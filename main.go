@@ -1,14 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html"
 	"github.com/smokers10/go-diagem.git/infrastructure/database"
+	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
+	"github.com/smokers10/go-diagem.git/router/api"
 )
 
 func main() {
@@ -22,11 +22,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(mysql)
 
-	app.Use(recover.New())
+	// app.Use(recover.New())
 
 	app.Static("/", "./public")
+
+	serviceResolver := resolver.MYSQLResolver(mysql)
+
+	api.AdminAPI(app, &serviceResolver)
 
 	log.Fatal(app.Listen(":8000"))
 }

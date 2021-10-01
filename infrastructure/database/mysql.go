@@ -3,7 +3,6 @@ package database
 import (
 	"database/sql"
 	"os"
-	"strconv"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -17,25 +16,23 @@ type config struct {
 	MAX_IDLE_CONNECTION_LIFE_TIME int    //rentan waktu masimal tiap koneksi idle (menit)
 }
 
-//akan mengembalikan nilai konfigurasi sesuai dari mode produksi
+//akan mengembalikan nilai konfigurasi sesuai dari mode produksi PRIVATE
 func setConfig(mode string) *config {
 	con := config{}
 	if mode == "" || mode == "development" || mode == "local" {
-		con.URI = ""
+		con.URI = "remote_admin:kingmesix@/diagem"
 		con.MAX_CONNECTION = 5
 		con.MAX_CONNECTION_LIFE_TIME = 1
 		con.MAX_IDLE_CONNECTION = 5
 		con.MAX_IDLE_CONNECTION_LIFE_TIME = 1
 	} else {
 		URI := os.Getenv("MYSQL_URI")
-		MAX_CONNECTION, _ := strconv.Atoi(os.Getenv("MAX_CONNECTION"))
-		MAX_CONNECTION_LIFE_TIME, _ := strconv.Atoi(os.Getenv("MAX_CONNECTION_LIFE_TIME"))
-		MAX_IDLE_CONNECTION, _ := strconv.Atoi(os.Getenv("MAX_IDLE_CONNECTION"))
 
 		con.URI = URI
-		con.MAX_CONNECTION = MAX_CONNECTION
-		con.MAX_CONNECTION_LIFE_TIME = MAX_CONNECTION_LIFE_TIME
-		con.MAX_IDLE_CONNECTION = MAX_IDLE_CONNECTION
+		con.MAX_CONNECTION = 10
+		con.MAX_CONNECTION_LIFE_TIME = 1
+		con.MAX_IDLE_CONNECTION = 10
+		con.MAX_IDLE_CONNECTION_LIFE_TIME = 1
 	}
 	return &con
 }
