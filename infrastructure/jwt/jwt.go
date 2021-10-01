@@ -47,7 +47,8 @@ func Sign(payload *Payload) string {
 	return tokenString
 }
 
-func Verify(tokenString string) (payload *Payload) {
+func Verify(tokenString string) *Payload {
+	payload := Payload{}
 	splitedToken := strings.Split(tokenString, "Bearer ")
 	token, err := jwt.Parse(splitedToken[1], func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -60,16 +61,12 @@ func Verify(tokenString string) (payload *Payload) {
 		panic(err)
 	}
 
-	if err != nil {
-		panic(err)
-	}
-
 	claims := token.Claims.(jwt.MapClaims)
-	payload.ID, _ = strconv.Atoi(claims["id"].(string))
+	payload.ID = int(claims["id"].(float64))
 	payload.Email = claims["email"].(string)
 	payload.Type = claims["type"].(string)
 
-	return payload
+	return &payload
 }
 
 func SignResetPassword(payload *PayloadResetPassword) string {
