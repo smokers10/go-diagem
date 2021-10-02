@@ -11,19 +11,23 @@ import (
 type ServiceResolver struct {
 	AdminService    *domain.AdminService
 	KategoriService *domain.KategoriService
+	MitraService    *domain.MitraService
 }
 
 func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	//setup repository
 	adminRepo := repository.AdminRepository(mysql)
 	kategoriRepo := repository.KategoriRepository(mysql)
+	mitraRepo := repository.MitraRepository(mysql)
 
 	//setup service
 	adminServ := services.AdminService(&adminRepo)
 	kategoriServ := services.KategoriService(&kategoriRepo)
+	mitraServ := services.MitraService(&mitraRepo)
 
 	return ServiceResolver{
 		AdminService:    &adminServ,
 		KategoriService: &kategoriServ,
+		MitraService:    &mitraServ,
 	}
 }

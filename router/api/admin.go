@@ -14,6 +14,7 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	//controller
 	authentication := admin.AdminAuthentication(resolver.AdminService)
 	kategoriController := admin.KategoriController(resolver.KategoriService)
+	mitraController := admin.MitraController(resolver.MitraService)
 
 	//parent path
 	parent := app.Group("/api/admin")
@@ -28,4 +29,13 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	kategori.Get("/list", middleware, kategoriController.Read)
 	kategori.Put("/update", middleware, kategoriController.Update)
 	kategori.Delete("/delete", middleware, kategoriController.Delete)
+
+	//mitra
+	mitra := parent.Group("/mitra")
+	mitra.Post("/create", middleware, mitraController.Create)
+	mitra.Get("/list", middleware, mitraController.Read)
+	mitra.Get("/:id", middleware, mitraController.GetOne)
+	mitra.Put("/update", middleware, mitraController.Update)
+	mitra.Delete("/delete", middleware, mitraController.Delete)
+
 }
