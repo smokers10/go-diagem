@@ -1,48 +1,66 @@
 package domain
 
 type Produk struct {
-	ID          string
-	Nama        string
-	Slug        string
-	Deskripsi   string
-	Spesifikasi string
-	KategoriID  int
-	HasVariasi  bool
-	Var1Nama    string
-	Var2Nama    string
-	Var1Value   string
-	Var2Value   string
-	Berat       float32
-	Beratsatuan float32
-	Lebar       int
-	Panjang     int
-	Tinggi      int
-	Dilihat     int64
-	CreatedAt   string
-	UpdatedAt   string
+	ID          string `json:"id,omitempty" form:"id"`
+	Nama        string `json:"nama,omitempty" form:"nama"`
+	Slug        string `json:"slug,omitempty" form:"slug"`
+	Deskripsi   string `json:"deskripsi,omitempty" form:"deskripsi"`
+	Spesifikasi string `json:"spesifikasi,omitempty" form:"spesifikasi"`
+	KategoriID  int    `json:"kategori_id,omitempty" form:"kategori_id"`
+	Dilihat     int64  `json:"dilihat" form:"dilihat"`
+	CreatedAt   string `json:"created_at,omitempty" form:"created_at"`
+	UpdatedAt   string `json:"updated_at,omitempty" form:"updated_at"`
+}
+
+type ProdukDetailed struct {
+	ID          string              `json:"id,omitempty" form:"id"`
+	Nama        string              `json:"nama,omitempty" form:"nama"`
+	Slug        string              `json:"slug,omitempty" form:"slug"`
+	Deskripsi   string              `json:"deskripsi,omitempty" form:"deskripsi"`
+	Spesifikasi []ProdukSpesifikasi `json:"spesifikasi,omitempty" form:"spesifikasi"`
+	Kategori    Kategori            `json:"kategori,omitempty" form:"kategori"`
+	Dilihat     int64               `json:"dilihat" form:"dilihat"`
+	CreatedAt   string              `json:"created_at,omitempty" form:"created_at"`
+	UpdatedAt   string              `json:"updated_at,omitempty" form:"updated_at"`
+}
+
+type ProdukDetailedTemp struct {
+	ID          string   `json:"id,omitempty" form:"id"`
+	Nama        string   `json:"nama,omitempty" form:"nama"`
+	Slug        string   `json:"slug,omitempty" form:"slug"`
+	Deskripsi   string   `json:"deskripsi,omitempty" form:"deskripsi"`
+	Spesifikasi string   `json:"spesifikasi,omitempty" form:"spesifikasi"`
+	Kategori    Kategori `json:"kategori,omitempty" form:"kategori"`
+	Dilihat     int64    `json:"dilihat" form:"dilihat"`
+	CreatedAt   string   `json:"created_at,omitempty" form:"created_at"`
+	UpdatedAt   string   `json:"updated_at,omitempty" form:"updated_at"`
+}
+
+type ProdukSpesifikasi struct {
+	Nama  string `json:"nama" form:"nama"`
+	Value string `json:"value" form:"value"`
 }
 
 type ProdukFilter struct {
-	Nama       string
-	KategoriID int
+	Nama       string `json:"nama" form:"nama"`
+	KategoriID int    `json:"kategori_id" form:"kategori_id"`
 }
 
 type ProdukService interface {
 	//Untuk Admin
 	Create(req *Produk) *Response
-	Read() *Response
-	Detail() *Response
 	Update(req *Produk) *Response
-	Delete(req *Produk) *Response
+	Delete(id string) *Response
 
 	//Untuk Umum
-	Catalogue(filter *ProdukFilter) *Response
+	Read(filter *ProdukFilter) *Response
+	Detail(id string) *Response
 }
 
 type ProdukRepository interface {
-	Create(req *Produk) *Produk
-	Read() []Produk
-	ByID(id string) *Produk
-	Update(req *Produk) *Produk
-	Delete(req *Produk) *Produk
+	Create(req *Produk) (*ProdukDetailed, error)
+	Read(filter *ProdukFilter) ([]ProdukDetailed, error)
+	ByID(id string) (*ProdukDetailed, error)
+	Update(req *Produk) (*Produk, error)
+	Delete(id string) error
 }

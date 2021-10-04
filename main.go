@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html"
 	"github.com/smokers10/go-diagem.git/infrastructure/database"
 	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
@@ -23,7 +24,7 @@ func main() {
 		panic(err)
 	}
 
-	// app.Use(recover.New())
+	app.Use(recover.New())
 
 	app.Static("/", "./public")
 
