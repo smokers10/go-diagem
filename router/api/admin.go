@@ -17,6 +17,7 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	mitraController := admin.MitraController(resolver.MitraService)
 	produkController := admin.ProdukController(resolver.ProdukService)
 	promoController := admin.PromoController(resolver.PromoService)
+	rekeningController := admin.RekeningController(resolver.RekeningService)
 
 	//parent path
 	parent := app.Group("/api/admin")
@@ -56,5 +57,11 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	promo.Put("/update", middleware, promoController.Update)
 	promo.Delete("/delete", middleware, promoController.Delete)
 
-	//
+	//rekening
+	rekening := parent.Group("/rekening")
+	rekening.Post("/create", middleware, rekeningController.Create)
+	rekening.Get("/list", middleware, rekeningController.Read)
+	rekening.Put("/update", middleware, rekeningController.Update)
+	rekening.Delete("/delete", middleware, rekeningController.Delete)
+
 }

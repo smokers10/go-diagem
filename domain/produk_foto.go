@@ -10,7 +10,11 @@ type ProdukFoto struct {
 }
 
 type ProdukFotoService interface {
+	Create(req *ProdukFoto) *Response
+	Delete(produkID string, produkFotoID string) *Response
 }
 
 type ProdukFotoRepository interface {
+	Create(req *ProdukFoto) (*ProdukFoto, error)
+	Delete(produkID string, produkFotoID string) error
 }

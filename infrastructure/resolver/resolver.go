@@ -14,6 +14,7 @@ type ServiceResolver struct {
 	MitraService    *domain.MitraService
 	ProdukService   *domain.ProdukService
 	PromoService    *domain.PromoService
+	RekeningService *domain.RekeningService
 }
 
 func MYSQLResolver(mysql *sql.DB) ServiceResolver {
@@ -23,6 +24,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	mitraRepo := repository.MitraRepository(mysql)
 	produkRepo := repository.ProdukRepository(mysql)
 	promoRepo := repository.PromoRepository(mysql)
+	rekeningRepo := repository.RekeningRepository(mysql)
 
 	//setup service
 	adminServ := services.AdminService(&adminRepo)
@@ -30,6 +32,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	mitraServ := services.MitraService(&mitraRepo)
 	produkServ := services.ProdukService(&produkRepo)
 	promoServ := services.PromoService(&promoRepo)
+	rekeningServ := services.RekeningService(&rekeningRepo)
 
 	return ServiceResolver{
 		AdminService:    &adminServ,
@@ -37,5 +40,6 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 		MitraService:    &mitraServ,
 		ProdukService:   &produkServ,
 		PromoService:    &promoServ,
+		RekeningService: &rekeningServ,
 	}
 }

@@ -11,6 +11,14 @@ type ProdukVariasi struct {
 	UpdatedAt string
 }
 
-type ProdukVariasiService interface{}
+type ProdukVariasiService interface {
+	Create(req *ProdukVariasi) *Response
+	Update(req *ProdukVariasi) *Response
+	Delete(produkID string, produkVariasiID string) *Response
+}
 
-type ProdukVariasiRepository interface{}
+type ProdukVariasiRepository interface {
+	Create(req *ProdukVariasi) (*ProdukVariasi, error)
+	Update(req *ProdukVariasi) (*ProdukVariasi, error)
+	Delete(produkID string, produkVariasiID string) error
+}
