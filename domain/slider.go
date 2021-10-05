@@ -1,15 +1,15 @@
 package domain
 
 type Slider struct {
-	ID          int
-	Name        string
-	Description string
-	Img         string
-	IsActive    string
-	URL         string
-	Type        int
-	CreatedAt   string
-	UpdatedAt   string
+	ID          int    `json:"id,omitempty" form:"id"`
+	Name        string `json:"name,omitempty" form:"name"`
+	Description string `json:"description,omitempty" form:"description"`
+	Img         string `json:"img,omitempty" form:"img"`
+	IsActive    bool   `json:"is_active,omitempty" form:"is_active"`
+	URL         string `json:"url,omitempty" form:"url"`
+	Type        int    `json:"type,omitempty" form:"type"`
+	CreatedAt   string `json:"created_at,omitempty" form:"created_at"`
+	UpdatedAt   string `json:"updated_at,omitempty" form:"updated_at"`
 }
 
 type SliderService interface {
@@ -17,13 +17,13 @@ type SliderService interface {
 	Create(req *Slider) *Response
 	Read() *Response
 	Update(req *Slider) *Response
-	Deletete(req *Slider) *Response
+	Delete(id int) *Response
 }
 
 type SliderRepository interface {
 	//Untuk Admin
-	Create(req *Slider) *Slider
-	Read() []Slider
-	Update(req *Slider) *Slider
-	Deletete(req *Slider) *Slider
+	Create(req *Slider) (*Slider, error)
+	Read() ([]Slider, error)
+	Update(req *Slider) (*Slider, error)
+	Delete(id int) error
 }
