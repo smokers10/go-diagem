@@ -32,5 +32,5 @@ func main() {
 
 	api.AdminAPI(app, &serviceResolver)
 
-	log.Fatal(app.Listen(":8000"))
+	log.Fatal(app.Listen(":8001"))
 }

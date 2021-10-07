@@ -47,14 +47,15 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 	produk.spesifikasi, produk.dilihat, produk.created_at, produk.updated_at, kategori.nama, 
 	kategori.id, kategori.slug 
 	FROM produk 
-	JOIN kategori ON kategori.id = produk.kategori_id`)
+	JOIN kategori ON kategori.id = produk.kategori_id 
+	WHERE produk.nama LIKE %?%`)
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	rows, err := statement.QueryContext(context.Background())
+	rows, err := statement.QueryContext(context.Background(), filter.Nama)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +67,7 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 
 		rows.Scan(&tempRow.ID, &tempRow.Nama, &tempRow.Slug, &tempRow.Deskripsi,
 			&tempRow.Spesifikasi, &tempRow.Dilihat, &tempRow.CreatedAt, &tempRow.UpdatedAt,
-			&tempRow.Kategori.Nama, tempRow.Kategori.ID, tempRow.Kategori.Slug)
+			&tempRow.Kategori.Nama, &tempRow.Kategori.ID, &tempRow.Kategori.Slug)
 
 		json.Unmarshal([]byte(tempRow.Spesifikasi), &spesifikasi)
 

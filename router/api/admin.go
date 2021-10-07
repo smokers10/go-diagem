@@ -71,5 +71,4 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	slider.Get("/list", middleware, sliderController.Read)
 	slider.Put("/update", middleware, sliderController.Update)
 	slider.Delete("/delete", middleware, sliderController.Delete)
-
 }
