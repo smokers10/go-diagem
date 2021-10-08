@@ -43,12 +43,11 @@ func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetaile
 
 func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.ProdukDetailed, error) {
 	result := []domain.ProdukDetailed{}
-	statement, err := p.db.Prepare(`SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, 
-	produk.spesifikasi, produk.dilihat, produk.created_at, produk.updated_at, kategori.nama, 
-	kategori.id, kategori.slug 
-	FROM produk 
-	JOIN kategori ON kategori.id = produk.kategori_id 
-	WHERE produk.nama LIKE %?%`)
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.dilihat, produk.created_at, produk.updated_at, kategori.nama, kategori.id, kategori.slug 
+	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
+	WHERE produk.nama LIKE CONCAT('%', ?, '%') AND produk.kategori_id LIKE CONCAT('%', ?, '%')`
+
+	statement, err := p.db.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
