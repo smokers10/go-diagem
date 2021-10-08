@@ -11,9 +11,10 @@ import (
 )
 
 type Payload struct {
-	ID    int
-	Email string
-	Type  string
+	ID         int
+	Email      string
+	Type       string
+	IsVerified bool
 }
 
 type PayloadResetPassword struct {
@@ -37,7 +38,8 @@ func Sign(payload *Payload) string {
 	claims["id"] = payload.ID
 	claims["email"] = payload.Email
 	claims["type"] = payload.Type
-	claims["exp"] = time.Now().Add((time.Hour * 24) * 7)
+	claims["exp"] = time.Now().Add((time.Hour * 24) * 30)
+	claims["is_verified"] = payload.IsVerified
 
 	tokenString, err := token.SignedString(signKey())
 	if err != nil {
@@ -65,6 +67,7 @@ func Verify(tokenString string) *Payload {
 	payload.ID = int(claims["id"].(float64))
 	payload.Email = claims["email"].(string)
 	payload.Type = claims["type"].(string)
+	payload.IsVerified = claims["is_verified"].(bool)
 
 	return &payload
 }

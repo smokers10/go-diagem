@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html"
 	"github.com/smokers10/go-diagem.git/infrastructure/database"
 	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
@@ -13,7 +12,10 @@ import (
 )
 
 func main() {
+	// konfigurasi view engine
 	engine := html.New("./view", ".html")
+
+	// konfigurasi & init fiber
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
@@ -24,13 +26,19 @@ func main() {
 		panic(err)
 	}
 
-	app.Use(recover.New())
+	// error recovery
+	// app.Use(recover.New())
 
+	// static folder
 	app.Static("/", "./public")
 
+	// resolver init
 	serviceResolver := resolver.MYSQLResolver(mysql)
 
+	// router
 	api.AdminAPI(app, &serviceResolver)
+	api.UserAPI(app, &serviceResolver)
 
+	// serving
 	log.Fatal(app.Listen(":8001"))
 }

@@ -9,13 +9,15 @@ import (
 )
 
 type ServiceResolver struct {
-	AdminService    *domain.AdminService
-	KategoriService *domain.KategoriService
-	MitraService    *domain.MitraService
-	ProdukService   *domain.ProdukService
-	PromoService    *domain.PromoService
-	RekeningService *domain.RekeningService
-	SliderService   *domain.SliderService
+	AdminService        *domain.AdminService
+	KategoriService     *domain.KategoriService
+	MitraService        *domain.MitraService
+	ProdukService       *domain.ProdukService
+	PromoService        *domain.PromoService
+	RekeningService     *domain.RekeningService
+	SliderService       *domain.SliderService
+	UserService         *domain.UserService
+	VerificationService *domain.VerifikasiService
 }
 
 func MYSQLResolver(mysql *sql.DB) ServiceResolver {
@@ -27,6 +29,8 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	promoRepo := repository.PromoRepository(mysql)
 	rekeningRepo := repository.RekeningRepository(mysql)
 	sliderRepo := repository.SliderRepository(mysql)
+	userRepo := repository.UserRepository(mysql)
+	verificationRepo := repository.VerificationRepository(mysql)
 
 	//setup service
 	adminServ := services.AdminService(&adminRepo)
@@ -36,14 +40,18 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	promoServ := services.PromoService(&promoRepo)
 	rekeningServ := services.RekeningService(&rekeningRepo)
 	sliderServ := services.SliderService(&sliderRepo)
+	userServ := services.UserService(&userRepo)
+	verificationServ := services.VerificationService(&verificationRepo, &userRepo)
 
 	return ServiceResolver{
-		AdminService:    &adminServ,
-		KategoriService: &kategoriServ,
-		MitraService:    &mitraServ,
-		ProdukService:   &produkServ,
-		PromoService:    &promoServ,
-		RekeningService: &rekeningServ,
-		SliderService:   &sliderServ,
+		AdminService:        &adminServ,
+		KategoriService:     &kategoriServ,
+		MitraService:        &mitraServ,
+		ProdukService:       &produkServ,
+		PromoService:        &promoServ,
+		RekeningService:     &rekeningServ,
+		SliderService:       &sliderServ,
+		UserService:         &userServ,
+		VerificationService: &verificationServ,
 	}
 }

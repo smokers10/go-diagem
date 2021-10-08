@@ -15,7 +15,7 @@ func Admin() fiber.Handler {
 
 		// check token
 		if token == "" {
-			res.Message = "akses token harus di sediakan"
+			res.Message = "akses token harus disertakan"
 			res.Status = http.StatusUnauthorized
 			return c.Status(http.StatusUnauthorized).JSON(res)
 		}
@@ -25,9 +25,78 @@ func Admin() fiber.Handler {
 
 		// check authorisasi
 		if claims.Type != "admin" {
-			res.Message = "hanya untuk akses ter-authorisasi"
+			res.Message = "hak authorisasi administratif tidak valid"
 			res.Status = http.StatusUnauthorized
 			return c.Status(http.StatusUnauthorized).JSON(res)
+		}
+
+		// assign claims ke locals
+		c.Locals("id", claims.ID)
+		c.Locals("email", claims.ID)
+		c.Locals("type", claims.Type)
+
+		return c.Next()
+	}
+}
+
+func UserStrict() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		token := string(c.Request().Header.Peek("Authorization"))
+		res := domain.Response{}
+
+		// check token
+		if token == "" {
+			res.Message = "akses token harus disertakan"
+			res.Status = http.StatusUnauthorized
+			return c.Status(http.StatusUnauthorized).JSON(res)
+		}
+
+		// verifikasi token
+		claims := jwt.Verify(token)
+
+		// check authorisasi
+		if claims.Type != "user" {
+			res.Message = "hak authorisasi tidak sesuai"
+			res.Status = http.StatusUnauthorized
+			return c.Status(res.Status).JSON(res)
+		}
+
+		// check verifikasi email
+		if !claims.IsVerified {
+			res.Message = "email akun belum terverifikasi"
+			res.Status = http.StatusUnauthorized
+			return c.Status(res.Status).JSON(res)
+		}
+
+		// assign claims ke locals
+		c.Locals("id", claims.ID)
+		c.Locals("email", claims.ID)
+		c.Locals("type", claims.Type)
+
+		return c.Next()
+	}
+}
+
+func UserNonStrict() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		token := string(c.Request().Header.Peek("Authorization"))
+		res := domain.Response{}
+
+		// check token
+		if token == "" {
+			res.Message = "akses token harus disertakan"
+			res.Status = http.StatusUnauthorized
+			return c.Status(http.StatusUnauthorized).JSON(res)
+		}
+
+		// verifikasi token
+		claims := jwt.Verify(token)
+
+		// check authorisasi
+		if claims.Type != "user" {
+			res.Message = "hak authorisasi tidak sesuai"
+			res.Status = http.StatusUnauthorized
+			return c.Status(res.Status).JSON(res)
 		}
 
 		// assign claims ke locals
