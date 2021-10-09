@@ -8,13 +8,14 @@ import (
 )
 
 func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
-	//middleware
+	// middleware
 	middlewareStrict := middleware.UserStrict()
 	middlewareNonStrict := middleware.UserNonStrict()
 
 	// controller
 	authController := user.UserAuthController(resolver.UserService)
 	verificationController := user.VerificationController(resolver.VerificationService)
+	alamatController := user.AlamatController(resolver.AlamatService)
 
 	// parent path
 	parentPath := app.Group("/api/user")
@@ -28,6 +29,13 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	verification := parentPath.Group("/verification")
 	verification.Post("/create", middlewareNonStrict, verificationController.Create)
 	verification.Post("/verificate", middlewareNonStrict, verificationController.Verificate)
+
+	// alamat
+	alamat := parentPath.Group("/alamat")
+	alamat.Post("/create", middlewareStrict, alamatController.Create)
+	alamat.Get("/read", middlewareStrict, alamatController.Read)
+	alamat.Put("/update", middlewareStrict, alamatController.Update)
+	alamat.Delete("/delete", middlewareStrict, alamatController.Delete)
 
 	parentPath.Get("/", middlewareStrict, func(c *fiber.Ctx) error {
 		return c.JSON("Hey there wellcome")
