@@ -46,8 +46,8 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	produk := parent.Group("/produk")
 	produk.Post("/create", middleware, produkController.Create)
 	produk.Get("/list", middleware, produkController.Read)
-	produk.Put("/update", middleware, produkController.Delete)
-	produk.Post("/delete", middleware, produkController.Delete)
+	produk.Put("/update", middleware, produkController.Update)
+	produk.Delete("/delete", middleware, produkController.Delete)
 	produk.Get("/:id", middleware, produkController.Detail)
 
 	//promo
