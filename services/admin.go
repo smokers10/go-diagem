@@ -48,6 +48,7 @@ func (as *adminServiceImpl) Login(cred *domain.AdminCredentials) (response *doma
 	payload.Email = admin.Email
 	payload.ID = admin.ID
 	payload.Type = "admin"
+	payload.IsVerified = false
 
 	res.Message = "login berhasil"
 	res.Data = admin

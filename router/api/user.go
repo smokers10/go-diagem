@@ -16,6 +16,7 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	authController := user.UserAuthController(resolver.UserService)
 	verificationController := user.VerificationController(resolver.VerificationService)
 	alamatController := user.AlamatController(resolver.AlamatService)
+	kategoriController := user.KategoriController(resolver.KategoriService)
 
 	// parent path
 	parentPath := app.Group("/api/user")
@@ -36,6 +37,10 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	alamat.Get("/read", middlewareStrict, alamatController.Read)
 	alamat.Put("/update", middlewareStrict, alamatController.Update)
 	alamat.Delete("/delete", middlewareStrict, alamatController.Delete)
+
+	// kategori
+	kategori := parentPath.Group("/kategori")
+	kategori.Get("/read", kategoriController.Read)
 
 	parentPath.Get("/", middlewareStrict, func(c *fiber.Ctx) error {
 		return c.JSON("Hey there wellcome")

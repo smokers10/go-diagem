@@ -43,7 +43,7 @@ type ProdukSpesifikasi struct {
 
 type ProdukFilter struct {
 	Nama       string `json:"nama" form:"nama"`
-	KategoriID int    `json:"kategori_id" form:"kategori_id"`
+	KategoriID string `json:"kategori_id" form:"kategori_id"`
 }
 
 type ProdukService interface {

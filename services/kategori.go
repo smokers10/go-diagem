@@ -82,12 +82,12 @@ func (k *kategoriServiceImpl) Read() *domain.Response {
 	kategori, err := k.kategoriRepository.Read()
 	if err != nil {
 		fmt.Println(err.Error())
-		res.Message = "error saat menghapus data kategori"
+		res.Message = "error saat mengambil data kategori"
 		res.Status = http.StatusInternalServerError
 		return &res
 	}
 
-	res.Message = "data kategori berhasil dihapus"
+	res.Message = "data kategori berhasil diambil"
 	res.Data = kategori
 	res.Status = http.StatusOK
 	res.Success = true

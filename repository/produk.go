@@ -32,6 +32,7 @@ func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetaile
 	}
 
 	json.Unmarshal([]byte(req.Spesifikasi), &spesifikasi)
+
 	produkDetailed.ID = req.ID
 	produkDetailed.Nama = req.Nama
 	produkDetailed.Slug = req.Slug
@@ -54,7 +55,7 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 
 	defer statement.Close()
 
-	rows, err := statement.QueryContext(context.Background(), filter.Nama)
+	rows, err := statement.QueryContext(context.Background(), filter.Nama, filter.KategoriID)
 	if err != nil {
 		return nil, err
 	}
