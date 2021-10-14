@@ -8,7 +8,7 @@ import (
 	"github.com/smokers10/go-diagem.git/infrastructure/jwt"
 )
 
-func Admin() fiber.Handler {
+func Admin(accessType string) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		token := string(c.Request().Header.Peek("Authorization"))
 		res := domain.Response{}
@@ -24,7 +24,7 @@ func Admin() fiber.Handler {
 		claims := jwt.Verify(token)
 
 		// check authorisasi
-		if claims.Type != "admin" {
+		if claims.Type != accessType {
 			res.Message = "hak authorisasi administratif tidak valid"
 			res.Status = http.StatusUnauthorized
 			return c.Status(http.StatusUnauthorized).JSON(res)

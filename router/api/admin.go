@@ -9,7 +9,7 @@ import (
 
 func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	//middleware
-	middleware := middleware.Admin()
+	superMiddleware := middleware.Admin("super admin")
 
 	//controller
 	authentication := admin.AdminAuthentication(resolver.AdminService)
@@ -19,6 +19,7 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	promoController := admin.PromoController(resolver.PromoService)
 	rekeningController := admin.RekeningController(resolver.RekeningService)
 	sliderController := admin.SliderController(resolver.SliderService)
+	userAdminController := admin.UserAdminController(resolver.AdminService)
 
 	//parent path
 	parent := app.Group("/api/admin")
@@ -29,46 +30,54 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 
 	//kategori
 	kategori := parent.Group("/kategori")
-	kategori.Post("/create", middleware, kategoriController.Create)
-	kategori.Get("/list", middleware, kategoriController.Read)
-	kategori.Put("/update", middleware, kategoriController.Update)
-	kategori.Delete("/delete", middleware, kategoriController.Delete)
+	kategori.Post("/create", superMiddleware, kategoriController.Create)
+	kategori.Get("/list", superMiddleware, kategoriController.Read)
+	kategori.Put("/update", superMiddleware, kategoriController.Update)
+	kategori.Delete("/delete", superMiddleware, kategoriController.Delete)
 
 	//mitra
 	mitra := parent.Group("/mitra")
-	mitra.Post("/create", middleware, mitraController.Create)
-	mitra.Get("/list", middleware, mitraController.Read)
-	mitra.Get("/:id", middleware, mitraController.GetOne)
-	mitra.Put("/update", middleware, mitraController.Update)
-	mitra.Delete("/delete", middleware, mitraController.Delete)
+	mitra.Post("/create", superMiddleware, mitraController.Create)
+	mitra.Get("/list", superMiddleware, mitraController.Read)
+	mitra.Get("/:id", superMiddleware, mitraController.GetOne)
+	mitra.Put("/update", superMiddleware, mitraController.Update)
+	mitra.Delete("/delete", superMiddleware, mitraController.Delete)
 
 	//produk
 	produk := parent.Group("/produk")
-	produk.Post("/create", middleware, produkController.Create)
-	produk.Get("/list", middleware, produkController.Read)
-	produk.Put("/update", middleware, produkController.Update)
-	produk.Delete("/delete", middleware, produkController.Delete)
-	produk.Get("/:id", middleware, produkController.Detail)
+	produk.Post("/create", superMiddleware, produkController.Create)
+	produk.Get("/list", superMiddleware, produkController.Read)
+	produk.Put("/update", superMiddleware, produkController.Update)
+	produk.Delete("/delete", superMiddleware, produkController.Delete)
+	produk.Get("/:id", superMiddleware, produkController.Detail)
 
 	//promo
 	promo := parent.Group("/promo")
-	promo.Post("/create", middleware, promoController.Create)
-	promo.Get("/list", middleware, promoController.Read)
-	promo.Get("/:id", middleware, promoController.Detail)
-	promo.Put("/update", middleware, promoController.Update)
-	promo.Delete("/delete", middleware, promoController.Delete)
+	promo.Post("/create", superMiddleware, promoController.Create)
+	promo.Get("/list", superMiddleware, promoController.Read)
+	promo.Get("/:id", superMiddleware, promoController.Detail)
+	promo.Put("/update", superMiddleware, promoController.Update)
+	promo.Delete("/delete", superMiddleware, promoController.Delete)
 
 	//rekening
 	rekening := parent.Group("/rekening")
-	rekening.Post("/create", middleware, rekeningController.Create)
-	rekening.Get("/list", middleware, rekeningController.Read)
-	rekening.Put("/update", middleware, rekeningController.Update)
-	rekening.Delete("/delete", middleware, rekeningController.Delete)
+	rekening.Post("/create", superMiddleware, rekeningController.Create)
+	rekening.Get("/list", superMiddleware, rekeningController.Read)
+	rekening.Put("/update", superMiddleware, rekeningController.Update)
+	rekening.Delete("/delete", superMiddleware, rekeningController.Delete)
 
 	//slider
 	slider := parent.Group("/slider")
-	slider.Post("/create", middleware, sliderController.Create)
-	slider.Get("/list", middleware, sliderController.Read)
-	slider.Put("/update", middleware, sliderController.Update)
-	slider.Delete("/delete", middleware, sliderController.Delete)
+	slider.Post("/create", superMiddleware, sliderController.Create)
+	slider.Get("/list", superMiddleware, sliderController.Read)
+	slider.Put("/update", superMiddleware, sliderController.Update)
+	slider.Delete("/delete", superMiddleware, sliderController.Delete)
+
+	//user administratif
+	userAdminstratif := parent.Group("/user-administratif")
+	userAdminstratif.Post("/create", superMiddleware, userAdminController.Create)
+	userAdminstratif.Get("/read", superMiddleware, userAdminController.Read)
+	userAdminstratif.Put("/update", superMiddleware, userAdminController.Update)
+	userAdminstratif.Delete("/delete", superMiddleware, userAdminController.Delete)
+
 }

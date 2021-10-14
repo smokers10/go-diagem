@@ -47,7 +47,7 @@ func (as *adminServiceImpl) Login(cred *domain.AdminCredentials) (response *doma
 	// buat token
 	payload.Email = admin.Email
 	payload.ID = admin.ID
-	payload.Type = "admin"
+	payload.Type = admin.Roles
 	payload.IsVerified = false
 
 	res.Message = "login berhasil"
@@ -55,5 +55,102 @@ func (as *adminServiceImpl) Login(cred *domain.AdminCredentials) (response *doma
 	res.Status = http.StatusOK
 	res.Success = true
 	res.Token = jwt.Sign(&payload)
+	return &res
+}
+
+func (as *adminServiceImpl) Create(req *domain.Admin) *domain.Response {
+	// deklarasi
+	res := domain.Response{}
+
+	// hash password
+	req.Password = encryption.Hash(req.Password)
+
+	// panggil repository
+	admins, err := as.adminRepository.Create(req)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error saat menambah user administratif"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Data = admins
+	res.Message = fmt.Sprintf("akun %s berhasil ditambahkan", req.Roles)
+	res.Status = http.StatusOK
+	res.Success = true
+	return &res
+}
+
+func (as *adminServiceImpl) Update(req *domain.Admin, logged_id int, logged_role string) *domain.Response {
+	// deklarasi variable
+	res := domain.Response{}
+
+	// check super admin
+	checkAdmins, err := as.adminRepository.GetByID(req.ID)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error saat check user administratif"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	// hanya boleh update dirinya sendiri
+	if (checkAdmins.ID == logged_id) || (logged_role == "super admin") {
+		// panggil repository
+		admins, err := as.adminRepository.Update(req)
+		if err != nil {
+			fmt.Println(err)
+			res.Message = "error saat update user administratif"
+			res.Status = http.StatusInternalServerError
+			return &res
+		}
+
+		res.Data = admins
+		res.Message = fmt.Sprintf("akun %s berhasil ditambahkan", req.Nama)
+		res.Status = http.StatusOK
+		res.Success = true
+		return &res
+	}
+
+	res.Message = "akses tidak diizinkan"
+	res.Status = http.StatusForbidden
+	return &res
+}
+
+func (as *adminServiceImpl) Delete(id int) *domain.Response {
+	// deklarasi variable
+	res := domain.Response{}
+
+	// panggil repository
+	if err := as.adminRepository.Delete(id); err != nil {
+		fmt.Println(err)
+		res.Message = "error saat menghapus user administratif"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Message = "akun administratif berhasil dihapus"
+	res.Status = http.StatusOK
+	res.Success = true
+	return &res
+}
+
+func (as *adminServiceImpl) Read(logged_id int) *domain.Response {
+	// deklarasi variable
+	res := domain.Response{}
+
+	// panggil repository
+	admin, err := as.adminRepository.Read(logged_id)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error saat mengambil user administratif"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Data = admin
+	res.Message = "akun administratif berhasil diambil"
+	res.Status = http.StatusOK
+	res.Success = true
 	return &res
 }
