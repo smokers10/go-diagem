@@ -8,6 +8,7 @@ import (
 	"github.com/smokers10/go-diagem.git/infrastructure/jwt"
 )
 
+// Admin middleware khusus untuk user administratif (super admin, admin & marketing)
 func Admin(accessType string) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		token := string(c.Request().Header.Peek("Authorization"))
@@ -39,6 +40,7 @@ func Admin(accessType string) fiber.Handler {
 	}
 }
 
+// UserStrict middleware khusus untuk endpoint user terverifikasi
 func UserStrict() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		token := string(c.Request().Header.Peek("Authorization"))
@@ -77,6 +79,7 @@ func UserStrict() fiber.Handler {
 	}
 }
 
+// UserNonStrict middleware untuk endpoint user tanpa harus terverifikasi
 func UserNonStrict() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		token := string(c.Request().Header.Peek("Authorization"))

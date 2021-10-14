@@ -55,12 +55,14 @@ type ProdukService interface {
 	//Untuk Umum
 	Read(filter *ProdukFilter) *Response
 	Detail(id string) *Response
+	DetailBySlug(slug string) *Response
 }
 
 type ProdukRepository interface {
 	Create(req *Produk) (*ProdukDetailed, error)
 	Read(filter *ProdukFilter) ([]ProdukDetailed, error)
 	ByID(id string) (*ProdukDetailed, error)
+	BySlugs(slug string) (*ProdukDetailed, error)
 	Update(req *Produk) (*Produk, error)
 	Delete(id string) error
 }

@@ -128,6 +128,48 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	return &result, nil
 }
 
+func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, error) {
+	result := domain.ProdukDetailed{}
+	resultTemp := domain.ProdukDetailedTemp{}
+	spesifikasi := []domain.ProdukSpesifikasi{}
+
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.dilihat,
+	 	  	  produk.created_at, produk.updated_at, kategori.nama, kategori.id, kategori.slug FROM produk 
+			  JOIN kategori ON kategori.id = produk.kategori_id WHERE produk.slug = ? LIMIT 1`
+
+	statement, err := p.db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer statement.Close()
+
+	row := statement.QueryRowContext(context.Background(), slug)
+
+	// scan row ke result temporary
+	row.Scan(&resultTemp.ID, &resultTemp.Nama, &resultTemp.Slug, &resultTemp.Deskripsi,
+		&resultTemp.Spesifikasi, &resultTemp.Dilihat, &resultTemp.CreatedAt, &resultTemp.UpdatedAt,
+		&resultTemp.Kategori.Nama, &resultTemp.Kategori.ID, &resultTemp.Kategori.Slug)
+
+	// unmarshall spesifikasi dari result temporary ke variable spesifikasi
+	json.Unmarshal([]byte(resultTemp.Spesifikasi), &spesifikasi)
+
+	// assign result temporary ke result
+	result.ID = resultTemp.ID
+	result.Nama = resultTemp.Nama
+	result.Slug = resultTemp.Slug
+	result.Deskripsi = resultTemp.Deskripsi
+	result.Dilihat = resultTemp.Dilihat
+	result.Spesifikasi = spesifikasi
+	result.Kategori.ID = resultTemp.Kategori.ID
+	result.Kategori.Nama = resultTemp.Kategori.Nama
+	result.Kategori.Slug = resultTemp.Kategori.Slug
+	result.CreatedAt = resultTemp.CreatedAt
+	result.UpdatedAt = resultTemp.UpdatedAt
+
+	return &result, nil
+}
+
 func (p *produkRepositoryImpl) Update(req *domain.Produk) (*domain.Produk, error) {
 	statement, err := p.db.Prepare("UPDATE produk SET nama = ?, slug = ?, deskripsi = ?, spesifikasi = ?, kategori_id = ? WHERE id = ?")
 	if err != nil {

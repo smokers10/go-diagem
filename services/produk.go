@@ -137,3 +137,24 @@ func (p *produkServiceImpl) Detail(id string) *domain.Response {
 
 	return &res
 }
+
+func (p *produkServiceImpl) DetailBySlug(slug string) *domain.Response {
+	// dekalarasi var
+	res := domain.Response{}
+
+	// panggil repository terkait
+	produk, err := p.produkRepository.BySlugs(slug)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error saat mengambil produk"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Data = produk
+	res.Message = "produk berhasil diambil"
+	res.Status = http.StatusOK
+	res.Success = true
+
+	return &res
+}

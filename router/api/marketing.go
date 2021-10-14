@@ -5,6 +5,6 @@ import (
 	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
 )
 
-func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
+func Marketing(app *fiber.App, resolver *resolver.ServiceResolver) {
 
 }
