@@ -19,6 +19,7 @@ type ProdukDetailed struct {
 	Deskripsi   string              `json:"deskripsi,omitempty" form:"deskripsi"`
 	Spesifikasi []ProdukSpesifikasi `json:"spesifikasi,omitempty" form:"spesifikasi"`
 	Kategori    Kategori            `json:"kategori,omitempty" form:"kategori"`
+	Variasi     []ProdukVariasi     `json:"variasi,omitempty" form:"variasi"`
 	Dilihat     int64               `json:"dilihat" form:"dilihat"`
 	CreatedAt   string              `json:"created_at,omitempty" form:"created_at"`
 	UpdatedAt   string              `json:"updated_at,omitempty" form:"updated_at"`

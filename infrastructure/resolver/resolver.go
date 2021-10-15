@@ -9,16 +9,17 @@ import (
 )
 
 type ServiceResolver struct {
-	AdminService        *domain.AdminService
-	AlamatService       *domain.AlamatService
-	KategoriService     *domain.KategoriService
-	MitraService        *domain.MitraService
-	ProdukService       *domain.ProdukService
-	PromoService        *domain.PromoService
-	RekeningService     *domain.RekeningService
-	SliderService       *domain.SliderService
-	UserService         *domain.UserService
-	VerificationService *domain.VerifikasiService
+	AdminService         *domain.AdminService
+	AlamatService        *domain.AlamatService
+	KategoriService      *domain.KategoriService
+	MitraService         *domain.MitraService
+	ProdukService        *domain.ProdukService
+	ProdukVariasiService *domain.ProdukVariasiService
+	PromoService         *domain.PromoService
+	RekeningService      *domain.RekeningService
+	SliderService        *domain.SliderService
+	UserService          *domain.UserService
+	VerificationService  *domain.VerifikasiService
 }
 
 func MYSQLResolver(mysql *sql.DB) ServiceResolver {
@@ -28,6 +29,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	kategoriRepo := repository.KategoriRepository(mysql)
 	mitraRepo := repository.MitraRepository(mysql)
 	produkRepo := repository.ProdukRepository(mysql)
+	produkVariasiRepo := repository.ProdukVariasiRepository(mysql)
 	promoRepo := repository.PromoRepository(mysql)
 	rekeningRepo := repository.RekeningRepository(mysql)
 	sliderRepo := repository.SliderRepository(mysql)
@@ -40,6 +42,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	kategoriServ := services.KategoriService(&kategoriRepo)
 	mitraServ := services.MitraService(&mitraRepo)
 	produkServ := services.ProdukService(&produkRepo)
+	produkVariasiServ := services.ProdukVariasiService(&produkVariasiRepo)
 	promoServ := services.PromoService(&promoRepo)
 	rekeningServ := services.RekeningService(&rekeningRepo)
 	sliderServ := services.SliderService(&sliderRepo)
@@ -47,15 +50,16 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	verificationServ := services.VerificationService(&verificationRepo, &userRepo)
 
 	return ServiceResolver{
-		AdminService:        &adminServ,
-		AlamatService:       &alamatServ,
-		KategoriService:     &kategoriServ,
-		MitraService:        &mitraServ,
-		ProdukService:       &produkServ,
-		PromoService:        &promoServ,
-		RekeningService:     &rekeningServ,
-		SliderService:       &sliderServ,
-		UserService:         &userServ,
-		VerificationService: &verificationServ,
+		AdminService:         &adminServ,
+		AlamatService:        &alamatServ,
+		KategoriService:      &kategoriServ,
+		MitraService:         &mitraServ,
+		ProdukService:        &produkServ,
+		ProdukVariasiService: &produkVariasiServ,
+		PromoService:         &promoServ,
+		RekeningService:      &rekeningServ,
+		SliderService:        &sliderServ,
+		UserService:          &userServ,
+		VerificationService:  &verificationServ,
 	}
 }

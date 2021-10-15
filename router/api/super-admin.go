@@ -16,6 +16,7 @@ func SuperAdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	kategoriController := admin.KategoriController(resolver.KategoriService)
 	mitraController := admin.MitraController(resolver.MitraService)
 	produkController := admin.ProdukController(resolver.ProdukService)
+	produkVariasiController := admin.ProdukVariasiController(resolver.ProdukVariasiService)
 	promoController := admin.PromoController(resolver.PromoService)
 	rekeningController := admin.RekeningController(resolver.RekeningService)
 	sliderController := admin.SliderController(resolver.SliderService)
@@ -50,6 +51,12 @@ func SuperAdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	produk.Put("/update", superMiddleware, produkController.Update)
 	produk.Delete("/delete", superMiddleware, produkController.Delete)
 	produk.Get("/:id", superMiddleware, produkController.Detail)
+
+	// produk variasi
+	produkVariasi := produk.Group("/variasi")
+	produkVariasi.Post("/create", superMiddleware, produkVariasiController.Create)
+	produkVariasi.Put("/update", superMiddleware, produkVariasiController.Update)
+	produkVariasi.Delete("/delete", superMiddleware, produkVariasiController.Delete)
 
 	// promo
 	promo := parent.Group("/promo")
