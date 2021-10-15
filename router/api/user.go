@@ -14,6 +14,7 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 
 	// controller
 	authController := user.UserAuthController(resolver.UserService)
+	cartController := user.CartController(resolver.CartService)
 	verificationController := user.VerificationController(resolver.VerificationService)
 	alamatController := user.AlamatController(resolver.AlamatService)
 	kategoriController := user.KategoriController(resolver.KategoriService)
@@ -47,6 +48,12 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	produk := parentPath.Group("/produk")
 	produk.Get("/", produkController.Read)
 	produk.Get("/:slug", produkController.Detail)
+
+	// cart
+	cart := parentPath.Group("/cart")
+	cart.Post("/add-to-cart", middlewareStrict, cartController.AddToCart)
+	cart.Put("/update-quantity", middlewareStrict, cartController.UpdateQuantity)
+	cart.Delete("/delete", middlewareStrict, cartController.DeleteCart)
 
 	parentPath.Get("/", middlewareStrict, func(c *fiber.Ctx) error {
 		return c.JSON("Hey there wellcome")

@@ -11,6 +11,7 @@ import (
 type ServiceResolver struct {
 	AdminService         *domain.AdminService
 	AlamatService        *domain.AlamatService
+	CartService          *domain.CartService
 	KategoriService      *domain.KategoriService
 	MitraService         *domain.MitraService
 	ProdukService        *domain.ProdukService
@@ -26,6 +27,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	//setup repository
 	adminRepo := repository.AdminRepository(mysql)
 	alamatRepo := repository.AlamatRepository(mysql)
+	cartRepo := repository.CartRepository(mysql)
 	kategoriRepo := repository.KategoriRepository(mysql)
 	mitraRepo := repository.MitraRepository(mysql)
 	produkRepo := repository.ProdukRepository(mysql)
@@ -39,6 +41,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	//setup service
 	adminServ := services.AdminService(&adminRepo)
 	alamatServ := services.AlamtService(&alamatRepo)
+	cartServ := services.CartService(&cartRepo)
 	kategoriServ := services.KategoriService(&kategoriRepo)
 	mitraServ := services.MitraService(&mitraRepo)
 	produkServ := services.ProdukService(&produkRepo)
@@ -52,6 +55,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	return ServiceResolver{
 		AdminService:         &adminServ,
 		AlamatService:        &alamatServ,
+		CartService:          &cartServ,
 		KategoriService:      &kategoriServ,
 		MitraService:         &mitraServ,
 		ProdukService:        &produkServ,
