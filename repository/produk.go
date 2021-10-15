@@ -93,7 +93,9 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	result := domain.ProdukDetailed{}
 	resultTemp := domain.ProdukDetailedTemp{}
 	spesifikasi := []domain.ProdukSpesifikasi{}
+	variasi := []domain.ProdukVariasi{}
 
+	// get single produk
 	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.dilihat,
 	 	  	  produk.created_at, produk.updated_at, kategori.nama, kategori.id, kategori.slug FROM produk 
 			  JOIN kategori ON kategori.id = produk.kategori_id WHERE produk.id = ? LIMIT 1`
@@ -106,13 +108,35 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	defer statement.Close()
 
 	row := statement.QueryRowContext(context.Background(), id)
+
+	// scan row ke result temporary
 	row.Scan(&resultTemp.ID, &resultTemp.Nama, &resultTemp.Slug, &resultTemp.Deskripsi,
 		&resultTemp.Spesifikasi, &resultTemp.Dilihat, &resultTemp.CreatedAt, &resultTemp.UpdatedAt,
 		&resultTemp.Kategori.Nama, &resultTemp.Kategori.ID, &resultTemp.Kategori.Slug)
 
-	//assign ke result asli
+	// unmarshall spesifikasi dari result temporary ke variable spesifikasi
 	json.Unmarshal([]byte(resultTemp.Spesifikasi), &spesifikasi)
 
+	// get variasi
+	statement2, err := p.db.Prepare("SELECT id, variant, harga, stok FROM produk_variasi WHERE produk_id = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	defer statement2.Close()
+
+	variasiRows, err := statement2.QueryContext(context.Background(), resultTemp.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	for variasiRows.Next() {
+		variasiRow := domain.ProdukVariasi{}
+		variasiRows.Scan(&variasiRow.ID, &variasiRow.Variant, &variasiRow.Harga, &variasiRow.Stok)
+		variasi = append(variasi, variasiRow)
+	}
+
+	// assign result temporary ke result
 	result.ID = resultTemp.ID
 	result.Nama = resultTemp.Nama
 	result.Slug = resultTemp.Slug
@@ -124,6 +148,7 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	result.Kategori.Slug = resultTemp.Kategori.Slug
 	result.CreatedAt = resultTemp.CreatedAt
 	result.UpdatedAt = resultTemp.UpdatedAt
+	result.Variasi = variasi
 
 	return &result, nil
 }
