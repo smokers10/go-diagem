@@ -41,7 +41,32 @@ func (c *cartRepositoryImpl) Create(req *domain.Cart) (*domain.Cart, error) {
 	return req, nil
 }
 
-// func (c *cartRepositoryImpl) Read(userID int) ([]domain.Cart, error)
+func (c *cartRepositoryImpl) Read(userID int) ([]domain.CartDetail, error) {
+	result := []domain.CartDetail{}
+	stmt, err := c.db.Prepare(`SELECT carts.produk_id, carts.variasi_id, carts.quantity, produk.nama, produk.id, produk_variasi.variant, produk_variasi.harga, 
+	carts.quantity * produk_variasi.harga sub_total FROM carts
+	JOIN produk ON carts.produk_id = produk.id
+	JOIN produk_variasi ON carts.variasi_id = produk_variasi.id
+	WHERE carts.user_id = ?`)
+	if err != nil {
+		return nil, err
+	}
+
+	defer stmt.Close()
+
+	rows, err := stmt.QueryContext(context.Background(), userID)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		row := domain.CartDetail{}
+		rows.Scan(&row.ProdukID, &row.VariasiID, &row.Quantity, &row.Produk.Nama, &row.Produk.ID, &row.Variasi.Variant, &row.Variasi.Harga, &row.SubTotal)
+		result = append(result, row)
+	}
+
+	return result, nil
+}
 
 func (c *cartRepositoryImpl) UpdateQuantity(req *domain.CartData) (*domain.CartData, error) {
 	tx, err := c.db.BeginTx(context.Background(), nil)

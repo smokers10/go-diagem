@@ -51,6 +51,7 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 
 	// cart
 	cart := parentPath.Group("/cart")
+	cart.Get("/read", middlewareStrict, cartController.Read)
 	cart.Post("/add-to-cart", middlewareStrict, cartController.AddToCart)
 	cart.Put("/update-quantity", middlewareStrict, cartController.UpdateQuantity)
 	cart.Delete("/delete", middlewareStrict, cartController.DeleteCart)

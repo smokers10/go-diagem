@@ -15,7 +15,26 @@ func CartService(cart *domain.CartRepository) domain.CartService {
 	return &cartServiceImpl{cartRepo: *cart}
 }
 
-// func (cs *cartServiceImpl) Read(userID int) *domain.Response
+func (cs *cartServiceImpl) Read(userID int) *domain.Response {
+	// deklarasi variable
+	res := domain.Response{}
+
+	// panggil repository
+	cart, err := cs.cartRepo.Read(userID)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error saat mengambil data cart"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Data = cart
+	res.Message = "cart berhasil diambil"
+	res.Status = http.StatusOK
+	res.Success = true
+
+	return &res
+}
 
 func (cs *cartServiceImpl) AddtoCart(req *domain.Cart) *domain.Response {
 	// deklarasi variable

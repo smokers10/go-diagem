@@ -13,6 +13,14 @@ func CartController(cart *domain.CartService) cartController {
 	return cartController{cartService: *cart}
 }
 
+func (cc *cartController) Read(c *fiber.Ctx) error {
+	userID := c.Locals("id").(int)
+
+	response := cc.cartService.Read(userID)
+
+	return c.Status(response.Status).JSON(response)
+}
+
 func (cc *cartController) AddToCart(c *fiber.Ctx) error {
 	req := domain.Cart{}
 	userID := c.Locals("id").(int)
