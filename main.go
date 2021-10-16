@@ -36,7 +36,7 @@ func main() {
 	serviceResolver := resolver.MYSQLResolver(mysql)
 
 	// router
-	api.SuperAdminAPI(app, &serviceResolver)
+	api.AdminAPI(app, &serviceResolver)
 	api.UserAPI(app, &serviceResolver)
 
 	// serving

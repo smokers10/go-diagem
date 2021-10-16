@@ -9,10 +9,11 @@ import (
 )
 
 // Admin middleware khusus untuk user administratif (super admin, admin & marketing)
-func Admin(accessType string) fiber.Handler {
+func Admin(accessType ...string) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		token := string(c.Request().Header.Peek("Authorization"))
 		res := domain.Response{}
+		var isAllowed bool
 
 		// check token
 		if token == "" {
@@ -25,7 +26,15 @@ func Admin(accessType string) fiber.Handler {
 		claims := jwt.Verify(token)
 
 		// check authorisasi
-		if claims.Type != accessType {
+		for _, allowed := range accessType {
+			if claims.Type == allowed {
+				isAllowedMemAddress := &isAllowed
+				*isAllowedMemAddress = true
+				break
+			}
+		}
+
+		if !isAllowed {
 			res.Message = "hak authorisasi administratif tidak valid"
 			res.Status = http.StatusUnauthorized
 			return c.Status(http.StatusUnauthorized).JSON(res)
