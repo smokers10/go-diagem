@@ -1,9 +1,10 @@
 package domain
 
-type Checkout struct{}
-
-type CheckoutService interface {
-	Create() *Response
+type Checkout struct {
+	UserID   int `json:"user_id" form:"user_id"`
+	AlamatID int `json:"alamat_id" form:"alamat_id"`
 }
 
-type CheckoutRepository interface{}
+type CheckoutService interface {
+	Checkout(req *Checkout) *Response
+}

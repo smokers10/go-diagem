@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+        <title>Admin | Tokonya</title>
+
+        <meta name="description" content="Tokonya">
+        <meta name="author" content="Tokonya">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Tokonya">
+        <meta property="og:site_name" content="Tokonya">
+        <meta property="og:description" content="Tokonya">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <!-- Page JS Plugins CSS -->
+        <link rel="stylesheet" href="../../public/js/plugins/datatables/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+
+        <!-- Fonts, Styles and Codebase framework -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+        <link rel="stylesheet" id="css-main" href="../../public/css/app.css">
+        <link rel="stylesheet" href="../../public/js/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="../../public/js/plugins/summernote/summernote-bs4.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
+        <link rel="stylesheet" href="../../public/js/plugins/jquery-tags-input/jquery.tagsinput.min.css">
+        <link rel="stylesheet" type="text/css" href="../../public/js/plugins/bootstrap-daterangepicker/daterangepicker.css" />
+        <!-- Scripts -->
+        <!-- <script>window.Laravel = {!! json_encode(['csrfToken' => csrf_token(),]) !!};</script> -->
+        <!-- END Scripts -->
+    </head>
+    <body>
+        <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
+            <!-- Sidebar -->
+            <nav id="sidebar">
+                <!-- Sidebar Content -->
+                <div class="sidebar-content">
+                    <!-- Side Header -->
+                    <div class="content-header content-header-fullrow px-15">
+                        <!-- Mini Mode -->
+                        <div class="content-header-section sidebar-mini-visible-b">
+                            <!-- Logo -->
+                            <span class="content-header-item font-w700 font-size-xl float-left animated fadeIn">
+                                <span class="text-dual-primary-dark">c</span><span class="text-primary">b</span>
+                            </span>
+                            <!-- END Logo -->
+                        </div>
+                        <!-- END Mini Mode -->
+            
+                        <!-- Normal Mode -->
+                        <div class="content-header-section text-center align-parent sidebar-mini-hidden">
+                            <!-- Close Sidebar, Visible only on mobile screens -->
+                            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                            <button type="button" class="btn btn-circle btn-dual-secondary d-lg-none align-v-r" data-toggle="layout" data-action="sidebar_close">
+                                <i class="fa fa-times text-danger"></i>
+                            </button>
+                            <!-- END Close Sidebar -->
+            
+                            <!-- Logo -->
+                            <div class="content-header-item">
+                                <a href="#">
+                                    <img src="../../public/img/logo/logo.png" width="180px"/>
+                                </a>
+                            </div>
+                            <!-- END Logo -->
+                        </div>
+                        <!-- END Normal Mode -->
+                    </div>
+                    <!-- END Side Header -->
+                    
+                    <!-- Side Navigation -->
+                    <div class="content-side content-side-full">
+                        <ul class="nav-main">
+                            <li>
+                                <a class="{{ Request::is('admin/beranda') ? 'active' : null }}" href="{{ route('admin.beranda') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Beranda</span></a>
+                            </li>
+                            <li class="{{ Request::is('admin/produk/*','admin/produk') ? 'open' : null }}">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-social-dropbox"></i><span class="sidebar-mini-hide">Produk</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="{{ Request::is('admin/produk/tambah', 'admin/produk/tambah') ? 'active' : null }}" href="{{ route('admin.produk.tambah') }}">Tambah Produk Baru</a>
+                                    </li>
+                                    <li>
+                                        <a class="{{ Request::is('admin/produk', 'admin/produk/edit/*') ? 'active' : null }}" href="{{ route('admin.produk') }}">Kelola Produk</a>
+                                    </li>
+                                    <li>
+                                        <a class="{{ Request::is('admin/produk/kategori') ? 'active' : null }}" href="{{ route('admin.kategori') }}">Kelola Kategori</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            
+                            <li>
+                                <a class="{{ Request::is('admin/order', 'admin/order/*') ? 'active' : null }}" href="{{ route('admin.order') }}?status=terbaru">
+                                    <i class="si si-people"></i>Order</span>
+                                </a>
+                            </li>
+                            <li class="{{ Request::is('admin/promo/*') ? 'open' : null }}">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-tags"></i><span class="sidebar-mini-hide">Promo</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="{{ Request::is('admin/promo/tambah') ? 'active' : null }}" href="{{ route('admin.promo.tambah') }}">Tambah Promo</a>
+                                    </li>
+                                    <li>
+                                        <a class="{{ Request::is('admin/promo') ? 'active' : null }}" href="{{ route('admin.promo') }}">Daftar Promo</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="{{ Request::is('admin/pesanan', 'admin/pesanan/*') ? 'active' : null }}" href="{{ route('admin.order') }}?status=terbaru">
+                                    <i class="si si-people"></i>User</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="{{ Request::is('admin/reseller', 'admin/reseller/*') ? 'active' : null }}" href="http://localhost/re-diagem/admin/reseller">
+                                    <i class="si si-people"></i>Reseller</span>
+                                </a>
+                            </li>
+                            <li class="{{ Request::is('admin/keuangan/*','admin/keuangan') ? 'open' : null }}">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-wallet"></i>Keuangan</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="{{ Request::is('admin/keuangan/rekening-bank') ? 'active' : null }}" href="{{ route('admin.rekening') }}">Rekening Bank</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="{{ Request::is('admin/penjualan/*','admin/penjualan') ? 'open' : null }}">
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-social-dropbox"></i><span class="sidebar-mini-hide">Promo</span></a>
+                                <ul>
+                                    <li>
+                                        <a class="{{ Request::is('admin/produk') ? 'active' : null }}" href="{{ route('admin.produk') }}">Tambah Promo Baru</a>
+                                    </li>
+                                    <li>
+                                        <a class="{{ Request::is('admin/produk/kategori') ? 'active' : null }}" href="{{ route('admin.kategori') }}">Daftar Promo</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="{{ Request::is('admin/slider', 'admin/slider/*') ? 'active' : null }}" href="{{ route('admin.slider') }}">
+                                    <i class="si si-people"></i>Slider</span>
+                                </a>
+                            </li>
+                        </ul>                        
+                    </div>
+                    <!-- END Side Navigation -->
+                </div>
+                <!-- Sidebar Content -->
+            </nav>            
+            <!-- END Sidebar -->
+
+            <!-- Header -->
+            <header id="page-header">
+                <!-- Header Content -->
+                <div class="content-header">
+                    <!-- Left Section -->
+                    <div class="content-header-section">
+                        <!-- Toggle Sidebar -->
+                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                        <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout" data-action="sidebar_toggle">
+                            <i class="fa fa-navicon"></i>
+                        </button>
+                        <!-- END Toggle Sidebar -->
+            
+                    </div>
+                    <!-- END Left Section -->
+            
+                    <!-- Right Section -->
+                    <div class="content-header-section" id="app">
+            
+                        <!-- Notifications -->
+                        <!-- {{-- @include('admin.layouts.notif') --}} -->
+                        <!-- END Notifications -->
+            
+                        <!-- User Dropdown -->
+                        @if(Auth::guard('admin')->check())
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-user d-sm-none"></i>
+                                    <span class="d-none d-sm-inline-block">{{ Auth::guard('admin')->user()->nama }}</span>
+                                    <i class="fa fa-angle-down ml-5"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">
+                                    <a class="dropdown-item" href="#">
+                                        <i class="si si-wrench mr-5"></i> Pengaturan
+                                    </a>
+            
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="si si-logout mr-5"></i> Keluar
+            
+                                        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+                        <!-- END User Dropdown -->
+                    </div>
+                    <!-- END Right Section -->
+                </div>
+                <!-- END Header Content -->
+            </header>
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+
+                <!-- Page Content -->
+                <div class="content">
+                    <!-- Default Elements -->
+                    <div class="block">
+                        <div class="block-content">
+                            <form id="form-promo" onsubmit="return false;" enctype="multipart/form-data">
+                            <input type="hidden" name="promo_id" id="promo_id" value="{{ $promo->id }}"/>
+                            <input type="hidden" id="method" value="update">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="form-group row">
+                                            <label class="col-12" for="field-judul">Judul</label>
+                                            <div class="col-12">
+                                                <input type="text" class="form-control" id="field-judul" name="judul" placeholder="Masukan Judul Post" value="{{ $promo->judul }}">
+                                                <div class="invalid-feedback" id="error-judul">Invalid feedback</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-12">Deskripsi</label>
+                                            <div class="col-12">
+                                                <textarea class="form-control" id="field-deskripsi" name="deskripsi" placeholder="Masukan Deskripsi Event" rows="8">{{ $promo->deskripsi }}</textarea>
+                                                <div class="invalid-feedback" id="error-deskripsi">Invalid feedback</div>
+                                            </div>
+                                        </div>
+                                        {{-- SEO INFO --}}
+                                        <div class="form-group row mb-3">
+                                            <div class="col-lg-12">
+                                                <div class="content-heading mb-0 pt-0">SEO Info</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-12" for="seo_keyword">SEO Keyword</label>
+                                            <div class="col-12">
+                                                <input type="text" class="form-control" id="seo_keyword" name="seo_keyword" placeholder="Masukan SEO Keyword">
+                                                <div class="form-text text-muted font-size-sm text-right">Gunakan tanda koma "," sebagai pemisah!</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-12" for="seo_tags">SEO Tags</label>
+                                            <div class="col-12">
+                                                <input type="text" class="form-control" id="seo_tags" name="seo_tags" placeholder="Masukan SEO Tags">
+                                                <div class="form-text text-muted font-size-sm text-right">Gunakan tanda koma "," sebagai pemisah!</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-12" for="seo_deskripsi">SEO Deksripsi</label>
+                                            <div class="col-12">
+                                                <textarea class="form-control" id="deskripsi_seo" name="seo_deskripsi" maxlength="115" data-always-show="true" data-placement="top" placeholder="Masukan SEO Deskripsi" rows="2"></textarea>
+                                                <div class="form-text text-muted font-size-sm text-right">Maksimal 115 Karakter</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                
+                                        <div class="form-group row">
+                                            <label class="col-4">Publikasi</label>
+                                            <div class="col-8">
+                                                <label class="css-control css-control-primary css-radio">
+                                                    <input type="radio" class="css-control-input" name="is_active" value="1" {{ $promo->is_featured === 1 ? "checked" : ''  }}>
+                                                    <span class="css-control-indicator"></span> Publikasikan
+                                                </label>
+                                                <label class="css-control css-control-secondary css-radio">
+                                                    <input type="radio" class="css-control-input" name="is_active" value="0" {{ $promo->is_featured === 0 ? "checked" : ''  }}>
+                                                    <span class="css-control-indicator"></span> Draft
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4">Featured</label>
+                                            <div class="col-8">
+                                                <label class="css-control css-control-primary css-radio">
+                                                    <input type="radio" class="css-control-input" name="is_featured" value="1" {{ $promo->is_featured === 1 ? "checked" : '' }}>
+                                                    <span class="css-control-indicator"></span> Ya
+                                                </label>
+                                                <label class="css-control css-control-secondary css-radio">
+                                                    <input type="radio" class="css-control-input" name="is_featured" value="0" {{ $promo->is_featured === 0 ? "checked" : '' }}>
+                                                    <span class="css-control-indicator"></span> Tidak
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-0">
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-primary btn-block"><i class="si si-check mr-5"></i>Simpan</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-3">
+                                            <div class="col-lg-12">
+                                                <div class="content-heading mb-0 pt-0">Periode</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <input type="text" class="form-control" id="tgl_range" placeholder="Tanggal Periode Promo">
+                                                <input type="hidden" id="tgl_mulai" name="tgl_mulai" value="">
+                                                <input type="hidden" id="tgl_selesai" name="tgl_selesai" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-3">
+                                            <div class="col-lg-12">
+                                                <div class="content-heading mb-0 pt-0">Media Info</div>
+                                            </div>
+                                        </div>
+                                        <div class="row gutters-tiny items-push">
+                                            <label class="col-12">Thumbnail</label>
+                                            <div class="col-lg-12">
+                                                <div class="text-center mb-15">
+                                                    <img id="img_preview" src="{{ $promo->img_url }}" width="100%">
+                                                </div>
+                                                <input type="hidden" name="image" id="image">
+                                                <div class="btn btn-primary btn-block">
+                                                    <input type="file" class="file-upload" id="file-upload" accept="image/*">
+                                                    Pilih Foto
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- END Default Elements -->
+                </div>
+                
+                <!-- END Page Content -->
+
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            <footer id="page-footer" class="opacity-0">
+                <div class="content py-20 font-size-xs clearfix">
+                    <div class="float-right">
+                        Crafted with <i class="fa fa-heart text-pulse"></i> by <a class="font-w600" href="#" target="_blank">Pintasku</a>
+                    </div>
+                    <div class="float-left">
+                        <a class="font-w600" href="" target="_blank">Diagem Jewerly</a> &copy; <span class="js-year-copy">2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- END Footer -->
+        </div>
+        <script src="../../public/js/laravel.app.js"></script>
+        <script src="../../public/js/laroute.js"></script>
+        <script src="../../public/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="../../public/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="../../public/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="../../public/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+        <script src="../../public/js/common.js"></script>
+        <script src="../../public/js/functions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <script src="../../public/js/plugins/select2/js/select2.full.min.js"></script>
+        <script src="../../public/js/plugins/select2/js/i18n/id.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
+        <script src="../../public/js/plugins/jquery-tags-input/jquery.tagsinput.min.js"></script>
+        <script src="../../public/js/plugins/summernote/summernote-bs4.min.js"></script>
+        <script src="../../public/js/plugins/moment/moment-with-locales.min.js"></script>
+        <script src="../../public/js/plugins/bootstrap-daterangepicker/daterangepicker.min.js"></script>
+        <script src="../../public/js/admin/promo/promo-form.js"></script>
+        <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $('.dataTables_filter input[type="search"]').
+        attr('placeholder','Search in this blog ....').
+        css({'width':'500px','display':'inline-block'});
+        $.extend( true, $.fn.dataTable.defaults, {
+            "responsive": true,
+            "pageLength": 20,
+            "lengthChange": false,
+            "language": {
+                'loadingRecords': '&nbsp;',
+                "sEmptyTable":	 "Tidak ada data yang tersedia pada tabel ini",
+                "sProcessing":   '<div class="spinner-grow text-primary pt-25" role="status"><span class="sr-only">Loading...</span></div>',
+                "sLengthMenu":   "Tampilkan _MENU_",
+                "sZeroRecords":  "Tidak ditemukan data yang sesuai",
+                "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
+                "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+                "sInfoPostFix":  "",
+                "sSearch":       "Cari:",
+                "sUrl":          "",
+                "oPaginate": {
+                    "sFirst":    "Pertama",
+                    "sPrevious": "Sebelumnya",
+                    "sNext":     "Selanjutnya",
+                    "sLast":     "Terakhir"
+                }
+            },
+        });
+        </script>
+        <!-- Scripts -->
+        <!-- END Scripts -->
+    </body>
+</html>

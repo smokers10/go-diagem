@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/smokers10/go-diagem.git/controller/admin"
+	"github.com/smokers10/go-diagem.git/controller/api/admin"
 	"github.com/smokers10/go-diagem.git/infrastructure/middleware"
 	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
 )

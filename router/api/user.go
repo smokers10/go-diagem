@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/smokers10/go-diagem.git/controller/user"
+	"github.com/smokers10/go-diagem.git/controller/api/user"
 	"github.com/smokers10/go-diagem.git/infrastructure/middleware"
 	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
 )
@@ -19,6 +19,7 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	alamatController := user.AlamatController(resolver.AlamatService)
 	kategoriController := user.KategoriController(resolver.KategoriService)
 	produkController := user.ProdukController(resolver.ProdukService)
+	checkoutController := user.CheckoutController(resolver.CheckoutService)
 
 	// parent path
 	parentPath := app.Group("/api/user")
@@ -29,16 +30,16 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	auth.Post("/login", authController.Login)
 
 	// verification
-	verification := parentPath.Group("/verification")
-	verification.Post("/create", middlewareNonStrict, verificationController.Create)
-	verification.Post("/verificate", middlewareNonStrict, verificationController.Verificate)
+	verification := parentPath.Group("/verification", middlewareNonStrict)
+	verification.Post("/create", verificationController.Create)
+	verification.Post("/verificate", verificationController.Verificate)
 
 	// alamat
-	alamat := parentPath.Group("/alamat")
-	alamat.Post("/create", middlewareStrict, alamatController.Create)
-	alamat.Get("/read", middlewareStrict, alamatController.Read)
-	alamat.Put("/update", middlewareStrict, alamatController.Update)
-	alamat.Delete("/delete", middlewareStrict, alamatController.Delete)
+	alamat := parentPath.Group("/alamat", middlewareStrict)
+	alamat.Post("/create", alamatController.Create)
+	alamat.Get("/read", alamatController.Read)
+	alamat.Put("/update", alamatController.Update)
+	alamat.Delete("/delete", alamatController.Delete)
 
 	// kategori
 	kategori := parentPath.Group("/kategori")
@@ -50,11 +51,15 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	produk.Get("/:slug", produkController.Detail)
 
 	// cart
-	cart := parentPath.Group("/cart")
-	cart.Get("/read", middlewareStrict, cartController.Read)
-	cart.Post("/add-to-cart", middlewareStrict, cartController.AddToCart)
-	cart.Put("/update-quantity", middlewareStrict, cartController.UpdateQuantity)
-	cart.Delete("/delete", middlewareStrict, cartController.DeleteCart)
+	cart := parentPath.Group("/cart", middlewareStrict)
+	cart.Get("/read", cartController.Read)
+	cart.Post("/add-to-cart", cartController.AddToCart)
+	cart.Put("/update-quantity", cartController.UpdateQuantity)
+	cart.Delete("/delete", cartController.DeleteCart)
+
+	// checkout
+	checkout := parentPath.Group("/checkout", middlewareStrict)
+	checkout.Post("/", checkoutController.Checkout)
 
 	parentPath.Get("/", middlewareStrict, func(c *fiber.Ctx) error {
 		return c.JSON("Hey there wellcome")
