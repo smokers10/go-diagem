@@ -15,13 +15,13 @@ func OrderRepository(database *sql.DB) domain.OrderRepository {
 	return &orderRepositoryImpl{db: database}
 }
 
-// khusus Admin
-func (or *orderRepositoryImpl) Read() ([]domain.Order, error)
+// // khusus Admin
+// func (or *orderRepositoryImpl) Read() ([]domain.Order, error)
 
-// khusus umum
-func (or *orderRepositoryImpl) GetByID(id int) (*domain.Order, error)
+// // khusus umum
+// func (or *orderRepositoryImpl) GetByID(id int) (*domain.Order, error)
 
-func (or *orderRepositoryImpl) GetByUserID(UserID int) ([]domain.Order, error)
+// func (or *orderRepositoryImpl) GetByUserID(UserID int) ([]domain.Order, error)
 
 func (or *orderRepositoryImpl) Create(req *domain.Order) (*domain.Order, error) {
 	c := context.Background()

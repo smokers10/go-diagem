@@ -40,10 +40,10 @@ type OrderService interface {
 
 type OrderRepository interface {
 	//khusus Admin
-	Read() ([]Order, error)
+	// Read() ([]Order, error)
 
 	// khusus umum
 	Create(req *Order) (*Order, error)
-	GetByID(id int) (*Order, error)
-	GetByUserID(UserID int) ([]Order, error)
+	// GetByID(id int) (*Order, error)
+	// GetByUserID(UserID int) ([]Order, error)
 }

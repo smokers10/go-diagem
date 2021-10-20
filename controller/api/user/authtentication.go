@@ -36,7 +36,3 @@ func (u *userAuthController) Register(c *fiber.Ctx) error {
 
 	return c.Status(response.Status).JSON(response)
 }
-
-func (u *userAuthController) LoginPage(c *fiber.Ctx) error {
-	return c.Render("", nil)
-}

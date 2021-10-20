@@ -6,9 +6,9 @@ require (
 	github.com/andybalholm/brotli v1.0.3 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/gofiber/fiber/v2 v2.19.0
-	github.com/gofiber/storage/mysql v0.0.0-20210922062006-ff033d0e0e86 // indirect
-	github.com/gofiber/template v1.6.17
+	github.com/gofiber/fiber/v2 v2.20.1
+	github.com/gofiber/storage/mysql v0.0.0-20211018071720-3d9778b4da19 // indirect
+	github.com/gofiber/template v1.6.18 // indirect
 	github.com/gosimple/slug v1.10.0
 	github.com/gosimple/unidecode v1.0.0 // indirect
 	github.com/klauspost/compress v1.13.4 // indirect

@@ -94,10 +94,16 @@ github.com/go-sql-driver/mysql v1.6.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LB
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
 github.com/gofiber/fiber/v2 v2.19.0 h1:wBN88VUHT1RSC2ptwsRUl38DVWYkwnwUQY24s0keZVE=
 github.com/gofiber/fiber/v2 v2.19.0/go.mod h1:/LdZHMUXZvTTo7gU4+b1hclqCAdoQphNQ9bi9gutPyI=
+github.com/gofiber/fiber/v2 v2.20.1 h1:p463gd/RI8YeYxP4WMGS+u1UtBS88yk8oLiPkEiDYx4=
+github.com/gofiber/fiber/v2 v2.20.1/go.mod h1:/LdZHMUXZvTTo7gU4+b1hclqCAdoQphNQ9bi9gutPyI=
 github.com/gofiber/storage/mysql v0.0.0-20210922062006-ff033d0e0e86 h1:LiA+UDvlrVR+4lPJgtALVrnGTsNLmTJTaLurwCXmhcU=
 github.com/gofiber/storage/mysql v0.0.0-20210922062006-ff033d0e0e86/go.mod h1:We6ky6rxW64XHR6FN2yH0y4u6D7JLQNtFiUWmuvWp6U=
+github.com/gofiber/storage/mysql v0.0.0-20211018071720-3d9778b4da19 h1:XwVv0Fm8yFsZWCilNnpPsIWGxFucSb3SJIb5CwuW8jE=
+github.com/gofiber/storage/mysql v0.0.0-20211018071720-3d9778b4da19/go.mod h1:We6ky6rxW64XHR6FN2yH0y4u6D7JLQNtFiUWmuvWp6U=
 github.com/gofiber/template v1.6.17 h1:uNuxSiZ3cx3owTu6EOG1dOx1zbtbe8F/7+2rpGYsTIw=
 github.com/gofiber/template v1.6.17/go.mod h1:847kEBdWnOZ4kw0WMBa6eHwsX9IRYUUl3eJu7A+THfE=
+github.com/gofiber/template v1.6.18 h1:nrDaRKJWS1vyuMLqijbiP+ryT2CIFYOr+jZnPmVf0Io=
+github.com/gofiber/template v1.6.18/go.mod h1:HfYYaUgBhj9nMknxczh3U2LtZ88Avd1IPThD3GTUtd8=
 github.com/gofiber/utils v0.1.2/go.mod h1:pacRFtghAE3UoknMOUiXh2Io/nLWSUHtQCi/3QASsOc=
 github.com/gogo/protobuf v1.3.2/go.mod h1:P1XiOD3dCwIKUDQYPy72D8LYyHL2YPYrpS2s69NZV8Q=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=

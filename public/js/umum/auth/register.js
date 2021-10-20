@@ -3,7 +3,7 @@ $(document).ready(function() {
         e.preventDefault();
         var formData = new FormData($('#form-register')[0]);
         $.ajax({
-            url: laroute.route('registerPost'),
+            url: "/register",
             type: 'POST',
             data: formData,
             cache: false,
@@ -13,13 +13,13 @@ $(document).ready(function() {
                 Swal.fire({
                     title: 'Tunggu Sebentar...',
                     text: ' ',
-                    imageUrl: laroute.url('public/img/loading.gif', ['']),
+                    imageUrl: laroute.url('/img/loading.gif', ['']),
                     showConfirmButton: false,
                     allowOutsideClick: false,
                 });
             },
             success: function (response) {
-                if (response.fail == false) {
+                if (response.success) {
                     Swal.fire({
                         title: "Berhasil",
                         text: "Panduan Verifikasi Akun Sudah Dikirim Ke Email",
