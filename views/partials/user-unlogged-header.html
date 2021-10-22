@@ -1,0 +1,122 @@
+<header id="page-header">
+    <!-- Header Content -->
+    <div class="content-header height-75 py-0">
+        <!-- Left Section -->
+        <div class="content-header-section">
+            <!-- Logo -->
+            <div class="content-header-item height-50">
+                <a href="/">
+                    <img src="/img/logo/logo.png" class="img-fluid h-100" />
+                </a>
+            </div>
+            <!-- END Logo -->
+        </div>
+        <!-- END Left Section -->
+
+        <!-- Middle Section -->
+        
+        <!-- END Middle Section -->
+
+        <!-- Right Section -->
+        <div class="content-header-section d-flex">
+            <ul class="nav-main-header">
+                <li class="">
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#">Who We Are</a>
+                    <ul>
+                        <li>
+                            <a href="#">The Brand</a>
+                        </li>
+                        <li>
+                            <a href="#">Magazine</a>
+                        </li>
+                        <li>
+                            <a href="#">About Us</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#">Products</a>
+                </li>
+
+                <li>
+                    <a href="#">Blog</a>
+                </li>
+            </ul>
+            
+            <!-- Cart Header Section -->
+            <div class="btn-cart d-none d-lg-block" role="group">
+                <button type="button" class="btn btn-sm cart" id="header-cart" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="si si-bag cart-icon"></i>
+                    <span class="cart-notification">
+                        0
+                    </span>
+                </button>
+                <div class="dropdown-menu cart-overlay dropdown-menu-right" aria-labelledby="header-cart">
+                    <div class="cart-header">
+                        <div class="font-weight-bold">Keranjang
+                            (<span class="cart-count">0</span>)
+                        </div>
+                        <div class="text-right">
+                            <a href="" class="text-decoration-none">Lihat Semua</a>
+                        </div>
+                    </div>
+                    <div class="cart-content"></div>
+                </div>
+            </div>
+            <!-- END Cart Header Section -->
+            
+            <!-- Auth Section -->
+            <div class="float-right">
+                <a href="/login" class="btn btn-primary mx-1 btn-sm">Login</a>
+                <a href="/register" class="btn btn-primary mx-1 btn-sm">Daftar</a>
+            </div>
+            <!-- END Auth Section -->
+
+            <!-- Toggle Sidebar -->
+            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+            <button type="button" class="btn btn-circle btn-dual-secondary d-lg-none" data-toggle="layout" data-action="sidebar_toggle">
+                <i class="fa fa-bars"></i>
+            </button>
+            <!-- END Toggle Sidebar -->
+        </div>
+        <!-- END Right Section -->
+    </div>
+    <!-- END Header Content -->
+
+    <!-- Header Search -->
+    <div id="page-header-search" class="overlay-header">
+        <div class="content-header content-header-fullrow">
+            <form action="bd_search.html" method="post">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <!-- Close Search Section -->
+                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                        <button type="button" class="btn btn-secondary px-15" data-toggle="layout" data-action="header_search_off">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        <!-- END Close Search Section -->
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search or hit ESC.." id="page-header-search-input" name="page-header-search-input">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary px-15">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- END Header Search -->
+
+    <!-- Header Loader -->
+    <!-- Please check out the Activity page under Elements category to see examples of showing/hiding it -->
+    <div id="page-header-loader" class="overlay-header bg-primary">
+        <div class="content-header content-header-fullrow text-center">
+            <div class="content-header-item">
+                <i class="fa fa-sun-o fa-spin text-white"></i>
+            </div>
+        </div>
+    </div>
+    <!-- END Header Loader -->
+</header>

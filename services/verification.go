@@ -85,14 +85,14 @@ func (v *verificationServiceImpl) Verificate(req *domain.Verifikasi) *domain.Res
 	// jika data verifikasi tidak ada
 	if verif.UserID == 0 {
 		res.Message = "tidak ada data verifikasi untuk akun anda"
-		res.Status = http.StatusUnauthorized
+		res.Status = http.StatusOK
 		return &res
 	}
 
 	// komparasi kode
 	if !encryption.Compare(verif.Kode, req.Kode) {
 		res.Message = "kode verifikasi salah"
-		res.Status = http.StatusUnauthorized
+		res.Status = http.StatusOK
 		return &res
 	}
 

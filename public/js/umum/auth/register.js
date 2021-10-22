@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $("#form-register").submit(function (e) {
-        e.preventDefault();
-        var formData = new FormData($('#form-register')[0]);
+        e.preventDefault()
+        var formData = new FormData($('#form-register')[0])
         $.ajax({
             url: "/register",
             type: 'POST',
@@ -12,11 +12,11 @@ $(document).ready(function() {
             beforeSend: function(){
                 Swal.fire({
                     title: 'Tunggu Sebentar...',
-                    text: ' ',
-                    imageUrl: laroute.url('/img/loading.gif', ['']),
+                    text: '',
+                    imageUrl: '/img/loading.gif',
                     showConfirmButton: false,
                     allowOutsideClick: false,
-                });
+                })
             },
             success: function (response) {
                 if (response.success) {
@@ -26,58 +26,24 @@ $(document).ready(function() {
                         timer: 3000,
                         showConfirmButton: false,
                         icon: 'success'
-                    });
+                    })
                     window.setTimeout(function () {
-                        location.reload();
-                    }, 1500);
+                        location.reload()
+                    }, 1500)
+                    var user = JSON.stringify(res.data)
+                    localStorage.setItem("logged", user)
                 } else {
-                    Swal.close();
+                    Swal.close()
                     for (control in response.errors) {
-                        $('#reg-' + control).addClass('is-invalid');
-                        $('#reg_error-' + control).html(response.errors[control]);
+                        $('#reg-' + control).addClass('is-invalid')
+                        $('#reg_error-' + control).html(response.errors[control])
                     }
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                Swal.close();
-                alert('Error adding / update data');
+                Swal.close()
+                alert('Error adding / update data')
             }
-        });
-    });
-    // $("form#form-register").validate({
-    //     errorClass: "invalid-feedback",
-    //     errorElement: "div",
-    //     errorPlacement: function (e, r) {
-    //         jQuery(r).parents(".form-group > div").append(e);
-    //     },
-    //     highlight: function (e) {
-    //         jQuery(e).closest(".form-group").removeClass("is-invalid").addClass("is-invalid");
-    //     },
-    //     success: function (e) {
-    //         jQuery(e).closest(".form-group").removeClass("is-invalid"), jQuery(e).remove();
-    //     },
-    //   rules: {
-    //     nama_lengkap: "required",
-    //     email: {
-    //       required: true,
-    //       email: true
-    //     },
-    //     password: {
-    //       required: true,
-    //       minlength: 5
-    //     }
-    //   },
-    //   messages: {
-    //     nama_lengkap: "Masukan Nama Lengkap",
-    //     password: {
-    //       required: "Please provide a password",
-    //       minlength: "Your password must be at least 5 characters long"
-    //     },
-    //     email: "Please enter a valid email address"
-    //   },
-    //   submitHandler: function(form) {
-    //     form.submit();
-    //   }
-    // });
-
-});
+        })
+    })
+})

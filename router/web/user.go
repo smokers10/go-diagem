@@ -10,16 +10,16 @@ import (
 	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
 )
 
-func UserWebPagge(app *fiber.App, session *session.Store, resolver *resolver.ServiceResolver) {
+func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.ServiceResolver) {
 	// middleware init
 	middlewareStrict := middleware.UserStrictWeb(session)
 	middlewareVerification := middleware.UserVerificationWeb(session)
-	MiddlewareGuestOnly := middleware.GuestOnly(session)
+	middlewareGuestOnly := middleware.GuestOnly(session)
 
 	// controller init
 	authencticationController := user.AuthenticationController(resolver.UserService, session)
 	homeController := user.HomeController()
-	verifikasiController := user.VerificationController()
+	verifikasiController := user.VerificationController(resolver.VerificationService, session)
 
 	// API Controller init
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
@@ -28,18 +28,23 @@ func UserWebPagge(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	parentPath := app.Group("/")
 
 	// authentication
-	parentPath.Get("/login", MiddlewareGuestOnly, authencticationController.LoginPage)
-	parentPath.Post("/login", MiddlewareGuestOnly, authencticationController.Login)
-	parentPath.Get("/register", MiddlewareGuestOnly, authencticationController.RegisterPage)
-	parentPath.Post("/register", MiddlewareGuestOnly, authencticationController.Register)
+	parentPath.Get("/login", middlewareGuestOnly, authencticationController.LoginPage)
+	parentPath.Post("/login", middlewareGuestOnly, authencticationController.Login)
+	parentPath.Get("/register", middlewareGuestOnly, authencticationController.RegisterPage)
+	parentPath.Post("/register", middlewareGuestOnly, authencticationController.Register)
 	parentPath.Get("/logout", authencticationController.Logout)
 
 	// verifikasi
 	verifikasi := parentPath.Group("/verifikasi", middlewareVerification)
 	verifikasi.Get("/", verifikasiController.VerificationPage)
 	verifikasi.Post("/create", verificationAPIController.Create)
-	verifikasi.Post("/verificate", verificationAPIController.Verificate)
+	verifikasi.Post("/verificate", verifikasiController.Verificate)
 
 	// home
 	parentPath.Get("/home", middlewareStrict, homeController.HomePage)
+
+	// index page
+	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {
+		return c.Render("home", nil)
+	})
 }

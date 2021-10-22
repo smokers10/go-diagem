@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    
     $("#form-login").submit(function (e) {
         e.preventDefault()
         var formData = new FormData($('#form-login')[0])
@@ -14,13 +13,13 @@ $(document).ready(function() {
                 Swal.fire({
                     title: 'Tunggu Sebentar...',
                     text: 'Data Sedang Diproses!',
-                    imageUrl: laroute.url('/img/loading.gif', ['']),
+                    imageUrl: '/img/loading.gif',
                     showConfirmButton: false,
                     allowOutsideClick: false,
                 })
             },
-            success: function (response) {
-                if (response.success == false) {
+            success: function (res) {
+                if (res.success) {
                     Swal.fire({
                         title: "Berhasil",
                         text: "Proses Masuk Ke Akun Kamu Berhasil!",
@@ -31,7 +30,7 @@ $(document).ready(function() {
                     window.setTimeout(function () {
                         location.reload()
                     }, 1500)
-                    var user = JSON.stringify(response.data)
+                    var user = JSON.stringify(res.data)
                     localStorage.setItem("logged", user)
                 }else {
                     Swal.close()

@@ -44,7 +44,7 @@ func main() {
 	api.AdminAPI(app, &serviceResolver)
 	api.UserAPI(app, &serviceResolver)
 	web.AdminWebPage(app)
-	web.UserWebPagge(app, session, &serviceResolver)
+	web.UserWebPage(app, session, &serviceResolver)
 
 	app.Get("/test", func(c *fiber.Ctx) error {
 		return c.Render("test-page", nil)
