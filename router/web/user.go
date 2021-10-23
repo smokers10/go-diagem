@@ -20,9 +20,11 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	authencticationController := user.AuthenticationController(resolver.UserService, session)
 	homeController := user.HomeController()
 	verifikasiController := user.VerificationController(resolver.VerificationService, session)
+	alamatController := user.AlamatController()
 
 	// API Controller init
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
+	alamatAPIController := userAPI.AlamatController(resolver.AlamatService)
 
 	// router clustering
 	parentPath := app.Group("/")
@@ -42,6 +44,14 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 
 	// home
 	parentPath.Get("/home", middlewareStrict, homeController.HomePage)
+
+	// alamat
+	alamat := parentPath.Group("/alamat", middlewareStrict)
+	alamat.Get("/", alamatController.AlamatPage)
+	alamat.Post("/create", alamatAPIController.Create)
+	alamat.Get("/read", alamatAPIController.Read)
+	alamat.Put("/update", alamatAPIController.Update)
+	alamat.Delete("/Delete", alamatAPIController.Delete)
 
 	// index page
 	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {

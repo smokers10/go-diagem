@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem Project</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="description" content="Diagem Project">
+        <meta name="author" content="Diagem Project">
+        <meta name="robots" content="noindex, nofollow">
+        
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem Project">
+        <meta property="og:site_name" content="Diagem Project">
+        <meta property="og:description" content="Diagem Project">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+        <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
+        <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="/js/plugins/select2/css/select2.min.css">
+        <style>
+            #list-alamat_filter {
+                display: none
+            }
+        </style>
+    </head>
+    <body class="bg-white">
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
+            {{template "partials/user-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="content">
+                    <div class="row mb-6">
+                        <div class="col-lg-3">
+                            {{template "partials/user-menu" .}}
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="block block-rounded block-bordered">
+                                <div class="block-header">
+                                    <h3 class="block-title">Buku Alamat</h3>
+                                    <div class="block-options">
+                                        <button type="button" class="btn btn-sm btn-secondary" id="btn-add_alamat">
+                                            <i class="fa fa-plus mr-1"></i> Tambah Alamat Baru
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="block-content block-content-full">
+                                    <div class="row justify-content-between">
+                                        <div class="col-4">
+                                            <div class="has-search">
+                                                <i class="fa fa-search"></i>
+                                                <input type="search" class="form-control" id="search-data-list" name="keyword">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="current_page" value="1">
+                                    <div class="py-50 text-center" id="dataku-loading">
+                                        <div class="spinner-border text-primary wh-50" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <div id="data-list" class="pt-20">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+        </div>
+
+        <!-- Modal Alamat -->
+        <div class="modal fade" id="alamatModal" role="dialog" aria-labelledby="alamat-modal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content rounded">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <div class="div">
+                            <h5 class="modal-title" id="alamatModal-title"></h5>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">
+                                <i class="fa fa-times-circle"></i>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="modal-body pt-0">
+                        <form id="alamatModalFrm" onsubmit="return false">
+                            <input type="hidden" name="operation" id="field-operation">
+                            <input type="hidden" name="id" id="field-id">
+                            <div class="form-group">
+                                <label class="form-label" for="field-nama">Nama
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="nama" id="field-nama" placeholder="Masukan Nama Alamat">
+                                <div class="invalid-feedback" id="error-nama"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="field-alamat">Alamat
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="alamat" id="field-alamat" placeholder="Masukan Alamat Lengkap">
+                                <div class="invalid-feedback" id="error-alamat"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="field-kode-pos">Kode Pos
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="kd_pos" id="field-kode-pos" placeholder="Masukan Kode Pos">
+                                <div class="invalid-feedback" id="error-kode-pos"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="field-penerima">Nama Penerima
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="penerima" id="field-penerima" placeholder="Masukan Nama Lengkap Penerima">
+                                <div class="invalid-feedback" id="error-penerima"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="field-phone">Kontak Yang Dapat Dihubungi
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="phone" id="field-phone" placeholder="Masukan Kontak Yang Dapat Dihubungi">
+                                <div class="invalid-feedback" id="error-phone"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block font-weight-bold">
+                                    Simpan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Modal Alamat -->
+        
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="/js/plugins/select2/js/select2.full.min.js"></script>
+        <script src="/js/plugins/select2/js/i18n/id.js"></script>
+        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+        <script src="/js/umum/alamat.js"></script>
+    </body>
+</html>
