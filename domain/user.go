@@ -10,6 +10,9 @@ type User struct {
 	DeviceToken   string `json:"device_token,omitempty" form:"device_token"`
 	RememberToken string `json:"remember_token,omitempty" form:"remember_token"`
 	IsVerified    bool   `json:"is_verified,omitempty" form:"is_verified"`
+	Tahun         int    `json:"tahun,omitempty" form:"tahun"`
+	Bulan         int    `json:"bulan,omitempty" form:"bulan"`
+	Tanggal       int    `json:"tanggal,omitempty" form:"tanggal"`
 	CreatedAt     string `json:"created_at,omitempty" form:"created_at"`
 	UpdatedAt     string `json:"updated_at,omitempty" form:"updated_at"`
 }
@@ -20,6 +23,9 @@ type UserBasicData struct {
 	HP       string `json:"hp,omitempty" form:"hp"`
 	Email    string `json:"email,omitempty" form:"email"`
 	Password string `json:"password,omitempty" form:"password"`
+	Tahun    int    `json:"tahun,omitempty" form:"tahun"`
+	Bulan    int    `json:"bulan,omitempty" form:"bulan"`
+	Tanggal  int    `json:"tanggal,omitempty" form:"tanggal"`
 }
 
 type UserCredential struct {
@@ -30,13 +36,15 @@ type UserCredential struct {
 type UserService interface {
 	Login(cred *UserCredential) *Response
 	Registrasi(req *UserBasicData) *Response
+	Update(req *UserBasicData) *Response
+	GetProfile(userID int) *Response
 }
 
 type UserRepository interface {
 	ByEmail(email string) (*User, error)
 	ByID(id int) (*User, error)
 	Create(req *UserBasicData) (*User, error)
-	Update(req *UserBasicData) (*User, error)
+	Update(req *UserBasicData) (*UserBasicData, error)
 	UpdatePassword(new_password string, id int) error
 	UpdateVerificationStatus(id int) error
 }

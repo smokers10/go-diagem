@@ -75,7 +75,7 @@ func (a *alamatRepository) Update(req *domain.Alamat) (*domain.Alamat, error) {
 		return nil, err
 	}
 
-	stmt, err := tx.Prepare("UPDATE alamat SET alamat = ?, nama = ?, penerima = ?, phone = ?, kd_pos = ?, is_utama = ? WHERE id = ? AND user_id = ?")
+	stmt, err := tx.Prepare("UPDATE alamat SET alamat = ?, nama = ?, penerima = ?, phone = ?, kd_pos = ? WHERE id = ? AND user_id = ?")
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -83,7 +83,7 @@ func (a *alamatRepository) Update(req *domain.Alamat) (*domain.Alamat, error) {
 
 	defer stmt.Close()
 
-	if _, err := stmt.ExecContext(c, req.Alamat, req.Nama, req.Penerima, req.Phone, req.KDPos, req.IsUtama, req.ID, req.UserID); err != nil {
+	if _, err := stmt.ExecContext(c, req.Alamat, req.Nama, req.Penerima, req.Phone, req.KDPos, req.ID, req.UserID); err != nil {
 		tx.Rollback()
 		return nil, err
 	}
@@ -113,5 +113,49 @@ func (a *alamatRepository) Delete(id int, user_id int) error {
 
 	tx.Commit()
 
+	return nil
+}
+
+func (a *alamatRepository) MakeUtama(id int, user_id int) error {
+	c := context.Background()
+	tx, err := a.db.BeginTx(c, nil)
+	if err != nil {
+		return err
+	}
+
+	stmt, err := tx.Prepare("UPDATE alamat SET is_utama = true WHERE id = ? AND user_id = ?")
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if _, err := stmt.ExecContext(c, id, user_id); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+	return nil
+}
+
+func (a *alamatRepository) MakeUtamaFalse(id int, user_id int) error {
+	c := context.Background()
+	tx, err := a.db.BeginTx(c, nil)
+	if err != nil {
+		return err
+	}
+
+	stmt, err := tx.Prepare("UPDATE alamat SET is_utama = false WHERE id <> ? AND user_id = ?")
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if _, err := stmt.ExecContext(c, id, user_id); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
 	return nil
 }

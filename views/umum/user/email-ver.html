@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Diagem Verifikasi</title>
+    <title>Verifikasi Email</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="description" content="Diagem Project">
@@ -27,7 +27,7 @@
     <link rel="stylesheet" id="css-main" href="/css/app.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
 </head>
-<body class="bg-white">
+<body>
     <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
         <!-- Header -->
         <header id="page-header">
@@ -128,6 +128,7 @@
                                         <h2 class="font-weight-bold mb-0">Verifikasi Akun</h2>
                                         <p>Verifikasi email Anda, silahkan masukan kode OTP yang kami kirim ke email Anda</p>
                                     </div>
+                                    
                                     <form id="form-verifikasi" onsubmit="return false;">
                                         <div class="form-group">
                                             <label class="form-label" for="kode">Kode Verifikasi
@@ -165,103 +166,6 @@
     <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="/js/umum/general.js"></script>
     <script src="/js/functions.js"></script>
-    <script>
-        $(document).ready(function(){
-            // get logged user
-            const logged = JSON.parse(localStorage.getItem("logged")) 
-            $("#logged-user-name").text(logged.nama)
-
-            // resend OTP
-            $("#resend-button").click(()=>{
-                $.ajax({
-                    url: "/verifikasi/create",
-                    method: "post",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function(){
-                        Swal.fire({
-                            title: 'Tunggu Sebentar...',
-                            text: 'Kode Verifikasi Sedang Diproses!',
-                            imageUrl: '/img/loading.gif',
-                            showConfirmButton: false,
-                            allowOutsideClick: false,
-                        })
-                    },
-                    success: function (res) {
-                        if (res.success) {
-                            Swal.fire({
-                                title: "Berhasil",
-                                text: "Kami Berhasil Mengirim Kode Verifikasi Baru, Silahkan Check Inbox Email Kamu",
-                                timer: 3000,
-                                showConfirmButton: false,
-                                icon: 'success'
-                            })
-                        }else {
-                            Swal.close()
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        Swal.close()
-                        alert('Error Create Verification Code')
-                    }
-                })
-            })
-
-            // verifikasi
-            $("#verificate-button").click(function(e){
-                var formData = new FormData($('#form-verifikasi')[0])
-                $.ajax({
-                    url: "/verifikasi/verificate",
-                    method: "post",
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function(){
-                        Swal.fire({
-                            title: 'Tunggu Sebentar...',
-                            text: 'Proses Verifikasi Akun!',
-                            imageUrl: '/img/loading.gif',
-                            showConfirmButton: false,
-                            allowOutsideClick: false,
-                        })
-                    },
-                    success: function (res) {
-                        if (res.success) {
-                            Swal.fire({
-                                title: "Berhasil",
-                                text: "Akun Kamu Berhasil Diverifikasi!",
-                                timer: 3000,
-                                showConfirmButton: false,
-                                icon: 'success'
-                            })
-                            setTimeout(() => {
-                                location.reload()
-                            }, 3000)
-                        }
-
-                        else if (!res.success && res.status != 500) {
-                            Swal.fire({
-                                title: "Kode Verifikasi Salah",
-                                text: "",
-                                timer: 3000,
-                                showConfirmButton: false,
-                                icon: 'error'
-                            })
-                        }
-
-                        else {
-                            Swal.close()
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        Swal.close()
-                        alert('Error Create Verification Code')
-                    }
-                })
-            })
-        })
-    </script>
+    <script src="/js/umum/verifikasi.js"></script>
 </body>
 </html>

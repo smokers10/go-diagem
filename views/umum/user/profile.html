@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem Project</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="description" content="Diagem Project">
+        <meta name="author" content="Diagem Project">
+        <meta name="robots" content="noindex, nofollow">
+        
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem Project">
+        <meta property="og:site_name" content="Diagem Project">
+        <meta property="og:description" content="Diagem Project">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        
+        
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    </head>
+    <body class="bg-white">
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
+            {{template "partials/user-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="content">
+                    <div class="row cols-xs-space cols-sm-space cols-md-space">
+                        <div class="col-lg-3">
+                            {{template "partials/user-menu" .}}
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="block block-rounded block-bordered block-shadow">
+                                <div class="block-header border-3x border-bottom">
+                                    <div class="block-title">
+                                        <h3 class="font-size-xl font-w600 mb-0">Profil Saya</h3>
+                                        <p class="font-size-sm mb-0 text-gray-90">Kelola informasi profil Anda untuk mengontrol, melindungi dan mengamankan akun.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="block-content">
+                                    <form id="form-profil">
+                                        <div class="form-group">
+                                            <label class="form-label" for="field-nama">Nama Lengkap
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" name="nama" id="field-nama" placeholder="Masukan Nama Lengkap">
+                                            <div class="invalid-feedback" id="error-nama"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="field-phone">No. Handphone
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="phone" class="form-control" name="hp" id="field-phone" placeholder="Masukan No. Handphone" value="">
+                                            <div class="invalid-feedback" id="error-phone"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="field-tgl">Tanggal Lahir
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <select class="form-control" id="field-tgl" name="tanggal">
+                                                        <option value="">Tanggal</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-4">
+                                                    <select class="form-control" id="field-bln" name="bulan">
+                                                        <option value="">Bulan</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-4">
+                                                    <select class="form-control" id="field-thn" name="tahun">
+                                                        <option value="">Tahun</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="invalid-feedback" id="error-phone"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary btn-block">
+                                                Simpan
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                _bulanRenderer()
+                _tanggalRenderer()
+                _tahunRenderer()
+                _getProfileData()
+
+                // submit form profile
+                $("#form-profil").submit(function(e){
+                    e.preventDefault()
+                    const formData = new FormData($("#form-profil")[0])
+                    $.ajax({
+                        url: "/profile/update",
+                        type: 'put',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function(){
+                            Swal.fire({
+                                title: 'Tunggu Sebentar...',
+                                text: '',
+                                imageUrl: '/img/loading.gif',
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                            })
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: "Berhasil",
+                                    text: "Akun Anda Diperbaharui",
+                                    timer: 1500,
+                                    showConfirmButton: false,
+                                    icon: 'success'
+                                })
+                            } else {
+                                Swal.close()
+                            }
+                        },
+                    })
+                })
+            })
+
+            function _getProfileData() {
+                $.ajax({
+                    url:"/profile/get",
+                    method: "get",
+                    success: function(res){
+                        const { data } = res
+                        const { nama, email, hp, tahun, bulan, tanggal } = data
+                        $("#field-nama").val(nama)
+                        $("#field-phone").val(hp)
+                        $("#field-tgl").val(tanggal)
+                        $("#field-bln").val(bulan)
+                        $("#field-thn").val(tahun)
+                    }
+                })
+            }
+
+            function _bulanRenderer() {
+                const bulan = [
+                    { no:1, nama:"Januari"},
+                    { no:2, nama:"Februari"},
+                    { no:3, nama:"Maret"},
+                    { no:4, nama:"April"},
+                    { no:5, nama:"Mei"},
+                    { no:6, nama:"Juni"},
+                    { no:7, nama:"Juli"},
+                    { no:8, nama:"Agustus"},
+                    { no:9, nama:"September"},
+                    { no:10, nama:"Oktober"},
+                    { no:11, nama:"November"},
+                    { no:12, nama:"Desember"},
+                ]
+
+                bulan.forEach(bln => {
+                    $("#field-bln").append(`<option value="${bln.no}">${bln.nama}</option>`)  
+                })
+            }
+
+            function _tanggalRenderer() {
+                for (let i = 0; i <= 30; i++) {
+                    $("#field-tgl").append(`<option value="${i+1}">${i+1}</option>`)
+                }
+            }
+
+            function _tahunRenderer() {
+                const currentTime = new Date()
+                
+                for (let i = 1965; i <= currentTime.getFullYear(); i++) {
+                    $("#field-thn").append(`<option value="${i}">${i}</option>`)
+                }
+            }
+        </script>
+    </body>
+</html>

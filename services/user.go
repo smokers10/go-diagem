@@ -110,3 +110,43 @@ func (u *userServiceImpl) Registrasi(req *domain.UserBasicData) *domain.Response
 
 	return &res
 }
+
+func (u *userServiceImpl) Update(req *domain.UserBasicData) *domain.Response {
+	// deklarasi variable
+	res := domain.Response{}
+
+	// panggil repository
+	user, err := u.userRepository.Update(req)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error terjadi saat update akun Anda"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Data = user
+	res.Message = "akun Anda berhasil diupdate"
+	res.Status = http.StatusOK
+	res.Success = true
+	return &res
+}
+
+func (u *userServiceImpl) GetProfile(userID int) *domain.Response {
+	// deklarasi variable
+	res := domain.Response{}
+
+	// panggil repository
+	user, err := u.userRepository.ByID(userID)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error terjadi saat pengambilan akun"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Data = user
+	res.Message = "akun berhasil diambil"
+	res.Status = http.StatusOK
+	res.Success = true
+	return &res
+}

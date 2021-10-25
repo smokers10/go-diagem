@@ -84,3 +84,28 @@ func (a *alamatServiceImpl) Delete(id int, user_id int) *domain.Response {
 	res.Success = true
 	return &res
 }
+
+func (a *alamatServiceImpl) MakeUtama(id int, user_id int) *domain.Response {
+	res := domain.Response{}
+
+	// buat nilai is_utama bernilai false terkecuali pada ID yang diinginkan
+	if err := a.alamatRepository.MakeUtamaFalse(id, user_id); err != nil {
+		fmt.Println(err)
+		res.Message = "error saat reverse nilai logic alamat"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	// ganti nilai is_utama bernilai true pada ID yang diinginkan
+	if err := a.alamatRepository.MakeUtama(id, user_id); err != nil {
+		fmt.Println(err)
+		res.Message = "error saat mengubah alamat terpilih menjadi alamat utama"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Message = "alamat utama berhasil dibuat"
+	res.Status = http.StatusOK
+	res.Success = true
+	return &res
+}

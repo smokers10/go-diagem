@@ -31,14 +31,14 @@ func (ur *userRepositoryImpl) ByEmail(email string) (user *domain.User, err erro
 
 func (ur *userRepositoryImpl) ByID(id int) (user *domain.User, err error) {
 	result := domain.User{}
-	statement, err := ur.db.Prepare("SELECT * FROM users WHERE id = ? LIMIT 1")
+	statement, err := ur.db.Prepare("SELECT nama, hp, email, tahun, bulan, tanggal FROM users WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	statement.QueryRowContext(context.Background(), id).Scan(&result.ID, &result.Nama, &result.HP, &result.Email, &result.Password, &result.IsVerified)
+	statement.QueryRowContext(context.Background(), id).Scan(&result.Nama, &result.HP, &result.Email, &result.Tahun, &result.Bulan, &result.Tanggal)
 
 	return &result, nil
 }
@@ -68,21 +68,17 @@ func (ur *userRepositoryImpl) Create(req *domain.UserBasicData) (user *domain.Us
 	}, nil
 }
 
-func (ur *userRepositoryImpl) Update(req *domain.UserBasicData) (user *domain.User, err error) {
-	statement, err := ur.db.Prepare("UPDATE users SET nama = ?, hp = ? WHERE id = ?")
+func (ur *userRepositoryImpl) Update(req *domain.UserBasicData) (user *domain.UserBasicData, err error) {
+	statement, err := ur.db.Prepare("UPDATE users SET nama = ?, hp = ?, tahun = ?, bulan = ?, tanggal = ? WHERE id = ?")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	statement.ExecContext(context.Background(), req.Nama, req.HP, req.ID)
+	statement.ExecContext(context.Background(), req.Nama, req.HP, req.Tahun, req.Bulan, req.Tanggal, req.ID)
 
-	return &domain.User{
-		ID:    req.ID,
-		Nama:  req.Nama,
-		Email: req.Email,
-	}, nil
+	return req, nil
 }
 
 func (ur *userRepositoryImpl) UpdatePassword(new_password string, id int) error {

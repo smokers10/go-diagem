@@ -21,7 +21,7 @@ func VerificationController(verification *domain.VerifikasiService, session *ses
 }
 
 func (vc *verificationController) VerificationPage(c *fiber.Ctx) error {
-	return c.Render("umum/verifikasi", nil)
+	return c.Render("umum/user/email-ver", nil)
 }
 
 func (vc *verificationController) Verificate(c *fiber.Ctx) error {

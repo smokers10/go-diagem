@@ -19,6 +19,7 @@ type AlamatService interface {
 	Read(userID int) *Response
 	Update(req *Alamat) *Response
 	Delete(id int, user_id int) *Response
+	MakeUtama(id int, user_id int) *Response
 }
 
 type AlamatRepository interface {
@@ -26,4 +27,6 @@ type AlamatRepository interface {
 	Read(userID int) ([]Alamat, error)
 	Update(req *Alamat) (*Alamat, error)
 	Delete(id int, user_id int) error
+	MakeUtama(id int, user_id int) error
+	MakeUtamaFalse(id int, user_id int) error
 }

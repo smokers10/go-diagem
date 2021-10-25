@@ -19,26 +19,36 @@ $(document).ready(function() {
                 })
             },
             success: function (res) {
+                var titleText 
+                var iconType
+                res.success ? titleText = "Berhasil" : titleText = "Gagal"
+                res.success ? iconType = "success" : iconType = "error"
+
+                Swal.fire({
+                    title: titleText,
+                    text: res.message,
+                    timer: 3000,
+                    showConfirmButton: false,
+                    icon: iconType
+                })
+
                 if (res.success) {
-                    Swal.fire({
-                        title: "Berhasil",
-                        text: "Proses Masuk Ke Akun Kamu Berhasil!",
-                        timer: 3000,
-                        showConfirmButton: false,
-                        icon: 'success'
-                    })
+                    var user = JSON.stringify(res.data)
+                    localStorage.setItem("logged", user)
                     window.setTimeout(function () {
                         location.reload()
                     }, 1500)
-                    var user = JSON.stringify(res.data)
-                    localStorage.setItem("logged", user)
-                }else {
-                    Swal.close()
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                Swal.close()
-                alert('Error adding / update data')
+            error : function(xhr, ajaxOptions, thrownError) {
+                var res = xhr.responseJSON
+                Swal.fire({
+                    title: "Opps",
+                    text: res.message,
+                    timer: 3000,
+                    showConfirmButton: false,
+                    icon: "error"
+                })
             }
         })
     })

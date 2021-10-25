@@ -20,6 +20,7 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	kategoriController := user.KategoriController(resolver.KategoriService)
 	produkController := user.ProdukController(resolver.ProdukService)
 	checkoutController := user.CheckoutController(resolver.CheckoutService)
+	profileController := user.ProfileController(resolver.UserService)
 
 	// parent path
 	parentPath := app.Group("/api/user")
@@ -40,6 +41,7 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	alamat.Get("/read", alamatController.Read)
 	alamat.Put("/update", alamatController.Update)
 	alamat.Delete("/delete", alamatController.Delete)
+	alamat.Put("/make-utama", alamatController.MakeUtama)
 
 	// kategori
 	kategori := parentPath.Group("/kategori")
@@ -56,6 +58,11 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	cart.Post("/add-to-cart", cartController.AddToCart)
 	cart.Put("/update-quantity", cartController.UpdateQuantity)
 	cart.Delete("/delete", cartController.DeleteCart)
+
+	// profile
+	profile := parentPath.Group("/profile", middlewareStrict)
+	profile.Get("/", profileController.GetProfile)
+	profile.Put("/update", profileController.Update)
 
 	// checkout
 	checkout := parentPath.Group("/checkout", middlewareStrict)

@@ -45,7 +45,7 @@ func (a *alamatController) Update(c *fiber.Ctx) error {
 	}
 
 	req.UserID = c.Locals("id").(int)
-	req.KDPos = c.FormValue("kd_post")
+	req.KDPos = c.FormValue("kd_pos")
 
 	response := a.alamarService.Update(&req)
 
@@ -57,6 +57,15 @@ func (a *alamatController) Delete(c *fiber.Ctx) error {
 	alamatID, _ := strconv.Atoi(c.FormValue("id"))
 
 	response := a.alamarService.Delete(alamatID, userID)
+
+	return c.Status(response.Status).JSON(response)
+}
+
+func (a *alamatController) MakeUtama(c *fiber.Ctx) error {
+	userID := c.Locals("id").(int)
+	alamatID, _ := strconv.Atoi(c.FormValue("id"))
+
+	response := a.alamarService.MakeUtama(alamatID, userID)
 
 	return c.Status(response.Status).JSON(response)
 }
