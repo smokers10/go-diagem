@@ -103,13 +103,50 @@ func GuestOnly(session *session.Store) fiber.Handler {
 			return c.Redirect("/home")
 		}
 
-		if claims.Type == "super admin" {
-			return c.Redirect("/super-admin/home")
-		}
-
-		if claims.Type == "admin" {
+		if claims.Type == "admin" || claims.Type == "super admin" || claims.Type == "marketing" {
 			return c.Redirect("/admin/home")
 		}
+
+		return c.Next()
+	}
+}
+
+func AdminWeb(session *session.Store, adminType ...string) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		sess, err := session.Get(c)
+		if err != nil {
+			panic(err)
+		}
+		var isAllowed bool
+
+		// get token
+		token := sess.Get("token")
+
+		// check token
+		if token == nil {
+			return c.Redirect("/admin/login")
+		}
+
+		// verifikasi token
+		claims := jwt.Verify(token.(string))
+
+		// check authorisasi
+		for _, allowed := range adminType {
+			if claims.Type == allowed {
+				isAllowedMemAddress := &isAllowed
+				*isAllowedMemAddress = true
+				break
+			}
+		}
+
+		if !isAllowed {
+			return c.Redirect("/admin/home")
+		}
+
+		// assign claims ke locals
+		c.Locals("id", claims.ID)
+		c.Locals("email", claims.ID)
+		c.Locals("type", claims.Type)
 
 		return c.Next()
 	}

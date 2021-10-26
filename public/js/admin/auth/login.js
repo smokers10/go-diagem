@@ -3,22 +3,22 @@ $(function () {
         onfocusout: function(element) {
             $(element).valid()
             if ($(element).valid()) {
-                $('#loginForm').find('button:submit').prop('disabled', false);  
+                $('#loginForm').find('button:submit').prop('disabled', false)  
             } else {
-                $('#loginForm').find('button:submit').prop('disabled', 'disabled');
+                $('#loginForm').find('button:submit').prop('disabled', 'disabled')
             }
         },    
         errorClass: "invalid-feedback font-size-sm animated fadeInDown",
         errorElement: "div",
         errorPlacement: function (e, n) {
-            jQuery(n).parents(".form-group").find('div.invalid-feedback').html(e);
+            jQuery(n).parents(".form-group").find('div.invalid-feedback').html(e)
         },
         highlight: function (e) {
-            jQuery(e).closest(".form-group").removeClass("is-invalid").addClass("is-invalid");
+            jQuery(e).closest(".form-group").removeClass("is-invalid").addClass("is-invalid")
         },
         success: function (e) {
-            jQuery(e).closest(".form-group").removeClass("is-invalid").addClass("is-valid");
-            jQuery(e).closest(".form-group").removeClass("is-invalid"), jQuery(e).remove();
+            jQuery(e).closest(".form-group").removeClass("is-invalid").addClass("is-valid")
+            jQuery(e).closest(".form-group").removeClass("is-invalid"), jQuery(e).remove()
         },
         rules: {
             email: {
@@ -41,11 +41,11 @@ $(function () {
             },
         },
         submitHandler: function (form) {
-            var fomr = $('form#loginForm')[0];
-            var formData = new FormData(fomr);
+            var form = $('#loginForm')[0]
+            var formData = new FormData(form)
             $.ajax({
                 type: 'POST',
-                url: laroute.route('admin.login'),
+                url: '/admin/login',
                 data: formData,
                 cache: false,
                 contentType: false,
@@ -54,54 +54,66 @@ $(function () {
                     Swal.fire({
                         title: 'Tunggu Sebentar...',
                         text: ' ',
-                        imageUrl: laroute.url('public/img/loading.gif', ['']),
+                        imageUrl: '/img/loading.gif',
                         showConfirmButton: false,
                         allowOutsideClick: false,
-                    });
+                    })
                 },
                 success: function (response) {
-                    if (response.fail == false) {
+                    if (response.success) {
                         Swal.fire({
                             title: "Berhasil",
                             text: "Anda Akan Segera Dialihkan!",
                             timer: 3000,
                             showConfirmButton: false,
                             icon: 'success'
-                        });
+                        })
+                        var user = JSON.stringify(response.data)
+                        localStorage.setItem("logged", user)
                         window.setTimeout(function () {
-                            location.reload();
-                        }, 1500);
-                    } else {
+                            location.reload()
+                        }, 1500)
+                    }else {
                         Swal.fire({
                             title: "Gagal",
                             text: "Periksa Form Input!",
                             timer: 3000,
                             showConfirmButton: false,
                             icon: 'error'
-                        });
+                        })
                         for (control in response.errors) {
-                            $('#login-' + control).addClass('is-invalid');
-                            $('#error-' + control).html(response.errors[control]);
+                            $('#login-' + control).addClass('is-invalid')
+                            $('#error-' + control).html(response.errors[control])
                         }
                     }
+                },
+                error : function(xhr, ajaxOptions, thrownError) {
+                    var res = xhr.responseJSON
+                    Swal.fire({
+                        title: "Gagal",
+                        text: res.message,
+                        timer: 3000,
+                        showConfirmButton: false,
+                        icon: "error"
+                    })
                 }
-            });
-            return false;
+            })
+            return false
         }
-    });
-});
+    })
+})
 
 $(document).ready(function() {
     $("#show_hide_password a").on('click', function(event) {
-        event.preventDefault();
+        event.preventDefault()
         if($('#show_hide_password input').attr("type") == "text"){
-            $('#show_hide_password input').attr('type', 'password');
-            $('#show_hide_password i').addClass( "fa-eye-slash" );
-            $('#show_hide_password i').removeClass( "fa-eye" );
+            $('#show_hide_password input').attr('type', 'password')
+            $('#show_hide_password i').addClass( "fa-eye-slash" )
+            $('#show_hide_password i').removeClass( "fa-eye" )
         }else if($('#show_hide_password input').attr("type") == "password"){
-            $('#show_hide_password input').attr('type', 'text');
-            $('#show_hide_password i').removeClass( "fa-eye-slash" );
-            $('#show_hide_password i').addClass( "fa-eye" );
+            $('#show_hide_password input').attr('type', 'text')
+            $('#show_hide_password i').removeClass( "fa-eye-slash" )
+            $('#show_hide_password i').addClass( "fa-eye" )
         }
-    });
-});
+    })
+})

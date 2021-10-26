@@ -43,7 +43,7 @@ func main() {
 	// router
 	api.AdminAPI(app, &serviceResolver)
 	api.UserAPI(app, &serviceResolver)
-	web.AdminWebPage(app)
+	web.AdminWebPage(app, session, &serviceResolver)
 	web.UserWebPage(app, session, &serviceResolver)
 
 	app.Get("/test", func(c *fiber.Ctx) error {

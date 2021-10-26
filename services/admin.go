@@ -50,6 +50,10 @@ func (as *adminServiceImpl) Login(cred *domain.AdminCredentials) (response *doma
 	payload.Type = admin.Roles
 	payload.IsVerified = false
 
+	// kosongkan data password pada admin struct
+	admin.Password = ""
+
+	// return response berhasil
 	res.Message = "login berhasil"
 	res.Data = admin
 	res.Status = http.StatusOK
