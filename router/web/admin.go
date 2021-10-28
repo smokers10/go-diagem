@@ -3,7 +3,9 @@ package web
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
+	adminAPI "github.com/smokers10/go-diagem.git/controller/api/admin"
 	"github.com/smokers10/go-diagem.git/controller/web/admin"
+
 	"github.com/smokers10/go-diagem.git/infrastructure/middleware"
 	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
 )
@@ -15,8 +17,13 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	// controller init
 	authenticationController := admin.AdminAuthenticationController(resolver.AdminService, session)
 	homeController := admin.HomeController()
+	mitraController := admin.MitraController()
+	sliderController := admin.SliderController()
+	keuanganController := admin.KeuanganController()
+	produkController := admin.ProdukController()
 
 	// controller API ini
+	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
 
 	// router clustering
 	adminParentPath := app.Group("/admin")
@@ -25,6 +32,32 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	adminParentPath.Get("/login", guestOnly, authenticationController.LoginPage)
 	adminParentPath.Post("/login", guestOnly, authenticationController.Login)
 	adminParentPath.Get("/logout", authenticationController.Logout)
+
+	// mitra
+	mitra := adminParentPath.Group("/mitra", middleware.AdminWeb(session, "admin", "super admin"))
+	// mitra page
+	mitra.Get("/", mitraController.IndexPage)
+	mitra.Get("/tambah", mitraController.TambahPage)
+	mitra.Get("/edit", mitraController.EditPage)
+	// mitra non page
+	mitra.Get("/get", mitraAPIController.Read)
+
+	// slider
+	slider := adminParentPath.Group("/slider", middleware.AdminWeb(session, "admin", "super admin"))
+	slider.Get("/", sliderController.IndexPage)
+	slider.Get("/tambah", sliderController.TambahPage)
+	slider.Get("/edit", sliderController.EditPage)
+
+	// keuangan
+	keuangan := adminParentPath.Group("/keuangan", middleware.AdminWeb(session, "admin", "super admin"))
+	keuangan.Get("/rekening", keuanganController.RekeningPage)
+
+	// produk
+	produk := adminParentPath.Group("/produk", middleware.AdminWeb(session, "admin", "super admin"))
+	produk.Get("/", produkController.IndexPage)
+	produk.Get("/tambah", produkController.TambahPage)
+	produk.Get("/edit", produkController.EditPage)
+	produk.Get("/kategori", produkController.KategoriPage)
 
 	// home
 	adminParentPath.Get("/home", middleware.AdminWeb(session, "admin", "super admin", "marketing"), homeController.HomePage)

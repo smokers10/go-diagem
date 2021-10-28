@@ -280,12 +280,11 @@ jQuery(document).ready(function () {
     });
 });
 
-function load_content()
-{
+function load_content(){
     var page = $('#current_page').val();
 
     $.ajax({
-        url: laroute.route('admin.slider'),
+        url: "",
         type: "GET",
         dataType: "JSON",
         data: {
@@ -310,7 +309,7 @@ function load_content()
                                 ${ response.data[k].status_badge }
                                 </div>
                                 <div class="col-lg-4 text-right">
-                                    <a class="btn btn-secondary btn-sm js-tooltip" data-toggle="tooltip" data-placement="top" title="Ubah"  href="${ laroute.route('admin.slider.edit', {id : response.data[k].id }) }">
+                                    <a class="btn btn-secondary btn-sm js-tooltip" data-toggle="tooltip" data-placement="top" title="Ubah"  href="#">
                                         <i class="si si-note"></i>
                                     </a>
                                     <button class="btn btn-secondary btn-sm js-tooltip btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" type="button" data-id="${ response.data[k].id }">

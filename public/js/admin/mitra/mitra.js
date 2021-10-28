@@ -2,7 +2,7 @@ jQuery(function() {
     oTable = $('#list-mitra').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "http://localhost/re-diagem/admin/reseller",
+        ajax: "",
         columns: [
             {
                 data: 'nama',

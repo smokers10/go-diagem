@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+        <title>Admin | Tokonya</title>
+
+        <meta name="description" content="Tokonya">
+        <meta name="author" content="Tokonya">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Tokonya">
+        <meta property="og:site_name" content="Tokonya">
+        <meta property="og:description" content="Tokonya">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <!-- Page JS Plugins CSS -->
+        <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+
+        <!-- Fonts, Styles and Codebase framework -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="/js/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="/js/plugins/select2/css/select2-bootstrap4.min.css">
+        <link rel="stylesheet" href="/js/plugins/summernote/summernote-bs4.css">
+        <link rel="stylesheet" href="/js/plugins/bootstrap-taginput/tagsinput.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
+        <style type="text/css">
+            .file-upload {
+                width: 100%;
+                padding: 10px 0px;
+                position: absolute;
+                left: 0;
+                opacity: 0;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
+            <!-- Sidebar -->
+            {{template "partials/admin-sidebar" .}}
+            <!-- END Sidebar -->
+
+            <!-- Header -->
+            {{template "partials/admin-header" .}}
+            <!-- END Header -->
+            
+
+            <!-- Main Container -->
+            <main id="main-container">
+
+                <!-- Page Content -->
+                <div class="content">
+                    <form id="form-produk" onsubmit="return false;">
+                        <input type="hidden" name="total_variasi" id="total_variasi" value="1">
+                        <div class="content-heading pt-0 mb-3">
+                            Tambah Produk Baru
+                            <button type="submit" class="btn btn-primary float-right mr-5">
+                                <i class="si si-paper-plane mr-1"></i>
+                                Simpan
+                            </button>
+                        </div>
+                        <!-- 1. Informasi Produk -->
+                        <div class="block block-rounded">
+                            <div class="block-header block-header-default">
+                                <div class="block-title">
+                                    <strong>1. Informasi Produk</strong>
+                                </div>
+                            </div>
+                            <div class="block-content pb-15">
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label" for="field-nama">Nama Produk</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" id="field-nama" name="nama" placeholder="Masukan Nama Produk" autocomplete="off">
+                                        <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
+                                    </div>
+                                </div>
+                
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label" for="field-deskripsi">Deskripsi Produk</label>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="deskripsi" id="field-deskripsi" cols="30" rows="10" placeholder="Masukan Deskripsi Produk"></textarea>
+                                        <div class="invalid-feedback font-size-sm" id="error-deskripsi">Invalid feedback</div>
+                                    </div>
+                                </div>
+                
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label" for="field-kategori">Kategori Produk</label>
+                                    <div class="col-lg-9">
+                                        <select class="form-control" id="field-kategori" name="kategori"></select>
+                                        <div class="invalid-feedback font-size-sm" id="error-kategori">Invalid feedback</div>
+                                    </div>
+                                </div>
+                
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label" for="field-kode">Kode Produk</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" id="field-kode" name="kode" placeholder="Masukan Kode Produk" autocomplete="off">
+                                        <div class="invalid-feedback font-size-sm" id="error-kode">Invalid feedback</div>
+                                    </div>
+                                </div>
+                
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label" for="field-spek">Spesifikasi Produk</label>
+                                    <div class="col-lg-9">
+                                        <input type="hidden" id="field-spek_count" value="0">
+                                        <table class="table table-bordered" id="field-spek">
+                                            <tbody>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <button class="btn btn-block btn-primary" type="button" id="btn-add-spek">Tambah Spesifikasi</button>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- 2. Harga Produk -->
+                        <div class="block block-rounded">
+                            <div class="block-header block-header-default">
+                                <div class="block-title">
+                                    <strong>2. Harga Produk</strong>
+                                </div>
+                            </div>
+                            <div class="block-content pb-15">
+                                <input type="hidden" name="is_variasi" id="is_variasi" value="0">
+                                <input type="hidden" id="var2_status" name="var2_status" value="0"/>
+                                <div class="form-group row non-variasi">
+                                    <label class="col-lg-3 col-form-label" for="field-harga">Harga Produk</label>
+                                    <div class="col-lg-7">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    Rp
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control" id="field-harga" name="harga" placeholder="Masukan Harga Produk" autocomplete="off">
+                                        </div>
+                                        <div class="text-danger font-size-sm" id="error-harga"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row non-variasi">
+                                    <label class="col-lg-3 col-form-label" for="field-stok">Stok Produk</label>
+                                    <div class="col-lg-7">
+                                        <input type="number" class="form-control" id="field-stok" name="stok" placeholder="Masukan Stok Produk">
+                                        <div class="invalid-feedback font-size-sm" id="error-stok">Invalid feedback</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row non-variasi">
+                                    <label class="col-lg-3 col-form-label" for="btn-add-variasi">Variasi Produk</label>
+                                    <div class="col-lg-7">
+                                        <button type="button" class="btn btn-outline-primary btn-block" id="btn-add-variasi">
+                                            <i class="si si-plus mr-1"></i> Aktifkan Variasi Produk
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger mt-0 d-none btn-block" id="btn-hapus-variasi">
+                                            <i class="si si-trash mr-1"></i> Hapus Variasi Produk
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- 3. Foto Produk -->
+                        <div class="block block-rounded">
+                            <div class="block-header block-header-default">
+                                <div class="block-title">
+                                    <strong>3. Foto Produk</strong>
+                                </div>
+                            </div>
+                            <div class="block-content pb-15">
+                                <div class="form-group row">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="preview_img border">
+                                                    <img id="previewImg-id" src="/img/placeholder/product.png" width="100%" height="100%"/>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="btn btn-primary btn-block btn-sm mt-3" >
+                                                            <input type="file" class="file-upload" data-id="index" accept="image/*">
+                                                            <input type="hidden" id="foto-index" name="foto[]" value="">
+                                                            <i class="si si-plus mr-1"></i>Pilih Foto
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="block block-rounded">
+                            <div class="block-header block-header-default">
+                                <div class="block-title">
+                                    <strong>4. Pengiriman</strong>
+                                </div>
+                            </div>
+                            <div class="block-content pb-15">
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label" for="field-berat">Berat</label>
+                                    <div class="col-lg-9">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <input type="number" class="form-control" id="field-berat" name="berat" placeholder="Masukan Berat Produk">
+                                            </div>
+                                            <div class="col-4">
+                                                <select class="form-control" name="berat_satuan">
+                                                    <option>Gram (g)</option>
+                                                    <option>Kilogram (Kg)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label" for="field-lebar">Ukuran Paket</label>
+                                    <div class="col-lg-3">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="field-lebar" name="lebar" placeholder="Lebar">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    cm
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="field-panjang" name="panjang" placeholder="Panjang">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    cm
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="field-tinggi" name="tinggi" placeholder="Tinggi">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    cm
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="modal" id="cropModal">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="block-header block-header-default">
+                                    <h3 class="block-title modal-title">Potong & Sesuaikan Foto</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="si si-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content pb-15">
+                                <input type="hidden" id="image_id" value=""/>
+                                <div id="resizer"></div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button class="btn btn-alt-primary rotate btn-block text-center" data-deg="90">
+                                            <i class="fa fa-undo"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-alt-primary rotate btn-block text-center" data-deg="-90" >
+                                        <i class="fa fa-redo"></i></button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-alt-primary btn-block" id="upload" data-id="">Potong Dan Simpan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="categorySelectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-popout" role="document">
+                        <div class="modal-content">
+                            <div class="block block-transparent mb-0">
+                                <div class="block-header block-header-default">
+                                        <h3 class="block-title modal-title">Pilih Kategori Produk</h3>
+                                    <div class="block-options">
+                                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                            <i class="si si-close"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="block-content block-content-full">
+                                    <div class="row">
+                                        <div class="col-4 border-right">
+                                            <div class="modal-category-box c-scrollbar">
+                                                <div class="sort-by-box">
+                                                    <form role="form" class="search-widget" onsubmit="return false;">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="Cari Kategori" onkeyup="filterListItems(this, 'categories')">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="si si-magnifier"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-category-list">
+                                                    <ul id="categories">
+                                                        <li onclick="get_subcategories_by_category(this, 1)">
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 border-right">
+                                            <div class="modal-category-box c-scrollbar" id="subcategory_list">
+                                                <div class="sort-by-box">
+                                                    <form role="form" class="search-widget">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="Cari Kategori" onkeyup="filterListItems(this, 'subcategories')">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="si si-magnifier"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-category-list has-right-arrow">
+                                                    <ul id="subcategories"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="modal-category-box c-scrollbar" id="subsubcategory_list">
+                                                <div class="sort-by-box">
+                                                    <form role="form" class="search-widget">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" placeholder="Cari Kategori" onkeyup="filterListItems(this, 'subsubcategories')">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="si si-magnifier"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-category-list">
+                                                    <ul id="subsubcategories">
+                
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-15">
+                                        <div class="col-12">
+                                            <span class="mr-3">Kategori Dipilih:</span>
+                                            <span>Kategori > Sub Kategori > Sub Kategori</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Batal</button>
+                                <button type="button" class="btn btn-alt-success" onclick="closeModal()">
+                                    <i class="fa fa-check"></i> Simpan Kategori
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+
+            </main>
+            <!-- END Main Container -->
+
+
+            <!-- Footer -->
+            {{template "partials/admin-footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
+        <script src="/js/plugins/select2/js/select2.full.min.js"></script>
+        <script src="/js/plugins/select2/js/i18n/id.js"></script>
+        <script src="/js/plugins/bootstrap-taginput/tagsinput.js"></script>
+        <script src="/js/plugins/jquery-rowspanizer/jquery.rowspanizer.min.js"></script>
+        <script src="/js/plugins/summernote/summernote-bs4.min.js"></script>
+        <script src="/js/admin/produk/produk-form.js"></script>
+        <script>
+        $('.dataTables_filter input[type="search"]').
+        attr('placeholder','Search in this blog ....').
+        css({'width':'500px','display':'inline-block'});
+        $.extend( true, $.fn.dataTable.defaults, {
+            "responsive": true,
+            "pageLength": 20,
+            "lengthChange": false,
+            "language": {
+                'loadingRecords': '&nbsp;',
+                "sEmptyTable":	 "Tidak ada data yang tersedia pada tabel ini",
+                "sProcessing":   '<div class="spinner-grow text-primary pt-25" role="status"><span class="sr-only">Loading...</span></div>',
+                "sLengthMenu":   "Tampilkan _MENU_",
+                "sZeroRecords":  "Tidak ditemukan data yang sesuai",
+                "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
+                "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+                "sInfoPostFix":  "",
+                "sSearch":       "Cari:",
+                "sUrl":          "",
+                "oPaginate": {
+                    "sFirst":    "Pertama",
+                    "sPrevious": "Sebelumnya",
+                    "sNext":     "Selanjutnya",
+                    "sLast":     "Terakhir"
+                }
+            },
+        });
+        </script>
+    </body>
+</html>

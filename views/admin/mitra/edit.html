@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+        <title>Admin | Tokonya</title>
+
+        <meta name="description" content="Tokonya">
+        <meta name="author" content="Tokonya">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Tokonya">
+        <meta property="og:site_name" content="Tokonya">
+        <meta property="og:description" content="Tokonya">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <!-- Page JS Plugins CSS -->
+        <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+
+        <!-- Fonts, Styles and Codebase framework -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <style>
+            #list-produk_filter {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
+            <!-- Sidebar -->
+            {{template "partials/admin-sidebar" .}}
+            <!-- END Sidebar -->
+
+            <!-- Header -->
+            {{template "partials/admin-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="content">
+                    <form id="form-mitra" onsubmit="return false;">
+                        <input type="hidden" name="total_variasi" id="total_variasi" value="1">
+                        <div class="content-heading pt-0 mb-3">
+                            Edit Data Reseller
+                            <button type="submit" class="btn btn-primary float-right mr-5">
+                                <i class="si si-paper-plane mr-1"></i>
+                                Simpan
+                            </button>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="block block-rounded">
+                                    <div class="block-header block-header-default">
+                                        <div class="block-title">
+                                            <strong>Informasi Reseller</strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="block-content pb-15">
+                                        <input type="hidden" name="id">
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-nama">Nama Reseller</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="field-nama" name="nama" placeholder="Masukan Nama Reseller" autocomplete="off">
+                                                <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-username">Username</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="field-username" name="username" placeholder="Masukan Nama Reseller" autocomplete="off">
+                                                <div class="invalid-feedback font-size-sm" id="error-username">Invalid feedback</div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-email">Email</label>
+                                            <div class="col-lg-9">
+                                                <input type="email" class="form-control" id="field-email" name="email" placeholder="Masukan Nama pengguna Reseller" autocomplete="off">
+                                                <div class="invalid-feedback font-size-sm" id="error-email">Invalid feedback</div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-kontak">Kontak</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="field-kontak" name="kontak" placeholder="Masukan Nama Reseller" autocomplete="off">
+                                                <div class="invalid-feedback font-size-sm" id="error-kontak">Invalid feedback</div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-alamat">Alamat Lengkap</label>
+                                            <div class="col-lg-9">
+                                                <textarea class="form-control" name="alamat" id="field-alamat" cols="30" rows="10" placeholder="Masukan alamat Reseller"></textarea>
+                                                <div class="invalid-feedback font-size-sm" id="error-alamat">Invalid feedback</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>  
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/admin-footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <script src="/js/admin/mitra/mitra.js"></script>
+        <script src="/js/admin/general.js"></script>
+    </body>
+</html>
+

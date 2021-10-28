@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+        <title>Admin | Tokonya</title>
+
+        <meta name="description" content="Tokonya">
+        <meta name="author" content="Tokonya">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Tokonya">
+        <meta property="og:site_name" content="Tokonya">
+        <meta property="og:description" content="Tokonya">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <!-- Page JS Plugins CSS -->
+        <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+
+        <!-- Fonts, Styles and Codebase framework -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="/js/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="/js/plugins/select2/css/select2-bootstrap4.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
+    </head>
+    <body>
+        <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
+            <!-- Sidebar -->
+            {{template "partials/admin-sidebar" .}}
+            <!-- END Sidebar -->
+
+            <!-- Header -->
+            {{template "partials/admin-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+
+                <!-- Page Content -->
+                <div class="content">
+                    <form id="form-slide" onsubmit="return false;" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="">
+                        <input type="hidden" id="metode" value="tambah">
+                        <div class="content-heading pt-3 mb-3">
+                            Tambah Slide
+                            <button type="submit" class="btn btn-primary float-right">
+                                <i class="si si-check mr-3"></i> Simpan
+                            </button>
+                        </div>
+                        <div class="block block-shadow block-rounded block-bordered">
+                            <div class="block-content">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="field-nama">Jenis</label>
+                                            <select class="form-control" name="type" id="field-type">
+                                                <option value="">Pilih</option>
+                                                <option value="1">Berita</option>
+                                                <option value="2">Halaman</option>
+                                                <option value="3">Custom Link</option>
+                                            </select>
+                                            <div id="error-type" class="invalid-feedback"></div>
+                                        </div>
+                                        <div class="form-group d-none" id="slug">
+                                            <label class="col-form-label" for="field-slug">Berita/Halaman</label>
+                                            <select class="form-control" name="slug" id="field-slug"></select>
+                                            <div id="error-slug" class="invalid-feedback"></div>
+                                        </div>
+                                        <div class="form-group d-none" id="link">
+                                            <label class="col-form-label" for="field-link">Link</label>
+                                            <input type="text" class="form-control" name="link" id="field-link" placeholder="Masukan Link / URL">
+                                            <div id="error-link" class="invalid-feedback"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <div>
+                                                <label class="css-control css-control-primary css-radio">
+                                                    <input type="radio" class="css-control-input" id="status_publikasi" name="status" value="1" checked>
+                                                    <span class="css-control-indicator"></span> Publikasikan
+                                                </label>
+                                                <label class="css-control css-control-danger css-radio">
+                                                    <input type="radio" class="css-control-input" id="status_draft" name="status" value="0">
+                                                    <span class="css-control-indicator"></span> Draft
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row gutters-tiny items-push">
+                                            <label class="col-12">Thumbnail</label>
+                                            <div class="col-lg-12">
+                                                <div class="text-center">
+                                                    <img id="img_preview" src="/img/slider.png" width="100%">
+                                                </div>
+                                                <div class="text-danger" id="error-foto"></div>
+                                                <div class="btn btn-primary btn-block mt-15">
+                                                    <input type="hidden" id="featured_img" name="featured_img" value="">
+                                                    <input type="file" class="file-upload" id="file-upload" accept="image/*">
+                                                    Pilih Foto
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- END Page Content -->
+
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/admin-footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <script src="/js/plugins/select2/js/select2.full.min.js"></script>
+        <script src="/js/plugins/select2/js/i18n/id.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
+        <script src="/js/admin/slider.js"></script>
+        <script src="/js/admin/general.js"></script>
+        <script>
+            $('.dataTables_filter input[type="search"]').
+            attr('placeholder','Search in this blog ....').
+            css({'width':'500px','display':'inline-block'})
+            $.extend( true, $.fn.dataTable.defaults, {
+                "responsive": true,
+                "pageLength": 20,
+                "lengthChange": false,
+                "language": {
+                    'loadingRecords': '&nbsp;',
+                    "sEmptyTable":	 "Tidak ada data yang tersedia pada tabel ini",
+                    "sProcessing":   '<div class="spinner-grow text-primary pt-25" role="status"><span class="sr-only">Loading...</span></div>',
+                    "sLengthMenu":   "Tampilkan _MENU_",
+                    "sZeroRecords":  "Tidak ditemukan data yang sesuai",
+                    "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                    "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
+                    "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+                    "sInfoPostFix":  "",
+                    "sSearch":       "Cari:",
+                    "sUrl":          "",
+                    "oPaginate": {
+                        "sFirst":    "Pertama",
+                        "sPrevious": "Sebelumnya",
+                        "sNext":     "Selanjutnya",
+                        "sLast":     "Terakhir"
+                    }
+                },
+            })
+        </script>
+    </body>
+</html>
