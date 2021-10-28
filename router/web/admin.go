@@ -22,6 +22,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	keuanganController := admin.KeuanganController()
 	produkController := admin.ProdukController()
 	orderController := admin.OrderController()
+	promoController := admin.PromoController()
 
 	// controller API ini
 	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
@@ -63,6 +64,12 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	// order
 	order := adminParentPath.Group("/order", middleware.AdminWeb(session, "admin", "super admin"))
 	order.Get("/", orderController.IndexPage)
+
+	// promo
+	promo := adminParentPath.Group("/promo", middleware.AdminWeb(session, "admin", "super admin"))
+	promo.Get("/", promoController.IndexPage)
+	promo.Get("/tambah", promoController.TambahPage)
+	promo.Get("/edit", promoController.EditPage)
 
 	// home
 	adminParentPath.Get("/home", middleware.AdminWeb(session, "admin", "super admin", "marketing"), homeController.HomePage)
