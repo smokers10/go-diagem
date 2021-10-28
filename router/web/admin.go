@@ -21,6 +21,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	sliderController := admin.SliderController()
 	keuanganController := admin.KeuanganController()
 	produkController := admin.ProdukController()
+	orderController := admin.OrderController()
 
 	// controller API ini
 	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
@@ -58,6 +59,10 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	produk.Get("/tambah", produkController.TambahPage)
 	produk.Get("/edit", produkController.EditPage)
 	produk.Get("/kategori", produkController.KategoriPage)
+
+	// order
+	order := adminParentPath.Group("/order", middleware.AdminWeb(session, "admin", "super admin"))
+	order.Get("/", orderController.IndexPage)
 
 	// home
 	adminParentPath.Get("/home", middleware.AdminWeb(session, "admin", "super admin", "marketing"), homeController.HomePage)
