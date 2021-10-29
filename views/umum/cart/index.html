@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem Project</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="description" content="Diagem Project">
+        <meta name="author" content="Diagem Project">
+        <meta name="robots" content="noindex, nofollow">
+        
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem Project">
+        <meta property="og:site_name" content="Diagem Project">
+        <meta property="og:description" content="Diagem Project">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+        <style>
+            .bottomcart{
+                position: fixed;
+                width: 100%;
+                z-index: 10;
+                box-shadow: none;
+                max-width: 500px;
+                left: initial;
+                bottom: 50px;
+                background: rgb(255, 255, 255);
+                padding: 16px;
+            }
+        </style>
+    </head>
+    <body class="bg-white">
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
+            {{template "partials/user-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="content">
+                    <div class="row">
+                        <div class="col-lg-8 col-sm-12 px-1 px-sm-3" id="cart-content">
+                            <div class="block block-shadow block-bordered block-rounded">
+                                <div class="block-content block-content-full">
+                                    <div id="data-list">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="col-lg-4 d-none d-lg-block">
+                            <div class="block block-shadow block-bordered block-rounded">
+                                <div class="block-header">
+                                    <div class="font-size-20 font-weight-bold">Ringkasan Belanja</div>
+                                </div>
+                                <div class="block-content pt-0 cart-summary">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="">Subtotal</div>
+                                        <div class="">Rp0</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="">Diskon</div>
+                                        <div class="">-Rp50000</div>
+                                    </div>
+                                    <hr class="border-2x">
+                                    <div class="d-flex font-size-20 font-weight-bold justify-content-between mb-2">
+                                        <div class="">Total Belanja</div>
+                                        <div class="total_belanja">Rp0</div>
+                                    </div>
+                                </div>
+                                <div class="block-content block-content-full pt-0">
+                                    <form id="cart-checkout" method="POST" action="#">
+                                        <button class="btn btn-primary btn-block btn-lg btn-checkout" type="submit" disabled>
+                                            Beli
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-block d-md-none">
+                    <div class="bottomcart">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="css-1j4pkxq">Total Harga</div>
+                                <div class="total_belanja">-</div>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-primary btn-block btn-lg btn-checkout" type="button" onclick="event.preventDefault(); document.getElementById('checkout').submit();"  disabled>
+                                    Checkout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="/js/umum/cart.js"></script>
+    </body>
+</html>

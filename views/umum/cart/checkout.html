@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem Project</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="description" content="Diagem Project">
+        <meta name="author" content="Diagem Project">
+        <meta name="robots" content="noindex, nofollow">
+        
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem Project">
+        <meta property="og:site_name" content="Diagem Project">
+        <meta property="og:description" content="Diagem Project">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        
+        
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="/js/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+        <style>
+            #wizard > .steps{
+                display: none;
+            }
+        
+            .aiz-megabox {
+                position: relative;
+                cursor: pointer;
+            }
+            .aiz-megabox input {
+                position: absolute;
+                /* opacity: 0; */
+            }
+            
+            .aiz-megabox .aiz-megabox-elem {
+                border: 1px solid #e2e5ec;
+                border-radius: 0.25rem;
+                -webkit-transition: all .3s ease;
+                transition: all .3s ease;
+                border-radius: 0.25rem;
+            }
+            /* .aiz-rounded-check {
+                border-radius: 50%;
+                background: 0 0;
+                position: relative;
+                height: 16px;
+                width: 16px;
+                border: 1px solid #d1d7e2;
+            } */
+        </style>
+    </head>
+
+    <body class="bg-white">
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
+            {{template "partials/user-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <div class="content">
+                    <form method="POST" action="#">
+                        <input type="hidden" name="ongkir">
+                        <input type="hidden" name="sub_total">
+                        <input type="hidden" name="final_total">
+                
+                        <div class="row">
+                            <div class="col-md-8 col-sm-12">
+                                <div class="block block-bordered block-shadow block-rounded mb-3">
+                                    <div class="block-header border-3x border-bottom">
+                                        <h3 class="block-title font-weight-bold">
+                                            <i class="fa fa-truck mr-1"></i>Kirim ke mana?
+                                        </h3>
+                                        <button type="button" class="btn btn-outline-primary float-right btn-sm btn-pilih_alamat">Pilih Alamat Lain</button>
+                                    </div>
+                                    <div class="block-content block-content-full" id="alamatData">
+                                        <input type="hidden" name="alamat['id']">
+                                        <input type="hidden" name="alamat['penerima']">
+                                        <input type="hidden" name="alamat['phone']">
+                                        <input type="hidden" name="alamat['alamat']">
+                                        <input type="hidden" name="alamat['kelurahan_id']">
+                                        <input type="hidden" name="alamat['kd_pos']">
+                                        <div>
+                                            <p class="mb-0">
+                                                <b class="nama-penerima">nama penerima</b>
+                                                <span class="nama-alamat">nama alamat</span>
+                                                <span class="badge badge-success">Utama</span>
+                                            </p>
+                                            <div class="phone">
+                                                kontak
+                                            </div>
+                                            <div class="alamat-lengkap">
+                                                alamat lengkap<br>
+                                                kode pos
+                                            </div>
+                                        </div>
+                                        <!-- jika alamat belum ada -->
+                                        <div class="text-center">
+                                            <img class="empty-img" src="/img/placeholder/alamat.png">
+                                            <div>
+                                                <h3 class="font-size-24 font-weight-bold mt-1">Alamat Pengiriman Belum Ditambahkan</h3>
+                                                <button type="button" class="btn btn-primary btn-lg btn-add_alamat">
+                                                    <i class="fa fa-plus mr-1"></i>Tambah Alamat</button>
+                                            </div>
+                                        </div>
+                                        <!-- END jika alamat belum ada -->
+                                    </div>
+                                </div>
+                                
+                                <div class="block block-bordered block-shadow block-rounded">
+                                    <div class="block-header border-3x border-bottom">
+                                        <h3 class="block-title font-weight-bold">
+                                            Detail Belanja
+                                        </h3>
+                                    </div>
+                                    <div class="block-content block-content-full pt-0">
+                                        <div class="cart-item">
+                                            <div class="cart-item-product">
+                                                <div class="cart-item-product_img">
+                                                    <img src="" data-src="" alt="" class="img-fluid lazyImage" data-loaded="true">
+                                                </div>
+                                                <div class="cart-item-product_info">
+                                                    <div class="cart-item-product_title">
+                                                        <a href="">
+                                                            nama produk
+                                                        </a>
+                                                    </div>
+                                                    <div class="cart-item-product_variant">
+                                                        Ukuran 30
+                                                    </div>
+                                                    <input type="hidden" class="cart_id" value="32">
+                                                    <input type="hidden" class="harga" value="17900.00">
+                                                    <div class="cart-item-product_price">
+                                                        harga produk x quantitas barang
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="my-auto">
+                                                <div class="float-right font-size-20 font-weight-bold product__price py-5 text-orange">
+                                                    subtotal
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 d-none d-md-block">
+                                <div class="block block-shadow block-bordered block-rounded">
+                                    <div class="block-header">
+                                        <div class="font-size-20 font-weight-bold">Ringkasan Belanja</div>
+                                    </div>
+                                    <div class="block-content pt-0 cart-summary">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="">Subtotal</div>
+                                            <div class="">total belanja</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="">Diskon</div>
+                                            <div class="">-Rp50000</div>
+                                        </div>
+                                        <hr class="border-2x">
+                                        <div class="d-flex font-size-20 font-weight-bold justify-content-between mb-2">
+                                            <div class="">Total Belanja</div>
+                                            <div class="total_belanja">Rp0</div>
+                                        </div>
+                                    </div>
+                                    <div class="block-content pt-0 ">
+                                        <div class="font-size-20 font-weight-bold">Metode Pembayaran</div>
+                                        <button class="btn btn-outline-primary btn-block btn-lg" type="submit" id="btn-bayar">
+                                            Pilih Pembayaran
+                                        </button>
+                                    </div>
+                                    <div class="block-content block-content-full pt-0">
+                                        <button class="btn btn-primary btn-block btn-lg" type="submit" id="btn-bayar">
+                                            Bayar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+
+            <!-- alamat form -->
+            <div class="modal fade" id="modalAlamat" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-rounded modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <form id="form-alamat" onsubmit="return false">
+                            <div class="modal-header border-bottom-0">
+                                <h5 class="modal-title">Tambah Alamat Baru</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="id" id="field-id" value="">
+                                <input type="hidden" name="user_id" id="field-user_id" value="">
+                                <div class="form-group">
+                                    <label class="form-label" for="field-nama">Nama Alamat
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" name="nama" id="field-nama"
+                                        placeholder="Contoh : Rumah, Kantor">
+                                    <div class="invalid-feedback" id="error-nama"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="field-penerima">Nama Penerima
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" name="penerima" id="field-penerima"
+                                                placeholder="Masukan Nama Lengkap">
+                                            <div class="invalid-feedback" id="error-penerima"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="field-phone">No. Ponsel
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control input_number" name="phone" id="field-phone"
+                                                placeholder="Masukan No. Handphone">
+                                            <div class="invalid-feedback" id="error-phone"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="form-group">
+                                            <label class="form-label" for="field-desa">Kota/Kecamatan
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-control" name="kelurahan_id" id="field-desa" style="width:100%"></select>
+                                            <div class="invalid-feedback" id="error-desa"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label class="form-label" for="field-pos">Kode POS
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" name="pos" id="field-pos"
+                                                placeholder="Kode POS">
+                                            <div class="invalid-feedback" id="error-pos"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="form-label" for="field-alamat">Alamat Lengkap
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea name="alamat" id="field-alamat" class="form-control" cols="30" rows="4" placeholder="Contoh : Jl. Terusan Lama No.152 RT 01 RW 02 ...."></textarea>
+                                    <div class="invalid-feedback" id="error-alamat"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button type="button" class="btn btn-outline-secondary px-6" data-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary px-6">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>            
+            <!-- end alamat form -->
+
+            <!-- alamat pengiriman form -->
+            <div class="modal fade" id="alamatPilih" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header border-bottom-0">
+                            <h5 class="modal-title">Pilih Alamat Pengiriman</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">
+                                    <i class="fa fa-times-circle"></i>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="modal-body pt-0">
+                            <div class="row gutters-5" id="pilihAlamat">
+            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <!-- end alamat pengiriman form -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="/js/plugins/select2/js/select2.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.1.0/jquery.steps.min.js" integrity="sha512-bE0ncA3DKWmKaF3w5hQjCq7ErHFiPdH2IGjXRyXXZSOokbimtUuufhgeDPeQPs51AI4XsqDZUK7qvrPZ5xboZg==" crossorigin="anonymous"></script>
+        <script src="/js/umum/checkout.js"></script>
+    </body>
+</html>
+

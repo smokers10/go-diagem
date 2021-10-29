@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem Project</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="description" content="Diagem Project">
+        <meta name="author" content="Diagem Project">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem Project">
+        <meta property="og:site_name" content="Diagem Project">
+        <meta property="og:description" content="Diagem Project">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        <!-- END Icons -->
+
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+        <link rel="stylesheet" id="css-main" href="/js/plugins/slick/slick-theme.css">
+        <link rel="stylesheet" id="css-main" href="/js/plugins/slick/slick.css">
+    </head>
+    <body class="bg-white">
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
+            {{template "partials/user-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="bg-image" style="background-image: url('../../public/img/banner/banner-for-all.jpg');">
+                    <div class="content content-full d-flex min-height-200 text-center">
+                        <div class="m-auto">
+                            <h1 class="font-w700 mb-10">Our Products</h1>
+                            <h2 class="h4 font-w400 text-muted">Everything looks nice and smooth!</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="content" id="product-content">
+                    <div class="justify-content-between mb-4 row">
+                        <div class="col-3">
+                        </div>
+                        <div class="col-3">
+                            <select class="form-control" id="product-sort">
+                                <option value="terbaru">Terbaru</option>
+                                <option value="harga-tertinggi">Harga Tertinggi</option>
+                                <option value="harga-terendah">Harga Terendah</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="current-page" value="1">
+                    <div class="row" id="product-list"></div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+            
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="/js/plugins/slick/slick.js"></script>
+        <script src="/js/umum/product.js"></script>
+    </body>
+</html>

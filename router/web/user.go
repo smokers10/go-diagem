@@ -22,6 +22,8 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	verifikasiController := user.VerificationController(resolver.VerificationService, session)
 	alamatController := user.AlamatController()
 	profileController := user.UserProfileCOntroller()
+	cartController := user.CartController()
+	produkController := user.ProdukController()
 
 	// API Controller init
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
@@ -55,11 +57,23 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	alamat.Put("/update", alamatAPIController.Update)
 	alamat.Delete("/Delete", alamatAPIController.Delete)
 
-	//profile
+	// profile
 	profile := parentPath.Group("/profile", middlewareStrict)
 	profile.Get("/", profileController.ProfilePage)
 	profile.Get("/get", profileAPIController.GetProfile)
 	profile.Put("/update", profileAPIController.Update)
+
+	// cart
+	cart := parentPath.Group("/cart", middlewareStrict)
+	cart.Get("/", cartController.IndexPage)
+	cart.Get("/checkout", cartController.CheckoutPage)
+	cart.Get("/pembayaran", cartController.PembayaranPage)
+
+	// produk
+	produk := parentPath.Group("/produk")
+	produk.Get("/", produkController.IndexPage)
+	produk.Get("/detail", produkController.DetailPage)
+	produk.Get("/produk-detail", produkController.ProdukDetailPage)
 
 	// index page
 	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {

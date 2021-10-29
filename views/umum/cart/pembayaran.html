@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem Project</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="description" content="Diagem Project">
+        <meta name="author" content="Diagem Project">
+        <meta name="robots" content="noindex, nofollow">
+        
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem Project">
+        <meta property="og:site_name" content="Diagem Project">
+        <meta property="og:description" content="Diagem Project">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+        <style>
+            .as-dropdown > .btn {
+                height: 44px;
+                padding: 12px;
+                background: #fff;
+                border: 1px solid #c0c7d1;
+                border-radius: 4px;
+            }
+        
+            .dropdown-item > span.text > {
+                font-size: 1rem;
+                font-weight: bold;
+            }
+        
+            .as-dropdown .dropdown-menu li a span.text > img {
+                border: 1px solid #c0c7d1;
+                border-radius: 4px;
+                overflow: hidden;
+                width: 64px;
+                height: 32px;
+                margin-right: 12px;
+            }
+        
+            .as-dropdown .btn:focus {
+                outline: none !important;
+            }
+        
+            .as-dropdown .dropdown-menu li a span.text {
+                display: inline-block;
+                font-weight: bold;
+                font-size: 1rem;
+            }
+        
+            .as-dropdown .dropdown-toggle .filter-option-inner-inner{
+                overflow: hidden;
+                font-weight: bold;
+                font-size: 1rem;
+            }
+        
+            .as-dropdown .dropdown-toggle .filter-option-inner-inner > img{
+                overflow: hidden;
+                border: 1px solid #c0c7d1;
+                border-radius: 4px;
+                overflow: hidden;
+                width: 64px;
+                height: 32px;
+                margin-right: 12px;
+            }
+        
+            .as-dropdown .dropdown-menu li:hover {
+                background: #eaeaea;
+            }
+            .filter-option {
+                position: relative;
+                z-index: 2;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: horizontal;
+                -webkit-box-direction: normal;
+                -ms-flex-direction: row;
+                flex-direction: row;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                height: 44px;
+                padding: 12px;
+            }
+        </style>
+    </head>
+    <body class="bg-white">
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
+            {{template "partials/user-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <main id="content" role="main">
+                    <!-- End breadcrumb -->
+                    <div class="container max-width-1130">
+                        <form id="checkout" onsubmit="return false;">
+                            <div class="row my-4 my-xl-10">
+                                <div class="col-md-8 col-sm-12">
+                                    <h4 class="hide">Bayar Pesanan</h4>
+                                    <section>
+                                        <div class="card shadow border mb-3">
+                                            <div class="card-header">
+                                                <span class="font-size-20 font-weight-bold">
+                                                    <i class="fa fa-wallet mr-1"></i>Pilih Metode Pembayaran
+                                                </span>
+                                            </div>
+                                            <div class="card-body px-0 pb-0">
+                
+                                                <!-- Payment Transfer -->
+                                                <div class="as-payment-cat px-3 border-bottom border-width-3">
+                                                    <label for="transfer" class="as-payment-cat__label">
+                                                        <div class="d-flex">
+                                                            <div class="d-flex">
+                                                                <label class="align-items-center as-radio-button as-radio-button">
+                                                                    <input type="radio" name="payment_method" id="transfer" class="as-radio-button__input" value="transfer" checked="checked">
+                                                                    <span class="as-radio-button__check"></span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="ml-3" style="width: 100%;">
+                                                                <p class="mb-0 font-size-18 font-weight-semi-bold">
+                                                                    Bank Transfer
+                                                                </p>
+                                                                <div class="bl-logos" data-test-logos="">
+                                                                    <div class="d-flex bl-logos__container flex-wrap">
+                                                                        <div class="d-flex as-payment-method">
+                                                                            <div class="as-logo-payment border border-gray-15">
+                                                                                <img src="/img/payment/bca.png" alt="bank_bca" class="as-logo-payment__img">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="d-flex as-payment-method">
+                                                                            <div class="as-logo-payment border border-gray-15">
+                                                                                <img src="/img/payment/bni.png" alt="bank_bni" class="as-logo-payment__img">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="d-flex as-payment-method">
+                                                                            <div class="as-logo-payment border border-gray-15">
+                                                                                <img src="/img/payment/mandiri.png" alt="briva" class="as-logo-payment__img">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="d-flex as-payment-method">
+                                                                            <div class="as-logo-payment border border-gray-15">
+                                                                                <img src="/img/payment/permata.png" alt="bank_mandiri" class="as-logo-payment__img">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!---->
+                                                                <div class="form-group">
+                                                                    <label class="font-size-18 font-weight-semi-bold text-gray-111" for="virtual_accout_select">Penyedia Layanan</label>
+                                                                    <select class="selectpicker dropdown-select as-dropdown form-control" name="transfer_bank" title="Pilih Bank Penyedia">
+                                                                        <option data-content="<img src=''>nama bank" value="id"></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                                <!-- END Payment Transfer -->
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="col-md-4 d-none d-md-block">
+                                    <div class="card shadow border">
+                                        <div class="border-bottom border-width-3 card-body">
+                                            <button type="button" class="btn btn-block btn-lg btn-outline-dark">
+                                                <i class="fa fa-ticket mr-1"></i>  Gunakan Voucher
+                                            </button>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="font-size-20 font-weight-bold total_title mb-3">Rincian Harga</div>
+                                            <div class="font-size-18 mb-1">
+                                                <span>Total Belanja</span>
+                                                <span class="text-black float-right total_belanja">total</span>
+                                            </div>
+                                            <div class="font-size-18 mb-1">
+                                                <span>Ongkos Kirim</span>
+                                                <span class="text-black float-right total_belanja">ongkir</span>
+                                            </div>
+                                            <div class="font-size-18 my-3">
+                                                <span class="font-size-20 font-weight-bold">Total Pembayaran</span>
+                                                <span class="font-size-20 font-weight-bold float-right total_belanja">total payment</span>
+                                            </div>
+                                            <button class="btn btn-primary btn-block btn-lg" type="submit" id="btn-bayar">
+                                                Bayar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </main>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="/js/umum/pembayaran.js"></script>
+    </body>
+</html>
