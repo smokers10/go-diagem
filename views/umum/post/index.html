@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem Project</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="description" content="Diagem Project">
+        <meta name="author" content="Diagem Project">
+        <meta name="robots" content="noindex, nofollow">
+        
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem Project">
+        <meta property="og:site_name" content="Diagem Project">
+        <meta property="og:description" content="Diagem Project">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    </head>
+    <body class="bg-white">
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
+            {{template "partials/user-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="bg-image" style="background-image: url('public/img/banner/banner-for-all.jpg')">
+                    <div class="content content-full d-flex min-height-200 text-center">
+                        <div class="m-auto">
+                            <h1 class="font-w700 mb-10">Our Blog</h1>
+                            <h2 class="h4 font-w400 text-muted">Everything looks nice and smooth!</h2>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content" id="post-content">
+                    <input type="hidden" id="current-page" value="1">
+                    <div class="row" id="post-list">
+                        <div class="col-6 col-xl-4 px-2">
+                            <div class="block block-shadow block-bordered mb-2">
+                                <div class="block-content block-content-full p-0">
+                                    <a class="badge badge-primary font-w700 badge-kategori p-2 text-white">
+                                        Tidak Dikategorikan
+                                    </a>
+                                    <a href="#">
+                                        <img src="https://cdn.shopify.com/s/files/1/0051/9159/8198/articles/ghona-blog-9_600x400_crop_center.jpg?v=1622605712" class="img-fluid">
+                                    </a>
+                                </div>
+                                <div class="block-content p-3">
+                                    <h2 class="font-size-14-down-lg font-size-18 font-w700 mb-1" style="min-height: 46px;">
+                                        <a class="title" href="#">Onide Nidie Inida Modfa</a>
+                                    </h2>
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="text-muted">
+                                                <i class="si si-clock mr-1"></i> 3 Bulan Yang Lalu
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+    </body>
+</html>

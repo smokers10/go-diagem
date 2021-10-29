@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem Project</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="description" content="Diagem Project">
+        <meta name="author" content="Diagem Project">
+        <meta name="robots" content="noindex, nofollow">
+        
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem Project">
+        <meta property="og:site_name" content="Diagem Project">
+        <meta property="og:description" content="Diagem Project">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        
+        
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    </head>
+    <body class="bg-white">
+
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+
+            <!-- Header -->
+            {{template "partials/user-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="container">
+                    <div class="kategori-header mb-4" style="background: url('../../public/img/kategori_bg.jpg') no-repeat 0 0;">
+                        <div class="row text-center" style="display: table-cell;vertical-align: middle;">
+                            <div class="col-12">
+                                <h2 class="font-size-46 font-weight-bold text-white">PROMO</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Mitra Head -->
+                <div class="container">
+                    <div class="my-10">
+                        <ul class="row list-unstyled no-gutters">
+                            <li class="col-md-4 col-wd-4 col-xl p-1">
+                                <div class="card shadow">
+                                    <a href="">
+                                        <div class="card-body px-0 py-0">
+                                            <img src="" class="img-fluid" alt="Promo Asoy Mart - JUDUL">
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="promo-title font-size-20 font-weight-bold">
+                                                Judul
+                                            </div>
+                                            <div class="periode">
+                                                <i class="fa fa-calendar-alt"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+            
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+    </body>
+</html>

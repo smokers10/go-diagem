@@ -24,6 +24,9 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	profileController := user.UserProfileCOntroller()
 	cartController := user.CartController()
 	produkController := user.ProdukController()
+	promoController := user.PromoController()
+	mitraController := user.MitraController()
+	postController := user.PostController()
 
 	// API Controller init
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
@@ -74,6 +77,19 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	produk.Get("/", produkController.IndexPage)
 	produk.Get("/detail", produkController.DetailPage)
 	produk.Get("/produk-detail", produkController.ProdukDetailPage)
+
+	// promo
+	promo := parentPath.Group("/promo")
+	promo.Get("/", promoController.IndexPage)
+	promo.Get("/detail", promoController.DetailPage)
+
+	// mitra
+	mitra := parentPath.Group("/mitra")
+	mitra.Get("/", mitraController.IndexPage)
+
+	// post
+	post := parentPath.Group("/blog")
+	post.Get("/", postController.IndexPage)
 
 	// index page
 	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {
