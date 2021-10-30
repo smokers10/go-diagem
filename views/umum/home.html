@@ -68,12 +68,11 @@
         <!-- End Styling -->
     </head>
     <body class="bg-white">
-        <!-- Header -->
-        {{template "partials/user-header" .}}
-        <!-- END Header -->
         
         <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
             {{template "partials/user-header" .}}
+            <!-- END Header -->
             
             <main id="main-container">
                 <div class="content content-full">
@@ -271,11 +270,12 @@
                     </div>
                 </div>
             </main>
+            
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
         </div>
-
-        <!-- Footer -->
-        {{template "partials/footer" .}}
-        <!-- END Footer -->
+        
 
         <script src="/js/laravel.app.js"></script>
         <script src="/js/laroute.js"></script>

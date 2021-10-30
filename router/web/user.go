@@ -27,6 +27,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	promoController := user.PromoController()
 	mitraController := user.MitraController()
 	postController := user.PostController()
+	kategoriController := user.KategoriController()
 
 	// API Controller init
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
@@ -90,6 +91,11 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	// post
 	post := parentPath.Group("/blog")
 	post.Get("/", postController.IndexPage)
+
+	// kategori
+	kategori := parentPath.Group("/kategori")
+	kategori.Get("/", kategoriController.IndexPage)
+	kategori.Get("/detail", kategoriController.DetailPage)
 
 	// index page
 	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {
