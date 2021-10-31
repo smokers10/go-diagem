@@ -26,6 +26,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 
 	// controller API ini
 	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
+	produkAPIController := adminAPI.ProdukController(resolver.ProdukService)
 
 	// router clustering
 	adminParentPath := app.Group("/admin")
@@ -60,6 +61,9 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	produk.Get("/tambah", produkController.TambahPage)
 	produk.Get("/edit", produkController.EditPage)
 	produk.Get("/kategori", produkController.KategoriPage)
+
+	// produk - API
+	produk.Post("/tambah", produkAPIController.Create)
 
 	// order
 	order := adminParentPath.Group("/order", middleware.AdminWeb(session, "admin", "super admin"))

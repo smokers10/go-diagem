@@ -19,15 +19,14 @@ func ProdukRepository(database *sql.DB) domain.ProdukRepository {
 func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetailed, error) {
 	spesifikasi := []domain.ProdukSpesifikasi{}
 	produkDetailed := domain.ProdukDetailed{}
-
-	statement, err := p.db.Prepare("INSERT INTO produk (id, nama, slug, deskripsi, spesifikasi, kategori_id) VALUES(?, ?, ?, ?, ?, ?)")
+	statement, err := p.db.Prepare("INSERT INTO produk (id, nama, slug, deskripsi, spesifikasi, kategori_id, berat, satuan_berat, lebar, panjang, tinggi) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.ID, req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.ID, req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.Berat, req.SatuanBerat, req.Lebar, req.Panjang, req.Tinggi); err != nil {
 		return nil, err
 	}
 
@@ -38,6 +37,11 @@ func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetaile
 	produkDetailed.Slug = req.Slug
 	produkDetailed.Deskripsi = req.Deskripsi
 	produkDetailed.Spesifikasi = spesifikasi
+	produkDetailed.Berat = req.Berat
+	produkDetailed.SatuanBerat = req.SatuanBerat
+	produkDetailed.Panjang = req.Panjang
+	produkDetailed.Lebar = req.Lebar
+	produkDetailed.Tinggi = req.Tinggi
 
 	return &produkDetailed, nil
 }

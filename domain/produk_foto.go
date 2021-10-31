@@ -11,10 +11,14 @@ type ProdukFoto struct {
 
 type ProdukFotoService interface {
 	Create(req *ProdukFoto) *Response
-	Delete(produkID string, produkFotoID string) *Response
+	Delete(id string) *Response
+	MakeUtama(id string, produkID string) *Response
 }
 
 type ProdukFotoRepository interface {
-	Create(req *ProdukFoto) (*ProdukFoto, error)
-	Delete(produkID string, produkFotoID string) error
+	ReadByID(produkID string) ([]ProdukFoto, error)
+	Create(req *ProdukFoto) error
+	Delete(id string) error
+	UpdateIsUtamaToTrue(id string) error
+	UpdateRestIsUtamaToFalse(id string, produkID string) error
 }
