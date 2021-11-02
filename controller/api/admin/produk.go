@@ -15,14 +15,13 @@ func ProdukController(produkServ *domain.ProdukService) produkController {
 
 func (p *produkController) Create(c *fiber.Ctx) error {
 	req := domain.Produk{}
-
 	if err := c.BodyParser(&req); err != nil {
 		panic(err)
 	}
 
-	response := p.produkService.Create(&req)
+	// response := p.produkService.Create(&req)
 
-	return c.Status(response.Status).JSON(response)
+	return c.Status(200).JSON(req)
 }
 
 func (p *produkController) Read(c *fiber.Ctx) error {

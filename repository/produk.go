@@ -19,14 +19,14 @@ func ProdukRepository(database *sql.DB) domain.ProdukRepository {
 func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetailed, error) {
 	spesifikasi := []domain.ProdukSpesifikasi{}
 	produkDetailed := domain.ProdukDetailed{}
-	statement, err := p.db.Prepare("INSERT INTO produk (id, nama, slug, deskripsi, spesifikasi, kategori_id, berat, satuan_berat, lebar, panjang, tinggi) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	statement, err := p.db.Prepare("INSERT INTO produk (id, nama, slug, deskripsi, spesifikasi, kategori_id, berat, satuan_berat, lebar, panjang, tinggi, kode, harga, is_has_variant) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.ID, req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.Berat, req.SatuanBerat, req.Lebar, req.Panjang, req.Tinggi); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.ID, req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.Berat, req.SatuanBerat, req.Lebar, req.Panjang, req.Tinggi, req.Kode, req.Harga, req.IsHasVariant); err != nil {
 		return nil, err
 	}
 
@@ -42,6 +42,9 @@ func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetaile
 	produkDetailed.Panjang = req.Panjang
 	produkDetailed.Lebar = req.Lebar
 	produkDetailed.Tinggi = req.Tinggi
+	produkDetailed.Kode = req.Kode
+	produkDetailed.Harga = req.Harga
+	produkDetailed.IsHasVariant = req.IsHasVariant
 
 	return &produkDetailed, nil
 }
@@ -100,7 +103,7 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	variasi := []domain.ProdukVariasi{}
 
 	// get single produk
-	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.dilihat,
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.dilihat, produk.harga, produk.kode, produk.is_has_variant
 	 	  	  produk.created_at, produk.updated_at, kategori.nama, kategori.id, kategori.slug FROM produk 
 			  JOIN kategori ON kategori.id = produk.kategori_id WHERE produk.id = ? LIMIT 1`
 
@@ -115,7 +118,7 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 
 	// scan row ke result temporary
 	row.Scan(&resultTemp.ID, &resultTemp.Nama, &resultTemp.Slug, &resultTemp.Deskripsi,
-		&resultTemp.Spesifikasi, &resultTemp.Dilihat, &resultTemp.CreatedAt, &resultTemp.UpdatedAt,
+		&resultTemp.Spesifikasi, &resultTemp.Dilihat, &resultTemp.Harga, &resultTemp.Kode, &resultTemp.IsHasVariant, &resultTemp.CreatedAt, &resultTemp.UpdatedAt,
 		&resultTemp.Kategori.Nama, &resultTemp.Kategori.ID, &resultTemp.Kategori.Slug)
 
 	// unmarshall spesifikasi dari result temporary ke variable spesifikasi
@@ -153,6 +156,9 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	result.CreatedAt = resultTemp.CreatedAt
 	result.UpdatedAt = resultTemp.UpdatedAt
 	result.Variasi = variasi
+	result.Kode = resultTemp.Kode
+	result.Harga = resultTemp.Harga
+	result.IsHasVariant = resultTemp.IsHasVariant
 
 	return &result, nil
 }
@@ -164,7 +170,7 @@ func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, err
 	variasi := []domain.ProdukVariasi{}
 
 	// get single produk
-	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.dilihat,
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.harga, produk.kode, produk.is_has_variant, produk.dilihat,
 	 	  	  produk.created_at, produk.updated_at, kategori.nama, kategori.id, kategori.slug FROM produk 
 			  JOIN kategori ON kategori.id = produk.kategori_id WHERE produk.slug = ? LIMIT 1`
 
@@ -217,19 +223,22 @@ func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, err
 	result.CreatedAt = resultTemp.CreatedAt
 	result.UpdatedAt = resultTemp.UpdatedAt
 	result.Variasi = variasi
+	result.Kode = resultTemp.Kode
+	result.Harga = resultTemp.Harga
+	result.IsHasVariant = resultTemp.IsHasVariant
 
 	return &result, nil
 }
 
 func (p *produkRepositoryImpl) Update(req *domain.Produk) (*domain.Produk, error) {
-	statement, err := p.db.Prepare("UPDATE produk SET nama = ?, slug = ?, deskripsi = ?, spesifikasi = ?, kategori_id = ? WHERE id = ?")
+	statement, err := p.db.Prepare("UPDATE produk SET nama = ?, slug = ?, deskripsi = ?, spesifikasi = ?, kategori_id = ?, harga = ?, kode = ? WHERE id = ?")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.ID); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.Harga, req.Kode, req.ID); err != nil {
 		return nil, err
 	}
 
