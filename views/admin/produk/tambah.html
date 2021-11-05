@@ -51,7 +51,6 @@
             {{template "partials/admin-header" .}}
             <!-- END Header -->
             
-
             <!-- Main Container -->
             <main id="main-container">
 
@@ -164,16 +163,13 @@
                                     <div class="col-lg-12">
                                         <div class="row">
                                             <div class="col">
-                                                <div class="preview_img border">
-                                                    <img id="previewImg-id" src="/img/placeholder/product.png" width="100%" height="100%"/>
+                                                <div class="foto-produk border">
+
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <div class="btn btn-primary btn-block btn-sm mt-3" >
-                                                            <input type="file" class="file-upload" data-id="index" accept="image/*">
-                                                            <input type="hidden" id="foto-index" name="foto[]" value="">
+                                                        <div class="btn btn-primary btn-block btn-sm mt-3"data-toggle="modal" data-target="#foto-produk-modal">
                                                             <i class="si si-plus mr-1"></i>Pilih Foto
-                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -246,11 +242,11 @@
                     </form>
                 </div>
                 
-                <div class="modal" id="cropModal">
+                <div class="modal" id="foto-produk-modal">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="block-header block-header-default">
-                                    <h3 class="block-title modal-title">Potong & Sesuaikan Foto</h3>
+                                <h3 class="block-title modal-title">Potong & Sesuaikan Foto</h3>
                                 <div class="block-options">
                                     <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                                         <i class="si si-close"></i>
@@ -258,117 +254,22 @@
                                 </div>
                             </div>
                             <div class="block-content pb-15">
-                                <input type="hidden" id="image_id" value=""/>
-                                <div id="resizer"></div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <button class="btn btn-alt-primary rotate btn-block text-center" data-deg="90">
-                                            <i class="fa fa-undo"></i>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button class="btn btn-alt-primary rotate btn-block text-center" data-deg="-90" >
-                                        <i class="fa fa-redo"></i></button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button class="btn btn-alt-primary btn-block" id="upload" data-id="">Potong Dan Simpan</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                <center>
+                                    <img id="imagePreview" src="/img/placeholder/product.png" width="50%" height="50%"/>
+                                </center>
 
-                <div class="modal fade" id="categorySelectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-popout" role="document">
-                        <div class="modal-content">
-                            <div class="block block-transparent mb-0">
-                                <div class="block-header block-header-default">
-                                        <h3 class="block-title modal-title">Pilih Kategori Produk</h3>
-                                    <div class="block-options">
-                                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                            <i class="si si-close"></i>
-                                        </button>
+                                <div class="row">
+                                    <div class="col-md-12 mb-4">
+                                        <div class="btn btn-alt-primary btn-block mt-2" >
+                                            <input type="file" id="file-upload-input" class="file-upload" accept="image/*">
+                                            <i class="si si-plus mr-1"></i>Pilih Foto
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <button class="btn btn-alt-primary btn-block" id="upload">Potong Dan Simpan</button>
                                     </div>
                                 </div>
-                                <div class="block-content block-content-full">
-                                    <div class="row">
-                                        <div class="col-4 border-right">
-                                            <div class="modal-category-box c-scrollbar">
-                                                <div class="sort-by-box">
-                                                    <form role="form" class="search-widget" onsubmit="return false;">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Cari Kategori" onkeyup="filterListItems(this, 'categories')">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">
-                                                                    <i class="si si-magnifier"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-category-list">
-                                                    <ul id="categories">
-                                                        <li onclick="get_subcategories_by_category(this, 1)">
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4 border-right">
-                                            <div class="modal-category-box c-scrollbar" id="subcategory_list">
-                                                <div class="sort-by-box">
-                                                    <form role="form" class="search-widget">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Cari Kategori" onkeyup="filterListItems(this, 'subcategories')">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">
-                                                                    <i class="si si-magnifier"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-category-list has-right-arrow">
-                                                    <ul id="subcategories"></ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="modal-category-box c-scrollbar" id="subsubcategory_list">
-                                                <div class="sort-by-box">
-                                                    <form role="form" class="search-widget">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" placeholder="Cari Kategori" onkeyup="filterListItems(this, 'subsubcategories')">
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text">
-                                                                    <i class="si si-magnifier"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-category-list">
-                                                    <ul id="subsubcategories">
-                
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row pt-15">
-                                        <div class="col-12">
-                                            <span class="mr-3">Kategori Dipilih:</span>
-                                            <span>Kategori > Sub Kategori > Sub Kategori</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Batal</button>
-                                <button type="button" class="btn btn-alt-success" onclick="closeModal()">
-                                    <i class="fa fa-check"></i> Simpan Kategori
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -377,7 +278,6 @@
 
             </main>
             <!-- END Main Container -->
-
 
             <!-- Footer -->
             {{template "partials/admin-footer" .}}
@@ -400,12 +300,15 @@
         <script src="/js/plugins/summernote/summernote-bs4.min.js"></script>
         <script src="/js/admin/general.js"></script>
         <script>
-            $(document).ready(function(){
-                var isHasVarian = false
-                var varianArr = []
-                const hargaProdukFormElem = $("#harga-produk-form")
-                const variasiToggleBtn = $("#btn-toggle-variasi")
+            var isHasVarian = false
+            var varianArr = []
+            const hargaProdukFormElem = $("#harga-produk-form")
+            const variasiToggleBtn = $("#btn-toggle-variasi")
 
+            const fotoInput = $("#file-upload-input")
+            const fotoEditorPreview = $("#imagePreview")
+
+            $(document).ready(function(){
                 // kategori select 2
                 $.ajax({
                     url:"/admin/kategori/get",
@@ -538,6 +441,9 @@
                     ]
                 })
 
+                // upload foto produk
+                fotoInput.change(function(){readURL(this)})
+
                 // submit
                 $("#form-produk").submit(function(e){
                     e.preventDefault()
@@ -608,6 +514,36 @@
                     })
                 })
             })
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader()
+
+                    reader.onload = function (e) {
+                        fotoEditorPreview.attr('src', e.target.result)
+                        photoProfileEditor = fotoEditorPreview.croppie({
+                            enableExif: true,
+                            viewport: {
+                                width: 350,
+                                height: 350,
+                                type: 'square'
+                            },
+                            original : {
+                                width: 350,
+                                height: 350,
+                                type: 'square'
+                            },
+                            boundary: {
+                                width: 360,
+                                height: 360
+                            },
+                            enableOrientation: true
+                        })
+                    }
+
+                    reader.readAsDataURL(input.files[0])
+                }
+            }
 
             function _nonVariasi() {
                 var element = `
@@ -705,7 +641,6 @@
                     </div>
                 `
             }
-            
         </script>
     </body>
 </html>

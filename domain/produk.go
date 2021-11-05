@@ -15,8 +15,9 @@ type Produk struct {
 	Tinggi       float32         `json:"tinggi,omitempty" form:"tinggi"`
 	Kode         string          `json:"kode,omitempty" form:"kode"`
 	Harga        int             `json:"harga,omitempty" form:"harga"`
-	Stok         int             `json:"stok,omitempty" json:"stok"`
+	Stok         int             `json:"stok,omitempty" form:"stok"`
 	Variasi      []ProdukVariasi `json:"variasi,omitempty" form:"variasi"`
+	ProdukFoto   []ProdukFoto    `json:"produk_foto,omitempty" form:"produk_foto"`
 	IsHasVariant bool            `json:"is_has_variant,omitempty" form:"is_has_varian"`
 	CreatedAt    string          `json:"created_at,omitempty" form:"created_at"`
 	UpdatedAt    string          `json:"updated_at,omitempty" form:"updated_at"`
@@ -30,6 +31,7 @@ type ProdukDetailed struct {
 	Spesifikasi  []ProdukSpesifikasi `json:"spesifikasi,omitempty" form:"spesifikasi"`
 	Kategori     Kategori            `json:"kategori,omitempty" form:"kategori"`
 	Variasi      []ProdukVariasi     `json:"variasi,omitempty" form:"variasi"`
+	ProdukFoto   []ProdukFoto        `json:"produk_foto,omitempty" form:"produk_foto"`
 	Dilihat      int64               `json:"dilihat" form:"dilihat"`
 	Berat        int                 `json:"berat,omitempty" form:"berat"`
 	SatuanBerat  string              `json:"satuan_berat,omitempty" form:"satuan_berat"`
