@@ -4,7 +4,7 @@ type ProdukFoto struct {
 	ID        string
 	ProdukID  string
 	Path      string
-	IsUtama   string
+	IsUtama   bool
 	CreatedAt string
 	UpdatedAt string
 }

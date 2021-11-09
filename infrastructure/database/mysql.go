@@ -20,7 +20,7 @@ type config struct {
 func setConfig(mode string) *config {
 	con := config{}
 	if mode == "" || mode == "development" || mode == "local" {
-		con.URI = "remote_admin:kingmesix@/diagem"
+		con.URI = "local_admin:suckitjiwa@/diagem"
 		con.MAX_CONNECTION = 5
 		con.MAX_CONNECTION_LIFE_TIME = 1
 		con.MAX_IDLE_CONNECTION = 5

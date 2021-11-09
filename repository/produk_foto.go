@@ -43,16 +43,18 @@ func (p *produkFotoRepositoryImpl) Create(req *domain.ProdukFoto) error {
 		return err
 	}
 
-	stmt, err := tx.Prepare("INSERT INTO produk_foto (produk_id, path, is_utama) VALUES(?, ?, ?)")
+	stmt, err := tx.Prepare("INSERT INTO produk_foto (id, produk_id, path, is_utama) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	if _, err := stmt.ExecContext(c, req.ProdukID, req.Path, req.IsUtama); err != nil {
+	if _, err := stmt.ExecContext(c, req.ID, req.ProdukID, req.Path, req.IsUtama); err != nil {
 		tx.Rollback()
 		return err
 	}
+
+	tx.Commit()
 
 	return err
 }

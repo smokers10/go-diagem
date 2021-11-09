@@ -12,8 +12,8 @@ func MYSQLSessionStore(productionStore string) *session.Store {
 		mysql := mysql.New(mysql.Config{
 			Host:       "127.0.0.1",
 			Port:       3306,
-			Username:   "remote_admin",
-			Password:   "kingmesix",
+			Username:   "local_admin",
+			Password:   "suckitjiwa",
 			Database:   "diagem",
 			Table:      "session",
 			Reset:      false,

@@ -159,21 +159,13 @@
                                 </div>
                             </div>
                             <div class="block-content pb-15">
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="foto-produk border">
-
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="btn btn-primary btn-block btn-sm mt-3"data-toggle="modal" data-target="#foto-produk-modal">
-                                                            <i class="si si-plus mr-1"></i>Pilih Foto
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <div class="form-group">
+                                    <div class="foto-produk">
+                                        <div class="row" id="selected-foto-row">
+                                            
+                                        </div>
+                                        <div class="btn btn-primary btn-block btn-sm mt-3" id="foto-modal-btn" data-toggle="modal" data-target="#foto-produk-modal">
+                                            <i class="si si-plus mr-1"></i>Pilih Foto
                                         </div>
                                     </div>
                                 </div>
@@ -267,7 +259,7 @@
                                     </div>
 
                                     <div class="col-md-12">
-                                        <button class="btn btn-alt-primary btn-block" id="upload">Potong Dan Simpan</button>
+                                        <button class="btn btn-alt-primary btn-block" id="upload" onclick="_uploadSelectedFoto()">Potong Dan Simpan</button>
                                     </div>
                                 </div>
                             </div>
@@ -307,7 +299,11 @@
 
             const fotoInput = $("#file-upload-input")
             const fotoEditorPreview = $("#imagePreview")
+            const imagePreviewDefaultSrc = "/img/placeholder/product.png"
+            const selectedFotoRow = $("#selected-foto-row")
+            var photoEditor
 
+            // once page ready
             $(document).ready(function(){
                 // kategori select 2
                 $.ajax({
@@ -442,6 +438,13 @@
                 })
 
                 // upload foto produk
+                // buka modal foto
+                $("#foto-modal-btn").click(function() {
+                    fotoEditorPreview.croppie('destroy')
+                    fotoEditorPreview.attr("src", imagePreviewDefaultSrc)
+                })
+
+                // preview foto produk
                 fotoInput.change(function(){readURL(this)})
 
                 // submit
@@ -459,10 +462,22 @@
                         }
                     }
 
+                    // mendapatkan foto
+                    var selectedFotoSrc = []
+                    const selectedFotoItem = $(".selected-foto-item")
+                    for (let i = 0; i < selectedFotoItem.length; i++) {
+                        let src = selectedFotoItem[i].currentSrc
+                        const base64 = src.split(";base64,")[1]
+                        const type = src.split(";base64,")[0]
+                        const format = type.split("data:image/")[1]
+                        selectedFotoSrc.push({ base64, format })
+                    }
+
                     const data = {
                         nama : $("#field-nama").val(),
                         deskripsi: $("#field-deskripsi").val(),
                         spesifikasi: JSON.stringify(spesifikasi),
+                        produk_foto: selectedFotoSrc,
                         kategori_id: parseInt($("#field-kategori").val()),
                         berat: parseInt($("#field-berat").val()),
                         satuan_berat: $("#field-berat-satuan").val(),
@@ -476,13 +491,14 @@
                         is_has_variant: isHasVarian,
                     }
 
+                    console.log(data)
+
                     $.ajax({
                         url: "/admin/produk/tambah",
-                        dataType: 'json',
-                        type: 'post',
-                        contentType: 'application/json',
+                        type:"post",
                         data: JSON.stringify(data),
-                        processData: false,
+                        dataType: "json",
+                        contentType: "application/json",
                         beforeSend: function(){
                             Swal.fire({
                                 title: 'Tunggu Sebentar...',
@@ -500,8 +516,8 @@
                                 icon: 'success',
                                 html: `Produk Baru Berhasil Disimpan!
                                     <br><br>
-                                    <a href="#" class="btn btn-keluar btn-alt-danger"><i class="si si-close mr-1"></i>Keluar</a> 
-                                    <a href="#" class="btn btn-tambah_baru btn-alt-primary"><i class="si si-plus mr-1"></i>Tambah Produk Lain</a>`,
+                                    <a href="/admin/produk" class="btn btn-keluar btn-alt-danger"><i class="si si-close mr-1"></i>Keluar</a> 
+                                    <a href="/admin/produk/tambah" class="btn btn-tambah_baru btn-alt-primary"><i class="si si-plus mr-1"></i>Tambah Produk Lain</a>`,
                                 showCancelButton: false,
                                 showConfirmButton: false,
                                 allowOutsideClick: false,
@@ -521,7 +537,7 @@
 
                     reader.onload = function (e) {
                         fotoEditorPreview.attr('src', e.target.result)
-                        photoProfileEditor = fotoEditorPreview.croppie({
+                        photoEditor = fotoEditorPreview.croppie({
                             enableExif: true,
                             viewport: {
                                 width: 350,
@@ -543,6 +559,20 @@
 
                     reader.readAsDataURL(input.files[0])
                 }
+            }
+
+            function _uploadSelectedFoto() {
+                photoEditor.croppie('result', 'base64').then(function (res){
+                    selectedFotoRow.append(`
+                        <div class="col-md-4 mb-2">
+                            <center>
+                                <img src="${res}" class="selected-foto-item mb-3" width="80%" height="80%"/>
+                                <button class="btn btn-danger">Hapus</button>
+                            </center>
+                        </div>
+                    `)
+                })
+                $("#foto-produk-modal").modal('hide')
             }
 
             function _nonVariasi() {

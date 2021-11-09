@@ -19,7 +19,8 @@ func (p *produkController) Create(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	// response := p.produkService.Create(&req)
+	// call service produk
+	p.produkService.Create(&req)
 
 	return c.Status(200).JSON(req)
 }
