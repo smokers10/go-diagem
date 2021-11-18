@@ -27,8 +27,7 @@ func (p *produkController) Create(c *fiber.Ctx) error {
 
 func (p *produkController) Read(c *fiber.Ctx) error {
 	filter := domain.ProdukFilter{}
-
-	if err := c.BodyParser(&filter); err != nil {
+	if err := c.QueryParser(&filter); err != nil {
 		panic(err)
 	}
 

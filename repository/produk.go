@@ -13,20 +13,22 @@ type produkRepositoryImpl struct {
 }
 
 func ProdukRepository(database *sql.DB) domain.ProdukRepository {
-	return &produkRepositoryImpl{db: database}
+	return &produkRepositoryImpl{
+		db: database,
+	}
 }
 
 func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetailed, error) {
 	spesifikasi := []domain.ProdukSpesifikasi{}
 	produkDetailed := domain.ProdukDetailed{}
-	statement, err := p.db.Prepare("INSERT INTO produk (id, nama, slug, deskripsi, spesifikasi, kategori_id, berat, satuan_berat, lebar, panjang, tinggi, kode, harga, is_has_variant) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	statement, err := p.db.Prepare("INSERT INTO produk (id, nama, slug, deskripsi, spesifikasi, kategori_id, berat, satuan_berat, lebar, panjang, tinggi, kode, harga, stok, is_has_variant) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.ID, req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.Berat, req.SatuanBerat, req.Lebar, req.Panjang, req.Tinggi, req.Kode, req.Harga, req.IsHasVariant); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.ID, req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.Berat, req.SatuanBerat, req.Lebar, req.Panjang, req.Tinggi, req.Kode, req.Harga, req.Stok, req.IsHasVariant); err != nil {
 		return nil, err
 	}
 
@@ -51,7 +53,9 @@ func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetaile
 
 func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.ProdukDetailed, error) {
 	result := []domain.ProdukDetailed{}
-	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.dilihat, produk.created_at, produk.updated_at, kategori.nama, kategori.id, kategori.slug 
+	produkFoto := ProdukFotoRepository(p.db)
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.stok, produk.harga, produk.dilihat, produk.created_at, produk.updated_at,
+	kategori.nama, kategori.id, kategori.slug
 	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
 	WHERE produk.nama LIKE CONCAT('%', ?, '%') AND produk.kategori_id LIKE CONCAT('%', ?, '%')`
 
@@ -69,27 +73,30 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 
 	for rows.Next() {
 		row := domain.ProdukDetailed{}
-		tempRow := domain.ProdukDetailedTemp{}
+
+		// temporary
 		spesifikasi := []domain.ProdukSpesifikasi{}
 
-		rows.Scan(&tempRow.ID, &tempRow.Nama, &tempRow.Slug, &tempRow.Deskripsi,
-			&tempRow.Spesifikasi, &tempRow.Dilihat, &tempRow.CreatedAt, &tempRow.UpdatedAt,
-			&tempRow.Kategori.Nama, &tempRow.Kategori.ID, &tempRow.Kategori.Slug)
+		// scan
+		rows.Scan(&row.ID, &row.Nama, &row.Slug, &row.Deskripsi,
+			&row.SpesifikasiTemp, &row.Stok, &row.Harga, &row.Dilihat, &row.CreatedAt, &row.UpdatedAt,
+			&row.Kategori.Nama, &row.Kategori.ID, &row.Kategori.Slug,
+		)
 
-		json.Unmarshal([]byte(tempRow.Spesifikasi), &spesifikasi)
-
-		row.ID = tempRow.ID
-		row.Nama = tempRow.Nama
-		row.Slug = tempRow.Slug
-		row.Deskripsi = tempRow.Deskripsi
+		// unmarshal spesifikasi
+		json.Unmarshal([]byte(row.SpesifikasiTemp), &spesifikasi)
 		row.Spesifikasi = spesifikasi
-		row.Dilihat = tempRow.Dilihat
-		row.CreatedAt = tempRow.CreatedAt
-		row.UpdatedAt = tempRow.UpdatedAt
-		row.Kategori.ID = tempRow.Kategori.ID
-		row.Kategori.Nama = tempRow.Kategori.Nama
-		row.Kategori.Slug = tempRow.Kategori.Slug
+		row.SpesifikasiTemp = ""
 
+		// get foto utama
+		fotoUtama, err := produkFoto.GetUtamaOnly(row.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		row.ProdukSingleFoto = *fotoUtama
+
+		// append hasil scan
 		result = append(result, row)
 	}
 
@@ -98,7 +105,6 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 
 func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	result := domain.ProdukDetailed{}
-	resultTemp := domain.ProdukDetailedTemp{}
 	spesifikasi := []domain.ProdukSpesifikasi{}
 	variasi := []domain.ProdukVariasi{}
 
@@ -117,12 +123,12 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	row := statement.QueryRowContext(context.Background(), id)
 
 	// scan row ke result temporary
-	row.Scan(&resultTemp.ID, &resultTemp.Nama, &resultTemp.Slug, &resultTemp.Deskripsi,
-		&resultTemp.Spesifikasi, &resultTemp.Dilihat, &resultTemp.Harga, &resultTemp.Kode, &resultTemp.IsHasVariant, &resultTemp.CreatedAt, &resultTemp.UpdatedAt,
-		&resultTemp.Kategori.Nama, &resultTemp.Kategori.ID, &resultTemp.Kategori.Slug)
+	row.Scan(&result.ID, &result.Nama, &result.Slug, &result.Deskripsi,
+		&result.Spesifikasi, &result.Dilihat, &result.Harga, &result.Kode, &result.IsHasVariant, &result.CreatedAt, &result.UpdatedAt,
+		&result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug)
 
 	// unmarshall spesifikasi dari result temporary ke variable spesifikasi
-	json.Unmarshal([]byte(resultTemp.Spesifikasi), &spesifikasi)
+	json.Unmarshal([]byte(result.SpesifikasiTemp), &spesifikasi)
 
 	// get variasi
 	statement2, err := p.db.Prepare("SELECT id, variant, harga, stok FROM produk_variasi WHERE produk_id = ?")
@@ -132,7 +138,7 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 
 	defer statement2.Close()
 
-	variasiRows, err := statement2.QueryContext(context.Background(), resultTemp.ID)
+	variasiRows, err := statement2.QueryContext(context.Background(), result.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -144,28 +150,14 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	}
 
 	// assign result temporary ke result
-	result.ID = resultTemp.ID
-	result.Nama = resultTemp.Nama
-	result.Slug = resultTemp.Slug
-	result.Deskripsi = resultTemp.Deskripsi
-	result.Dilihat = resultTemp.Dilihat
 	result.Spesifikasi = spesifikasi
-	result.Kategori.ID = resultTemp.Kategori.ID
-	result.Kategori.Nama = resultTemp.Kategori.Nama
-	result.Kategori.Slug = resultTemp.Kategori.Slug
-	result.CreatedAt = resultTemp.CreatedAt
-	result.UpdatedAt = resultTemp.UpdatedAt
 	result.Variasi = variasi
-	result.Kode = resultTemp.Kode
-	result.Harga = resultTemp.Harga
-	result.IsHasVariant = resultTemp.IsHasVariant
 
 	return &result, nil
 }
 
 func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, error) {
 	result := domain.ProdukDetailed{}
-	resultTemp := domain.ProdukDetailedTemp{}
 	spesifikasi := []domain.ProdukSpesifikasi{}
 	variasi := []domain.ProdukVariasi{}
 
@@ -184,12 +176,12 @@ func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, err
 	row := statement.QueryRowContext(context.Background(), slug)
 
 	// scan row ke result temporary
-	row.Scan(&resultTemp.ID, &resultTemp.Nama, &resultTemp.Slug, &resultTemp.Deskripsi,
-		&resultTemp.Spesifikasi, &resultTemp.Dilihat, &resultTemp.CreatedAt, &resultTemp.UpdatedAt,
-		&resultTemp.Kategori.Nama, &resultTemp.Kategori.ID, &resultTemp.Kategori.Slug)
+	row.Scan(&result.ID, &result.Nama, &result.Slug, &result.Deskripsi,
+		&result.Spesifikasi, &result.Dilihat, &result.CreatedAt, &result.UpdatedAt,
+		&result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug)
 
 	// unmarshall spesifikasi dari result temporary ke variable spesifikasi
-	json.Unmarshal([]byte(resultTemp.Spesifikasi), &spesifikasi)
+	json.Unmarshal([]byte(result.SpesifikasiTemp), &spesifikasi)
 
 	// get variasi
 	statement2, err := p.db.Prepare("SELECT id, variant, harga, stok FROM produk_variasi WHERE produk_id = ?")
@@ -199,7 +191,7 @@ func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, err
 
 	defer statement2.Close()
 
-	variasiRows, err := statement2.QueryContext(context.Background(), resultTemp.ID)
+	variasiRows, err := statement2.QueryContext(context.Background(), result.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -210,22 +202,9 @@ func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, err
 		variasi = append(variasi, variasiRow)
 	}
 
-	// assign result temporary ke result
-	result.ID = resultTemp.ID
-	result.Nama = resultTemp.Nama
-	result.Slug = resultTemp.Slug
-	result.Deskripsi = resultTemp.Deskripsi
-	result.Dilihat = resultTemp.Dilihat
+	// assign spesifikasi dan variasi ke result
 	result.Spesifikasi = spesifikasi
-	result.Kategori.ID = resultTemp.Kategori.ID
-	result.Kategori.Nama = resultTemp.Kategori.Nama
-	result.Kategori.Slug = resultTemp.Kategori.Slug
-	result.CreatedAt = resultTemp.CreatedAt
-	result.UpdatedAt = resultTemp.UpdatedAt
 	result.Variasi = variasi
-	result.Kode = resultTemp.Kode
-	result.Harga = resultTemp.Harga
-	result.IsHasVariant = resultTemp.IsHasVariant
 
 	return &result, nil
 }

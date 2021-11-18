@@ -65,6 +65,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 
 	// produk - API
 	produk.Post("/tambah", produkAPIController.Create)
+	produk.Get("/get", produkAPIController.Read)
 
 	// kategori
 	kategori := adminParentPath.Group("/kategori")
