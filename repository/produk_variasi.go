@@ -22,7 +22,7 @@ func (p *produkVariasiRepository) Create(req *domain.ProdukVariasi) (*domain.Pro
 		return nil, err
 	}
 
-	stmt, err := tx.Prepare("INSERT INTO produk_variasi (id, variant, harga, produk_id, stok) VALUES(?, ?, ?, ?, ?)")
+	stmt, err := tx.Prepare("INSERT INTO produk_variasi (id, variant, sku, harga, produk_id, stok) VALUES(?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -30,7 +30,7 @@ func (p *produkVariasiRepository) Create(req *domain.ProdukVariasi) (*domain.Pro
 
 	defer stmt.Close()
 
-	if _, err := stmt.ExecContext(c, req.ID, req.Variant, req.Harga, req.ProdukID, req.Stok); err != nil {
+	if _, err := stmt.ExecContext(c, req.ID, req.Variant, req.SKU, req.Harga, req.ProdukID, req.Stok); err != nil {
 		tx.Rollback()
 		return nil, err
 	}
