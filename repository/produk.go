@@ -110,8 +110,9 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	produkVariasi := ProdukVariasiRepository(p.db)
 
 	// get single produk
-	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.stok, produk.harga, produk.dilihat, produk.created_at, produk.updated_at,
-	kategori.nama, kategori.id, kategori.slug
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, 
+	produk.stok, produk.harga, produk.dilihat, produk.created_at, produk.updated_at, produk.kode,
+	produk.is_has_variant, kategori.nama, kategori.id, kategori.slug
 	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
 	WHERE produk.id = ? AND produk.deleted = false LIMIT 1`
 
@@ -126,8 +127,8 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 
 	// scan row ke result temporary
 	row.Scan(&result.ID, &result.Nama, &result.Slug, &result.Deskripsi, &result.SpesifikasiTemp,
-		&result.Stok, &result.Harga, &result.Dilihat, &result.CreatedAt, &result.UpdatedAt,
-		&result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug)
+		&result.Stok, &result.Harga, &result.Dilihat, &result.CreatedAt, &result.UpdatedAt, &result.Kode,
+		&result.IsHasVariant, &result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug)
 
 	// unmarshall spesifikasi
 	json.Unmarshal([]byte(result.SpesifikasiTemp), &spesifikasi)
