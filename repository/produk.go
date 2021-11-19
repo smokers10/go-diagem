@@ -57,7 +57,7 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.stok, produk.harga, produk.dilihat, produk.created_at, produk.updated_at,
 	kategori.nama, kategori.id, kategori.slug
 	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
-	WHERE produk.nama LIKE CONCAT('%', ?, '%') AND produk.kategori_id LIKE CONCAT('%', ?, '%')`
+	WHERE produk.nama LIKE CONCAT('%', ?, '%') AND produk.kategori_id LIKE CONCAT('%', ?, '%') AND produk.deleted = false`
 
 	statement, err := p.db.Prepare(query)
 	if err != nil {
@@ -106,12 +106,14 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	result := domain.ProdukDetailed{}
 	spesifikasi := []domain.ProdukSpesifikasi{}
-	variasi := []domain.ProdukVariasi{}
+	produkFoto := ProdukFotoRepository(p.db)
+	produkVariasi := ProdukVariasiRepository(p.db)
 
 	// get single produk
-	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.dilihat, produk.harga, produk.kode, produk.is_has_variant
-	 	  	  produk.created_at, produk.updated_at, kategori.nama, kategori.id, kategori.slug FROM produk 
-			  JOIN kategori ON kategori.id = produk.kategori_id WHERE produk.id = ? LIMIT 1`
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.stok, produk.harga, produk.dilihat, produk.created_at, produk.updated_at,
+	kategori.nama, kategori.id, kategori.slug
+	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
+	WHERE produk.id = ? AND produk.deleted = false LIMIT 1`
 
 	statement, err := p.db.Prepare(query)
 	if err != nil {
@@ -123,34 +125,29 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	row := statement.QueryRowContext(context.Background(), id)
 
 	// scan row ke result temporary
-	row.Scan(&result.ID, &result.Nama, &result.Slug, &result.Deskripsi,
-		&result.Spesifikasi, &result.Dilihat, &result.Harga, &result.Kode, &result.IsHasVariant, &result.CreatedAt, &result.UpdatedAt,
+	row.Scan(&result.ID, &result.Nama, &result.Slug, &result.Deskripsi, &result.SpesifikasiTemp,
+		&result.Stok, &result.Harga, &result.Dilihat, &result.CreatedAt, &result.UpdatedAt,
 		&result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug)
 
-	// unmarshall spesifikasi dari result temporary ke variable spesifikasi
+	// unmarshall spesifikasi
 	json.Unmarshal([]byte(result.SpesifikasiTemp), &spesifikasi)
-
-	// get variasi
-	statement2, err := p.db.Prepare("SELECT id, variant, harga, stok FROM produk_variasi WHERE produk_id = ?")
-	if err != nil {
-		return nil, err
-	}
-
-	defer statement2.Close()
-
-	variasiRows, err := statement2.QueryContext(context.Background(), result.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	for variasiRows.Next() {
-		variasiRow := domain.ProdukVariasi{}
-		variasiRows.Scan(&variasiRow.ID, &variasiRow.Variant, &variasiRow.Harga, &variasiRow.Stok)
-		variasi = append(variasi, variasiRow)
-	}
-
-	// assign result temporary ke result
 	result.Spesifikasi = spesifikasi
+	result.SpesifikasiTemp = ""
+
+	// ambil semua foto produk
+	foto, err := produkFoto.ReadByProdukID(result.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	// ambil semua variasi
+	variasi, err := produkVariasi.ReadByProdukID(result.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	// assign foto produk dan variasi ke variable result
+	result.ProdukFoto = foto
 	result.Variasi = variasi
 
 	return &result, nil
@@ -225,7 +222,7 @@ func (p *produkRepositoryImpl) Update(req *domain.Produk) (*domain.Produk, error
 }
 
 func (p *produkRepositoryImpl) Delete(id string) error {
-	statement, err := p.db.Prepare("DELETE FROM produk WHERE id = ?")
+	statement, err := p.db.Prepare("UPDATE produk SET deleted = true WHERE id = ?")
 	if err != nil {
 		return err
 	}

@@ -60,12 +60,14 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	produk := adminParentPath.Group("/produk", middleware.AdminWeb(session, "admin", "super admin"))
 	produk.Get("/", produkController.IndexPage)
 	produk.Get("/tambah", produkController.TambahPage)
-	produk.Get("/edit", produkController.EditPage)
+	produk.Get("/edit/:id", produkController.EditPage)
 	produk.Get("/kategori", produkController.KategoriPage)
 
 	// produk - API
 	produk.Post("/tambah", produkAPIController.Create)
 	produk.Get("/get", produkAPIController.Read)
+	produk.Get("/get/:id", produkAPIController.Detail)
+	produk.Delete("/delete", produkAPIController.Delete)
 
 	// kategori
 	kategori := adminParentPath.Group("/kategori")

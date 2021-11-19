@@ -18,6 +18,7 @@ type ProdukVariasiService interface {
 }
 
 type ProdukVariasiRepository interface {
+	ReadByProdukID(produkID string) ([]ProdukVariasi, error)
 	Create(req *ProdukVariasi) (*ProdukVariasi, error)
 	Update(req *ProdukVariasi) (*ProdukVariasi, error)
 	Delete(produkID string, produkVariasiID string) error

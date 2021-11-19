@@ -16,7 +16,7 @@ type ProdukFotoService interface {
 }
 
 type ProdukFotoRepository interface {
-	ReadByID(produkID string) ([]ProdukFoto, error)
+	ReadByProdukID(produkID string) ([]ProdukFoto, error)
 	GetUtamaOnly(produkID string) (*ProdukFoto, error)
 	Create(req *ProdukFoto) error
 	Delete(id string) error

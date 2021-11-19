@@ -123,6 +123,7 @@
             {{template "partials/admin-footer" .}}
             <!-- END Footer -->
         </div>
+        
         <script src="/js/laravel.app.js"></script>
         <script src="/js/laroute.js"></script>
         <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
@@ -133,6 +134,7 @@
         <script src="/js/functions.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
         <script src="/js/admin/general.js"></script>
+
         <script>
             $('.dataTables_filter input[type="search"]').
             attr('placeholder','Search in this blog ....').
@@ -213,14 +215,14 @@
                 .then((result) => {
                     if (result.value) {
                     $.ajax({
-                        url: '',
-                        type: "GET",
-                        dataType: "JSON",
+                        url: '/admin/produk/delete',
+                        type: "DELETE",
+                        data: {id},
                         beforeSend: function(){
                             Swal.fire({
                                 title: 'Tunggu Sebentar...',
                                 text: ' ',
-                                imageUrl: 'public/img/loading.gif',
+                                imageUrl: '/img/loading.gif',
                                 showConfirmButton: false,
                                 allowOutsideClick: false,
                             })
@@ -312,7 +314,7 @@
                     <td>#</td>
                     <td>
                         <div class="media">
-                        <img class="media-object" src="${ item.produk_single_foto.path }" style="width:45px">
+                        <img class="media-object" src="${ item.produk_single_foto.path ? item.produk_single_foto.path : "/img/placeholder.png" }" style="width:45px">
                             <div class="media-body ml-3">
                                 <div class="font-size-h6 font-w700 mb-0">
                                     <a href="#" target="_blank">${ item.nama }</a>
@@ -333,7 +335,7 @@
                                 OPSI
                             </button>
                             <div class="dropdown-menu" aria-labelledby="actionButton-${ item.id }">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="/admin/produk/edit/${ item.id }">
                                     <i class="si si-note mr-5"></i>Ubah
                                 </a>
                                 <a class="dropdown-item btn-hapus" href="javascript:void(0)" onClick="hapus('`+ item.id +`')">

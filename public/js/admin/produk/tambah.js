@@ -154,7 +154,7 @@ $(document).ready(function(){
     fotoInput.change(function(){readURL(this)})
 
     // submit
-    $("#form-produk").submit(function(e){
+    $("#submit-tbh-barang").click(function(e){
         e.preventDefault()
         // mendapatkan data spesifikasi 
         const spek_count = parseInt($('#field-spek_count').val())

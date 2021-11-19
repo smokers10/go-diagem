@@ -56,182 +56,180 @@
 
                 <!-- Page Content -->
                 <div class="content">
-                    <form id="form-produk" onsubmit="return false;">
-                        <input type="hidden" name="total_variasi" id="total_variasi" value="1">
-                        <div class="content-heading pt-0 mb-3">
-                            Tambah Produk Baru
-                            <button type="submit" class="btn btn-primary float-right mr-5">
-                                <i class="si si-paper-plane mr-1"></i>
-                                Simpan
-                            </button>
-                        </div>
+                    <input type="hidden" name="total_variasi" id="total_variasi" value="1">
+                    <div class="content-heading pt-0 mb-3">
+                        Tambah Produk Baru
+                        <button type="button" id="submit-tbh-barang" class="btn btn-primary float-right mr-5">
+                            <i class="si si-paper-plane mr-1"></i>
+                            Simpan
+                        </button>
+                    </div>
 
-                        <!-- 1. Informasi Produk -->
-                        <div class="block block-rounded">
-                            <div class="block-header block-header-default">
-                                <div class="block-title">
-                                    <strong>1. Informasi Produk</strong>
+                    <!-- 1. Informasi Produk -->
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <div class="block-title">
+                                <strong>1. Informasi Produk</strong>
+                            </div>
+                        </div>
+                        <div class="block-content pb-15">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label" for="field-nama">Nama Produk</label>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" id="field-nama" name="nama" placeholder="Masukan Nama Produk" autocomplete="off">
+                                    <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
                                 </div>
                             </div>
-                            <div class="block-content pb-15">
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label" for="field-nama">Nama Produk</label>
-                                    <div class="col-lg-9">
-                                        <input type="text" class="form-control" id="field-nama" name="nama" placeholder="Masukan Nama Produk" autocomplete="off">
-                                        <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
-                                    </div>
+            
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label" for="field-deskripsi">Deskripsi Produk</label>
+                                <div class="col-lg-9">
+                                    <textarea class="form-control" name="deskripsi" id="field-deskripsi" cols="30" rows="10" placeholder="Masukan Deskripsi Produk"></textarea>
+                                    <div class="invalid-feedback font-size-sm" id="error-deskripsi">Invalid feedback</div>
                                 </div>
-                
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label" for="field-deskripsi">Deskripsi Produk</label>
-                                    <div class="col-lg-9">
-                                        <textarea class="form-control" name="deskripsi" id="field-deskripsi" cols="30" rows="10" placeholder="Masukan Deskripsi Produk"></textarea>
-                                        <div class="invalid-feedback font-size-sm" id="error-deskripsi">Invalid feedback</div>
-                                    </div>
+                            </div>
+            
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label" for="field-kategori">Kategori Produk</label>
+                                <div class="col-lg-9">
+                                    <select class="form-control" id="field-kategori" name="kategori_id"></select>
+                                    <div class="invalid-feedback font-size-sm" id="error-kategori">Invalid feedback</div>
                                 </div>
-                
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label" for="field-kategori">Kategori Produk</label>
-                                    <div class="col-lg-9">
-                                        <select class="form-control" id="field-kategori" name="kategori_id"></select>
-                                        <div class="invalid-feedback font-size-sm" id="error-kategori">Invalid feedback</div>
-                                    </div>
+                            </div>
+            
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label" for="field-kode">Kode Produk</label>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" id="field-kode" name="kode" placeholder="Masukan Kode Produk" autocomplete="off">
+                                    <div class="invalid-feedback font-size-sm" id="error-kode">Invalid feedback</div>
                                 </div>
-                
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label" for="field-kode">Kode Produk</label>
-                                    <div class="col-lg-9">
-                                        <input type="text" class="form-control" id="field-kode" name="kode" placeholder="Masukan Kode Produk" autocomplete="off">
-                                        <div class="invalid-feedback font-size-sm" id="error-kode">Invalid feedback</div>
-                                    </div>
-                                </div>
-                
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label" for="field-spek">Spesifikasi Produk</label>
-                                    <div class="col-lg-9">
-                                        <input type="hidden" id="field-spek_count" value="0">
-                                        <table class="table table-bordered" id="field-spek">
-                                            <tbody>
+                            </div>
+            
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label" for="field-spek">Spesifikasi Produk</label>
+                                <div class="col-lg-9">
+                                    <input type="hidden" id="field-spek_count" value="0">
+                                    <table class="table table-bordered" id="field-spek">
+                                        <tbody>
 
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <button class="btn btn-block btn-primary" type="button" id="btn-add-spek">Tambah Spesifikasi</button>
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <button class="btn btn-block btn-primary" type="button" id="btn-add-spek">Tambah Spesifikasi</button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                
-                        <!-- 2. Harga Produk -->
-                        <div class="block block-rounded">
-                            <div class="block-header block-header-default">
-                                <div class="block-title">
-                                    <strong>2. Harga Produk</strong>
-                                </div>
+                    </div>
+            
+                    <!-- 2. Harga Produk -->
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <div class="block-title">
+                                <strong>2. Harga Produk</strong>
                             </div>
-                            <div class="block-content pb-15">
-                                <input type="hidden" name="is_has_variant" id="is_has_variant" value="0">
+                        </div>
+                        <div class="block-content pb-15">
+                            <input type="hidden" name="is_has_variant" id="is_has_variant" value="0">
 
-                                <div id="harga-produk-form">
+                            <div id="harga-produk-form">
 
-                                </div>
+                            </div>
 
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <button type="button" class="btn btn-outline-primary btn-block" id="btn-toggle-variasi">
-                                            <i class="si si-plus mr-1"></i> Aktifkan Variasi Produk
-                                        </button>
-                                    </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12">
+                                    <button type="button" class="btn btn-outline-primary btn-block" id="btn-toggle-variasi">
+                                        <i class="si si-plus mr-1"></i> Aktifkan Variasi Produk
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                
-                        <!-- 3. Foto Produk -->
-                        <div class="block block-rounded">
-                            <div class="block-header block-header-default">
-                                <div class="block-title">
-                                    <strong>3. Foto Produk</strong>
-                                </div>
+                    </div>
+            
+                    <!-- 3. Foto Produk -->
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <div class="block-title">
+                                <strong>3. Foto Produk</strong>
                             </div>
-                            <div class="block-content pb-15">
-                                <div class="form-group">
-                                    <div class="foto-produk">
-                                        <div class="row" id="selected-foto-row">
-                                            
-                                        </div>
-                                        <div class="btn btn-primary btn-block btn-sm mt-3" id="foto-modal-btn" data-toggle="modal" data-target="#foto-produk-modal">
-                                            <i class="si si-plus mr-1"></i>Pilih Foto
-                                        </div>
+                        </div>
+                        <div class="block-content pb-15">
+                            <div class="form-group">
+                                <div class="foto-produk">
+                                    <div class="row" id="selected-foto-row">
+                                        
+                                    </div>
+                                    <div class="btn btn-primary btn-block btn-sm mt-3" id="foto-modal-btn" data-toggle="modal" data-target="#foto-produk-modal">
+                                        <i class="si si-plus mr-1"></i>Pilih Foto
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- 4. Pengiriman Produk -->
-                        <div class="block block-rounded">
-                            <div class="block-header block-header-default">
-                                <div class="block-title">
-                                    <strong>4. Pengiriman</strong>
+                    </div>
+                    
+                    <!-- 4. Pengiriman Produk -->
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <div class="block-title">
+                                <strong>4. Pengiriman</strong>
+                            </div>
+                        </div>
+                        <div class="block-content pb-15">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label" for="field-berat">Berat</label>
+                                <div class="col-lg-9">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <input type="number" class="form-control" id="field-berat" name="berat" placeholder="Masukan Berat Produk">
+                                        </div>
+                                        <div class="col-4">
+                                            <select class="form-control" id="field-berat-satuan" name="berat_satuan">
+                                                <option value="g">Gram (g)</option>
+                                                <option value="kg">Kilogram (Kg)</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="block-content pb-15">
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label" for="field-berat">Berat</label>
-                                    <div class="col-lg-9">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <input type="number" class="form-control" id="field-berat" name="berat" placeholder="Masukan Berat Produk">
-                                            </div>
-                                            <div class="col-4">
-                                                <select class="form-control" id="field-berat-satuan" name="berat_satuan">
-                                                    <option value="g">Gram (g)</option>
-                                                    <option value="kg">Kilogram (Kg)</option>
-                                                </select>
-                                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label" for="field-lebar">Ukuran Paket</label>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="field-lebar" name="lebar" placeholder="Lebar">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                cm
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label" for="field-lebar">Ukuran Paket</label>
-                                    <div class="col-lg-3">
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" id="field-lebar" name="lebar" placeholder="Lebar">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                    cm
-                                                </span>
-                                            </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="field-panjang" name="panjang" placeholder="Panjang">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                cm
+                                            </span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3">
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" id="field-panjang" name="panjang" placeholder="Panjang">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                    cm
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" id="field-tinggi" name="tinggi" placeholder="Tinggi">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                    cm
-                                                </span>
-                                            </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="field-tinggi" name="tinggi" placeholder="Tinggi">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                cm
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 
                 <div class="modal" id="foto-produk-modal">

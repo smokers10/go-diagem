@@ -15,6 +15,28 @@ func ProdukVariasiRepository(database *sql.DB) domain.ProdukVariasiRepository {
 	return &produkVariasiRepository{db: database}
 }
 
+func (p *produkVariasiRepository) ReadByProdukID(produkID string) ([]domain.ProdukVariasi, error) {
+	result := []domain.ProdukVariasi{}
+	c := context.Background()
+	stmt, err := p.db.Prepare("SELECT id, variant, sku, harga, produk_id, stok FROM produk_variasi WHERE produk_id = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := stmt.QueryContext(c, produkID)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		row := domain.ProdukVariasi{}
+		rows.Scan(&row.ID, &row.Variant, &row.SKU, &row.Harga, &row.ProdukID, &row.Stok)
+		result = append(result, row)
+	}
+
+	return result, nil
+}
+
 func (p *produkVariasiRepository) Create(req *domain.ProdukVariasi) (*domain.ProdukVariasi, error) {
 	c := context.Background()
 	tx, err := p.db.BeginTx(c, nil)
