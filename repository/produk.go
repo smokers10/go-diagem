@@ -112,6 +112,7 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	// get single produk
 	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, 
 	produk.stok, produk.harga, produk.dilihat, produk.created_at, produk.updated_at, produk.kode,
+	produk.berat, produk.satuan_berat, produk.lebar, produk.panjang, produk.tinggi,
 	produk.is_has_variant, kategori.nama, kategori.id, kategori.slug
 	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
 	WHERE produk.id = ? AND produk.deleted = false LIMIT 1`
@@ -125,9 +126,10 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 
 	row := statement.QueryRowContext(context.Background(), id)
 
-	// scan row ke result temporary
+	// scan row ke result
 	row.Scan(&result.ID, &result.Nama, &result.Slug, &result.Deskripsi, &result.SpesifikasiTemp,
 		&result.Stok, &result.Harga, &result.Dilihat, &result.CreatedAt, &result.UpdatedAt, &result.Kode,
+		&result.Berat, &result.SatuanBerat, &result.Lebar, &result.Panjang, &result.Tinggi,
 		&result.IsHasVariant, &result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug)
 
 	// unmarshall spesifikasi

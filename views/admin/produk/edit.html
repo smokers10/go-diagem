@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-        <title>Admin | Tokonya</title>
+        <title>Admin | Diagem</title>
 
-        <meta name="description" content="Tokonya">
-        <meta name="author" content="Tokonya">
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
         <meta name="robots" content="noindex, nofollow">
 
         <!-- Open Graph Meta -->
-        <meta property="og:title" content="Tokonya">
-        <meta property="og:site_name" content="Tokonya">
-        <meta property="og:description" content="Tokonya">
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
         <meta property="og:type" content="website">
         <meta property="og:url" content="">
         <meta property="og:image" content="">
@@ -75,6 +75,7 @@
                                 <strong>Informasi Produk</strong>
                             </div>
                         </div>
+
                         <div class="block-content pb-15">
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label" for="field-nama">Nama Produk</label>
@@ -107,60 +108,34 @@
                                     <div class="invalid-feedback font-size-sm" id="error-kode">Invalid feedback</div>
                                 </div>
                             </div>
+                            
+                            <!-- harga -->
+                            <div id="harga">
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label" for="field-harga">Harga Produk</label>
+                                    <div class="col-lg-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    Rp
+                                                </span>
+                                            </div>
+                                            <input type="number" class="form-control" id="field-harga" name="harga" placeholder="Masukan Harga Produk" autocomplete="off">
+                                        </div>
+                                        <div class="text-danger font-size-sm" id="error-harga"></div>
+                                    </div>
+                                </div>
             
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label" for="field-spek">Spesifikasi Produk</label>
-                                <div class="col-lg-9">
-                                    <input type="hidden" id="field-spek_count" value="0">
-                                    <table class="table table-bordered" id="field-spek">
-                                        <tbody>
-
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3">
-                                                    <button class="btn btn-block btn-primary" type="button" id="btn-add-spek">Tambah Spesifikasi</button>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label" for="field-stok">Stok Produk</label>
+                                    <div class="col-lg-9">
+                                        <input type="number" class="form-control" id="field-stok" name="stok" placeholder="Masukan Stok Produk">
+                                        <div class="invalid-feedback font-size-sm" id="error-stok">Invalid feedback</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-            
-                    <!-- Harga Produk -->
-                    <div class="block block-rounded">
-                        <div class="block-header block-header-default">
-                            <div class="block-title">
-                                <strong>Harga Produk</strong>
-                            </div>
-                        </div>
-                        <div class="block-content pb-15">
-                            <input type="hidden" name="is_has_variant" id="is_has_variant" value="0">
+                            <!-- END harga -->
 
-                            <div id="harga-produk-form">
-
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-lg-12">
-                                    <button type="button" class="btn btn-outline-primary btn-block" id="btn-toggle-variasi">
-                                        <i class="si si-plus mr-1"></i> Aktifkan Variasi Produk
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Pengiriman Produk -->
-                    <div class="block block-rounded">
-                        <div class="block-header block-header-default">
-                            <div class="block-title">
-                                <strong>Pengiriman</strong>
-                            </div>
-                        </div>
-                        <div class="block-content pb-15">
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label" for="field-berat">Berat</label>
                                 <div class="col-lg-9">
@@ -177,6 +152,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label" for="field-lebar">Ukuran Paket</label>
                                 <div class="col-lg-3">
@@ -208,6 +184,99 @@
                                             </span>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label" for="field-spek">Spesifikasi Produk</label>
+                                <div class="col-lg-9">
+                                    <input type="hidden" id="field-spek_count" value="0">
+                                    <table class="table table-bordered" id="field-spek">
+                                        <tbody>
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <button class="btn btn-block btn-primary" type="button" id="btn-add-spek">Tambah Spesifikasi</button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Variasi Produk -->
+                    <div class="block block-rounded" id="variasi">
+                        <div class="block-header block-header-default">
+                            <div class="block-title">
+                                <strong>Varian Produk</strong>
+                            </div>
+                        </div>
+                        <div class="block-content pb-15">
+                            <div class="form-group row mb-0 variasi">
+                                <div class="col-lg-12">
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 col-form-label" for="field-nama">Nama</label>
+                                        <div class="col-lg-10">
+                                            <input type="text" class="form-control variasi-nama" id="nama-varian" name="var_nama" placeholder="Masukkan Nama Variasi, contoh: Warna, Jenis Batu, dll.">
+                                            <div class="text-danger font-size-sm" id="error-var1_nama"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 col-form-label" for="field-kode">Kode</label>
+                                        <div class="col-lg-10">
+                                            <input type="text" class="form-control variasi-kode" id="kode-varian" name="var_kode" placeholder="Masukan Kode/SKU Variasi Ini">
+                                            <div class="text-danger font-size-sm" id="error-kode"></div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 col-form-label" for="field-stok">Stok Variasi</label>
+                                        <div class="col-lg-10">
+                                            <input type="number" class="form-control variasi-stok" id="stok-varian" name="var_stok" placeholder="Masukan Stok Variasi Ini">
+                                            <div class="text-danger font-size-sm" id="error-stok"></div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 col-form-label" for="field-harga">Harga</label>
+                                        <div class="col-lg-10">
+                                            <input type="number" class="form-control variasi-harga" id="harga-varian" name="var_harga" placeholder="Masukkan Nama Harga Untuk Variasi Ini">
+                                            <div class="text-danger font-size-sm" id="error-var_harga"></div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 col-form-label"></label>
+                                        <div class="col-lg-10">
+                                            <button type="button" class="btn btn-outline-primary btn-block" id="btn-add-variasi">
+                                                <i class="si si-plus mr-1"></i> Simpan Variasi
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+        
+                            <div class="form-group row variasi">
+                                <div class="col-lg-12">
+                                    <table class="table table-bordered table-vcenter text-center" id="tbl_variasi">
+                                        <thead>
+                                            <tr>
+                                                <th class="tb-variasi-1_nama" width="18%">Nama</th>
+                                                <th width="30%">Harga</th>
+                                                <th width="14%">Stok</th>
+                                                <th width="20%">Kode Variasi</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -294,11 +363,6 @@
         <script src="/js/plugins/summernote/summernote-bs4.min.js"></script>
         <script src="/js/admin/general.js"></script>
         <script>
-            var isHasVarian = false
-            var varianArr = []
-            const hargaProdukFormElem = $("#harga-produk-form")
-            const variasiToggleBtn = $("#btn-toggle-variasi")
-
             const fotoInput = $("#file-upload-input")
             const fotoEditorPreview = $("#imagePreview")
             const imagePreviewDefaultSrc = "/img/placeholder/product.png"
@@ -312,21 +376,7 @@
 
             // once page is ready
             $(document).ready(function(){
-                // get data
-                $.ajax({
-                    url: `/admin/produk/get/${produkID}`,
-                    method: "get",
-                    success: function (res) {
-                        const data = res.data
-                        const { produk_foto, variasi, spesifikasi, nama, slug, stok, description, kode, harga,   } = data
-                        _renderFoto(produk_foto)
-
-                        // set to html
-                        $("#field-nama").val()
-                    }
-                })
-
-                // kategori select 2
+                // get data kategori
                 $.ajax({
                     url:"/admin/kategori/get",
                     method: "get",
@@ -338,9 +388,61 @@
                     }
                 })
 
-                $("#field-kategori").select2({
-                    placeholder: 'Pilih Kategori',
-                    theme : 'bootstrap4',
+                // get data
+                $.ajax({
+                    url: `/admin/produk/get/${produkID}`,
+                    method: "get",
+                    success: function (res) {
+                        const data = res.data
+                        const { produk_foto, variasi, spesifikasi, nama, slug, stok, description,
+                             kode, harga, is_has_variant, kategori, berat, satuan_berat,
+                             lebar, panjang, tinggi } = data
+                        const { id } = kategori 
+
+                        _renderFoto(produk_foto)
+
+                        // has variant or not
+                        if (is_has_variant) {
+                            $("#harga").hide()
+                            $("#variasi").show()
+                        } else {
+                            $("#harga").show()
+                            $("#variasi").hide()
+                        } 
+
+                        // set to input html
+                        $("#field-nama").val(nama) 
+                        $("#field-deskripsi").val(description)
+                        $("#field-kategori").val(id)
+                        $("#field-berat").val(berat)
+                        $("#field-berat-satuan").val(satuan_berat)
+                        $("#field-kategori").val(id)
+                        $("#field-lebar").val(lebar)
+                        $("#field-panjang").val(panjang)
+                        $("#field-tinggi").val(tinggi)
+                        $("#field-harga").val(harga)
+                        $("#field-stok").val(stok)
+                        $("#field-kode").val(kode)
+
+                        // set varian
+                        variasi.forEach(v => {
+                            _renderVarian(v)
+                        })
+                    }
+                })
+
+                // Deskripsi Summernote init
+                $('#field-deskripsi').summernote({
+                    height: '250px',
+                    toolbar: [
+                        ['undo', ['undo',]],
+                        ['redo', ['redo',]],
+                        ['style', ['bold', 'italic', 'underline','clear']],
+                        ['font', ['strikethrough',]],
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                    ]
                 })
 
                 // tambah spesifikasi 
@@ -365,157 +467,23 @@
                     console.log(spek_count)
                 })
 
-                // hapus spesifikasi
-                $(document).on('click', '#field-spek .btn-delete-spek', function () {
-                    $(this).closest('tr').remove();
-                })
+                // submit informasi produk
 
-                // varian
-                hargaProdukFormElem.html(_nonVariasi())
-
-                variasiToggleBtn.click(function(){
-                    isHasVarian ? isHasVarian = false : isHasVarian = true
-                    console.log(isHasVarian)
-                    
-                    if (isHasVarian) {
-                        $(this).removeClass("btn-outline-primary")
-                        $(this).addClass("btn-outline-danger")
-                        $(this).html(`Nonaktifkan Variasi Produk`)
-                        hargaProdukFormElem.html(_variasi())
-                        if (varianArr.length) {
-                            let table = $("#tbl_variasi")
-                            varianArr.forEach(varian => {
-                                table.find("tbody").append(`
-                                    <tr>
-                                        <td>${varian.variant}</td>
-                                        <td>${varian.harga}</td>
-                                        <td>${varian.stok}</td>
-                                        <td>${varian.sku}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger">
-                                                <i class="si si-trash mr-1"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                `)
-                            })
-                        }
-                    }else {
-                        hargaProdukFormElem.html(_nonVariasi())
-                        $(this).removeClass("btn-outline-danger")
-                        $(this).addClass("btn-outline-primary")
-                        $(this).html(`<i class="si si-plus mr-1"></i> Aktifkan Variasi Produk`)
-                    }
-                })
-
-                $(document).on('click', '#btn-add-variasi', function(){
-                    let namaVarian = $("#nama-varian")
-                    let kodeVarian = $("#kode-varian")
-                    let stokVarian = $("#stok-varian")
-                    let hargaVarian = $("#harga-varian")
-                    let table = $("#tbl_variasi")
-
-                    var varian = {
-                        variant : namaVarian.val(),
-                        sku : kodeVarian.val(),
-                        stok : parseInt(stokVarian.val()),
-                        harga : parseInt(hargaVarian.val()),
-                    }
-                    
-                    varianArr.push(varian)
-
-                    namaVarian.val("")
-                    kodeVarian.val("")
-                    stokVarian.val("")
-                    hargaVarian.val("")
-
-                    table.find("tbody").append(`
-                        <tr>
-                            <td>${varian.variant}</td>
-                            <td>${varian.harga}</td>
-                            <td>${varian.stok}</td>
-                            <td>${varian.sku}</td>
-                            <td>
-                                <button type="button" class="btn btn-danger">
-                                    <i class="si si-trash mr-1"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `)
-                })
-
-                // Deskripsi Summernote init
-                $('#field-deskripsi').summernote({
-                    height: '250px',
-                    toolbar: [
-                        ['undo', ['undo',]],
-                        ['redo', ['redo',]],
-                        ['style', ['bold', 'italic', 'underline','clear']],
-                        ['font', ['strikethrough',]],
-                        ['fontsize', ['fontsize']],
-                        ['color', ['color']],
-                        ['para', ['ul', 'ol', 'paragraph']],
-                    ]
-                })
-
-                // upload foto produk
-                // buka modal foto
-                $("#foto-modal-btn").click(function() {
-                    fotoEditorPreview.croppie('destroy')
-                    fotoEditorPreview.attr("src", imagePreviewDefaultSrc)
-                })
-
-                // preview foto produk
-                fotoInput.change(function(){readURL(this)})
-
-                // submit
-                $("#form-produk").submit(function(e){
-                    e.preventDefault()
-                    // mendapatkan data spesifikasi 
-                    const spek_count = parseInt($('#field-spek_count').val())
-                    var spesifikasi = []
-                    for (let i = 0; i < spek_count; i++) {
-                        var nama = $(`#nama${i}`).val()
-                        var value = $(`#value${i}`).val()
-                        var spek = {nama, value}
-                        if (!nama == "" && !value == "") {
-                            spesifikasi.push(spek)
-                        }
-                    }
-
-                    // mendapatkan foto
-                    var selectedFotoSrc = []
-                    const selectedFotoItem = $(".selected-foto-item")
-                    for (let i = 0; i < selectedFotoItem.length; i++) {
-                        let src = selectedFotoItem[i].currentSrc
-                        const base64 = src.split(";base64,")[1]
-                        const type = src.split(";base64,")[0]
-                        const format = type.split("data:image/")[1]
-                        selectedFotoSrc.push({ base64, format })
-                    }
-
-                    const data = {
-                        nama : $("#field-nama").val(),
-                        deskripsi: $("#field-deskripsi").val(),
-                        spesifikasi: JSON.stringify(spesifikasi),
-                        produk_foto: selectedFotoSrc,
-                        kategori_id: parseInt($("#field-kategori").val()),
-                        berat: parseInt($("#field-berat").val()),
-                        satuan_berat: $("#field-berat-satuan").val(),
-                        lebar: parseFloat($("#field-lebar").val()),
-                        panjang: parseFloat($("#field-panjang").val()),
-                        tinggi: parseFloat($("#field-tinggi").val()),
-                        kode: $("#field-kode").val(),
-                        harga: parseInt($("#field-harga").val()),
-                        variasi: varianArr,
-                        stok: parseInt($("#field-stok").val()),
-                        is_has_variant: isHasVarian,
+                // VARIAN
+                // add varian
+                $("#btn-add-variasi").click(function(){
+                    let newVarian = {
+                        variant: $("#nama-varian").val(),
+                        sku: $("#kode-varian").val(),
+                        harga: parseFloat($("#harga-varian").val()),
+                        stok: parseInt($("#stok-varian").val()),
+                        produk_id: produkID,
                     }
 
                     $.ajax({
-                        url: "/admin/produk/tambah",
-                        type:"post",
-                        data: JSON.stringify(data),
+                        url: "/admin/varian",
+                        method: "post",
+                        data: JSON.stringify(newVarian),
                         dataType: "json",
                         contentType: "application/json",
                         beforeSend: function(){
@@ -527,20 +495,21 @@
                                 allowOutsideClick: false,
                             })
                         },
-                        success: function (response) {
-                            $('.is-invalid').removeClass('is-invalid')
+                        success: function(){
+                            $("#nama-varian").val("")
+                            $("#kode-varian").val("")
+                            $("#harga-varian").val("")
+                            $("#stok-varian").val("")
                             Swal.fire({
-                                title: `Berhasil!`,
-                                showConfirmButton: false,
                                 icon: 'success',
-                                html: `Produk Baru Berhasil Disimpan!
-                                    <br><br>
-                                    <a href="/admin/produk" class="btn btn-keluar btn-alt-danger"><i class="si si-close mr-1"></i>Keluar</a> 
-                                    <a href="/admin/produk/tambah" class="btn btn-tambah_baru btn-alt-primary"><i class="si si-plus mr-1"></i>Tambah Produk Lain</a>`,
+                                title: 'Varian produk berhasil disimpan',
+                                showConfirmButton: false,
                                 showCancelButton: false,
                                 showConfirmButton: false,
-                                allowOutsideClick: false,
+                                timer: 1500
                             })
+
+                            _renderVarian(newVarian)
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             Swal.close()
@@ -548,8 +517,10 @@
                         }
                     })
                 })
+
             })
 
+            // foto functionallity
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader()
@@ -607,101 +578,142 @@
                 })
             }
 
-            function _nonVariasi() {
-                var element = `
-                    <div class="form-group row non-variasi">
-                        <label class="col-lg-3 col-form-label" for="field-harga">Harga Produk</label>
-                        <div class="col-lg-9">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        Rp
-                                    </span>
-                                </div>
-                                <input type="number" class="form-control" id="field-harga" name="harga" placeholder="Masukan Harga Produk" autocomplete="off">
-                            </div>
-                            <div class="text-danger font-size-sm" id="error-harga"></div>
-                        </div>
-                    </div>
+            // varian functionallity
+            // render
+            function _renderVarian(data){
+                $("#tbl_variasi").find("tbody").append(`
+                    <tr id="varian-${data.id}">
+                        <td>
+                            <input type="text" name="nama-varian" class="form-control" value="${data.variant}"></input> 
+                        </td>
 
-                    <div class="form-group row non-variasi">
-                        <label class="col-lg-3 col-form-label" for="field-stok">Stok Produk</label>
-                        <div class="col-lg-9">
-                            <input type="number" class="form-control" id="field-stok" name="stok" placeholder="Masukan Stok Produk">
-                            <div class="invalid-feedback font-size-sm" id="error-stok">Invalid feedback</div>
-                        </div>
-                    </div>
-                `
+                        <td>
+                            <input type="number" name="harga-varian" class="form-control" min="0" value="${data.harga}"></input> 
+                        </td>
 
-                return element
+                        <td>
+                            <input type="number" name="stok-varian" class="form-control" min="0" value="${data.stok}"></input> 
+                        </td>
+
+                        <td>
+                            <input type="text" name="sku-varian" class="form-control" value="${data.sku}"></input> 
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn btn-success" data-id="${data.id}" onclick="_updateVarian(this)">
+                                <i class="fas fa-save"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger" data-id="${data.id}" onclick="_deleteVarian(this)">
+                                <i class="si si-trash mr-1"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `)
             }
 
-            function _variasi() {
-                return `
-                    <div class="form-group row mb-0 variasi">
-                        <div class="col-lg-12">
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-form-label" for="field-nama">Nama</label>
-                                <div class="col-lg-10">
-                                    <input type="text" class="form-control variasi-nama" id="nama-varian" name="var_nama" placeholder="Masukkan Nama Variasi, contoh: Warna, Jenis Batu, dll.">
-                                    <div class="text-danger font-size-sm" id="error-var1_nama"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-form-label" for="field-kode">Kode</label>
-                                <div class="col-lg-10">
-                                    <input type="text" class="form-control variasi-kode" id="kode-varian" name="var_kode" placeholder="Masukan Kode/SKU Variasi Ini">
-                                    <div class="text-danger font-size-sm" id="error-kode"></div>
-                                </div>
-                            </div>
+            // hapus
+            function _deleteVarian(data){
+                var id = $(data).attr("data-id")
+                Swal.fire({
+                    title: "Anda Yakin?",
+                    text: "Data Yang Dihapus Tidak Akan Bisa Dikembalikan",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Tidak, Batalkan!',
+                    reverseButtons: true,
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#af1310',
+                    cancelButtonColor: '#fffff',
+                })
+                .then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: "/admin/varian",
+                            method: "delete",
+                            data: {
+                                produk_id: produkID,
+                                id: id,
+                            },
+                            beforeSend: function(){
+                                Swal.fire({
+                                    title: 'Tunggu Sebentar...',
+                                    text: '',
+                                    imageUrl: '/img/loading.gif',
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                })
+                            },
+                            success: function(){
+                                $("#nama-varian").val("")
+                                $("#kode-varian").val("")
+                                $("#harga-varian").val("")
+                                $("#stok-varian").val("")
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Varian produk berhasil dihapus',
+                                    showConfirmButton: false,
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
 
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-form-label" for="field-stok">Stok Variasi</label>
-                                <div class="col-lg-10">
-                                    <input type="number" class="form-control variasi-stok" id="stok-varian" name="var_stok" placeholder="Masukan Stok Variasi Ini">
-                                    <div class="text-danger font-size-sm" id="error-stok"></div>
-                                </div>
-                            </div>
+                                $(`#varian-${id}`).remove()
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                Swal.close()
+                                alert('Error adding / update data')
+                            }
+                        })
+                    }else{
+                        Swal.close()
+                    }
+                })
+            }
 
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-form-label" for="field-harga">Harga</label>
-                                <div class="col-lg-10">
-                                    <input type="number" class="form-control variasi-harga" id="harga-varian" name="var_harga" placeholder="Masukkan Nama Harga Untuk Variasi Ini">
-                                    <div class="text-danger font-size-sm" id="error-var_harga"></div>
-                                </div>
-                            </div>
+            // update
+            function _updateVarian(data){
+                var id = $(data).attr("data-id")
+                var trEl = $(`#varian-${id}`)
+                const updatedVarian =  {
+                    variant: trEl.find('input[name="nama-varian"]').val(),
+                    sku: trEl.find('input[name="sku-varian"]').val(),
+                    harga: parseFloat(trEl.find('input[name="harga-varian"]').val()),
+                    stok: parseInt(trEl.find('input[name="stok-varian"]').val()),
+                    produk_id: produkID,
+                    id: id,
+                }
 
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-form-label"></label>
-                                <div class="col-lg-10">
-                                    <button type="button" class="btn btn-outline-primary btn-block" id="btn-add-variasi">
-                                        <i class="si si-plus mr-1"></i> Tambahkan Variasi
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> 
-
-                    <div class="form-group row variasi">
-                        <div class="col-lg-12">
-                            <table class="table table-bordered table-vcenter text-center" id="tbl_variasi">
-                                <thead>
-                                    <tr>
-                                        <th class="tb-variasi-1_nama" width="18%">Nama</th>
-                                        <th width="30%">Harga</th>
-                                        <th width="14%">Stok</th>
-                                        <th width="20%">Kode Variasi</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                `
+                $.ajax({
+                    url: "/admin/varian",
+                    method: "put",
+                    data: JSON.stringify(updatedVarian),
+                    dataType: "json",
+                    contentType: "application/json",
+                    beforeSend: function(){
+                        Swal.fire({
+                            title: 'Tunggu Sebentar...',
+                            text: '',
+                            imageUrl: '/img/loading.gif',
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                        })
+                    },
+                    success: function(){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Varian produk berhasil disimpan',
+                            showConfirmButton: false,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal.close()
+                        alert('Error adding / update data')
+                    }
+                })
             }
         </script>
     </body>

@@ -18,7 +18,7 @@ func ProdukVariasiRepository(database *sql.DB) domain.ProdukVariasiRepository {
 func (p *produkVariasiRepository) ReadByProdukID(produkID string) ([]domain.ProdukVariasi, error) {
 	result := []domain.ProdukVariasi{}
 	c := context.Background()
-	stmt, err := p.db.Prepare("SELECT id, variant, sku, harga, produk_id, stok FROM produk_variasi WHERE produk_id = ?")
+	stmt, err := p.db.Prepare("SELECT id, variant, sku, harga, produk_id, stok FROM produk_variasi WHERE produk_id = ? AND deleted = false")
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (p *produkVariasiRepository) Update(req *domain.ProdukVariasi) (*domain.Pro
 		return nil, err
 	}
 
-	stmt, err := tx.Prepare("UPDATE produk_variasi SET variant = ?, harga = ?, stok = ? WHERE id = ? AND produk_id = ?")
+	stmt, err := tx.Prepare("UPDATE produk_variasi SET variant = ?, sku = ?, harga = ?, stok = ? WHERE id = ? AND produk_id = ?")
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -77,7 +77,7 @@ func (p *produkVariasiRepository) Update(req *domain.ProdukVariasi) (*domain.Pro
 
 	defer stmt.Close()
 
-	if _, err := stmt.ExecContext(c, req.Variant, req.Harga, req.Stok, req.ID, req.ProdukID); err != nil {
+	if _, err := stmt.ExecContext(c, req.Variant, req.SKU, req.Harga, req.Stok, req.ID, req.ProdukID); err != nil {
 		tx.Rollback()
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (p *produkVariasiRepository) Delete(produkID string, produkVariasiID string
 		return err
 	}
 
-	stmt, err := tx.Prepare("DELETE FROM produk_variasi WHERE id = ? AND produk_id = ?")
+	stmt, err := tx.Prepare("UPDATE produk_variasi SET deleted = true WHERE id = ? AND produk_id = ?")
 	if err != nil {
 		tx.Rollback()
 		return err

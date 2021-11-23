@@ -23,11 +23,6 @@ $(document).ready(function(){
         }
     })
 
-    $("#field-kategori").select2({
-        placeholder: 'Pilih Kategori',
-        theme : 'bootstrap4',
-    })
-
     // tambah spesifikasi 
     $("#btn-add-spek").click(function(){
         // append form
@@ -47,7 +42,6 @@ $(document).ready(function(){
         </tr>`)
         spek_count += 1
         $('#field-spek_count').val(spek_count)
-        console.log(spek_count)
     })
 
     // hapus spesifikasi
