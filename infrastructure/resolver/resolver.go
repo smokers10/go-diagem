@@ -15,6 +15,7 @@ type ServiceResolver struct {
 	KategoriService      *domain.KategoriService
 	MitraService         *domain.MitraService
 	ProdukService        *domain.ProdukService
+	ProdukFoto           *domain.ProdukFotoService
 	ProdukVariasiService *domain.ProdukVariasiService
 	PromoService         *domain.PromoService
 	RekeningService      *domain.RekeningService
@@ -49,6 +50,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	kategoriServ := services.KategoriService(&kategoriRepo)
 	mitraServ := services.MitraService(&mitraRepo)
 	produkServ := services.ProdukService(&produkRepo, &produkFoto, &produkVariasiRepo)
+	produkFotoServ := services.ProdukFoto(&produkFoto)
 	produkVariasiServ := services.ProdukVariasiService(&produkVariasiRepo)
 	promoServ := services.PromoService(&promoRepo)
 	rekeningServ := services.RekeningService(&rekeningRepo)
@@ -64,6 +66,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 		KategoriService:      &kategoriServ,
 		MitraService:         &mitraServ,
 		ProdukService:        &produkServ,
+		ProdukFoto:           &produkFotoServ,
 		ProdukVariasiService: &produkVariasiServ,
 		PromoService:         &promoServ,
 		RekeningService:      &rekeningServ,

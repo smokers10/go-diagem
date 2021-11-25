@@ -54,7 +54,7 @@ func (p *produkServiceImpl) Create(req *domain.Produk) *domain.Response {
 		return &res
 	}
 
-	// menyimpan foto produk (jika ada)
+	// menyimpan foto produk dari type64 ke file citra
 	path := fmt.Sprintf("public/uploads/produk/%s", req.ID)
 	if len(req.ProdukFoto) > 0 {
 		if err := os.MkdirAll(path, 0755); err != nil {
@@ -72,7 +72,6 @@ func (p *produkServiceImpl) Create(req *domain.Produk) *domain.Response {
 			if err != nil {
 				panic(err)
 			}
-
 			defer f.Close()
 
 			if _, err := f.Write(dec); err != nil {

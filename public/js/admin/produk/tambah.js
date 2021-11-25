@@ -298,7 +298,6 @@ function _nonVariasi() {
             </div>
         </div>
     `
-
     return element
 }
 

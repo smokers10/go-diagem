@@ -23,11 +23,6 @@ type Produk struct {
 	UpdatedAt    string           `json:"updated_at,omitempty" form:"updated_at"`
 }
 
-type FotoProdukFile struct {
-	Base64 string `form:"base64" json:"base64"`
-	Format string `form:"format" json:"format"`
-}
-
 type ProdukDetailed struct {
 	ID               string              `json:"id,omitempty" form:"id"`
 	Nama             string              `json:"nama,omitempty" form:"nama"`

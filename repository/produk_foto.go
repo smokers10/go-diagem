@@ -89,6 +89,8 @@ func (p *produkFotoRepositoryImpl) Delete(id string) error {
 		return err
 	}
 
+	tx.Commit()
+
 	return nil
 }
 
@@ -110,6 +112,8 @@ func (p *produkFotoRepositoryImpl) UpdateIsUtamaToTrue(id string) error {
 		return err
 	}
 
+	tx.Commit()
+
 	return nil
 }
 
@@ -130,6 +134,8 @@ func (p *produkFotoRepositoryImpl) UpdateRestIsUtamaToFalse(id string, produkID 
 		tx.Rollback()
 		return err
 	}
+
+	tx.Commit()
 
 	return nil
 }

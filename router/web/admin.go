@@ -27,6 +27,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	// controller API ini
 	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
 	produkAPIController := adminAPI.ProdukController(resolver.ProdukService)
+	produkFotoAPIController := adminAPI.ProdukFotoController(resolver.ProdukFoto)
 	kategoriController := adminAPI.KategoriController(resolver.KategoriService)
 	varianController := adminAPI.ProdukVariasiController(resolver.ProdukVariasiService)
 
@@ -69,6 +70,12 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	produk.Get("/get", produkAPIController.Read)
 	produk.Get("/get/:id", produkAPIController.Detail)
 	produk.Delete("/delete", produkAPIController.Delete)
+	produk.Put("/update", produkAPIController.Update)
+
+	// produk foto - action
+	produk.Post("/foto/upload", produkFotoAPIController.Upload)
+	produk.Put("/foto/foto-utama", produkFotoAPIController.MakeUtama)
+	produk.Delete("/foto/delete", produkFotoAPIController.Delete)
 
 	// varian - Action Only
 	varian := adminParentPath.Group("/varian")

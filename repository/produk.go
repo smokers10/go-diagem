@@ -210,14 +210,19 @@ func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, err
 }
 
 func (p *produkRepositoryImpl) Update(req *domain.Produk) (*domain.Produk, error) {
-	statement, err := p.db.Prepare("UPDATE produk SET nama = ?, slug = ?, deskripsi = ?, spesifikasi = ?, kategori_id = ?, harga = ?, kode = ? WHERE id = ?")
+	statement, err := p.db.Prepare(`
+		UPDATE produk SET
+		nama = ?, kategori_id = ?, deskripsi = ?, slug = ?, spesifikasi = ?, berat = ?, 
+		lebar = ?, panjang = ?, tinggi = ?, harga = ?, kode = ?, stok = ?
+		WHERE id = ?
+	`)
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.Harga, req.Kode, req.ID); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.Nama, req.KategoriID, req.Deskripsi, req.Slug, req.Spesifikasi, req.Berat, req.Lebar, req.Panjang, req.Tinggi, req.Harga, req.Kode, req.Stok, req.ID); err != nil {
 		return nil, err
 	}
 

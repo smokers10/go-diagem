@@ -9,9 +9,15 @@ type ProdukFoto struct {
 	UpdatedAt string `json:"updated_at,omitempty" form:"updated_at"`
 }
 
+type FotoProdukFile struct {
+	Base64   string `form:"base64" json:"base64"`
+	Format   string `form:"format" json:"format"`
+	ProdukID string `json:"produk_id,omitempty" form:"produk_id"`
+}
+
 type ProdukFotoService interface {
-	Create(req *ProdukFoto) *Response
-	Delete(id string) *Response
+	Create(req *FotoProdukFile) *Response
+	Delete(id string, path string) *Response
 	MakeUtama(id string, produkID string) *Response
 }
 

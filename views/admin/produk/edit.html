@@ -58,11 +58,6 @@
                     
                     <div class="content-heading pt-0 mb-3">
                         Edit Produk
-                        <button type="submit" class="btn btn-primary float-right mr-5">
-                            <i class="si si-paper-plane mr-1"></i>
-                            Simpan Perubahan
-                        </button>
-
                         <a type="submit" class="btn btn-primary float-right mr-5" href="/admin/produk">
                             Kembali
                         </a>
@@ -190,7 +185,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label" for="field-spek">Spesifikasi Produk</label>
                                 <div class="col-lg-9">
-                                    <input type="hidden" id="field-spek_count" value="0">
+                                    <input type="hidden" id="field-spek-count" value="0">
                                     <table class="table table-bordered" id="field-spek">
                                         <tbody>
 
@@ -203,6 +198,16 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-9">
+                                    <button id="submit-info-produk" class="btn btn-primary btn-block">
+                                        <i class="si si-paper-plane mr-1"></i>
+                                        Simpan Perubahan Informasi Produk
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -394,12 +399,10 @@
                     method: "get",
                     success: function (res) {
                         const data = res.data
-                        const { produk_foto, variasi, spesifikasi, nama, slug, stok, description,
+                        const { produk_foto, variasi, spesifikasi, nama, slug, stok, deskripsi,
                              kode, harga, is_has_variant, kategori, berat, satuan_berat,
                              lebar, panjang, tinggi } = data
                         const { id } = kategori 
-
-                        _renderFoto(produk_foto)
 
                         // has variant or not
                         if (is_has_variant) {
@@ -408,11 +411,11 @@
                         } else {
                             $("#harga").show()
                             $("#variasi").hide()
-                        } 
+                        }
 
                         // set to input html
                         $("#field-nama").val(nama) 
-                        $("#field-deskripsi").val(description)
+                        $("#field-deskripsi").html(deskripsi)
                         $("#field-kategori").val(id)
                         $("#field-berat").val(berat)
                         $("#field-berat-satuan").val(satuan_berat)
@@ -425,10 +428,28 @@
                         $("#field-kode").val(kode)
 
                         // set varian
-                        variasi.forEach(v => {
-                            _renderVarian(v)
-                        })
+                        if (variasi) {
+                            variasi.forEach(v => {
+                                _renderVarian(v)
+                            })
+                        }
+
+                        // set spesifikasi
+                        _renderSpek(spesifikasi)
+
+                        // set foto produk
+                        _renderFoto(produk_foto)
+
+                        // set deskripsi
+                        $("#field-deskripsi").summernote('pasteHTML', deskripsi)
+
+                        
                     }
+                })
+
+                // hapus spesifikasi
+                $(document).on('click', '#field-spek .btn-delete-spek', function () {
+                    $(this).closest('tr').remove();
                 })
 
                 // Deskripsi Summernote init
@@ -447,29 +468,27 @@
 
                 // tambah spesifikasi 
                 $("#btn-add-spek").click(function(){
+                    var spekEl = $('#field-spek')
+                    var spekCountEl = $('#field-spek-count') 
+                    var count = parseInt(spekCountEl.val())
+
                     // append form
-                    var spek = $('#field-spek')
-                    var spek_count = parseInt($('#field-spek_count').val());
-                    spek.find('tbody').append(`
-                    <tr>
-                        <td>
-                            <input type="text" class="form-control" id="nama${spek_count}" placeholder="Nama" autocomplete="off">
-                        </td>
-                        <td>
-                            <input type="text" class="form-control" id="value${spek_count}" placeholder="Nilai Spesifikasi" autocomplete="off">
-                        </td>
-                        <td width="5%">
-                            <button type="button" class="btn btn-sm btn-alt-danger btn-delete-spek"><i class="si si-trash"></i></button>
-                        </td>
-                    </tr>`)
-                    spek_count += 1
-                    $('#field-spek_count').val(spek_count)
-                    console.log(spek_count)
+                    spekEl.find('tbody').append(_createSpekEl(count))
+                    count += 1
+
+                    spekCountEl.val(count)
                 })
 
-                // submit informasi produk
+                // upload foto produk
+                // buka modal foto
+                $("#foto-modal-btn").click(function() {
+                    fotoEditorPreview.croppie('destroy')
+                    fotoEditorPreview.attr("src", imagePreviewDefaultSrc)
+                })
 
-                // VARIAN
+                // preview foto produk
+                fotoInput.change(function(){readURL(this)})
+
                 // add varian
                 $("#btn-add-variasi").click(function(){
                     let newVarian = {
@@ -518,6 +537,73 @@
                     })
                 })
 
+                // update info produk
+                $("#submit-info-produk").click(function() {
+                    // mendapatkan data spesifikasi 
+                    const spek_count = parseInt($('#field-spek-count').val())
+                    var spesifikasi = []
+                    for (let i = 0; i < spek_count; i++) {
+                        var nama = $(`#nama${i+1}`).val()
+                        var value = $(`#value${i+1}`).val()
+                        var spek = {nama, value}
+                        if (!nama == "" && !value == "") {
+                            spesifikasi.push(spek)
+                        }
+                    }
+                    
+                    const data = {
+                        nama : $("#field-nama").val(),
+                        deskripsi: $("#field-deskripsi").val(),
+                        spesifikasi: JSON.stringify(spesifikasi),
+                        kategori_id: parseInt($("#field-kategori").val()),
+                        berat: parseInt($("#field-berat").val()),
+                        satuan_berat: $("#field-berat-satuan").val(),
+                        lebar: parseFloat($("#field-lebar").val()),
+                        panjang: parseFloat($("#field-panjang").val()),
+                        tinggi: parseFloat($("#field-tinggi").val()),
+                        kode: $("#field-kode").val(),
+                        harga: parseInt($("#field-harga").val()),
+                        stok: parseInt($("#field-stok").val()),
+                        id: produkID
+                    }
+
+                    $.ajax({
+                        url: "/admin/produk/update",
+                        type:"PUT",
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        contentType: "application/json",
+                        beforeSend: function(){
+                            Swal.fire({
+                                title: 'Tunggu Sebentar...',
+                                text: '',
+                                imageUrl: '/img/loading.gif',
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                            })
+                        },
+                        success: function (response) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            Swal.fire({
+                                title: `Berhasil!`,
+                                showConfirmButton: false,
+                                icon: 'success',
+                                html: `Produk Baru Berhasil Diupdate!
+                                    <br>
+                                    <br>
+                                    <a href="/admin/produk" class="btn btn-keluar btn-alt-danger"><i class="si si-close mr-1"></i>Keluar</a>`,
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                timer: 3000
+                            })
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            Swal.close()
+                            alert('Error adding / update data')
+                        }
+                    })
+                })
             })
 
             // foto functionallity
@@ -553,28 +639,115 @@
 
             function _uploadSelectedFoto() {
                 photoEditor.croppie('result', 'base64').then(function (res){
-                    selectedFotoRow.append(`
-                        <div class="col-md-4 mb-2">
-                            <center>
-                                <img src="${res}" class="selected-foto-item mb-3" width="80%" height="80%"/>
-                                <button class="btn btn-danger">Hapus</button>
-                            </center>
-                        </div>
-                    `)
+                    let base64 = res.split(";base64,")[1]
+                    let type = res.split(";base64,")[0]
+                    let format = type.split("data:image/")[1]
+                    let data = {
+                        base64,
+                        format,
+                        produk_id: produkID
+                    }
+
+                    $.ajax({
+                        url: "/admin/produk/foto/upload",
+                        method: "post",
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        contentType: "application/json",
+                        beforeSend: function(){
+                            Swal.fire({
+                                title: 'Tunggu Sebentar...',
+                                text: '',
+                                imageUrl: '/img/loading.gif',
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                            })
+                        },
+                        success: function(res){
+                            let {data} = res
+                            selectedFotoRow.append(_createFotoElement(data))
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Foto Produk Baru Berhasil Disimpan',
+                                showConfirmButton: false,
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                timer: 3000
+                            })
+                            $("#foto-produk-modal").modal('hide')
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            Swal.close()
+                            alert('Error adding / update data')
+                        }
+                    })
                 })
-                $("#foto-produk-modal").modal('hide')
             }
 
             function _renderFoto(data){
                 data.forEach(foto => {
-                    selectedFotoRow.append(`
-                        <div class="col-md-4 mb-2">
-                            <center>
-                                <img src="${foto.path}" class="selected-foto-item mb-3" width="80%" height="80%"/>
-                                <button class="btn btn-danger">Hapus</button>
-                            </center>
-                        </div>
-                    `)
+                    selectedFotoRow.append(_createFotoElement(foto))
+                })
+            }
+
+            function _createFotoElement(data){
+                return `
+                    <div class="col-md-4 mb-2">
+                        <center>
+                            <img src="${data.path}" class="selected-foto-item mb-3" width="80%" height="80%"/>
+                            <button class="btn btn-danger" data-id="${data.id}" data-src="${data.path}" onclick="_deleteFoto(this)">Hapus</button>
+                        </center>
+                    </div>
+                `
+            }
+
+            function _deleteFoto(data) {
+                var id = $(data).attr("data-id")
+                var path = $(data).attr("data-src")
+                Swal.fire({
+                    title: "Anda Yakin?",
+                    text: "Foto Yang Dihapus Tidak Akan Bisa Dikembalikan",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Tidak, Batalkan!',
+                    reverseButtons: true,
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#af1310',
+                    cancelButtonColor: '#fffff',
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: "/admin/produk/foto/delete",
+                            method: "delete",
+                            data: {id, path},
+                            beforeSend: function(){
+                                Swal.fire({
+                                    title: 'Tunggu Sebentar...',
+                                    text: '',
+                                    imageUrl: '/img/loading.gif',
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                })
+                            },
+                            success: function(){
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Foto produk berhasil dihapus',
+                                    showConfirmButton: false,
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                Swal.close()
+                                alert('Error adding / update data')
+                            }
+                        })
+                    }else{
+                        Swal.close()
+                    }
                 })
             }
 
@@ -714,6 +887,55 @@
                         alert('Error adding / update data')
                     }
                 })
+            }
+            
+            // fungsionalitas informasi produk
+            function _renderSpek(spek_array) {
+                var spekEl = $('#field-spek')
+                var spekCountEl = $('#field-spek-count') 
+
+                // append form
+                for (let i = 0; i < spek_array.length; i++) {
+                    spekEl.find('tbody').append(_createSpekElWithData(i+1, spek_array[i].nama, spek_array[i].value))
+                }
+                
+                spekCountEl.val(spek_array.length)
+            }
+
+            function _createSpekEl(count) {
+                return `
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" id="nama${count}" placeholder="Nama" autocomplete="off">
+                        </td>
+
+                        <td>
+                            <input type="text" class="form-control" id="value${count}" placeholder="Nilai Spesifikasi" autocomplete="off">
+                        </td>
+
+                        <td width="5%">
+                            <button type="button" class="btn btn-sm btn-alt-danger btn-delete-spek"><i class="si si-trash"></i></button>
+                        </td>
+                    </tr>
+                `
+            }
+
+            function _createSpekElWithData(count, name, value) {
+                return `
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" id="nama${count}" value="${name}" placeholder="Nama" autocomplete="off">
+                        </td>
+
+                        <td>
+                            <input type="text" class="form-control" id="value${count}" value="${value}" placeholder="Nilai Spesifikasi" autocomplete="off">
+                        </td>
+
+                        <td width="5%">
+                            <button type="button" class="btn btn-sm btn-alt-danger btn-delete-spek"><i class="si si-trash"></i></button>
+                        </td>
+                    </tr>
+                `
             }
         </script>
     </body>
