@@ -26,7 +26,7 @@ func (p *promoController) Create(c *fiber.Ctx) error {
 }
 
 func (p *promoController) Read(c *fiber.Ctx) error {
-	response := p.promoService.ReadOnlyByAdmin()
+	response := p.promoService.Read()
 
 	return c.Status(response.Status).JSON(response)
 }

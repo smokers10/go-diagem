@@ -1,20 +1,17 @@
 package domain
 
 type User struct {
-	ID            int    `json:"id,omitempty" form:"id"`
-	Nama          string `json:"nama,omitempty" form:"nama"`
-	HP            string `json:"hp,omitempty" form:"hp"`
-	Email         string `json:"email,omitempty" form:"email"`
-	Password      string `json:"password,omitempty" form:"password"`
-	APIToken      string `json:"api_token,omitempty" form:"api_token"`
-	DeviceToken   string `json:"device_token,omitempty" form:"device_token"`
-	RememberToken string `json:"remember_token,omitempty" form:"remember_token"`
-	IsVerified    bool   `json:"is_verified,omitempty" form:"is_verified"`
-	Tahun         int    `json:"tahun,omitempty" form:"tahun"`
-	Bulan         int    `json:"bulan,omitempty" form:"bulan"`
-	Tanggal       int    `json:"tanggal,omitempty" form:"tanggal"`
-	CreatedAt     string `json:"created_at,omitempty" form:"created_at"`
-	UpdatedAt     string `json:"updated_at,omitempty" form:"updated_at"`
+	ID         int    `json:"id,omitempty" form:"id"`
+	Nama       string `json:"nama,omitempty" form:"nama"`
+	HP         string `json:"hp,omitempty" form:"hp"`
+	Email      string `json:"email,omitempty" form:"email"`
+	Password   string `json:"password,omitempty" form:"password"`
+	IsVerified bool   `json:"is_verified,omitempty" form:"is_verified"`
+	Tahun      int    `json:"tahun,omitempty" form:"tahun"`
+	Bulan      int    `json:"bulan,omitempty" form:"bulan"`
+	Tanggal    int    `json:"tanggal,omitempty" form:"tanggal"`
+	CreatedAt  string `json:"created_at,omitempty" form:"created_at"`
+	UpdatedAt  string `json:"updated_at,omitempty" form:"updated_at"`
 }
 
 type UserBasicData struct {

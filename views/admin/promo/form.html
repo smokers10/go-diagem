@@ -28,7 +28,6 @@
         <link rel="stylesheet" href="/js/plugins/select2/css/select2.min.css">
         <link rel="stylesheet" href="/js/plugins/summernote/summernote-bs4.css">
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
-        <link rel="stylesheet" href="/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
     </head>
     <body>
         <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
@@ -75,23 +74,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-12" for="seo_keyword">SEO Keyword</label>
+                                                    <label class="col-12" for="seo-keyword">SEO Keyword</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="seo_keyword" name="seo_keyword" placeholder="Masukan SEO Keyword">
+                                                        <input type="text" class="form-control" id="seo-keyword" name="seo-keyword" placeholder="Masukan SEO Keyword">
                                                         <div class="form-text text-muted font-size-sm text-right">Gunakan tanda koma "," sebagai pemisah!</div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-12" for="seo_tags">SEO Tags</label>
+                                                    <label class="col-12" for="seo-tags">SEO Tags</label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="seo_tags" name="seo_tags" placeholder="Masukan SEO Tags">
+                                                        <input type="text" class="form-control" id="seo-tags" name="seo-tags" placeholder="Masukan SEO Tags">
                                                         <div class="form-text text-muted font-size-sm text-right">Gunakan tanda koma "," sebagai pemisah!</div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-12" for="seo_deskripsi">SEO Deksripsi</label>
                                                     <div class="col-12">
-                                                        <textarea class="form-control" id="deskripsi_seo" name="seo_deskripsi" maxlength="115" data-always-show="true" data-placement="top" placeholder="Masukan SEO Deskripsi" rows="2"></textarea>
+                                                        <textarea class="form-control" id="seo-deskripsi" name="seo-deskripsi" maxlength="115" data-always-show="true" data-placement="top" placeholder="Masukan SEO Deskripsi" rows="2"></textarea>
                                                         <div class="form-text text-muted font-size-sm text-right">Maksimal 115 Karakter</div>
                                                     </div>
                                                 </div>
@@ -106,11 +105,11 @@
                                                     <label class="col-4">Publikasi</label>
                                                     <div class="col-8">
                                                         <label class="css-control css-control-primary css-radio">
-                                                            <input type="radio" class="css-control-input" name="is_active" value="1" checked>
+                                                            <input type="radio" class="css-control-input" name="is-publish" value="1" checked>
                                                             <span class="css-control-indicator"></span> Publikasikan
                                                         </label>
                                                         <label class="css-control css-control-secondary css-radio">
-                                                            <input type="radio" class="css-control-input" name="is_active" value="0">
+                                                            <input type="radio" class="css-control-input" name="is-publish" value="0">
                                                             <span class="css-control-indicator"></span> Draft
                                                         </label>
                                                     </div>
@@ -119,11 +118,11 @@
                                                     <label class="col-4">Featured</label>
                                                     <div class="col-8">
                                                         <label class="css-control css-control-primary css-radio">
-                                                            <input type="radio" class="css-control-input" name="is_featured" value="1" checked>
+                                                            <input type="radio" class="css-control-input" name="is-featured" value="1" checked>
                                                             <span class="css-control-indicator"></span> Ya
                                                         </label>
                                                         <label class="css-control css-control-secondary css-radio">
-                                                            <input type="radio" class="css-control-input" name="is_featured" value="0">
+                                                            <input type="radio" class="css-control-input" name="is-featured" value="0">
                                                             <span class="css-control-indicator"></span> Tidak
                                                         </label>
                                                     </div>
@@ -141,13 +140,13 @@
                                                 <div class="form-group row">
                                                     <label class="col-4">Tanggal Mulai</label>
                                                     <div class="col-8">
-                                                        <input type="text" class="form-control" name="tgl_mulai" id="field-tgl_mulai" placeholder="Tanggal Mulai Promo">
+                                                        <input type="date" class="form-control" name="tgl-mulai" id="field-tgl-mulai" placeholder="Tanggal Mulai Promo">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-4">Tanggal Selesai</label>
                                                     <div class="col-8">
-                                                        <input type="text" class="form-control" name="tgl_selesai" id="field-tgl_selesai" placeholder="Tanggal Mulai Promo">
+                                                        <input type="date" class="form-control" name="tgl-selesai" id="field-tgl-selesai" placeholder="Tanggal Mulai Promo">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row mb-3">
@@ -182,6 +181,42 @@
             </main>
             <!-- END Main Container -->
 
+            <!-- crop modal -->
+            <div class="modal" id="cropModal">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title modal-title">Potong & Sesuaikan Sampul</h3>
+                            <div class="block-options">
+                                <button type="button" class="close btn-primary" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content pb-15">
+                            <div id="resizer"></div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button class="btn btn-info rotate btn-block text-center" data-deg="90">
+                                        <i class="fa fa-undo"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-info rotate btn-block text-center" data-deg="-90" >
+                                    <i class="fa fa-redo"></i></button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary btn-block" id="sampulSave">Potong Dan Simpan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END crop modal -->
+            
             <!-- Footer -->
             {{template "partials/admin-footer" .}}
             <!-- END Footer -->
@@ -200,39 +235,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
         <script src="/js/plugins/jquery-tags-input/jquery.tagsinput.min.js"></script>
         <script src="/js/plugins/summernote/summernote-bs4.min.js"></script>
-        <script src="/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+        <script src="/js/plugins/moment/moment.min.js"></script>
         <script src="/js/admin/promo/promo-form.js"></script>
         <script src="/js/admin/general.js"></script>
-        <script>
-        $('.dataTables_filter input[type="search"]').
-        attr('placeholder','Search in this blog ....').
-        css({'width':'500px','display':'inline-block'});
-        $.extend( true, $.fn.dataTable.defaults, {
-            "responsive": true,
-            "pageLength": 20,
-            "lengthChange": false,
-            "language": {
-                'loadingRecords': '&nbsp;',
-                "sEmptyTable":	 "Tidak ada data yang tersedia pada tabel ini",
-                "sProcessing":   '<div class="spinner-grow text-primary pt-25" role="status"><span class="sr-only">Loading...</span></div>',
-                "sLengthMenu":   "Tampilkan _MENU_",
-                "sZeroRecords":  "Tidak ditemukan data yang sesuai",
-                "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
-                "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
-                "sInfoPostFix":  "",
-                "sSearch":       "Cari:",
-                "sUrl":          "",
-                "oPaginate": {
-                    "sFirst":    "Pertama",
-                    "sPrevious": "Sebelumnya",
-                    "sNext":     "Selanjutnya",
-                    "sLast":     "Terakhir"
-                }
-            },
-        });
-        </script>
-        <!-- Scripts -->
-        <!-- END Scripts -->
     </body>
 </html>

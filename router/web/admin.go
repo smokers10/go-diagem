@@ -28,8 +28,9 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
 	produkAPIController := adminAPI.ProdukController(resolver.ProdukService)
 	produkFotoAPIController := adminAPI.ProdukFotoController(resolver.ProdukFoto)
-	kategoriController := adminAPI.KategoriController(resolver.KategoriService)
-	varianController := adminAPI.ProdukVariasiController(resolver.ProdukVariasiService)
+	kategoriAPIController := adminAPI.KategoriController(resolver.KategoriService)
+	varianAPIController := adminAPI.ProdukVariasiController(resolver.ProdukVariasiService)
+	promoAPIController := adminAPI.PromoController(resolver.PromoService)
 
 	// router clustering
 	adminParentPath := app.Group("/admin")
@@ -83,13 +84,13 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 
 	// varian - Action Only
 	varian := adminParentPath.Group("/varian")
-	varian.Post("/", varianController.Create)
-	varian.Put("/", varianController.Update)
-	varian.Delete("/", varianController.Delete)
+	varian.Post("/", varianAPIController.Create)
+	varian.Put("/", varianAPIController.Update)
+	varian.Delete("/", varianAPIController.Delete)
 
 	// kategori
 	kategori := adminParentPath.Group("/kategori")
-	kategori.Get("/get", kategoriController.Read)
+	kategori.Get("/get", kategoriAPIController.Read)
 
 	// order
 	order := adminParentPath.Group("/order", middleware.AdminWeb(session, "admin", "super admin"))
@@ -100,6 +101,12 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	promo.Get("/", promoController.IndexPage)
 	promo.Get("/tambah", promoController.TambahPage)
 	promo.Get("/edit", promoController.EditPage)
+
+	// promo - Action
+	promo.Get("/get", promoAPIController.Read)
+	promo.Post("/create", promoAPIController.Create)
+	promo.Put("/update", promoAPIController.Update)
+	promo.Delete("/delete", promoAPIController.Delete)
 
 	// home
 	adminParentPath.Get("/home", middleware.AdminWeb(session, "admin", "super admin", "marketing"), homeController.HomePage)

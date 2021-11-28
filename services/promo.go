@@ -1,8 +1,11 @@
 package services
 
 import (
+	"encoding/base64"
 	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/google/uuid"
 	"github.com/gosimple/slug"
@@ -17,7 +20,7 @@ func PromoService(promo *domain.PromoRepository) domain.PromoService {
 	return &promoServiceImpl{promoRepository: *promo}
 }
 
-//Untuk Admin
+// Untuk Admin
 func (p *promoServiceImpl) Create(req *domain.Promo) *domain.Response {
 	//deklarasi var
 	res := domain.Response{}
@@ -35,6 +38,38 @@ func (p *promoServiceImpl) Create(req *domain.Promo) *domain.Response {
 	// buat slug
 	req.Slug = slug.Make(req.Judul)
 
+	// simpan data citra sampul
+	path := "public/uploads/promo/"                                    // file path
+	filename := fmt.Sprintf("sampul-%s.%s", req.ID, req.Sampul.Format) // image/file name
+
+	// buat directory jika tidak ada dan set permission
+	if err := os.MkdirAll(path, 0755); err != nil {
+		panic(err)
+	}
+
+	dec, err := base64.StdEncoding.DecodeString(req.Sampul.Base64)
+	if err != nil {
+		panic(err)
+	}
+
+	file, err := os.Create(filepath.Join(path, filepath.Base(filename)))
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	if _, err := file.Write(dec); err != nil {
+		panic(err)
+	}
+
+	if err := file.Sync(); err != nil {
+		panic(err)
+	}
+
+	// set path(web) data citra
+	req.Image = fmt.Sprintf("/uploads/promo/sampul-%s.%s", req.ID, req.Sampul.Format)
+
+	// menyimpan data promo
 	promo, err := p.promoRepository.Create(req)
 	if err != nil {
 		fmt.Println(err)
@@ -93,27 +128,7 @@ func (p *promoServiceImpl) Delete(id string) *domain.Response {
 	return &res
 }
 
-func (p *promoServiceImpl) ReadOnlyByAdmin() *domain.Response {
-	//deklarasi var
-	res := domain.Response{}
-
-	promo, err := p.promoRepository.ReadOnlyByAdmin()
-	if err != nil {
-		fmt.Println(err)
-		res.Message = "error saat mengambil promo"
-		res.Status = http.StatusInternalServerError
-		return &res
-	}
-
-	res.Data = promo
-	res.Message = "promo baru berhasil diambil"
-	res.Status = http.StatusOK
-	res.Success = true
-
-	return &res
-}
-
-//untuk umum
+// untuk umum
 func (p *promoServiceImpl) Read() *domain.Response {
 	//deklarasi var
 	res := domain.Response{}
