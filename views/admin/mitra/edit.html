@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-        <title>Admin | Tokonya</title>
+        <title>Admin | Diagem</title>
 
-        <meta name="description" content="Tokonya">
-        <meta name="author" content="Tokonya">
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
         <meta name="robots" content="noindex, nofollow">
 
         <!-- Open Graph Meta -->
-        <meta property="og:title" content="Tokonya">
-        <meta property="og:site_name" content="Tokonya">
-        <meta property="og:description" content="Tokonya">
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
         <meta property="og:type" content="website">
         <meta property="og:url" content="">
         <meta property="og:image" content="">
@@ -48,12 +48,13 @@
                     <form id="form-mitra" onsubmit="return false;">
                         <input type="hidden" name="total_variasi" id="total_variasi" value="1">
                         <div class="content-heading pt-0 mb-3">
-                            Edit Data Reseller
+                            Edit Reseller
                             <button type="submit" class="btn btn-primary float-right mr-5">
                                 <i class="si si-paper-plane mr-1"></i>
                                 Simpan
                             </button>
                         </div>
+
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="block block-rounded">
@@ -64,20 +65,12 @@
                                     </div>
                                     
                                     <div class="block-content pb-15">
-                                        <input type="hidden" name="id">
+                                        <input type="hidden" name="id" id="field-id">
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label" for="field-nama">Nama Reseller</label>
                                             <div class="col-lg-9">
                                                 <input type="text" class="form-control" id="field-nama" name="nama" placeholder="Masukan Nama Reseller" autocomplete="off">
                                                 <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
-                                            </div>
-                                        </div>
-                
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label" for="field-username">Username</label>
-                                            <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="field-username" name="username" placeholder="Masukan Nama Reseller" autocomplete="off">
-                                                <div class="invalid-feedback font-size-sm" id="error-username">Invalid feedback</div>
                                             </div>
                                         </div>
                 
@@ -108,7 +101,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>  
+                    </form>
                 </div>
                 <!-- END Page Content -->
             </main>
@@ -127,7 +120,7 @@
         <script src="/js/common.js"></script>
         <script src="/js/functions.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
-        <script src="/js/admin/mitra/mitra.js"></script>
+        <script src="/js/admin/mitra/mitra-edit.js"></script>
         <script src="/js/admin/general.js"></script>
     </body>
 </html>

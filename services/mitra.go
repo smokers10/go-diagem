@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/smokers10/go-diagem.git/domain"
-	"github.com/smokers10/go-diagem.git/infrastructure/encryption"
 )
 
 type mitraServiceImpl struct {
@@ -34,24 +33,6 @@ func (m *mitraServiceImpl) Create(req *domain.Mitra) *domain.Response {
 		res.Status = http.StatusConflict
 		return &res
 	}
-
-	//check username apakah sudah digunakan
-	mitraByUsername, err := m.mitraRepository.ByUsername(req.Username)
-	if err != nil {
-		fmt.Println(err.Error())
-		res.Message = "error saat check ketersedian akun mitra"
-		res.Status = http.StatusInternalServerError
-		return &res
-	}
-
-	if mitraByUsername.Username != "" {
-		res.Message = fmt.Sprintf("mitra dengan username %s sudah terdaftar", req.Username)
-		res.Status = http.StatusConflict
-		return &res
-	}
-
-	//hash password
-	req.Password = encryption.Hash(req.Password)
 
 	//panggil repository simpan
 	insertedMitra, err := m.mitraRepository.Create(req)

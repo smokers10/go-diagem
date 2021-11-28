@@ -3,7 +3,7 @@ jQuery(document).ready(function(){
         e.preventDefault()
         var data = new FormData($('#form-mitra')[0])
         $.ajax({
-            url : "http://localhost/re-diagem/admin/reseller/simpan",
+            url : "/admin/reseller/create",
             type: 'POST',
             data,
             cache: false,
@@ -13,32 +13,28 @@ jQuery(document).ready(function(){
                 Swal.fire({
                     title: 'Tunggu Sebentar...',
                     text: ' ',
-                    imageUrl: laroute.url('public/img/loading.gif', ['']),
+                    imageUrl: '/img/loading.gif',
                     showConfirmButton: false,
                     allowOutsideClick: false,
                 });
             },
-            success: function (response) {
-                $('.is-invalid').removeClass('is-invalid');
-                if (response.fail == false) { 
+            success: function (res) {
+                $('.is-invalid').removeClass('is-invalid')
+                if (res.success) {
                     Swal.fire({
                         title: `Berhasil!`,
                         showConfirmButton: false,
                         icon: 'success',
-                        html: `Produk Baru Berhasil Disimpan!
+                        html: `Reseller Baru Berhasil Disimpan!
                             <br><br>
-                            <a href="`+ "http://localhost/re-diagem/admin/reseller" +`" class="btn btn-keluar btn-alt-danger"><i class="si si-close mr-1"></i>Keluar</a> 
-                            <a href="`+ "http://localhost/re-diagem/admin/reseller/tambah" +`" class="btn btn-tambah_baru btn-alt-primary"><i class="si si-plus mr-1"></i>Tambah Produk Lain</a>`,
+                            <a href="`+ "/admin/reseller" +`"class="btn btn-keluar btn-alt-danger"><i class="si si-close mr-1"></i>Keluar</a> 
+                            <a href="`+ "/admin/reseller/tambah" +`"class="btn btn-tambah_baru btn-alt-primary"><i class="si si-plus mr-1"></i>Tambah Reseller Lain</a>`,
                         showCancelButton: false,
                         showConfirmButton: false,
                         allowOutsideClick: false,
-                    });
+                    })
                 } else {
-                    Swal.close();
-                    for (control in response.errors) {
-                        $('#field-' + control).addClass('is-invalid');
-                        $('#error-' + control).html(response.errors[control]);
-                    }
+                    alert("terjadi kesalahan silahkan hubungi developer")
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {

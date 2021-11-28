@@ -39,17 +39,23 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	adminParentPath.Post("/login", guestOnly, authenticationController.Login)
 	adminParentPath.Get("/logout", authenticationController.Logout)
 
-	// mitra
-	mitra := adminParentPath.Group("/mitra", middleware.AdminWeb(session, "admin", "super admin"))
-	// mitra page
+	// reseller
+	mitra := adminParentPath.Group("/reseller", middleware.AdminWeb(session, "admin", "super admin"))
+	// reseller page
 	mitra.Get("/", mitraController.IndexPage)
 	mitra.Get("/tambah", mitraController.TambahPage)
-	mitra.Get("/edit", mitraController.EditPage)
-	// mitra non page
+	mitra.Get("/edit/:id", mitraController.EditPage)
+
+	// reseller - action
 	mitra.Get("/get", mitraAPIController.Read)
+	mitra.Get("/get/:id", mitraAPIController.GetOne)
+	mitra.Post("/create", mitraAPIController.Create)
+	mitra.Put("/update", mitraAPIController.Update)
+	mitra.Delete("/delete", mitraAPIController.Delete)
 
 	// slider
 	slider := adminParentPath.Group("/slider", middleware.AdminWeb(session, "admin", "super admin"))
+	// slider page
 	slider.Get("/", sliderController.IndexPage)
 	slider.Get("/tambah", sliderController.TambahPage)
 	slider.Get("/edit", sliderController.EditPage)
@@ -71,8 +77,6 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	produk.Get("/get/:id", produkAPIController.Detail)
 	produk.Delete("/delete", produkAPIController.Delete)
 	produk.Put("/update", produkAPIController.Update)
-
-	// produk foto - action
 	produk.Post("/foto/upload", produkFotoAPIController.Upload)
 	produk.Put("/foto/foto-utama", produkFotoAPIController.MakeUtama)
 	produk.Delete("/foto/delete", produkFotoAPIController.Delete)

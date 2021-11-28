@@ -16,14 +16,14 @@ func MitraRepository(database *sql.DB) domain.MitraRepository {
 }
 
 func (m *mitraRepositoryImpl) Create(req *domain.Mitra) (*domain.Mitra, error) {
-	statement, err := m.db.Prepare("INSERT INTO mitra (nama, username, kontak, alamat, email, password) VALUES(?, ?, ?, ?, ?, ?)")
+	statement, err := m.db.Prepare("INSERT INTO mitra (nama, kontak, alamat, email) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	result, err := statement.ExecContext(context.Background(), req.Nama, req.Username, req.Kontak, req.Alamat, req.Email, req.Password)
+	result, err := statement.ExecContext(context.Background(), req.Nama, req.Kontak, req.Alamat, req.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (m *mitraRepositoryImpl) Create(req *domain.Mitra) (*domain.Mitra, error) {
 
 func (m *mitraRepositoryImpl) Read() ([]domain.Mitra, error) {
 	result := []domain.Mitra{}
-	statement, err := m.db.Prepare("SELECT * FROM mitra")
+	statement, err := m.db.Prepare("SELECT id, nama, kontak, email, alamat FROM mitra")
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (m *mitraRepositoryImpl) Read() ([]domain.Mitra, error) {
 
 	for rows.Next() {
 		row := domain.Mitra{}
-		rows.Scan(&row.ID, &row.Alamat, &row.Email, &row.Kontak, &row.Nama, &row.Password, &row.Username)
+		rows.Scan(&row.ID, &row.Nama, &row.Kontak, &row.Email, &row.Alamat)
 		result = append(result, row)
 	}
 
@@ -67,7 +67,7 @@ func (m *mitraRepositoryImpl) ByID(id int) (*domain.Mitra, error) {
 	defer statement.Close()
 
 	row := statement.QueryRowContext(context.Background(), id)
-	row.Scan(&result.ID, &result.Alamat, &result.Email, &result.Kontak, &result.Nama, &result.Password, &result.Username)
+	row.Scan(&result.ID, &result.Alamat, &result.Email, &result.Kontak, &result.Nama)
 
 	return &result, nil
 }
@@ -82,69 +82,24 @@ func (m *mitraRepositoryImpl) ByEmail(email string) (*domain.Mitra, error) {
 	defer statement.Close()
 
 	row := statement.QueryRowContext(context.Background(), email)
-	row.Scan(&result.ID, &result.Alamat, &result.Email, &result.Kontak, &result.Nama, &result.Password, &result.Username)
-
-	return &result, nil
-}
-
-func (m *mitraRepositoryImpl) ByUsername(username string) (*domain.Mitra, error) {
-	result := domain.Mitra{}
-	statement, err := m.db.Prepare("SELECT * FROM mitra WHERE username = ? LIMIT 1")
-	if err != nil {
-		return nil, err
-	}
-
-	defer statement.Close()
-
-	row := statement.QueryRowContext(context.Background(), username)
-	row.Scan(&result.ID, &result.Alamat, &result.Email, &result.Kontak, &result.Nama, &result.Password, &result.Username)
+	row.Scan(&result.ID, &result.Alamat, &result.Email, &result.Kontak, &result.Nama)
 
 	return &result, nil
 }
 
 func (m *mitraRepositoryImpl) Update(req *domain.Mitra) (*domain.Mitra, error) {
-	statement, err := m.db.Prepare("UPDATE mitra SET nama = ?, kontak = ?, alamat = ? WHERE id = ?")
+	statement, err := m.db.Prepare("UPDATE mitra SET nama = ?, kontak = ?, alamat = ?, email = ? WHERE id = ?")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.Nama, req.Kontak, req.Alamat, req.ID); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.Nama, req.Kontak, req.Alamat, req.Email, req.ID); err != nil {
 		return nil, err
 	}
 
 	return req, nil
-}
-
-func (m *mitraRepositoryImpl) UpdatePassword(id int, password string) error {
-	statement, err := m.db.Prepare("UPDATE mitra SET password = ? WHERE id = ?")
-	if err != nil {
-		return err
-	}
-
-	defer statement.Close()
-
-	if _, err := statement.ExecContext(context.Background(), password, id); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *mitraRepositoryImpl) UpdateEmail(id int, email string) error {
-	statement, err := m.db.Prepare("UPDATE mitra SET email = ? WHERE id = ?")
-	if err != nil {
-		return err
-	}
-
-	defer statement.Close()
-
-	if _, err := statement.ExecContext(context.Background(), email, id); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (m *mitraRepositoryImpl) Delete(id int) error {

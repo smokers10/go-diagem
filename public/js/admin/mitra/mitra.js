@@ -1,35 +1,56 @@
 jQuery(function() {
-    oTable = $('#list-mitra').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "",
-        columns: [
+    $('#list-mitra').DataTable({
+        "ajax":"/admin/reseller/get",
+        "columns":[
             {
-                data: 'nama',
-                name: 'nama'
+                "data": null,
+                "render": function(data, type, row) {
+                    return data.nama
+                },
             },
             {
-                data: 'kontak',
-                name: 'kontak'
+                "data": null,
+                "render": function(data, type, row) {
+                    return data.kontak
+                },
             },
             {
-                data: 'alamat',
-                name: 'alamat'
+                "data": null,
+                "render": function(data, type, row) {
+                    return data.email
+                },
             },
             {
-                data: 'aksi',
-                name: 'aksi',
-                orderable: false,
-                searchable: false
+                "data": null,
+                "render": function(data, type, row) {
+                    return data.alamat
+                },
             },
-        ]
-    });
-
-    $('#cari_produk').on('keyup', function () {
-        oTable.search($(this).val()).draw();
-    });
-});
-
+            {
+                "data":null,
+                "orderable":false,
+                "render":function(data, type, row){
+                    return `
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="actionButton-${data.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            OPSI
+                        </button>
+    
+                        <div class="dropdown-menu" aria-labelledby="actionButton-${data.id}">
+                            <a class="dropdown-item" href="/admin/reseller/edit/${data.id}">
+                                <i class="si si-note mr-5"></i>Ubah
+                            </a>
+                            <a class="dropdown-item btn-hapus" href="javascript:void(0)" onClick="hapus('`+ data.id +`')">
+                                <i class="si si-trash mr-5"></i>Hapus
+                            </a>
+                        </div>
+                    </div>
+                    `
+                }
+            }
+        ],
+    })
+})
 
 function hapus(id) {
     Swal.fire({
@@ -47,17 +68,18 @@ function hapus(id) {
     .then((result) => {
         if (result.value) {
         $.ajax({
-            url: `http://localhost/re-diagem/admin/reseller/delete/${id}`,
-            type: "GET",
+            url: `/admin/reseller/delete`,
+            type: "DELETE",
+            data: {id},
             dataType: "JSON",
             beforeSend: function(){
                 Swal.fire({
                     title: 'Tunggu Sebentar...',
-                    text: ' ',
-                    imageUrl: laroute.url('public/img/loading.gif', ['']),
+                    text: '',
+                    imageUrl: '/img/loading.gif',
                     showConfirmButton: false,
                     allowOutsideClick: false,
-                });
+                })
             },
             success: function(data) {
                 Swal.fire({
@@ -66,16 +88,16 @@ function hapus(id) {
                     timer: 3000,
                     showConfirmButton: false,
                     icon: 'success'
-                });
-                $('#list-post').DataTable().ajax.reload();
+                })
+                $('#list-mitra').DataTable().ajax.reload()
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                Swal.close();
-                alert('Error deleting data');
+                Swal.close()
+                alert('Error deleting data')
             }
-        });
+        })
         }else{
-            Swal.close();
+            Swal.close()
         }
-    });
+    })
 }
