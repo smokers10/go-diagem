@@ -4,29 +4,27 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-        <title>Admin | Tokonya</title>
+        <title>Admin | Diagem</title>
 
-        <meta name="description" content="Tokonya">
-        <meta name="author" content="Tokonya">
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
         <meta name="robots" content="noindex, nofollow">
 
         <!-- Open Graph Meta -->
-        <meta property="og:title" content="Tokonya">
-        <meta property="og:site_name" content="Tokonya">
-        <meta property="og:description" content="Tokonya">
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
         <meta property="og:type" content="website">
         <meta property="og:url" content="">
         <meta property="og:image" content="">
 
         <!-- Page JS Plugins CSS -->
-        <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
 
         <!-- Fonts, Styles and Codebase framework -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
         <link rel="stylesheet" id="css-main" href="/css/app.css">
-        <link rel="stylesheet" href="/js/plugins/select2/css/select2.min.css">
-        <link rel="stylesheet" href="/js/plugins/select2/css/select2-bootstrap4.min.css">
+        <link rel="stylesheet" href="/js/plugins/summernote/summernote-bs4.css">
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
     </head>
     <body>
@@ -46,7 +44,7 @@
                 <div class="content">
                     <form id="form-slide" onsubmit="return false;" enctype="multipart/form-data">
                         <input type="hidden" name="id" value="">
-                        <input type="hidden" id="metode" value="tambah">
+                        <input type="hidden" id="method" value="store">
                         <div class="content-heading pt-3 mb-3">
                             Tambah Slide
                             <button type="submit" class="btn btn-primary float-right">
@@ -58,7 +56,16 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="field-nama">Jenis</label>
+                                            <label class="col-form-label" for="field-name">Nama Slide</label>
+                                            <input type="text" name="name" id="field-name" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="field-deskripsi">Deskripsi</label>
+                                            <textarea class="form-control" id="field-deskripsi" name="deskripsi" placeholder="Masukan Deskripsi Event" rows="8"></textarea>
+                                            <div class="invalid-feedback" id="error-deskripsi">Invalid feedback</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="field-type">Jenis</label>
                                             <select class="form-control" name="type" id="field-type">
                                                 <option value="">Pilih</option>
                                                 <option value="1">Berita</option>
@@ -67,12 +74,7 @@
                                             </select>
                                             <div id="error-type" class="invalid-feedback"></div>
                                         </div>
-                                        <div class="form-group d-none" id="slug">
-                                            <label class="col-form-label" for="field-slug">Berita/Halaman</label>
-                                            <select class="form-control" name="slug" id="field-slug"></select>
-                                            <div id="error-slug" class="invalid-feedback"></div>
-                                        </div>
-                                        <div class="form-group d-none" id="link">
+                                        <div class="form-group" id="link">
                                             <label class="col-form-label" for="field-link">Link</label>
                                             <input type="text" class="form-control" name="link" id="field-link" placeholder="Masukan Link / URL">
                                             <div id="error-link" class="invalid-feedback"></div>
@@ -117,52 +119,55 @@
             </main>
             <!-- END Main Container -->
 
+            <!-- crop modal -->
+            <div class="modal" id="cropModal">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title modal-title">Potong & Sesuaikan Sampul</h3>
+                            <div class="block-options">
+                                <button type="button" class="close btn-primary" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content pb-15">
+                            <div id="resizer"></div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button class="btn btn-info rotate btn-block text-center" data-deg="90">
+                                        <i class="fa fa-undo"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-info rotate btn-block text-center" data-deg="-90" >
+                                    <i class="fa fa-redo"></i></button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary btn-block" id="sampulSave">Potong Dan Simpan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END crop modal -->
+
             <!-- Footer -->
             {{template "partials/admin-footer" .}}
             <!-- END Footer -->
         </div>
         <script src="/js/laravel.app.js"></script>
         <script src="/js/laroute.js"></script>
-        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
-        <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
         <script src="/js/common.js"></script>
         <script src="/js/functions.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <script src="/js/plugins/summernote/summernote-bs4.min.js"></script>
         <script src="/js/plugins/select2/js/select2.full.min.js"></script>
         <script src="/js/plugins/select2/js/i18n/id.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
-        <script src="/js/admin/slider.js"></script>
+        <script src="/js/admin/slider/slider-form.js"></script>
         <script src="/js/admin/general.js"></script>
-        <script>
-            $('.dataTables_filter input[type="search"]').
-            attr('placeholder','Search in this blog ....').
-            css({'width':'500px','display':'inline-block'})
-            $.extend( true, $.fn.dataTable.defaults, {
-                "responsive": true,
-                "pageLength": 20,
-                "lengthChange": false,
-                "language": {
-                    'loadingRecords': '&nbsp;',
-                    "sEmptyTable":	 "Tidak ada data yang tersedia pada tabel ini",
-                    "sProcessing":   '<div class="spinner-grow text-primary pt-25" role="status"><span class="sr-only">Loading...</span></div>',
-                    "sLengthMenu":   "Tampilkan _MENU_",
-                    "sZeroRecords":  "Tidak ditemukan data yang sesuai",
-                    "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                    "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
-                    "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
-                    "sInfoPostFix":  "",
-                    "sSearch":       "Cari:",
-                    "sUrl":          "",
-                    "oPaginate": {
-                        "sFirst":    "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext":     "Selanjutnya",
-                        "sLast":     "Terakhir"
-                    }
-                },
-            })
-        </script>
     </body>
 </html>

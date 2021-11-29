@@ -1,8 +1,6 @@
 package admin
 
 import (
-	"strconv"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/smokers10/go-diagem.git/domain"
 )
@@ -33,6 +31,14 @@ func (s *sliderController) Read(c *fiber.Ctx) error {
 	return c.Status(response.Status).JSON(response)
 }
 
+func (s *sliderController) Detail(c *fiber.Ctx) error {
+	param := c.Params("id")
+
+	response := s.sliderService.ByID(param)
+
+	return c.Status(response.Status).JSON(response)
+}
+
 func (s *sliderController) Update(c *fiber.Ctx) error {
 	req := domain.Slider{}
 
@@ -45,8 +51,20 @@ func (s *sliderController) Update(c *fiber.Ctx) error {
 	return c.Status(response.Status).JSON(response)
 }
 
+func (s *sliderController) UpdateCover(c *fiber.Ctx) error {
+	req := domain.Slider{}
+
+	if err := c.BodyParser(&req); err != nil {
+		panic(err)
+	}
+
+	response := s.sliderService.UpdateCover(&req)
+
+	return c.Status(response.Status).JSON(response)
+}
+
 func (s *sliderController) Delete(c *fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.FormValue("id"))
+	id := c.FormValue("id")
 
 	response := s.sliderService.Delete(id)
 

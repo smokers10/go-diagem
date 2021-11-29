@@ -31,6 +31,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	kategoriAPIController := adminAPI.KategoriController(resolver.KategoriService)
 	varianAPIController := adminAPI.ProdukVariasiController(resolver.ProdukVariasiService)
 	promoAPIController := adminAPI.PromoController(resolver.PromoService)
+	sliderAPIController := adminAPI.SliderController(resolver.SliderService)
 
 	// router clustering
 	adminParentPath := app.Group("/admin")
@@ -59,7 +60,15 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	// slider page
 	slider.Get("/", sliderController.IndexPage)
 	slider.Get("/tambah", sliderController.TambahPage)
-	slider.Get("/edit", sliderController.EditPage)
+	slider.Get("/edit/:id", sliderController.EditPage)
+
+	// slider - Action
+	slider.Get("/get", sliderAPIController.Read)
+	slider.Get("/get/:id", sliderAPIController.Detail)
+	slider.Post("/create", sliderAPIController.Create)
+	slider.Put("/update", sliderAPIController.Update)
+	slider.Put("/update-cover", sliderAPIController.UpdateCover)
+	slider.Delete("/delete", sliderAPIController.Delete)
 
 	// keuangan
 	keuangan := adminParentPath.Group("/keuangan", middleware.AdminWeb(session, "admin", "super admin"))
@@ -73,7 +82,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	produk.Get("/kategori", produkController.KategoriPage)
 
 	// produk - Action
-	produk.Post("/tambah", produkAPIController.Create)
+	produk.Post("/create", produkAPIController.Create)
 	produk.Get("/get", produkAPIController.Read)
 	produk.Get("/get/:id", produkAPIController.Detail)
 	produk.Delete("/delete", produkAPIController.Delete)

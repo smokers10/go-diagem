@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-        <title>Admin | Tokonya</title>
+        <title>Admin | Diagem</title>
 
-        <meta name="description" content="Tokonya">
-        <meta name="author" content="Tokonya">
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
         <meta name="robots" content="noindex, nofollow">
 
         <!-- Open Graph Meta -->
-        <meta property="og:title" content="Tokonya">
-        <meta property="og:site_name" content="Tokonya">
-        <meta property="og:description" content="Tokonya">
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
         <meta property="og:type" content="website">
         <meta property="og:url" content="">
         <meta property="og:image" content="">
@@ -25,7 +25,11 @@
         <!-- Fonts, Styles and Codebase framework -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
         <link rel="stylesheet" id="css-main" href="/css/app.css">
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
+        <style>
+            #list-produk_filter {
+                display: none;
+            }
+        </style>
     </head>
     <body>
         <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
@@ -42,57 +46,32 @@
 
                 <!-- Page Content -->
                 <div class="content">
-                    <div class="content-heading pt-0 mb-3">
-                        Kelola Slider
-                        <a href="#" class="btn btn-secondary mr-5 mb-5 float-right btn-rounded">
-                            <i class="si si-plus mr-5"></i>
-                            Tambah Slider Baru
+                    <div class="content-heading pt-3 mb-3">
+                        <a href="/admin/slider/tambah" class="btn btn-primary float-right mr-5">
+                            <i class="si si-plus mr-1"></i>
+                            Tambah Slider
                         </a>
+                        Kelola Slider
                     </div>
 
-                    <div class="block block-rounded block-shadow block-bordered d-md-block d-none mb-10">
-                        <div class="block-content p-2">
-                            <div class="row justify-content-between">
-                                <div class="col-4">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="fa fa-search"></i>
-                                            </span>
-                                        </div>
-                                        <input type="text" class="form-control" id="pencarian" name="keyword"
-                                            placeholder="Masukan Kata Kunci">
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <select class="form-control" id="kategori" placeholder="Semua Kategori"></select>
-                                </div>
-                                <div class="col-4">
-                                    <div class="row">
-                                        <div class="col-md-8 py-lg-2" id="content-nav">
-                                            <span>Navigasi</span>
-                                        </div>
-                                        <div class="col-md-4 pt-25 pl-0">
-                                            <button type="button" class="btn btn-alt-secondary float-right" id="nextProduk">
-                                                <i class="fa fa-chevron-right fa-fw"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-alt-secondary float-left" id="prevProduk">
-                                                <i class="fa fa-chevron-left fa-fw"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <div class="block-title">
+                                <strong>Daftar Slider</strong>
                             </div>
                         </div>
-                    </div>
 
-                    <input type="hidden" id="current_page" value="1">
-                    <div class="row" id="data-list"></div>
-                    <div class="row justify-content-center my-15" id="loading">
-                        <div class="col-lg-6 text-center">
-                            <div class="spinner-border text-primary wh-50" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
+                        <div class="block-content pb-15">
+                            <table class="table table-striped table-vcenter" id="list-slider">
+                                <thead>
+                                    <tr>
+                                        <th class="font-weight-bold">NAMA</th>
+                                        <th class="font-weight-bold">STATUS</th>
+                                        <th class="font-weight-bold">URL</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -100,6 +79,42 @@
 
             </main>
             <!-- END Main Container -->
+
+            <!-- crop modal -->
+            <div class="modal" id="cropModal">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title modal-title">Potong & Sesuaikan Sampul</h3>
+                            <div class="block-options">
+                                <button type="button" class="close btn-primary" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content pb-15">
+                            <div id="resizer"></div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button class="btn btn-info rotate btn-block text-center" data-deg="90">
+                                        <i class="fa fa-undo"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-info rotate btn-block text-center" data-deg="-90" >
+                                    <i class="fa fa-redo"></i></button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary btn-block" id="sampulSave">Potong Dan Simpan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END crop modal -->
 
             <!-- Footer -->
             {{template "partials/admin-footer" .}}
@@ -114,39 +129,8 @@
         <script src="/js/common.js"></script>
         <script src="/js/functions.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
-        <script src="/js/admin/slider.js"></script>
+        <script src="/js/admin/slider/slider.js"></script>
         <script src="/js/admin/general.js"></script>
-        <script>
-            $('.dataTables_filter input[type="search"]').
-            attr('placeholder','Search in this blog ....').
-            css({'width':'500px','display':'inline-block'});
-            $.extend( true, $.fn.dataTable.defaults, {
-                "responsive": true,
-                "pageLength": 20,
-                "lengthChange": false,
-                "language": {
-                    'loadingRecords': '&nbsp;',
-                    "sEmptyTable":	 "Tidak ada data yang tersedia pada tabel ini",
-                    "sProcessing":   '<div class="spinner-grow text-primary pt-25" role="status"><span class="sr-only">Loading...</span></div>',
-                    "sLengthMenu":   "Tampilkan _MENU_",
-                    "sZeroRecords":  "Tidak ditemukan data yang sesuai",
-                    "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                    "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
-                    "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
-                    "sInfoPostFix":  "",
-                    "sSearch":       "Cari:",
-                    "sUrl":          "",
-                    "oPaginate": {
-                        "sFirst":    "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext":     "Selanjutnya",
-                        "sLast":     "Terakhir"
-                    }
-                },
-            });
-        </script>
-        <!-- Scripts -->
-        <!-- END Scripts -->
     </body>
 </html>
+
