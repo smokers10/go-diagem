@@ -28,6 +28,7 @@ type PromoService interface {
 	Create(req *Promo) *Response
 	Update(req *Promo) *Response
 	Delete(id string) *Response
+	UpdateCover(req *Promo) *Response
 
 	// untuk umum
 	Read() *Response

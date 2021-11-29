@@ -1,74 +1,51 @@
 jQuery(document).ready(function () {
-
-
-    table = $('#list-promo').DataTable({
-        processing: true,
-        serverSide: true,
-        ordering : false,
-        ajax: {
-            url: laroute.route('admin.post'),
-            data: function (d) {
-                d.kategori = $("#field-kategori").val()
+    $('#list-promo').DataTable({
+        "ajax":"/admin/promo/get",
+        "columns":[
+            {
+                "data": null,
+                "render": function(data, type, row) {
+                    return data.judul
+                },
+            },
+            {
+                "data": null,
+                "render": function(data, type, row) {
+                    return `${data.is_publish ? "Publish" : "Draft"} `
+                },
+            },
+            {
+                "data": null,
+                "render": function(data, type, row) {
+                    return `${data.tgl_mulai} s/d ${data.tgl_selesai}`
+                },
+            },
+            {
+                "data":null,
+                "orderable":false,
+                "render":function(data, type, row){
+                    return `
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="actionButton-${data.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            OPSI
+                        </button>
+    
+                        <div class="dropdown-menu" aria-labelledby="actionButton-${data.id}">
+                            <a class="dropdown-item" href="/admin/promo/edit/${data.id}">
+                                <i class="si si-note mr-5"></i>Ubah
+                            </a>
+                            <a class="dropdown-item btn-hapus" href="javascript:void(0)" onClick="hapus('`+ data.id +`')">
+                                <i class="si si-trash mr-5"></i>Hapus
+                            </a>
+                        </div>
+                    </div>
+                    `
+                }
             }
-          },
-        columns: [
-            {
-                data: 'judul',
-                name: 'judul'
-            },
-            {
-                data: 'status',
-                name: 'status'
-            },
-            {
-                data: 'periode',
-                name: 'periode'
-            },
-            {
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false
-            },
         ],
-        fnDrawCallback :function(){
-            $('div.dataTables_wrapper div.dataTables_filter').css('text-align', 'left');
-            $('div.dataTables_wrapper div.dataTables_filter input').css({'display':'block', 'width':'100%'}).removeClass("form-control-sm");
-            $('div.dataTables_wrapper div.dataTables_filter label').css('display','block');
-        }
-    });
-    
-    $('#kategori').html('<select class="form-control" name="kategori" id="field-kategori"></select>');
-    
-    $("#field-kategori").select2({
-        placeholder: 'Pilih Kategori',
-        allowClear: true,
-        ajax: {
-            url: laroute.route('admin.postKategori.json'),
-            type: 'POST',
-            dataType: 'JSON',
-            delay: 250,
-            data: function (params) {
-                return {
-                    searchTerm: params.term
-                };
-            },
-            processResults: function (response) {
-                return {
-                    results: response
-                };
-            },
-            cache: true
-        }
-    }).on('select2:unselecting', function(e) {
-        $(this).val(null).trigger('change');
-        e.preventDefault();
-    });
+    })
+})
 
-    $("#field-kategori").change(function(){
-        table.draw();
-    });
-});
 function hapus(id) {
     Swal.fire({
         title: "Anda Yakin?",
@@ -85,35 +62,40 @@ function hapus(id) {
     .then((result) => {
         if (result.value) {
         $.ajax({
-            url: laroute.route('admin.post.hapus', { id: id }),
-            type: "GET",
+            url: "/admin/promo/delete",
+            data : {id},
+            type: "DELETE",
             dataType: "JSON",
             beforeSend: function(){
                 Swal.fire({
                     title: 'Tunggu Sebentar...',
                     text: ' ',
-                    imageUrl: laroute.url('assets/img/loading.gif', ['']),
+                    imageUrl: 'assets/img/loading.gif',
                     showConfirmButton: false,
                     allowOutsideClick: false,
-                });
+                })
             },
-            success: function(data) {
-                Swal.fire({
-                    title: "Berhasil",
-                    text: 'Berita Berhasil Dihapus!',
-                    timer: 3000,
-                    showConfirmButton: false,
-                    icon: 'success'
-                });
-                $('#list-post').DataTable().ajax.reload();
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Berhasil",
+                        text: 'Berita Berhasil Dihapus!',
+                        timer: 3000,
+                        showConfirmButton: false,
+                        icon: 'success'
+                    })
+                    $('#list-promo').DataTable().ajax.reload()
+                }else {
+                    alert("kesalahan terjadi hubungi developer")
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                Swal.close();
-                alert('Error deleting data');
+                Swal.close()
+                alert('Error deleting data')
             }
-        });
+        })
         }else{
-            Swal.close();
+            Swal.close()
         }
-    });
+    })
 }

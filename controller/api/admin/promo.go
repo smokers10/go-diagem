@@ -43,6 +43,18 @@ func (p *promoController) Update(c *fiber.Ctx) error {
 	return c.Status(response.Status).JSON(response)
 }
 
+func (p *promoController) UpdateCover(c *fiber.Ctx) error {
+	req := domain.Promo{}
+
+	if err := c.BodyParser(&req); err != nil {
+		panic(err)
+	}
+
+	response := p.promoService.UpdateCover(&req)
+
+	return c.Status(response.Status).JSON(response)
+}
+
 func (p *promoController) Delete(c *fiber.Ctx) error {
 	id := c.FormValue("id")
 

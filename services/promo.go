@@ -1,15 +1,14 @@
 package services
 
 import (
-	"encoding/base64"
 	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"
 
 	"github.com/google/uuid"
 	"github.com/gosimple/slug"
 	"github.com/smokers10/go-diagem.git/domain"
+	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 )
 
 type promoServiceImpl struct {
@@ -41,33 +40,13 @@ func (p *promoServiceImpl) Create(req *domain.Promo) *domain.Response {
 	// simpan data citra sampul
 	path := "public/uploads/promo/"                                    // file path
 	filename := fmt.Sprintf("sampul-%s.%s", req.ID, req.Sampul.Format) // image/file name
-
-	// buat directory jika tidak ada dan set permission
-	if err := os.MkdirAll(path, 0755); err != nil {
-		panic(err)
-	}
-
-	dec, err := base64.StdEncoding.DecodeString(req.Sampul.Base64)
+	fullpath, err := etc.UploadFile(path, filename, req.Sampul.Base64)
 	if err != nil {
-		panic(err)
-	}
-
-	file, err := os.Create(filepath.Join(path, filepath.Base(filename)))
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-
-	if _, err := file.Write(dec); err != nil {
-		panic(err)
-	}
-
-	if err := file.Sync(); err != nil {
 		panic(err)
 	}
 
 	// set path(web) data citra
-	req.Image = fmt.Sprintf("/uploads/promo/sampul-%s.%s", req.ID, req.Sampul.Format)
+	req.Image = fullpath
 
 	// menyimpan data promo
 	promo, err := p.promoRepository.Create(req)
@@ -110,9 +89,10 @@ func (p *promoServiceImpl) Update(req *domain.Promo) *domain.Response {
 }
 
 func (p *promoServiceImpl) Delete(id string) *domain.Response {
-	//deklarasi var
+	// deklarasi var
 	res := domain.Response{}
 
+	// hapus promo di database
 	err := p.promoRepository.Delete(id)
 	if err != nil {
 		fmt.Println(err)
@@ -121,7 +101,33 @@ func (p *promoServiceImpl) Delete(id string) *domain.Response {
 		return &res
 	}
 
+	// hapus citra promo
+	if err := os.Remove(fmt.Sprintf("public/uploads/promo/sampul-%s.jpeg", id)); err != nil {
+		fmt.Println(err)
+		res.Message = "error saat menghapus citra sampul"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
 	res.Message = "promo baru berhasil dihapus"
+	res.Status = http.StatusOK
+	res.Success = true
+
+	return &res
+}
+
+func (p *promoServiceImpl) UpdateCover(req *domain.Promo) *domain.Response {
+	// deklarasi var
+	res := domain.Response{}
+
+	// simpan data citra sampul
+	path := "public/uploads/promo/"                                    // file path
+	filename := fmt.Sprintf("sampul-%s.%s", req.ID, req.Sampul.Format) // image/file name
+	if _, err := etc.UploadFile(path, filename, req.Sampul.Base64); err != nil {
+		panic(err)
+	}
+
+	res.Message = "sampul promo berhasil duupdate"
 	res.Status = http.StatusOK
 	res.Success = true
 

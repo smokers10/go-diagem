@@ -100,12 +100,14 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	promo := adminParentPath.Group("/promo", middleware.AdminWeb(session, "admin", "super admin"))
 	promo.Get("/", promoController.IndexPage)
 	promo.Get("/tambah", promoController.TambahPage)
-	promo.Get("/edit", promoController.EditPage)
+	promo.Get("/edit/:id", promoController.EditPage)
 
 	// promo - Action
 	promo.Get("/get", promoAPIController.Read)
+	promo.Get("/get/:id", promoAPIController.Detail)
 	promo.Post("/create", promoAPIController.Create)
 	promo.Put("/update", promoAPIController.Update)
+	promo.Put("/update-cover", promoAPIController.UpdateCover)
 	promo.Delete("/delete", promoAPIController.Delete)
 
 	// home

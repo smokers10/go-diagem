@@ -32,14 +32,14 @@ func (p *promoRepositoryImpl) Create(req *domain.Promo) (*domain.Promo, error) {
 }
 
 func (p *promoRepositoryImpl) Update(req *domain.Promo) (*domain.Promo, error) {
-	statement, err := p.db.Prepare("UPDATE promo SET judul = ?, slug = ?, deskripsi = ?, image = ?, is_publish = ?, is_featured = ?, seo_keyword = ?, seo_tags = ?, seo_deskripsi = ?, tgl_mulai = ?, tgl_selesai = ? WHERE id = ?")
+	statement, err := p.db.Prepare("UPDATE promo SET judul = ?, slug = ?, deskripsi = ?, is_publish = ?, is_featured = ?, seo_keyword = ?, seo_tags = ?, seo_deskripsi = ?, tgl_mulai = ?, tgl_selesai = ? WHERE id = ?")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.Judul, req.Slug, req.Deskripsi, req.Image, req.IsPublish, req.IsFeatured, req.SEOKeyword, req.SEOTags, req.SEODeskripsi, req.TglMulai, req.TglSelesai, req.ID); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.Judul, req.Slug, req.Deskripsi, req.IsPublish, req.IsFeatured, req.SEOKeyword, req.SEOTags, req.SEODeskripsi, req.TglMulai, req.TglSelesai, req.ID); err != nil {
 		return nil, err
 	}
 
