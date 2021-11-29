@@ -4,21 +4,21 @@ jQuery(document).ready(function () {
         "columns":[
             {
                 "data": null,
-                "render": function(data, type, row) {
+                "render": function(data, type, row){
                     return data.judul
-                },
+                }
             },
             {
                 "data": null,
-                "render": function(data, type, row) {
-                    return `${data.is_publish ? "Publish" : "Draft"} `
-                },
+                "render": function(data, type, row){
+                    return `${ data.is_publish ? "Publish" : "Draft" }`
+                }
             },
             {
                 "data": null,
-                "render": function(data, type, row) {
-                    return `${data.tgl_mulai} s/d ${data.tgl_selesai}`
-                },
+                "render": function(data, type, row){
+                    return `${ data.tgl_mulai } s/d ${ data.tgl_selesai }`
+                }
             },
             {
                 "data":null,
@@ -31,7 +31,7 @@ jQuery(document).ready(function () {
                         </button>
     
                         <div class="dropdown-menu" aria-labelledby="actionButton-${data.id}">
-                            <a class="dropdown-item" href="/admin/promo/edit/${data.id}">
+                            <a class="dropdown-item" href="/admin/slider/edit/${data.id}">
                                 <i class="si si-note mr-5"></i>Ubah
                             </a>
                             <a class="dropdown-item btn-hapus" href="javascript:void(0)" onClick="hapus('`+ data.id +`')">
@@ -70,7 +70,7 @@ function hapus(id) {
                 Swal.fire({
                     title: 'Tunggu Sebentar...',
                     text: ' ',
-                    imageUrl: 'assets/img/loading.gif',
+                    imageUrl: '/img/loading.gif',
                     showConfirmButton: false,
                     allowOutsideClick: false,
                 })
@@ -79,7 +79,7 @@ function hapus(id) {
                 if (response.success) {
                     Swal.fire({
                         title: "Berhasil",
-                        text: 'Berita Berhasil Dihapus!',
+                        text: 'Promo Berhasil Dihapus!',
                         timer: 3000,
                         showConfirmButton: false,
                         icon: 'success'

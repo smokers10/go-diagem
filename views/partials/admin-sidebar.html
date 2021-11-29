@@ -38,67 +38,67 @@
         <div class="content-side content-side-full">
             <!-- li class="open" untuk membuka nav sub-menu -->
             <ul class="nav-main">
-                <li>
-                    <a class="active" href="/"><i class="si si-cup"></i><span class="sidebar-mini-hide">Beranda</span></a>
+                <li id="beranda-submenu">
+                    <a class="" href="/" id="beranda"><i class="si si-cup"></i><span class="sidebar-mini-hide">Beranda</span></a>
                 </li>
 
-                <li>
+                <li id="produk-submenu">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-social-dropbox"></i><span class="sidebar-mini-hide">Produk</span></a>
                     <ul>
                         <li>
-                            <a class="" href="/admin/produk/tambah">Tambah Produk Baru</a>
+                            <a id="tambah-produk" class="" href="/admin/produk/tambah">Tambah Produk Baru</a>
                         </li>
                         <li>
-                            <a class="" href="/admin/produk">Kelola Produk</a>
+                            <a id="atur-produk" class="" href="/admin/produk">Kelola Produk</a>
                         </li>
                         <li>
-                            <a class="" href="/admin/produk/kategori">Kelola Kategori</a>
+                            <a id="kategori-produk" class="" href="/admin/produk/kategori">Kelola Kategori</a>
                         </li>
                     </ul>
                 </li>
                 
-                <li>
-                    <a class="" href="/admin/order">
+                <li id="order-submenu">
+                    <a id="atur-order" class="" href="/admin/order">
                         <i class="si si-people"></i>Order</span>
                     </a>
                 </li>
 
-                <li>
+                <li id="promo-submenu">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-tags"></i><span class="sidebar-mini-hide">Promo</span></a>
                     <ul>
                         <li>
-                            <a class="" href="/admin/promo/tambah">Tambah Promo</a>
+                            <a id="tambah-promo" class="" href="/admin/promo/tambah">Tambah Promo</a>
                         </li>
 
                         <li>
-                            <a class="" href="/admin/promo">Daftar Promo</a>
+                            <a id="atur-promo" class="" href="/admin/promo">Daftar Promo</a>
                         </li>
                     </ul>
                 </li>
 
-                <li>
+                <li id="user-submenu">
                     <a class="" href="#">
                         <i class="si si-people"></i>User</span>
                     </a>
                 </li>
 
-                <li>
-                    <a class="" href="/admin/reseller">
+                <li id="reseller-submenu">
+                    <a id="reseller" class="" href="/admin/reseller">
                         <i class="si si-people"></i>Reseller</span>
                     </a>
                 </li>
 
-                <li>
+                <li id="keuangan-submenu">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-wallet"></i>Keuangan</span></a>
                     <ul>
                         <li>
-                            <a class="" href="/admin/keuangan/rekening">Rekening Bank</a>
+                            <a id="rekening-keuangan" class="" href="/admin/keuangan/rekening">Rekening Bank</a>
                         </li>
                     </ul>
                 </li>
 
-                <li>
-                    <a class="" href="/admin/slider">
+                <li id="slider-submenu">
+                    <a id="slider" class="" href="/admin/slider">
                         <i class="si si-people"></i>Slider</span>
                     </a>
                 </li>
@@ -108,3 +108,61 @@
     </div>
     <!-- Sidebar Content -->
 </nav>            
+
+<script>
+    // get current URL path
+    const pathname = location.pathname
+    const pathnameSplit = pathname.split("/")
+    const parentPath = pathnameSplit[1]
+    const childPath = pathnameSplit[2]
+    const subChildPath = pathnameSplit[3]
+
+
+    // beranda
+    if (childPath == "beranda") {
+        document.getElementById("beranda").classList.add("active")
+    }
+
+    // produk
+    if (childPath == "produk") {
+        document.getElementById("produk-submenu").classList.add("open")
+        switch (subChildPath) {
+            case "tambah":
+                document.getElementById("tambah-produk").classList.add("active")
+                break;
+            
+            case "kategori":
+                document.getElementById("kategori-produk").classList.add("active")
+                break;
+
+            default:
+                document.getElementById("atur-produk").classList.add("active")
+                break;
+        }
+    }
+
+    // promo
+    if (childPath == "promo") {
+        document.getElementById("promo-submenu").classList.add("open")
+        switch (subChildPath) {
+            case "tambah":
+                document.getElementById("tambah-promo").classList.add("active")
+                break;
+
+            default:
+                document.getElementById("atur-promo").classList.add("active")
+                break;
+        }
+    }
+
+    // reseller
+    if (childPath == "reseller") {
+        document.getElementById("reseller").classList.add("active")
+    }
+
+    // slider
+    if (childPath == "slider") {
+        document.getElementById("slider").classList.add("active")
+    }
+
+</script>
