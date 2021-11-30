@@ -15,6 +15,29 @@ func UserRepository(database *sql.DB) domain.UserRepository {
 	return &userRepositoryImpl{db: database}
 }
 
+func (ur *userRepositoryImpl) ReadAll() ([]domain.User, error) {
+	result := []domain.User{}
+	stmt, err := ur.db.Prepare("SELECT id, nama, hp, email, is_verified")
+	if err != nil {
+		return nil, err
+	}
+
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		row := domain.User{}
+		rows.Scan(&row.ID, &row.Nama, &row.HP, &row.Email, &row.IsVerified)
+		result = append(result, row)
+	}
+
+	return result, nil
+}
+
 func (ur *userRepositoryImpl) ByEmail(email string) (user *domain.User, err error) {
 	result := domain.User{}
 	statement, err := ur.db.Prepare("SELECT id, nama, hp, email, password, is_verified FROM users WHERE email = ? LIMIT 1")

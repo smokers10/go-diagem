@@ -31,6 +31,7 @@ type UserCredential struct {
 }
 
 type UserService interface {
+	Read() *Response
 	Login(cred *UserCredential) *Response
 	Registrasi(req *UserBasicData) *Response
 	Update(req *UserBasicData) *Response
@@ -38,6 +39,7 @@ type UserService interface {
 }
 
 type UserRepository interface {
+	ReadAll() ([]User, error)
 	ByEmail(email string) (*User, error)
 	ByID(id int) (*User, error)
 	Create(req *UserBasicData) (*User, error)

@@ -97,6 +97,30 @@ func (ar *adminRepositoryImpl) Update(req *domain.Admin) (*domain.Admin, error) 
 	return req, nil
 }
 
+func (ar *adminRepositoryImpl) UpdatePassword(req *domain.Admin) (*domain.Admin, error) {
+	c := context.Background()
+	tx, err := ar.db.BeginTx(c, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	stmt, err := tx.Prepare("UPDATE admins SET password = ? WHERE ID = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	defer stmt.Close()
+
+	if _, err := stmt.ExecContext(c, req.Password, req.ID); err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	tx.Commit()
+
+	return req, nil
+}
+
 func (ar *adminRepositoryImpl) Delete(id int) error {
 	c := context.Background()
 	tx, err := ar.db.BeginTx(c, nil)

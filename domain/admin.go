@@ -21,13 +21,16 @@ type AdminService interface {
 	Login(cred *AdminCredentials) *Response
 	Create(req *Admin) *Response
 	Update(req *Admin, logged_id int, logged_role string) *Response
+	UpdatePassword(req *Admin, logged_id int, logged_role string) *Response
 	Delete(id int) *Response
 	Read(logged_id int) *Response
+	Detail(id int) *Response
 }
 
 type AdminRepository interface {
 	Create(req *Admin) (*Admin, error)
 	Update(req *Admin) (*Admin, error)
+	UpdatePassword(req *Admin) (*Admin, error)
 	Delete(id int) error
 	GetByEmail(email string) (*Admin, error)
 	GetByID(id int) (*Admin, error)

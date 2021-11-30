@@ -49,10 +49,32 @@ func (uac *userAdminController) Update(c *fiber.Ctx) error {
 	return c.Status(response.Status).JSON(response)
 }
 
+func (uac *userAdminController) UpdatePassword(c *fiber.Ctx) error {
+	req := domain.Admin{}
+	id := c.Locals("id").(int)
+	roles := c.Locals("type").(string)
+
+	if err := c.BodyParser(&req); err != nil {
+		panic(err)
+	}
+
+	response := uac.adminService.UpdatePassword(&req, id, roles)
+
+	return c.Status(response.Status).JSON(response)
+}
+
 func (uac *userAdminController) Delete(c *fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.FormValue("id"))
 
 	response := uac.adminService.Delete(id)
+
+	return c.Status(response.Status).JSON(response)
+}
+
+func (uac *userAdminController) Detail(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+
+	response := uac.adminService.Detail(id)
 
 	return c.Status(response.Status).JSON(response)
 }

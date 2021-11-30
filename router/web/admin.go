@@ -23,6 +23,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	produkController := admin.ProdukController()
 	orderController := admin.OrderController()
 	promoController := admin.PromoController()
+	userAdministratifController := admin.UserAdministratifController()
 
 	// controller API ini
 	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
@@ -32,6 +33,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	varianAPIController := adminAPI.ProdukVariasiController(resolver.ProdukVariasiService)
 	promoAPIController := adminAPI.PromoController(resolver.PromoService)
 	sliderAPIController := adminAPI.SliderController(resolver.SliderService)
+	userAdminController := adminAPI.UserAdminController(resolver.AdminService)
 
 	// router clustering
 	adminParentPath := app.Group("/admin")
@@ -118,6 +120,21 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	promo.Put("/update", promoAPIController.Update)
 	promo.Put("/update-cover", promoAPIController.UpdateCover)
 	promo.Delete("/delete", promoAPIController.Delete)
+
+	// user administratif
+	// user adminsitratif page
+	userAdministratif := adminParentPath.Group("/user-administratif", middleware.AdminWeb(session, "admin", "super admin"))
+	userAdministratif.Get("/", userAdministratifController.IndexPage)
+	userAdministratif.Get("/tambah", userAdministratifController.TambahPage)
+	userAdministratif.Get("/edit/:id", userAdministratifController.EditPage)
+
+	// user administratif - action
+	userAdministratif.Get("/get", userAdminController.Read)
+	userAdministratif.Get("/get/:id", userAdminController.Detail)
+	userAdministratif.Post("/create", userAdminController.Create)
+	userAdministratif.Put("/update", userAdminController.Update)
+	userAdministratif.Put("/update-password", userAdminController.UpdatePassword)
+	userAdministratif.Delete("/delete", userAdminController.Delete)
 
 	// home
 	adminParentPath.Get("/home", middleware.AdminWeb(session, "admin", "super admin", "marketing"), homeController.HomePage)

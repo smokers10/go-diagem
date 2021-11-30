@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+        <title>Admin | Diagem</title>
+
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <!-- Page JS Plugins CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+
+        <!-- Fonts, Styles and Codebase framework -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="/js/plugins/summernote/summernote-bs4.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
+    </head>
+    <body>
+        <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
+            <!-- Sidebar -->
+            {{template "partials/admin-sidebar" .}}
+            <!-- END Sidebar -->
+
+            <!-- Header -->
+            {{template "partials/admin-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+
+                <!-- Page Content -->
+                <div class="content">
+                    <form id="form-user-admin" onsubmit="return false;" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="">
+                        <input type="hidden" id="method" value="store">
+                        <div class="content-heading pt-3 mb-3">
+                            Tambah User Administratif
+                            <button type="submit" class="btn btn-primary float-right">
+                                <i class="si si-check mr-3"></i> Simpan
+                            </button>
+                        </div>
+                        <div class="block block-shadow block-rounded block-bordered">
+                            <div class="block-content">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="field-name">Nama</label>
+                                            <input type="text" name="name" id="field-name" class="form-control">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="field-username">Username</label>
+                                            <input type="text" name="user" id="field-username" class="form-control">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="field-email">Email</label>
+                                            <input type="email" name="email" id="field-email" class="form-control">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="field-role">Role</label>
+                                            <select class="form-control" name="role" id="field-role">
+                                                <option value="">Pilih</option>
+                                                <option value="admin">Admin</option>
+                                                <option value="marketing">Marketing</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="field-password">Password</label>
+                                            <input type="password" name="password" id="field-password" class="form-control">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="field-konf-password">Konfirmasi Password</label>
+                                            <input type="password" name="konf-password" id="field-konf-password" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- END Page Content -->
+
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/admin-footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="/js/plugins/summernote/summernote-bs4.min.js"></script>
+        <script src="/js/plugins/select2/js/select2.full.min.js"></script>
+        <script src="/js/plugins/select2/js/i18n/id.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
+        <script src="/js/admin/user-administratif/user-form.js"></script>
+        <script src="/js/admin/general.js"></script>
+    </body>
+</html>

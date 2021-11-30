@@ -76,8 +76,14 @@
                     </ul>
                 </li>
 
+                <li id="user-administratif-submenu">
+                    <a id="user-administratif" class="" href="/admin/user-administratif">
+                        <i class="si si-people"></i>User Administratif</span>
+                    </a>
+                </li>
+
                 <li id="user-submenu">
-                    <a class="" href="#">
+                    <a id="user" class="" href="#">
                         <i class="si si-people"></i>User</span>
                     </a>
                 </li>
@@ -163,6 +169,11 @@
     // slider
     if (childPath == "slider") {
         document.getElementById("slider").classList.add("active")
+    }
+
+    // user administratif
+    if (childPath == "user-administratif") {
+        document.getElementById("user-administratif").classList.add("active")
     }
 
 </script>
