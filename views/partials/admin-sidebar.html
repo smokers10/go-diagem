@@ -83,7 +83,7 @@
                 </li>
 
                 <li id="user-submenu">
-                    <a id="user" class="" href="#">
+                    <a id="user" class="" href="/admin/user">
                         <i class="si si-people"></i>User</span>
                     </a>
                 </li>
@@ -122,7 +122,6 @@
     const parentPath = pathnameSplit[1]
     const childPath = pathnameSplit[2]
     const subChildPath = pathnameSplit[3]
-
 
     // beranda
     if (childPath == "beranda") {
@@ -176,4 +175,8 @@
         document.getElementById("user-administratif").classList.add("active")
     }
 
+    // user
+    if (childPath == "user") {
+        document.getElementById("user").classList.add("active")
+    }
 </script>

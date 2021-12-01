@@ -17,7 +17,7 @@ func UserRepository(database *sql.DB) domain.UserRepository {
 
 func (ur *userRepositoryImpl) ReadAll() ([]domain.User, error) {
 	result := []domain.User{}
-	stmt, err := ur.db.Prepare("SELECT id, nama, hp, email, is_verified")
+	stmt, err := ur.db.Prepare("SELECT id, nama, hp, email, is_verified FROM users")
 	if err != nil {
 		return nil, err
 	}
@@ -38,30 +38,54 @@ func (ur *userRepositoryImpl) ReadAll() ([]domain.User, error) {
 	return result, nil
 }
 
-func (ur *userRepositoryImpl) ByEmail(email string) (user *domain.User, err error) {
+func (ur *userRepositoryImpl) Detail(id int) (user *domain.User, err error) {
 	result := domain.User{}
-	statement, err := ur.db.Prepare("SELECT id, nama, hp, email, password, is_verified FROM users WHERE email = ? LIMIT 1")
+	alamatRepository := AlamatRepository(ur.db)
+	// get user data
+	stmt, err := ur.db.Prepare("SELECT id, nama, hp, email, is_verified, tahun, bulan, tanggal FROM users WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
-	defer statement.Close()
+	defer stmt.Close()
 
-	statement.QueryRowContext(context.Background(), email).Scan(&result.ID, &result.Nama, &result.HP, &result.Email, &result.Password, &result.IsVerified)
+	stmt.QueryRow(id).Scan(&result.ID, &result.Nama, &result.HP, &result.Email, &result.IsVerified, &result.Tahun, &result.Bulan, &result.Tanggal)
+
+	// get alamat
+	alamat, err := alamatRepository.Read(id)
+	if err != nil {
+		return nil, err
+	}
+
+	result.Alamat = alamat
+
+	return &result, nil
+}
+
+func (ur *userRepositoryImpl) ByEmail(email string) (user *domain.User, err error) {
+	result := domain.User{}
+	stmt, err := ur.db.Prepare("SELECT id, nama, hp, email, password, is_verified FROM users WHERE email = ? LIMIT 1")
+	if err != nil {
+		return nil, err
+	}
+
+	defer stmt.Close()
+
+	stmt.QueryRowContext(context.Background(), email).Scan(&result.ID, &result.Nama, &result.HP, &result.Email, &result.Password, &result.IsVerified)
 
 	return &result, nil
 }
 
 func (ur *userRepositoryImpl) ByID(id int) (user *domain.User, err error) {
 	result := domain.User{}
-	statement, err := ur.db.Prepare("SELECT nama, hp, email, tahun, bulan, tanggal FROM users WHERE id = ? LIMIT 1")
+	stmt, err := ur.db.Prepare("SELECT nama, hp, email, tahun, bulan, tanggal FROM users WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
-	defer statement.Close()
+	defer stmt.Close()
 
-	statement.QueryRowContext(context.Background(), id).Scan(&result.Nama, &result.HP, &result.Email, &result.Tahun, &result.Bulan, &result.Tanggal)
+	stmt.QueryRowContext(context.Background(), id).Scan(&result.Nama, &result.HP, &result.Email, &result.Tahun, &result.Bulan, &result.Tanggal)
 
 	return &result, nil
 }

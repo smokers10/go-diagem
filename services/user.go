@@ -36,6 +36,24 @@ func (u *userServiceImpl) Read() *domain.Response {
 	return &res
 }
 
+func (u *userServiceImpl) Detail(id int) *domain.Response {
+	res := domain.Response{}
+
+	user, err := u.userRepository.Detail(id)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error terjadi saat mengambil data user"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Data = user
+	res.Message = "pengambilan data user berhasil"
+	res.Status = http.StatusOK
+	res.Success = true
+	return &res
+}
+
 // khusus user
 func (u *userServiceImpl) Login(cred *domain.UserCredential) *domain.Response {
 	res := domain.Response{}

@@ -24,6 +24,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	orderController := admin.OrderController()
 	promoController := admin.PromoController()
 	userAdministratifController := admin.UserAdministratifController()
+	userController := admin.UserController()
 
 	// controller API ini
 	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
@@ -34,6 +35,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	promoAPIController := adminAPI.PromoController(resolver.PromoService)
 	sliderAPIController := adminAPI.SliderController(resolver.SliderService)
 	userAdminController := adminAPI.UserAdminController(resolver.AdminService)
+	userAPIController := adminAPI.UserController(resolver.UserService)
 
 	// router clustering
 	adminParentPath := app.Group("/admin")
@@ -109,6 +111,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 
 	// promo
 	promo := adminParentPath.Group("/promo", middleware.AdminWeb(session, "admin", "super admin"))
+	// promo page
 	promo.Get("/", promoController.IndexPage)
 	promo.Get("/tambah", promoController.TambahPage)
 	promo.Get("/edit/:id", promoController.EditPage)
@@ -122,8 +125,8 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	promo.Delete("/delete", promoAPIController.Delete)
 
 	// user administratif
-	// user adminsitratif page
 	userAdministratif := adminParentPath.Group("/user-administratif", middleware.AdminWeb(session, "admin", "super admin"))
+	// user adminsitratif page
 	userAdministratif.Get("/", userAdministratifController.IndexPage)
 	userAdministratif.Get("/tambah", userAdministratifController.TambahPage)
 	userAdministratif.Get("/edit/:id", userAdministratifController.EditPage)
@@ -135,6 +138,16 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	userAdministratif.Put("/update", userAdminController.Update)
 	userAdministratif.Put("/update-password", userAdminController.UpdatePassword)
 	userAdministratif.Delete("/delete", userAdminController.Delete)
+
+	// user
+	user := adminParentPath.Group("/user", middleware.AdminWeb(session, "admin", "super admin", "marketing"))
+	// user page
+	user.Get("/", userController.IndexPage)
+	user.Get("/profile/:id", userController.DetailPage)
+
+	// user - action
+	user.Get("/get", userAPIController.ReadAll)
+	user.Get("/get/:id", userAPIController.Detail)
 
 	// home
 	adminParentPath.Get("/home", middleware.AdminWeb(session, "admin", "super admin", "marketing"), homeController.HomePage)

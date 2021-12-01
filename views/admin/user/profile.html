@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-        <title>Admin | Tokonya</title>
+        <title>Admin | Diagem</title>
 
-        <meta name="description" content="Tokonya">
-        <meta name="author" content="Tokonya">
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
         <meta name="robots" content="noindex, nofollow">
 
         <!-- Open Graph Meta -->
-        <meta property="og:title" content="Tokonya">
-        <meta property="og:site_name" content="Tokonya">
-        <meta property="og:description" content="Tokonya">
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
         <meta property="og:type" content="website">
         <meta property="og:url" content="">
         <meta property="og:image" content="">
@@ -44,43 +44,60 @@
 
             <!-- Main Container -->
             <main id="main-container">
-
                 <!-- Page Content -->
                 <div class="content">
-                    <div class="content-heading pt-3 mb-3">
-                        Profile Pelanggan
+                    <div class="content-heading pt-0 mb-3">
+                        Profile User
                     </div>
 
-                    <!-- informasi -->
                     <div class="block block-rounded">
                         <div class="block-header block-header-default">
                             <div class="block-title">
-                                <strong>Informasi Pelanggan</strong>
+                                <strong>Informasi User</strong>
                             </div>
                         </div>
                         
                         <div class="block-content pb-15">
-                            
+                            <div class="form-group">
+                                <label for="field-nama">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="field-nama" name="nama" autocomplete="off" disabled>
+                                <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
+                            </div> 
+
+                            <div class="form-group">
+                                <label for="field-kontak">Kontak</label>
+                                <input type="text" class="form-control" id="field-kontak" name="kontak" autocomplete="off" disabled>
+                                <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="field-email">Email</label>
+                                <input type="text" class="form-control" id="field-email" name="email" autocomplete="off" disabled>
+                                <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="field-tgl-lahir">Tanggal Lahir</label>
+                                <input type="text" class="form-control" id="field-tgl-lahir" name="tgl-lahir" autocomplete="off" disabled>
+                                <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
+                            </div>
                         </div>
                     </div>
-                    <!-- END informasi -->
 
-                    <!-- alamat -->
+
                     <div class="block block-rounded">
                         <div class="block-header block-header-default">
                             <div class="block-title">
-                                <strong>Alamat Pelanggan</strong>
+                                <strong>Alamat User</strong>
                             </div>
                         </div>
                         
-                        <div class="block-content pb-15">
-                            
+                        <div id="alamat-row" class="block-content row pb-15">
+                        
                         </div>
                     </div>
-                    <!-- END alamat -->
                 </div>
                 <!-- END Page Content -->
-
             </main>
             <!-- END Main Container -->
 
@@ -97,6 +114,8 @@
         <script src="/js/common.js"></script>
         <script src="/js/functions.js"></script>
         <script src="/js/admin/produk/produk.js"></script>
+        <script src="/js/admin/general.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <script src="/js/admin/user/profile.js"></script>
     </body>
 </html>
