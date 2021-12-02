@@ -17,20 +17,17 @@ func KategoriRepository(database *sql.DB) domain.KategoriRepository {
 
 func (k *kategoriRepositoryImpl) Create(req *domain.Kategori) (*domain.Kategori, error) {
 	insertedItem := domain.Kategori{}
-	statement, err := k.db.Prepare("INSERT INTO kategori (nama, slug) VALUES(?, ?)")
+	statement, err := k.db.Prepare("INSERT INTO kategori (id, nama, slug, cover) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	result, err := statement.ExecContext(context.Background(), req.Nama, req.Slug)
-	if err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.ID, req.Nama, req.Slug, req.Cover); err != nil {
 		return nil, err
 	}
 
-	id, _ := result.LastInsertId()
-	insertedItem.ID = int(id)
 	insertedItem.Nama = req.Nama
 	insertedItem.Slug = req.Slug
 
@@ -39,7 +36,7 @@ func (k *kategoriRepositoryImpl) Create(req *domain.Kategori) (*domain.Kategori,
 
 func (k *kategoriRepositoryImpl) Read() ([]domain.Kategori, error) {
 	result := []domain.Kategori{}
-	statement, err := k.db.Prepare("SELECT id, nama, slug FROM kategori")
+	statement, err := k.db.Prepare("SELECT id, nama, slug, cover FROM kategori WHERE deleted = false")
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +50,7 @@ func (k *kategoriRepositoryImpl) Read() ([]domain.Kategori, error) {
 
 	for rows.Next() {
 		row := domain.Kategori{}
-		rows.Scan(&row.ID, &row.Nama, &row.Slug)
+		rows.Scan(&row.ID, &row.Nama, &row.Slug, row.Cover)
 		result = append(result, row)
 	}
 
@@ -75,17 +72,30 @@ func (k *kategoriRepositoryImpl) Update(req *domain.Kategori) (*domain.Kategori,
 	return req, nil
 }
 
-func (k *kategoriRepositoryImpl) Delete(id int) error {
-	statement, err := k.db.Prepare("DELETE FROM kategori WHERE id = ?")
+func (k *kategoriRepositoryImpl) Delete(id string) error {
+	stmt, err := k.db.Prepare("UPDATE kategori SET deleted = true WHERE id = ?")
 	if err != nil {
 		return err
 	}
 
-	defer statement.Close()
+	defer stmt.Close()
 
-	if _, err := statement.ExecContext(context.Background(), id); err != nil {
+	if _, err := stmt.ExecContext(context.Background(), id); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (k *kategoriRepositoryImpl) Detail(id string) (*domain.Kategori, error) {
+	result := domain.Kategori{}
+	stmt, err := k.db.Prepare("SELECT id, nama, cover, slug FROM kategori WHERE id = ?")
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	stmt.QueryRow(id).Scan(&result.ID, &result.Nama, &result.Cover, &result.Slug)
+
+	return &result, nil
 }

@@ -23,3 +23,11 @@ func (p *produkController) EditPage(c *fiber.Ctx) error {
 func (p *produkController) KategoriPage(c *fiber.Ctx) error {
 	return c.Render("admin/produk/kategori", nil)
 }
+
+func (p *produkController) KategoriTambahPage(c *fiber.Ctx) error {
+	return c.Render("admin/produk/kategori-form", nil)
+}
+
+func (p *produkController) KategoriEditPage(c *fiber.Ctx) error {
+	return c.Render("admin/produk/kategori-edit", nil)
+}
