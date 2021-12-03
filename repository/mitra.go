@@ -59,30 +59,28 @@ func (m *mitraRepositoryImpl) Read() ([]domain.Mitra, error) {
 
 func (m *mitraRepositoryImpl) ByID(id int) (*domain.Mitra, error) {
 	result := domain.Mitra{}
-	statement, err := m.db.Prepare("SELECT * FROM mitra WHERE id = ? LIMIT 1")
+	stmt, err := m.db.Prepare("SELECT id, nama, email, alamat, kontak FROM mitra WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
-	defer statement.Close()
+	defer stmt.Close()
 
-	row := statement.QueryRowContext(context.Background(), id)
-	row.Scan(&result.ID, &result.Alamat, &result.Email, &result.Kontak, &result.Nama)
+	stmt.QueryRowContext(context.Background(), id).Scan(&result.ID, &result.Nama, &result.Email, &result.Alamat, &result.Kontak)
 
 	return &result, nil
 }
 
 func (m *mitraRepositoryImpl) ByEmail(email string) (*domain.Mitra, error) {
 	result := domain.Mitra{}
-	statement, err := m.db.Prepare("SELECT * FROM mitra WHERE email = ? LIMIT 1")
+	stmt, err := m.db.Prepare("SELECT id, nama, email, alamat, kontak FROM mitra WHERE email = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
-	defer statement.Close()
+	defer stmt.Close()
 
-	row := statement.QueryRowContext(context.Background(), email)
-	row.Scan(&result.ID, &result.Alamat, &result.Email, &result.Kontak, &result.Nama)
+	stmt.QueryRowContext(context.Background(), email).Scan(&result.ID, &result.Nama, &result.Email, &result.Alamat, &result.Kontak)
 
 	return &result, nil
 }
