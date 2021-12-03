@@ -27,11 +27,13 @@ $(document).ready(function() {
                         showConfirmButton: false,
                         icon: 'success'
                     })
-                    window.setTimeout(function () {
-                        location.reload()
-                    }, 1500)
-                    var user = JSON.stringify(res.data)
-                    localStorage.setItem("logged", user)
+                    if (response.success) {
+                        var user = JSON.stringify(response.data)
+                        localStorage.setItem("logged", user)
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1500)
+                    }
                 } else {
                     Swal.close()
                     for (control in response.errors) {

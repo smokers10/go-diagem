@@ -42,14 +42,14 @@ func (ur *userRepositoryImpl) Detail(id int) (user *domain.User, err error) {
 	result := domain.User{}
 	alamatRepository := AlamatRepository(ur.db)
 	// get user data
-	stmt, err := ur.db.Prepare("SELECT id, nama, hp, email, is_verified, tahun, bulan, tanggal FROM users WHERE id = ? LIMIT 1")
+	stmt, err := ur.db.Prepare("SELECT id, nama, hp, email, is_verified, tgl_lahir FROM users WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
 	defer stmt.Close()
 
-	stmt.QueryRow(id).Scan(&result.ID, &result.Nama, &result.HP, &result.Email, &result.IsVerified, &result.Tahun, &result.Bulan, &result.Tanggal)
+	stmt.QueryRow(id).Scan(&result.ID, &result.Nama, &result.HP, &result.Email, &result.IsVerified, &result.TglLahir)
 
 	// get alamat
 	alamat, err := alamatRepository.Read(id)
@@ -78,27 +78,26 @@ func (ur *userRepositoryImpl) ByEmail(email string) (user *domain.User, err erro
 
 func (ur *userRepositoryImpl) ByID(id int) (user *domain.User, err error) {
 	result := domain.User{}
-	stmt, err := ur.db.Prepare("SELECT nama, hp, email, tahun, bulan, tanggal FROM users WHERE id = ? LIMIT 1")
+	stmt, err := ur.db.Prepare("SELECT nama, hp, email, tgl_lahir FROM users WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
 	defer stmt.Close()
 
-	stmt.QueryRowContext(context.Background(), id).Scan(&result.Nama, &result.HP, &result.Email, &result.Tahun, &result.Bulan, &result.Tanggal)
+	stmt.QueryRowContext(context.Background(), id).Scan(&result.Nama, &result.HP, &result.Email, &result.TglLahir)
 
 	return &result, nil
 }
 
 func (ur *userRepositoryImpl) Create(req *domain.UserBasicData) (user *domain.User, err error) {
-	statement, err := ur.db.Prepare("INSERT INTO users (nama, hp, email, password) VALUES(?, ?, ?, ?)")
+	statement, err := ur.db.Prepare("INSERT INTO users(nama, hp, email, tgl_lahir, password) VALUES(?, ?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
 	}
-
 	defer statement.Close()
 
-	result, err := statement.ExecContext(context.Background(), req.Nama, req.HP, req.Email, req.Password)
+	result, err := statement.ExecContext(context.Background(), req.Nama, req.HP, req.Email, req.TglLahir, req.Password)
 	if err != nil {
 		return nil, err
 	}
@@ -116,14 +115,14 @@ func (ur *userRepositoryImpl) Create(req *domain.UserBasicData) (user *domain.Us
 }
 
 func (ur *userRepositoryImpl) Update(req *domain.UserBasicData) (user *domain.UserBasicData, err error) {
-	statement, err := ur.db.Prepare("UPDATE users SET nama = ?, hp = ?, tahun = ?, bulan = ?, tanggal = ? WHERE id = ?")
+	statement, err := ur.db.Prepare("UPDATE users SET nama = ?, hp = ?, tgl_lahir = ? WHERE id = ?")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	statement.ExecContext(context.Background(), req.Nama, req.HP, req.Tahun, req.Bulan, req.Tanggal, req.ID)
+	statement.ExecContext(context.Background(), req.Nama, req.HP, req.TglLahir, req.ID)
 
 	return req, nil
 }

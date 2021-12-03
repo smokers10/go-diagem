@@ -8,12 +8,12 @@ $(document).ready(function() {
         url:`/admin/user/get/${userID}`,
         success: function(res) {
             const data = res.data
-            const { nama, email, hp, tahun, bulan, tanggal, alamat, kd_pos  } = data
+            const { nama, email, hp, tgl_lahir, alamat} = data
             $("#field-nama").val(nama)
             $("#field-kontak").val(hp)
             $("#field-email").val(email)
             if ( tahun && bulan && tanggal) {
-                $("#field-tgl-lahir").val(`${tahun}/${bulan}/${tanggal}`)
+                $("#field-tgl-lahir").val(tgl_lahir)
             }
 
             if (alamat) {

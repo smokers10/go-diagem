@@ -6,10 +6,8 @@ type User struct {
 	HP         string   `json:"hp,omitempty" form:"hp"`
 	Email      string   `json:"email,omitempty" form:"email"`
 	Password   string   `json:"password,omitempty" form:"password"`
+	TglLahir   string   `json:"tgl_lahir,omitempty" form:"tgl_lahir"`
 	IsVerified bool     `json:"is_verified,omitempty" form:"is_verified"`
-	Tahun      int      `json:"tahun,omitempty" form:"tahun"`
-	Bulan      int      `json:"bulan,omitempty" form:"bulan"`
-	Tanggal    int      `json:"tanggal,omitempty" form:"tanggal"`
 	CreatedAt  string   `json:"created_at,omitempty" form:"created_at"`
 	UpdatedAt  string   `json:"updated_at,omitempty" form:"updated_at"`
 	Alamat     []Alamat `json:"alamat,omitempty" form:"alamata"`
@@ -20,10 +18,8 @@ type UserBasicData struct {
 	Nama     string `json:"nama,omitempty" form:"nama"`
 	HP       string `json:"hp,omitempty" form:"hp"`
 	Email    string `json:"email,omitempty" form:"email"`
+	TglLahir string `json:"tgl_lahir,omitempty" form:"tgl_lahir"`
 	Password string `json:"password,omitempty" form:"password"`
-	Tahun    int    `json:"tahun,omitempty" form:"tahun"`
-	Bulan    int    `json:"bulan,omitempty" form:"bulan"`
-	Tanggal  int    `json:"tanggal,omitempty" form:"tanggal"`
 }
 
 type UserCredential struct {
