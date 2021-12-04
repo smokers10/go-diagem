@@ -29,17 +29,22 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
         <link rel="stylesheet" id="css-main" href="/js/plugins/slick/slick-theme.css">
         <link rel="stylesheet" id="css-main" href="/js/plugins/slick/slick.css">
+        <link rel="stylesheet" href="/js/plugins/fontawesome/css/all.css">
     </head>
     <body class="bg-white">
         <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
             <!-- Header -->
-            {{template "partials/user-header" .}}
+            {{if .Logged.IsLogged}}
+                {{template "partials/user-header" .}}
+                {{else}}
+                {{template "partials/user-unlogged-header" .}}
+            {{end}}
             <!-- END Header -->
 
             <!-- Main Container -->
             <main id="main-container">
                 <!-- Page Content -->
-                <div class="bg-image" style="background-image: url('../../public/img/banner/banner-for-all.jpg');">
+                <div class="bg-image" style="background-image: url('/img/banner/banner-for-all.jpg');">
                     <div class="content content-full d-flex min-height-200 text-center">
                         <div class="m-auto">
                             <h1 class="font-w700 mb-10">Our Products</h1>
@@ -47,11 +52,23 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="content" id="product-content">
                     <div class="justify-content-between mb-4 row">
-                        <div class="col-3">
+                        <div class="col-4">
+                            <div class="input-group mb-2 mr-sm-2">
+                                <input type="text" class="form-control" id="product-name" placeholder="Cari nama produk">
+                                <div class="input-group-prepend">
+                                    <button class="input-group-text" id="search-btn"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
+                            <select class="form-control" id="product-category">
+                                <option value="terbaru">Kategori Produk</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
                             <select class="form-control" id="product-sort">
                                 <option value="terbaru">Terbaru</option>
                                 <option value="harga-tertinggi">Harga Tertinggi</option>
@@ -65,15 +82,15 @@
                 <!-- END Page Content -->
             </main>
             <!-- END Main Container -->
-            
+
             <!-- Footer -->
             {{template "partials/footer" .}}
             <!-- END Footer -->
         </div>
         <script src="/js/laravel.app.js"></script>
         <script src="/js/laroute.js"></script>
-        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="/js/umum/general.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="/js/functions.js"></script>
         <script src="/js/plugins/slick/slick.js"></script>
         <script src="/js/umum/product.js"></script>

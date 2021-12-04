@@ -6,7 +6,7 @@ type Produk struct {
 	Slug         string           `json:"slug,omitempty" form:"slug"`
 	Deskripsi    string           `json:"deskripsi,omitempty" form:"deskripsi"`
 	Spesifikasi  string           `json:"spesifikasi,omitempty" form:"spesifikasi"`
-	KategoriID   int              `json:"kategori_id,omitempty" form:"kategori_id"`
+	KategoriID   string           `json:"kategori_id,omitempty" form:"kategori_id"`
 	Dilihat      int64            `json:"dilihat" form:"dilihat"`
 	Berat        int              `json:"berat,omitempty" form:"berat"`
 	SatuanBerat  string           `json:"satuan_berat,omitempty" form:"satuan_berat"`
@@ -54,8 +54,21 @@ type ProdukSpesifikasi struct {
 }
 
 type ProdukFilter struct {
-	Nama       string `json:"nama" form:"nama"`
-	KategoriID string `json:"kategori_id" form:"kategori_id"`
+	Nama         string       `json:"nama" form:"nama"`
+	KategoriID   string       `json:"kategori_id" form:"kategori_id"`
+	ShortBy      string       `json:"short_by,omitempty" form:"short_by"`
+	Pagination   pagination   `json:"pagination,omitempty" form:"pagination"`
+	ClarifyOrder clarifyOrder `json:"order_by,omitempty" form:"order_by"`
+}
+
+type pagination struct {
+	From  int `json:"from,omitempty" form:"from"`
+	Until int `json:"until,omitempty" form:"until"`
+}
+
+type clarifyOrder struct {
+	TableName   string
+	OrderMethod string
 }
 
 type ProdukService interface {

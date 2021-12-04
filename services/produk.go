@@ -188,6 +188,9 @@ func (p *produkServiceImpl) Read(filter *domain.ProdukFilter) *domain.Response {
 	// dekalarasi var
 	res := domain.Response{}
 
+	// klarifikasi filter
+	clarifyFilter(filter)
+
 	// panggil repository terkait
 	produk, err := p.produkRepository.Read(filter)
 	if err != nil {
@@ -203,6 +206,26 @@ func (p *produkServiceImpl) Read(filter *domain.ProdukFilter) *domain.Response {
 	res.Success = true
 
 	return &res
+}
+
+func clarifyFilter(filter *domain.ProdukFilter) {
+	// sort by
+	switch filter.ShortBy {
+	case "harga-tertinggi":
+		filter.ClarifyOrder.TableName = "produk.harga"
+		filter.ClarifyOrder.OrderMethod = "DESC"
+	case "harga-terendah":
+		filter.ClarifyOrder.TableName = "produk.harga"
+		filter.ClarifyOrder.OrderMethod = "ASC"
+	default:
+		filter.ClarifyOrder.TableName = "produk.created_at"
+		filter.ClarifyOrder.OrderMethod = "DESC"
+	}
+
+	// kategori handle empty string
+	if filter.KategoriID == "" {
+		filter.KategoriID = " "
+	}
 }
 
 func (p *produkServiceImpl) Detail(id string) *domain.Response {

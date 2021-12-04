@@ -178,7 +178,7 @@ $(document).ready(function(){
             deskripsi: $("#field-deskripsi").val(),
             spesifikasi: JSON.stringify(spesifikasi),
             produk_foto: selectedFotoSrc,
-            kategori_id: parseInt($("#field-kategori").val()),
+            kategori_id: $("#field-kategori").val(),
             berat: parseInt($("#field-berat").val()),
             satuan_berat: $("#field-berat-satuan").val(),
             lebar: parseFloat($("#field-lebar").val()),
@@ -192,7 +192,7 @@ $(document).ready(function(){
         }
 
         $.ajax({
-            url: "/admin/produk/tambah",
+            url: "/admin/produk/create",
             type:"post",
             data: JSON.stringify(data),
             dataType: "json",

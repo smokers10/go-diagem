@@ -4,6 +4,11 @@ jQuery(function() {
     cart_count()
 })
 
+// Log out
+$("#logout-button").on("click", function(){
+    localStorage.removeItem("logged")
+})
+
 // Cart
 const createCartItemHeader = (item) => {
     var item = `<div class="cart-item">
@@ -180,10 +185,6 @@ $(document).on('click', '#btn-add-cart', function () {
             icon: 'warning'
         })
     }
-})
-
-$(document).on('click', '.btn-login', function () {
-    $('#loginModal').modal()
 })
 
 function cart_count(){

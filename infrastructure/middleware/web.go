@@ -36,8 +36,46 @@ func UserStrictWeb(session *session.Store) fiber.Handler {
 
 		// assign claims ke locals
 		c.Locals("id", claims.ID)
-		c.Locals("email", claims.ID)
+		c.Locals("email", claims.Email)
 		c.Locals("type", claims.Type)
+		c.Locals("is_verified", claims.IsVerified)
+
+		return c.Next()
+	}
+}
+
+func UserNotSoStrictWeb(session *session.Store) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		sess, err := session.Get(c)
+		if err != nil {
+			panic(err)
+		}
+
+		// ambil token dari session
+		token := sess.Get("token")
+
+		if token != nil {
+			// verifikasi token
+			claims := jwt.Verify(token.(string))
+
+			// check authorisasi
+			if claims.Type != "user" {
+				return c.Redirect("/")
+			}
+
+			// check verifikasi email
+			if !claims.IsVerified {
+				return c.Redirect("/verifikasi")
+			}
+
+			// assign claims ke locals
+			c.Locals("id", claims.ID)
+			c.Locals("email", claims.Email)
+			c.Locals("type", claims.Type)
+			c.Locals("is_verified", claims.IsVerified)
+
+			return c.Next()
+		}
 
 		return c.Next()
 	}
@@ -73,8 +111,9 @@ func UserVerificationWeb(session *session.Store) fiber.Handler {
 
 		// assign claims ke locals
 		c.Locals("id", claims.ID)
-		c.Locals("email", claims.ID)
+		c.Locals("email", claims.Email)
 		c.Locals("type", claims.Type)
+		c.Locals("is_verified", claims.IsVerified)
 
 		return c.Next()
 	}
@@ -145,8 +184,9 @@ func AdminWeb(session *session.Store, adminType ...string) fiber.Handler {
 
 		// assign claims ke locals
 		c.Locals("id", claims.ID)
-		c.Locals("email", claims.ID)
+		c.Locals("email", claims.Email)
 		c.Locals("type", claims.Type)
+		c.Locals("is_verified", claims.IsVerified)
 
 		return c.Next()
 	}

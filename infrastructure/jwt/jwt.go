@@ -15,6 +15,7 @@ type Payload struct {
 	Email      string
 	Type       string
 	IsVerified bool
+	IsLogged   bool
 }
 
 type PayloadResetPassword struct {
@@ -59,6 +60,7 @@ func Verify(tokenString string) *Payload {
 
 		return signKey(), nil
 	})
+
 	if err != nil {
 		panic(err)
 	}
@@ -75,7 +77,6 @@ func Verify(tokenString string) *Payload {
 func SignResetPassword(payload *PayloadResetPassword) string {
 	token := jwt.New(jwt.SigningMethodES256)
 	claims := token.Claims.(jwt.MapClaims)
-
 	claims["email"] = payload.Email
 	claims["type"] = payload.Type
 	claims["code"] = payload.Code

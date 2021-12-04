@@ -1,7 +1,26 @@
+var toRupiah = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+})
+
+$.ajax({
+    url: "/kategori/get",
+    success: function(res) {
+        const data = res.data
+        data.forEach(el => {
+            $("#product-category").append(`<option value="${el.id}">${el.nama}</option>`)
+        });
+    }
+})
+
 jQuery(function() {
     $("#product-sort").on("change", function(){
         load_content()
     });
+
+    $("#product-category").on("change", function(){
+        load_content()
+    })
 });
 
 jQuery('.product-slides').each((index, element) => {
@@ -32,7 +51,7 @@ jQuery('.product-slides-nav').each((index, element) => {
         draggable:false,
     });
 
-   el.not('.slick-initialized').slick({
+    el.not('.slick-initialized').slick({
         asNavFor: '.product-slides',
     });
 });
@@ -51,21 +70,20 @@ jQuery('#product-content').first().each((index, element) => {
 });
 
 function load_content(){
+    var el = $("#product-list")
+    let data = JSON.stringify({
+        nama : $("#product-name").val(),
+        short_by : $("#product-sort").val()
+    })
 
-    var el = $("#product-list");
-    var ob = $("#product-sort").val();
-    var ob = $("#product-sort").val();
-    var page = $('#current-page').val();
     $.ajax({
-        url: laroute.route('product'),
-        type: 'GET',
-        dataType: "JSON",
-        data: {
-            ob : ob,
-            page : page,
-        },
+        url: "/produk/get",
+        type: 'POST',
+        data,
+        dataType: "json",
+        contentType: "application/json",
         beforeSend: function(){
-            el.html('');
+            el.html('')
             for(var count = 1; count <= 8; count++){
                 el.append(`
                     <div class="col-6 col-lg-3 product">
@@ -78,30 +96,32 @@ function load_content(){
                             </div>
                         </div>
                     </div>          
-                `);
+                `)
             }
         },
         success: function (response) {
-            el.html('');
+            el.html('')
             $.each(response.data, function(k, v) {
+                let data = response.data[k]
+                let {produk_single_foto, nama, slug, harga} = data
+
                 el.append(`
                 <div class="col-6 col-lg-3 d-flex align-items-stretch">
                     <div class="product">
                         <div class="product-content">
                             <div class="product-img">
-                                <img src="${ response.data[k].fotoUtama }" class="img-fluid"/>
+                                <img src="${ produk_single_foto.path }" class="img-fluid"/>
                             </div>
                             <div class="product-info">
-                                <div class="product-title"><a href="${ laroute.route('product.detail', { produk : response.data[k].slug }) }">${ response.data[k].nama }</a></div>
-                                <div class="product-price">${ response.data[k].harga }</div>
+                                <div class="product-title"><a href="/produk/detail/${slug}">${ nama }</a></div>
+                                <div class="product-price">${ toRupiah.format(harga) }</div>
                             </div>
                         </div>
                     </div> 
                 </div>            
-                `);
-            });
-
-            window.history.pushState({ additionalInformation: 'Updated the URL with JS' }, "Produk Detail | Semua Produk", this.url);
+                `)
+            })
+            // window.history.pushState({ additionalInformation: 'Updated the URL with JS' }, "Produk Detail | Semua Produk", this.url)
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error adding / update data');

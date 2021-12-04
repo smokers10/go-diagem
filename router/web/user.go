@@ -15,6 +15,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	middlewareStrict := middleware.UserStrictWeb(session)
 	middlewareVerification := middleware.UserVerificationWeb(session)
 	middlewareGuestOnly := middleware.GuestOnly(session)
+	middlewareNotSoStrict := middleware.UserNotSoStrictWeb(session)
 
 	// controller init
 	authencticationController := user.AuthenticationController(resolver.UserService, session)
@@ -33,6 +34,8 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
 	alamatAPIController := userAPI.AlamatController(resolver.AlamatService)
 	profileAPIController := userAPI.ProfileController(resolver.UserService)
+	produkAPIController := userAPI.ProdukController(resolver.ProdukService)
+	kategoriAPIController := userAPI.KategoriController(resolver.KategoriService)
 
 	// router clustering
 	parentPath := app.Group("/")
@@ -74,10 +77,13 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	cart.Get("/pembayaran", cartController.PembayaranPage)
 
 	// produk
-	produk := parentPath.Group("/produk")
+	produk := parentPath.Group("/produk", middlewareNotSoStrict)
 	produk.Get("/", produkController.IndexPage)
-	produk.Get("/detail", produkController.DetailPage)
-	produk.Get("/produk-detail", produkController.ProdukDetailPage)
+	produk.Get("/detail/:slug", produkController.ProdukDetailPage)
+
+	// produk - api
+	produk.Post("/get", produkAPIController.Read)
+	produk.Get("/get/:slug", produkAPIController.Detail)
 
 	// promo
 	promo := parentPath.Group("/promo")
@@ -96,6 +102,8 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	kategori := parentPath.Group("/kategori")
 	kategori.Get("/", kategoriController.IndexPage)
 	kategori.Get("/detail", kategoriController.DetailPage)
+
+	kategori.Get("/get", kategoriAPIController.Read)
 
 	// index page
 	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {
