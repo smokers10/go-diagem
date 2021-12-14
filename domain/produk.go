@@ -19,6 +19,7 @@ type Produk struct {
 	Variasi      []ProdukVariasi  `json:"variasi,omitempty" form:"variasi"`
 	ProdukFoto   []FotoProdukFile `json:"produk_foto,omitempty" form:"produk_foto"`
 	IsHasVariant bool             `json:"is_has_variant,omitempty" form:"is_has_varian"`
+	Discount     int              `json:"discount,omitempty" form:"discount"`
 	CreatedAt    string           `json:"created_at,omitempty" form:"created_at"`
 	UpdatedAt    string           `json:"updated_at,omitempty" form:"updated_at"`
 }
@@ -44,6 +45,7 @@ type ProdukDetailed struct {
 	Harga            int                 `json:"harga,omitempty" form:"harga"`
 	Stok             int                 `json:"stok,omitempty" form:"stok"`
 	IsHasVariant     bool                `json:"is_has_variant,omitempty" form:"is_has_varian"`
+	Discount         int                 `json:"discount,omitempty" form:"discount"`
 	CreatedAt        string              `json:"created_at,omitempty" form:"created_at"`
 	UpdatedAt        string              `json:"updated_at,omitempty" form:"updated_at"`
 }

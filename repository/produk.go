@@ -21,14 +21,14 @@ func ProdukRepository(database *sql.DB) domain.ProdukRepository {
 func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetailed, error) {
 	spesifikasi := []domain.ProdukSpesifikasi{}
 	produkDetailed := domain.ProdukDetailed{}
-	statement, err := p.db.Prepare("INSERT INTO produk (id, nama, slug, deskripsi, spesifikasi, kategori_id, berat, satuan_berat, lebar, panjang, tinggi, kode, harga, stok, is_has_variant) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	statement, err := p.db.Prepare("INSERT INTO produk (id, nama, slug, deskripsi, spesifikasi, kategori_id, berat, satuan_berat, lebar, panjang, tinggi, kode, harga, stok, is_has_variant, discount) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.ID, req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.Berat, req.SatuanBerat, req.Lebar, req.Panjang, req.Tinggi, req.Kode, req.Harga, req.Stok, req.IsHasVariant); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.ID, req.Nama, req.Slug, req.Deskripsi, req.Spesifikasi, req.KategoriID, req.Berat, req.SatuanBerat, req.Lebar, req.Panjang, req.Tinggi, req.Kode, req.Harga, req.Stok, req.IsHasVariant, req.Discount); err != nil {
 		return nil, err
 	}
 
@@ -54,11 +54,13 @@ func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetaile
 func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.ProdukDetailed, error) {
 	result := []domain.ProdukDetailed{}
 	produkFoto := ProdukFotoRepository(p.db)
-	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.stok, produk.harga, 
-	produk.dilihat, produk.created_at, produk.updated_at,
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.stok, 
+	produk.harga, produk.dilihat, produk.created_at, produk.updated_at,
 	kategori.nama, kategori.id, kategori.slug
 	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
-	WHERE produk.nama LIKE CONCAT('%', ?, '%') AND produk.kategori_id LIKE CONCAT('%', ?, '%') AND produk.deleted = false ORDER BY ` + filter.ClarifyOrder.TableName + " " + filter.ClarifyOrder.OrderMethod
+	WHERE produk.nama LIKE CONCAT('%', ?, '%') 
+	AND produk.kategori_id LIKE CONCAT('%', ?, '%') 
+	AND produk.deleted = false ORDER BY ` + filter.ClarifyOrder.TableName + " " + filter.ClarifyOrder.OrderMethod
 
 	statement, err := p.db.Prepare(query)
 	if err != nil {
@@ -113,8 +115,8 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	// get single produk
 	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, 
 	produk.stok, produk.harga, produk.dilihat, produk.created_at, produk.updated_at, produk.kode,
-	produk.berat, produk.satuan_berat, produk.lebar, produk.panjang, produk.tinggi,
-	produk.is_has_variant, kategori.nama, kategori.id, kategori.slug
+	produk.berat, produk.satuan_berat, produk.lebar, produk.panjang, produk.tinggi, 
+	produk.is_has_variant, kategori.nama, kategori.id, kategori.slug, produk.discount
 	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
 	WHERE produk.id = ? AND produk.deleted = false LIMIT 1`
 
@@ -131,7 +133,7 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	row.Scan(&result.ID, &result.Nama, &result.Slug, &result.Deskripsi, &result.SpesifikasiTemp,
 		&result.Stok, &result.Harga, &result.Dilihat, &result.CreatedAt, &result.UpdatedAt, &result.Kode,
 		&result.Berat, &result.SatuanBerat, &result.Lebar, &result.Panjang, &result.Tinggi,
-		&result.IsHasVariant, &result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug)
+		&result.IsHasVariant, &result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug, &result.Discount)
 
 	// unmarshall spesifikasi
 	json.Unmarshal([]byte(result.SpesifikasiTemp), &spesifikasi)
@@ -160,12 +162,16 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, error) {
 	result := domain.ProdukDetailed{}
 	spesifikasi := []domain.ProdukSpesifikasi{}
-	variasi := []domain.ProdukVariasi{}
+	produkFoto := ProdukFotoRepository(p.db)
+	produkVariasi := ProdukVariasiRepository(p.db)
 
 	// get single produk
-	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.harga, produk.kode, produk.is_has_variant, produk.dilihat,
-	 	  	  produk.created_at, produk.updated_at, kategori.nama, kategori.id, kategori.slug FROM produk 
-			  JOIN kategori ON kategori.id = produk.kategori_id WHERE produk.slug = ? LIMIT 1`
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, 
+	produk.stok, produk.harga, produk.dilihat, produk.created_at, produk.updated_at, produk.kode,
+	produk.berat, produk.satuan_berat, produk.lebar, produk.panjang, produk.tinggi, 
+	produk.is_has_variant, kategori.nama, kategori.id, kategori.slug, produk.discount
+	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
+	WHERE produk.slug = ? AND produk.deleted = false LIMIT 1`
 
 	statement, err := p.db.Prepare(query)
 	if err != nil {
@@ -176,35 +182,31 @@ func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, err
 
 	row := statement.QueryRowContext(context.Background(), slug)
 
-	// scan row ke result temporary
-	row.Scan(&result.ID, &result.Nama, &result.Slug, &result.Deskripsi,
-		&result.Spesifikasi, &result.Dilihat, &result.CreatedAt, &result.UpdatedAt,
-		&result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug)
+	// scan row ke result
+	row.Scan(&result.ID, &result.Nama, &result.Slug, &result.Deskripsi, &result.SpesifikasiTemp,
+		&result.Stok, &result.Harga, &result.Dilihat, &result.CreatedAt, &result.UpdatedAt, &result.Kode,
+		&result.Berat, &result.SatuanBerat, &result.Lebar, &result.Panjang, &result.Tinggi,
+		&result.IsHasVariant, &result.Kategori.Nama, &result.Kategori.ID, &result.Kategori.Slug, &result.Discount)
 
-	// unmarshall spesifikasi dari result temporary ke variable spesifikasi
+	// unmarshall spesifikasi
 	json.Unmarshal([]byte(result.SpesifikasiTemp), &spesifikasi)
-
-	// get variasi
-	statement2, err := p.db.Prepare("SELECT id, variant, harga, stok FROM produk_variasi WHERE produk_id = ?")
-	if err != nil {
-		return nil, err
-	}
-
-	defer statement2.Close()
-
-	variasiRows, err := statement2.QueryContext(context.Background(), result.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	for variasiRows.Next() {
-		variasiRow := domain.ProdukVariasi{}
-		variasiRows.Scan(&variasiRow.ID, &variasiRow.Variant, &variasiRow.Harga, &variasiRow.Stok)
-		variasi = append(variasi, variasiRow)
-	}
-
-	// assign spesifikasi dan variasi ke result
 	result.Spesifikasi = spesifikasi
+	result.SpesifikasiTemp = ""
+
+	// ambil semua foto produk
+	foto, err := produkFoto.ReadByProdukID(result.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	// ambil semua variasi
+	variasi, err := produkVariasi.ReadByProdukID(result.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	// assign foto produk dan variasi ke variable result
+	result.ProdukFoto = foto
 	result.Variasi = variasi
 
 	return &result, nil
@@ -214,16 +216,18 @@ func (p *produkRepositoryImpl) Update(req *domain.Produk) (*domain.Produk, error
 	statement, err := p.db.Prepare(`
 		UPDATE produk SET
 		nama = ?, kategori_id = ?, deskripsi = ?, slug = ?, spesifikasi = ?, berat = ?, 
-		lebar = ?, panjang = ?, tinggi = ?, harga = ?, kode = ?, stok = ?
+		lebar = ?, panjang = ?, tinggi = ?, harga = ?, kode = ?, stok = ?, discount = ?
 		WHERE id = ?
 	`)
+
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.Nama, req.KategoriID, req.Deskripsi, req.Slug, req.Spesifikasi, req.Berat, req.Lebar, req.Panjang, req.Tinggi, req.Harga, req.Kode, req.Stok, req.ID); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.Nama, req.KategoriID, req.Deskripsi, req.Slug, req.Spesifikasi,
+		req.Berat, req.Lebar, req.Panjang, req.Tinggi, req.Harga, req.Kode, req.Stok, req.Discount, req.ID); err != nil {
 		return nil, err
 	}
 

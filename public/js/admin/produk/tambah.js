@@ -54,7 +54,6 @@ $(document).ready(function(){
 
     variasiToggleBtn.click(function(){
         isHasVarian ? isHasVarian = false : isHasVarian = true
-        console.log(isHasVarian)
         
         if (isHasVarian) {
             $(this).removeClass("btn-outline-primary")
@@ -189,6 +188,7 @@ $(document).ready(function(){
             variasi: varianArr,
             stok: parseInt($("#field-stok").val()),
             is_has_variant: isHasVarian,
+            discount: parseInt($("#field-discount").val())
         }
 
         $.ajax({

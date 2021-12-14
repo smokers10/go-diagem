@@ -18,7 +18,3 @@ func (p *produkController) IndexPage(c *fiber.Ctx) error {
 func (p *produkController) DetailPage(c *fiber.Ctx) error {
 	return c.Render("umum/produk/detail", fiber.Map{"Logged": etc.GetLocal(c)})
 }
-
-func (p *produkController) ProdukDetailPage(c *fiber.Ctx) error {
-	return c.Render("umum/produk/produk_detail", fiber.Map{"Logged": etc.GetLocal(c)})
-}

@@ -1,17 +1,18 @@
 <!doctype html>
 <html lang="en" class="no-focus">
     <head>
-        <title>Diagem Project</title>
+
+        <title>Diagem</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <meta name="description" content="Diagem Project">
-        <meta name="author" content="Diagem Project">
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
         <meta name="robots" content="noindex, nofollow">
 
         <!-- Open Graph Meta -->
-        <meta property="og:title" content="Diagem Project">
-        <meta property="og:site_name" content="Diagem Project">
-        <meta property="og:description" content="Diagem Project">
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
         <meta property="og:type" content="website">
         <meta property="og:url" content="">
         <meta property="og:image" content="">
@@ -59,7 +60,11 @@
     <body class="bg-white">
         <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
             <!-- Header -->
-            {{template "partials/user-header" .}}
+            {{if .Logged.IsLogged}}
+                {{template "partials/user-header" .}}
+                {{else}}
+                {{template "partials/user-unlogged-header" .}}
+            {{end}}
             <!-- END Header -->
 
             <!-- Main Container -->
@@ -70,80 +75,63 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="product-slides mb-0">
+                                    <!-- for each image foto -->
                                     <div class="item-detail">
-                                        <img class="img-fluid" src="" alt="Image Description">
+                                        <img class="img-fluid" src="/img/placeholder/product.png" id="foto-produk-main" alt="Image Description">
                                     </div>
                                 </div>
-                                <div class="product-slides-nav">
-                                        <div class="slider-nav__item">
-                                            <img src="" class="h-100" alt="" />
-                                        </div>
-                                  </div>
+                                <div class="product-slides-nav row" id="foto-produk-nav"></div>
                             </div>
+
                             <div class="col-md-7">
-                                <div class="product-title">nama produk</div>
+                                <div class="product-title" id="nama-produk">Nama Produk</div>
                                 <div class="product-rating" data-score="3" data-star-on="fa fa-fw fa-star text-warning" data-star-off="fa fa-fw fa-star text-muted"></div>
                                 <div class="product-price mb-3">
                                     <div class="product-price_final">
-                                        <span class="product-price__after">harga</span>
+                                        <span class="product-price__after" id="harga-produk">Harga Produk</span>
                                     </div>
-                                    <div class="product-strikethrough_price">
-                                        <span class="product-price__before">harga</span>
-                                        <span class="product-price__discount">30%</span>
+                                    <div class="product-strikethrough_price" id="discount">
+                                        <span class="product-price__before" id="harga-produk-original"></span>
+                                        <span class="product-price__discount" id="besaran-discount"></span>
                                     </div>
                                 </div>
+
                                 <form id="option-choice-form" method="POST" onsubmit="return false;">
-                                    <input type="hidden" name="id-produk">
-                                    <input type="hidden" name="has_variasi" value="" data-var2="">
-                    
-                    
-                                    <div class="product-variant">
-                                        <label class="product-label">nama virant</label>
-                                        <div class="product-variant-item">
-                                            <label for="var1-" class="radio-chip b-outline b-secondary">
-                                                <input type="radio" id="var1-" name="var1" value="">
-                                                <span></span>
-                                            </label>
-                                        </div>
+                                    <input type="hidden" id="id-produk" name="id">
+                                    <input type="hidden" id="harga-original" name="harga-original">
+                                    <input type="hidden" id="discount-form" name="discount-form">
+                                    <input type="hidden" id="subtotal-form" name="subtotal-form">
+                                    <input type="hidden" id="id-varian" name="id-varian">
+
+                                    <div id="varian-produk" class="product-variant"></div>
+
+                                    <div class="product-subtotal" id="varian-section">
+                                        <label class="product-label">Varian</label>
+                                        <div class="product-price" id="variasi"></div>
                                     </div>
-                
-                                    <div class="border-top no-gutters pt-3 row">
-                                        <div class="col-2">
-                                            <div class="product-description-label mt-2 ">nama variant 2</div>
-                                        </div>
-                                        <div class="col-10">
-                                            <ul class="list-inline checkbox-alphanumeric checkbox-alphanumeric--style-1 mb-2">
-                                                <li>
-                                                    <input type="radio" id="var2-" name="var2" value="">
-                                                    <label for="var2-"></label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!-- Quantity + Add to cart -->
-                    
+
                                     <div class="product-quantity d-flex">
                                         <label class="product-label">Kuantitas</label>
                                         <div class="cart-quantity">
-                                            <button class="btn-decrement" type="button" data-type="minus">
+                                            <button class="btn-qty" type="button" data-type="minus">
                                                 <i class="fa fa-minus"></i>
                                             </button>
-                                            <input type="text" name="quantity" class="input-number" value="1" data-min="1" data-max="10">
-                                            <button class="btn-increment" type="button" data-type="plus">
+                                            <input type="text" id="buy-quantity" name="quantity" class="input-number" value="1" data-min="1" data-max="10">
+                                            <button class="btn-qty" type="button" data-type="plus">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
                                         <div class="product-available">
-                                            <span class="label">Stok :&nbsp; <b>30</b></span>
+                                            <span class="label">Stok :&nbsp; <b id="stok">n/a</b></span>
                                         </div>
                                     </div>
                     
                                     <div class="product-subtotal">
                                         <label class="product-label">Subtotal</label>
-                                        <div class="product-price">harga</div>
+                                        <div class="product-price" id="subtotal">Harga</div>
                                     </div>
-                    
                                 </form>
+
                                 <div class="product-action">
                                     <button href="#" class="btn btn-outline-primary font-weight-bold mr-1" id="btn-add-cart">
                                         <i class="si si-plus mr-1"></i>
@@ -162,38 +150,36 @@
                     <div class="content">
                         <div class="block">
                             <div class="block-header p-0 sticky-navigation">
-                                <ul class="nav nav-tabs nav-tabs-alt" id="product-nav">
+                                <ul class="nav nav-tabs nav-tabs-alt" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" href="#product-detail">Spesifikasi</a>
+                                      <a class="nav-link active" id="spec-tab" data-toggle="tab" href="#spec" role="tab" aria-controls="spec" aria-selected="true">Spesifikasi</a>
                                     </li>
+    
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#product-description">Deskripsi</a>
+                                      <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Deskripsi</a>
                                     </li>
+    
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#product-reviews">Ulasan</a>
+                                      <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">Ulasan</a>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="block-content">
-                                <div id="product-detail">
+
+                            <div class="tab-content block-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="spec" role="tabpanel" aria-labelledby="spec-tab">
                                     <h4 class="font-w400">Spesifikasi</h4>
-                                    <table class="table table-sm table-bordered w-50">
-                                            <tr>
-                                                <td width="40%">nama spek</td>
-                                                <td>nilai spek</td>
-                                            </tr>
+                                    <table class="table" id="table-spec">
+                                        <tbody>
+
+                                        </tbody>
                                     </table>
                                 </div>
-                                <div id="product-description">
+                                <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
                                     <h4 class="font-w400">Deskripsi</h4>
-                                    deskripsi prouk
+                                    <div id="deskripsi"></div>
                                 </div>
-                                <div id="product-reviews">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu sem tempor, varius quam at, luctus dui. Mauris magna metus, dapibus nec turpis vel, semper malesuada ante. Vestibulum id metus ac nisl bibendum scelerisque non non purus. Suspendisse varius nibh non aliquet sagittis. In tincidunt orci sit amet elementum vestibulum. Vivamus fermentum in arcu in aliquam. Quisque aliquam porta odio in fringilla. Vivamus nisl leo, blandit at bibendum eu, tristique eget risus. Integer aliquet quam ut elit suscipit, id interdum neque porttitor. Integer faucibus ligula.</p>
-                                    <p>Quis quam ut magna consequat faucibus. Pellentesque eget nisi a mi suscipit tincidunt. Ut tempus dictum risus. Pellentesque viverra sagittis quam at mattis. Suspendisse potenti. Aliquam sit amet gravida nibh, facilisis gravida odio. Phasellus auctor velit at lacus blandit, commodo iaculis justo viverra. Etiam vitae est arcu. Mauris vel congue dolor. Aliquam eget mi mi. Fusce quam tortor, commodo ac dui quis, bibendum viverra erat. Maecenas mattis lectus enim, quis tincidunt dui molestie euismod. Curabitur et diam tristique, accumsan nunc eu, hendrerit tellus.</p>
-                                        <p>Orci facilisis, dignissim tortor vitae, ultrices mi. Vestibulum a iaculis lacus. Phasellus vitae convallis ligula, nec volutpat tellus. Vivamus scelerisque mollis nisl, nec vehicula elit egestas a. Sed luctus metus id mi gravida, faucibus convallis neque pretium. Maecenas quis sapien ut leo fringilla tempor vitae sit amet leo. Donec imperdiet tempus placerat. Pellentesque pulvinar ultrices nunc sed ultrices. Morbi vel mi pretium, fermentum lacus et, viverra tellus. Phasellus sodales libero nec dui convallis, sit amet fermentum sapien auctor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed eu elementum nibh, quis varius libero.</p>
-                                    <p>Nam eget purus nec est consectetur vehicula. Nullam ultrices nisl risus, in viverra libero egestas sit amet. Etiam porttitor dolor non eros pulvinar malesuada. Vestibulum sit amet est mollis nulla tempus aliquet. Praesent luctus hendrerit arcu non laoreet. Morbi consequat placerat magna, ac ornare odio sagittis sed. Donec vitae ullamcorper purus. Vivamus non metus ac justo porta volutpat.</p>
-                                    <p>Pulvinar leo id risus pellentesque vestibulum. Sed diam libero, sodales eget sapien vel, porttitor bibendum enim. Donec sed nibh vitae lorem porttitor blandit in nec ante. Pellentesque vitae metus ipsum. Phasellus sed nunc ac sem malesuada condimentum. Etiam in aliquam lectus. Nam vel sapien diam. Donec pharetra id arcu eget blandit. Proin imperdiet mattis augue in porttitor. Quisque tempus enim id lobortis feugiat. Suspendisse tincidunt risus quis dolor fringilla blandit. Ut sed sapien at purus lacinia porttitor. Nullam iaculis, felis a pretium ornare, dolor nisl semper tortor, vel sagittis lacus est consequat eros. Sed id pretium nisl. Curabitur dolor nisl, laoreet vitae aliquam id.</p>
+                                <div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
+                                    <h4 class="font-w400">Ulasan</h4>
                                 </div>
                             </div>
                         </div>
@@ -213,17 +199,174 @@
         <script src="/js/umum/general.js"></script>
         <script src="/js/functions.js"></script>
         <script src="/js/plugins/slick/slick.js"></script>
-        <script src="/js/umum/product.js"></script>
         <script src="/js/plugins/jquery-raty/jquery.raty.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-zoom@1.7.21/jquery.zoom.min.js"></script>
-        <script src="/js/umum/product.js"></script>
         <script>
+            const currentPath = location.pathname
+            const CPSplit = currentPath.split("/")  
+            const slug = CPSplit[3]
+            const toRupiah = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+            })
+
+            $("#varian-section").hide()
+
             $(document).ready(function(){
+                $("#discount").hide()
+
                 $("body").scrollspy({
                     target: "#product-nav",
                     offset: 583
-                });
+                })
+
+                $.ajax({
+                    url:`/produk/get/${slug}`,
+                    success: function(response) {
+                        const data = response.data
+                        const { 
+                            nama, kode, harga, berat, satuan_berat, stok, tinggi, lebar, panjang,
+                            kategori, produk_foto, deskripsi, spesifikasi, id, is_has_variant,
+                            variasi, discount
+                        } = data
+
+                        // set to DOM
+                        $("#nama-produk").text(nama)
+                        $("#deskripsi").html(deskripsi)
+                        $("#stok").text(stok)
+
+                        // set value
+                        $("#id-produk").val(id)
+                        $("#harga-original").val(harga)
+                        $("#discount-form").val(discount)
+
+                        _initialPriceState(discount, harga)
+                        
+                        // produk foto
+                        produk_foto.forEach(data => {
+                            if (data.is_utama) {
+                                $("#foto-produk-main").attr("src", data.path)
+                            }
+                            $("#foto-produk-nav").append(_createImageNav(data.path))
+                        })
+
+                        // ngisi table spek
+                        spesifikasi.forEach(el => {
+                            $("#table-spec > tbody").append(`
+                                <tr>
+                                    <td><b>${el.nama}</b></td>
+                                    <td>${el.value}</td>
+                                <tr>
+                            `)
+                        })
+
+                        // jika punya variasi
+                        if (is_has_variant) {
+                            $("#varian-section").show()
+                            variasi.forEach(data => {
+                                $("#variasi").append(_createVariantElement(data))
+                            })
+                        }
+                    }
+                })
             })
+
+            $(".btn-qty").on("click", function () {
+                var tipe = $(this).attr("data-type")
+                var subtotalForm = $("#subtotal-form")
+                var bqty = parseInt($("#buy-quantity").val())
+                var hargaOriginal = parseInt($("#harga-original").val())
+                
+                // perhitungan subtotal
+                var besaranDiscount = parseInt($("#discount-form").val())
+                var discount =  besaranDiscount / 100
+                var potongan = hargaOriginal - (hargaOriginal * discount)
+                
+                // processed subtotal
+                var subtotal 
+                var qty
+                
+                // pengurangan / penambahan stok yang dibeli
+                if (tipe == "minus") {
+                    qty = bqty - 1
+                } else {
+                    qty = bqty + 1
+                }
+
+                // set buy quantity
+                $("#buy-quantity").val(qty)
+
+                // pengurangan / penambahan subtotal
+                if (besaranDiscount > 0) {
+                    subtotal = potongan * qty
+                }else {
+                    subtotal = hargaOriginal * qty
+                }
+                
+                subtotalForm.val(subtotal)
+                $("#subtotal").text(toRupiah.format(subtotal))
+            })
+
+            function _createVarianElement(data) {
+                return `
+                    <label class="product-label">${data.variant}</label>
+                    <div class="product-variant-item">
+                        <label for="nilai_Varian" class="radio-chip b-outline b-secondary">
+                            <input type="radio" id="nilai_Varian" name="var1" value="nilai">
+                            <span>nilai</span>
+                        </label>
+                    </div>
+                `
+            }
+
+            function _createImageNav(path) {
+                return `
+                    <div class="slider-nav__item co-4">
+                        <img src="${path}" class="h-100" alt="navigasi foto" />
+                    </div>
+                `
+            }
+
+            function _createVariantElement(data) {
+                let {id, harga, stok, variant} = data
+                return `
+                    <button href="#" class="btn btn-outline-secondary mr-1 mb-3" data-id="${id}" data-harga="${harga}" data-stok="${stok}" onclick="_chooseVarian(this)">
+                        ${variant}
+                    </button>
+                `
+            }
+
+            function _initialPriceState(discount, harga) {
+                let discountToInt = parseInt(discount)
+                let persentase = discountToInt / 100
+                var subtot
+                var potongan = harga - (harga * persentase)
+
+                if(discountToInt > 0) {
+                    subtot = parseInt($("#buy-quantity").val()) * potongan
+                    $("#discount").show()
+                    $("#besaran-discount").text(`${discount}%`)
+                    $("#harga-produk").text(toRupiah.format(potongan))
+                    $("#harga-produk-original").text(toRupiah.format(harga))
+                    $("#subtotal").text(toRupiah.format(subtot)) 
+                }else {
+                    subtot = parseInt($("#buy-quantity").val()) * harga
+                    $("#harga").text(toRupiah.format(harga))
+                    $("#harga-produk").text(toRupiah.format(harga))
+                    $("#subtotal").text(toRupiah.format(subtot)) 
+                }
+
+                $("#subtotal-form").val(subtot)
+            }
+
+            function _chooseVarian(data) {
+                let el = $(data)
+                let harga = el.attr("data-harga")
+                let id = el.attr("data-id")
+                let stok = el.attr("data-stok")
+                console.log(harga, id, stok)
+            }
+
         </script>
     </body>
 </html>

@@ -29,9 +29,9 @@ $(document).ready(function(){
         method: "get",
         success: function (res) {
             const data = res.data
-            const { produk_foto, variasi, spesifikasi, nama, slug, stok, deskripsi,
+            const { produk_foto, variasi, spesifikasi, nama, stok, deskripsi,
                  kode, harga, is_has_variant, kategori, berat, satuan_berat,
-                 lebar, panjang, tinggi } = data
+                 lebar, panjang, tinggi, discount } = data
             const { id } = kategori 
 
             // has variant or not
@@ -56,6 +56,7 @@ $(document).ready(function(){
             $("#field-harga").val(harga)
             $("#field-stok").val(stok)
             $("#field-kode").val(kode)
+            $("#field-discount").val(discount)
 
             // set varian
             if (variasi) {
@@ -185,7 +186,7 @@ $(document).ready(function(){
             nama : $("#field-nama").val(),
             deskripsi: $("#field-deskripsi").val(),
             spesifikasi: JSON.stringify(spesifikasi),
-            kategori_id: parseInt($("#field-kategori").val()),
+            kategori_id: $("#field-kategori").val(),
             berat: parseInt($("#field-berat").val()),
             satuan_berat: $("#field-berat-satuan").val(),
             lebar: parseFloat($("#field-lebar").val()),
@@ -194,6 +195,7 @@ $(document).ready(function(){
             kode: $("#field-kode").val(),
             harga: parseInt($("#field-harga").val()),
             stok: parseInt($("#field-stok").val()),
+            discount: parseInt($("#field-discount").val()),
             id: produkID
         }
 

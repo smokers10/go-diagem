@@ -79,7 +79,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	// produk
 	produk := parentPath.Group("/produk", middlewareNotSoStrict)
 	produk.Get("/", produkController.IndexPage)
-	produk.Get("/detail/:slug", produkController.ProdukDetailPage)
+	produk.Get("/detail/:slug", produkController.DetailPage)
 
 	// produk - api
 	produk.Post("/get", produkAPIController.Read)

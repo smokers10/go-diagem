@@ -130,6 +130,8 @@ func (p *produkServiceImpl) Create(req *domain.Produk) *domain.Response {
 				return &res
 			}
 		}
+
+		req.Harga = int(req.Variasi[0].Harga)
 	}
 
 	res.Data = produk
@@ -220,11 +222,6 @@ func clarifyFilter(filter *domain.ProdukFilter) {
 	default:
 		filter.ClarifyOrder.TableName = "produk.created_at"
 		filter.ClarifyOrder.OrderMethod = "DESC"
-	}
-
-	// kategori handle empty string
-	if filter.KategoriID == "" {
-		filter.KategoriID = " "
 	}
 }
 

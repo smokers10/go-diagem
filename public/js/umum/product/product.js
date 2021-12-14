@@ -9,19 +9,24 @@ $.ajax({
         const data = res.data
         data.forEach(el => {
             $("#product-category").append(`<option value="${el.id}">${el.nama}</option>`)
-        });
+        })
     }
 })
 
 jQuery(function() {
     $("#product-sort").on("change", function(){
         load_content()
-    });
+    })
 
     $("#product-category").on("change", function(){
         load_content()
     })
-});
+
+    $("#product-search").submit(function(e){
+        e.preventDefault()
+        load_content()
+    })
+})
 
 jQuery('.product-slides').each((index, element) => {
     let el = jQuery(element);
@@ -33,8 +38,8 @@ jQuery('.product-slides').each((index, element) => {
         fade: true,
         asNavFor: '.product-slides-nav',
         rows: 0,
-    });
-});
+    })
+})
 
 jQuery('.product-slides-nav').each((index, element) => {
     let el = jQuery(element);
@@ -49,12 +54,12 @@ jQuery('.product-slides-nav').each((index, element) => {
         arrows: false,
         variableWidth: true,
         draggable:false,
-    });
+    })
 
     el.not('.slick-initialized').slick({
         asNavFor: '.product-slides',
-    });
-});
+    })
+})
 
 jQuery('.product-rating').each((index, element) => {
     let el = jQuery(element);
@@ -62,20 +67,20 @@ jQuery('.product-rating').each((index, element) => {
     el.raty({ 
         starType: 'i',
         readOnly : true,
-    });
-});
+    })
+})
 
 jQuery('#product-content').first().each((index, element) => {
-    load_content();
-});
+    load_content()
+})
 
 function load_content(){
     var el = $("#product-list")
     let data = JSON.stringify({
         nama : $("#product-name").val(),
-        short_by : $("#product-sort").val()
+        short_by : $("#product-sort").val(),
+        kategori_id : $("#product-category").val()
     })
-
     $.ajax({
         url: "/produk/get",
         type: 'POST',
@@ -104,7 +109,6 @@ function load_content(){
             $.each(response.data, function(k, v) {
                 let data = response.data[k]
                 let {produk_single_foto, nama, slug, harga} = data
-
                 el.append(`
                 <div class="col-6 col-lg-3 d-flex align-items-stretch">
                     <div class="product">
@@ -114,7 +118,7 @@ function load_content(){
                             </div>
                             <div class="product-info">
                                 <div class="product-title"><a href="/produk/detail/${slug}">${ nama }</a></div>
-                                <div class="product-price">${ toRupiah.format(harga) }</div>
+                                <div class="product-price">${ harga ? toRupiah.format(harga) : `<a href="/produk/detail/${slug}">lihat detail</a>` }</div>
                             </div>
                         </div>
                     </div> 
@@ -126,5 +130,5 @@ function load_content(){
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error adding / update data');
         }
-    });
+    })
 }
