@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en" class="no-focus">
     <head>
-
         <title>Diagem</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -84,7 +83,9 @@
                             </div>
 
                             <div class="col-md-7">
-                                <div class="product-title" id="nama-produk">Nama Produk</div>
+                                <div class="product-title">
+                                    <div id="nama-produk" class="d-inline-block"></div><div id="choosed-variant" class="d-inline-block"></div>
+                                </div>
                                 <div class="product-rating" data-score="3" data-star-on="fa fa-fw fa-star text-warning" data-star-off="fa fa-fw fa-star text-muted"></div>
                                 <div class="product-price mb-3">
                                     <div class="product-price_final">
@@ -97,11 +98,11 @@
                                 </div>
 
                                 <form id="option-choice-form" method="POST" onsubmit="return false;">
-                                    <input type="hidden" id="id-produk" name="id">
+                                    <input type="hidden" id="id-produk" name="produk_id">
                                     <input type="hidden" id="harga-original" name="harga-original">
                                     <input type="hidden" id="discount-form" name="discount-form">
-                                    <input type="hidden" id="subtotal-form" name="subtotal-form">
-                                    <input type="hidden" id="id-varian" name="id-varian">
+                                    <input type="hidden" id="subtotal-form" name="subtotal">
+                                    <input type="hidden" id="id-varian" name="variasi_id">
 
                                     <div id="varian-produk" class="product-variant"></div>
 
@@ -133,13 +134,23 @@
                                 </form>
 
                                 <div class="product-action">
-                                    <button href="#" class="btn btn-outline-primary font-weight-bold mr-1" id="btn-add-cart">
-                                        <i class="si si-plus mr-1"></i>
-                                        Masukan Keranjang
-                                    </button>
-                                    <button href="#" class="btn btn btn-primary font-weight-bold" id="btn-buy-now">
-                                        Beli Sekarang
-                                    </button>
+                                    {{if .Logged.IsLogged}}
+                                        <button href="#" class="btn btn-outline-primary font-weight-bold mr-1" id="btn-add-cart">
+                                            <i class="si si-plus mr-1"></i>
+                                            Masukan Keranjang
+                                        </button>
+                                        <button href="#" class="btn btn btn-primary font-weight-bold" id="btn-buy-now">
+                                            Beli Sekarang
+                                        </button>
+                                        {{else}}
+                                        <a href="/login" class="btn btn-outline-primary font-weight-bold mr-1">
+                                            <i class="si si-plus mr-1"></i>
+                                            Masukan Keranjang
+                                        </a>
+                                        <a href="/login" class="btn btn btn-primary font-weight-bold">
+                                            Beli Sekarang
+                                        </a>
+                                    {{end}}
                                 </div>
                             </div>
                         </div>
@@ -197,176 +208,10 @@
         <script src="/js/laroute.js"></script>
         <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="/js/umum/general.js"></script>
+        <script src="/js/umum/product/product-detail.js"></script>
         <script src="/js/functions.js"></script>
         <script src="/js/plugins/slick/slick.js"></script>
         <script src="/js/plugins/jquery-raty/jquery.raty.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-zoom@1.7.21/jquery.zoom.min.js"></script>
-        <script>
-            const currentPath = location.pathname
-            const CPSplit = currentPath.split("/")  
-            const slug = CPSplit[3]
-            const toRupiah = new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-            })
-
-            $("#varian-section").hide()
-
-            $(document).ready(function(){
-                $("#discount").hide()
-
-                $("body").scrollspy({
-                    target: "#product-nav",
-                    offset: 583
-                })
-
-                $.ajax({
-                    url:`/produk/get/${slug}`,
-                    success: function(response) {
-                        const data = response.data
-                        const { 
-                            nama, kode, harga, berat, satuan_berat, stok, tinggi, lebar, panjang,
-                            kategori, produk_foto, deskripsi, spesifikasi, id, is_has_variant,
-                            variasi, discount
-                        } = data
-
-                        // set to DOM
-                        $("#nama-produk").text(nama)
-                        $("#deskripsi").html(deskripsi)
-                        $("#stok").text(stok)
-
-                        // set value
-                        $("#id-produk").val(id)
-                        $("#harga-original").val(harga)
-                        $("#discount-form").val(discount)
-
-                        _initialPriceState(discount, harga)
-                        
-                        // produk foto
-                        produk_foto.forEach(data => {
-                            if (data.is_utama) {
-                                $("#foto-produk-main").attr("src", data.path)
-                            }
-                            $("#foto-produk-nav").append(_createImageNav(data.path))
-                        })
-
-                        // ngisi table spek
-                        spesifikasi.forEach(el => {
-                            $("#table-spec > tbody").append(`
-                                <tr>
-                                    <td><b>${el.nama}</b></td>
-                                    <td>${el.value}</td>
-                                <tr>
-                            `)
-                        })
-
-                        // jika punya variasi
-                        if (is_has_variant) {
-                            $("#varian-section").show()
-                            variasi.forEach(data => {
-                                $("#variasi").append(_createVariantElement(data))
-                            })
-                        }
-                    }
-                })
-            })
-
-            $(".btn-qty").on("click", function () {
-                var tipe = $(this).attr("data-type")
-                var subtotalForm = $("#subtotal-form")
-                var bqty = parseInt($("#buy-quantity").val())
-                var hargaOriginal = parseInt($("#harga-original").val())
-                
-                // perhitungan subtotal
-                var besaranDiscount = parseInt($("#discount-form").val())
-                var discount =  besaranDiscount / 100
-                var potongan = hargaOriginal - (hargaOriginal * discount)
-                
-                // processed subtotal
-                var subtotal 
-                var qty
-                
-                // pengurangan / penambahan stok yang dibeli
-                if (tipe == "minus") {
-                    qty = bqty - 1
-                } else {
-                    qty = bqty + 1
-                }
-
-                // set buy quantity
-                $("#buy-quantity").val(qty)
-
-                // pengurangan / penambahan subtotal
-                if (besaranDiscount > 0) {
-                    subtotal = potongan * qty
-                }else {
-                    subtotal = hargaOriginal * qty
-                }
-                
-                subtotalForm.val(subtotal)
-                $("#subtotal").text(toRupiah.format(subtotal))
-            })
-
-            function _createVarianElement(data) {
-                return `
-                    <label class="product-label">${data.variant}</label>
-                    <div class="product-variant-item">
-                        <label for="nilai_Varian" class="radio-chip b-outline b-secondary">
-                            <input type="radio" id="nilai_Varian" name="var1" value="nilai">
-                            <span>nilai</span>
-                        </label>
-                    </div>
-                `
-            }
-
-            function _createImageNav(path) {
-                return `
-                    <div class="slider-nav__item co-4">
-                        <img src="${path}" class="h-100" alt="navigasi foto" />
-                    </div>
-                `
-            }
-
-            function _createVariantElement(data) {
-                let {id, harga, stok, variant} = data
-                return `
-                    <button href="#" class="btn btn-outline-secondary mr-1 mb-3" data-id="${id}" data-harga="${harga}" data-stok="${stok}" onclick="_chooseVarian(this)">
-                        ${variant}
-                    </button>
-                `
-            }
-
-            function _initialPriceState(discount, harga) {
-                let discountToInt = parseInt(discount)
-                let persentase = discountToInt / 100
-                var subtot
-                var potongan = harga - (harga * persentase)
-
-                if(discountToInt > 0) {
-                    subtot = parseInt($("#buy-quantity").val()) * potongan
-                    $("#discount").show()
-                    $("#besaran-discount").text(`${discount}%`)
-                    $("#harga-produk").text(toRupiah.format(potongan))
-                    $("#harga-produk-original").text(toRupiah.format(harga))
-                    $("#subtotal").text(toRupiah.format(subtot)) 
-                }else {
-                    subtot = parseInt($("#buy-quantity").val()) * harga
-                    $("#harga").text(toRupiah.format(harga))
-                    $("#harga-produk").text(toRupiah.format(harga))
-                    $("#subtotal").text(toRupiah.format(subtot)) 
-                }
-
-                $("#subtotal-form").val(subtot)
-            }
-
-            function _chooseVarian(data) {
-                let el = $(data)
-                let harga = el.attr("data-harga")
-                let id = el.attr("data-id")
-                let stok = el.attr("data-stok")
-                console.log(harga, id, stok)
-            }
-
-        </script>
     </body>
 </html>

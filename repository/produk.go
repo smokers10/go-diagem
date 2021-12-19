@@ -159,6 +159,24 @@ func (p *produkRepositoryImpl) ByID(id string) (*domain.ProdukDetailed, error) {
 	return &result, nil
 }
 
+func (p *produkRepositoryImpl) ByIDSimplified(id string) (*domain.ProdukDetailed, error) {
+	result := domain.ProdukDetailed{}
+
+	// get single produk
+	query := `SELECT id, nama, harga, slug, stok, discount, is_has_variant FROM produk WHERE id = ? AND deleted = false`
+
+	statement, err := p.db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer statement.Close()
+
+	statement.QueryRowContext(context.Background(), id).Scan(&result.ID, &result.Nama, &result.Harga, &result.Slug, &result.Stok, &result.Discount, &result.IsHasVariant)
+
+	return &result, nil
+}
+
 func (p *produkRepositoryImpl) BySlugs(slug string) (*domain.ProdukDetailed, error) {
 	result := domain.ProdukDetailed{}
 	spesifikasi := []domain.ProdukSpesifikasi{}
@@ -243,6 +261,21 @@ func (p *produkRepositoryImpl) Delete(id string) error {
 	defer statement.Close()
 
 	if _, err := statement.ExecContext(context.Background(), id); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *produkRepositoryImpl) UpdateStok(produkID string, stok int) error {
+	statement, err := p.db.Prepare(`UPDATE produk SET stok = ? WHERE id = ?`)
+	if err != nil {
+		return err
+	}
+
+	defer statement.Close()
+
+	if _, err := statement.ExecContext(context.Background(), stok, produkID); err != nil {
 		return err
 	}
 

@@ -59,7 +59,12 @@
                             (<span class="cart-count">0</span>)
                         </div>
                         <div class="text-right">
-                            <a href="/cart" class="text-decoration-none">detail</a>
+                            <a href="/cart" id="detail-kerangjang" class="text-decoration-none" onclick="redirect(this)">Lihat Detail</a>
+                            <script>
+                                function redirect(data) {
+                                    location.href = "/cart"
+                                }
+                            </script>
                         </div>
                     </div>
                     <div class="cart-content"></div>

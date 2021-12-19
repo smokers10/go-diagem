@@ -37,7 +37,7 @@ func (cc *cartController) AddToCart(c *fiber.Ctx) error {
 }
 
 func (cc *cartController) UpdateQuantity(c *fiber.Ctx) error {
-	req := domain.CartData{}
+	req := domain.Cart{}
 	userID := c.Locals("id").(int)
 
 	if err := c.BodyParser(&req); err != nil {
@@ -52,7 +52,7 @@ func (cc *cartController) UpdateQuantity(c *fiber.Ctx) error {
 }
 
 func (cc *cartController) DeleteCart(c *fiber.Ctx) error {
-	req := domain.CartData{}
+	req := domain.Cart{}
 	userID := c.Locals("id").(int)
 
 	if err := c.BodyParser(&req); err != nil {
@@ -63,5 +63,11 @@ func (cc *cartController) DeleteCart(c *fiber.Ctx) error {
 
 	response := cc.cartService.Delete(&req)
 
+	return c.Status(response.Status).JSON(response)
+}
+
+func (cc *cartController) CartCount(c *fiber.Ctx) error {
+	userID := c.Locals("id").(int)
+	response := cc.cartService.Count(userID)
 	return c.Status(response.Status).JSON(response)
 }

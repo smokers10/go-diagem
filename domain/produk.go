@@ -89,7 +89,9 @@ type ProdukRepository interface {
 	Create(req *Produk) (*ProdukDetailed, error)
 	Read(filter *ProdukFilter) ([]ProdukDetailed, error)
 	ByID(id string) (*ProdukDetailed, error)
+	ByIDSimplified(id string) (*ProdukDetailed, error)
 	BySlugs(slug string) (*ProdukDetailed, error)
 	Update(req *Produk) (*Produk, error)
+	UpdateStok(produkID string, stok int) error
 	Delete(id string) error
 }

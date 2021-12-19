@@ -46,7 +46,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	//setup service
 	adminServ := services.AdminService(&adminRepo)
 	alamatServ := services.AlamtService(&alamatRepo)
-	cartServ := services.CartService(&cartRepo)
+	cartServ := services.CartService(&cartRepo, &produkRepo, &produkVariasiRepo)
 	kategoriServ := services.KategoriService(&kategoriRepo)
 	mitraServ := services.MitraService(&mitraRepo)
 	produkServ := services.ProdukService(&produkRepo, &produkFoto, &produkVariasiRepo)

@@ -1,122 +1,108 @@
 jQuery(function() {
-    load_cart();
-});
+    load_cart()
+})
 
 $(document).on('change', '#select-all', function () {
-    $('.cart-item').find('input[type=checkbox]').not(this).prop('checked', this.checked);
-    updateCart();
-});
+    $('.cart-item').find('input[type=checkbox]').not(this).prop('checked', this.checked)
+    updateCart()
+})
 
 $(document).on('change', '.cart-store input[type=checkbox]', function () {
-    parent = $(this).closest('.cart-store').parent();
-    parent.find('.cart-product input[type=checkbox]').not(this).prop('checked', this.checked);
-    updateCart();
-});
+    parent = $(this).closest('.cart-store').parent()
+    parent.find('.cart-product input[type=checkbox]').not(this).prop('checked', this.checked)
+    updateCart()
+})
 
 $(document).on('change', '.cart-group input[type=checkbox]', function () {
-    updateCart();
-});
+    updateCart()
+})
 
-// $(document).on('change', '.product input.input-number', function () {
-//     $.ajax({
-//         type:"POST",
-//         url: laroute.route('cart.updateQuantity'),
-//         data: {
-//             cart_id : $('.product input.cart_id').val(),
-//             qty : parseInt($(this).val())
-//         },
-//         success: function(data){
-//             $('#cartTopHover span').html(parseInt($('#cartTopHover span').text(), 10) - 1);
-//             updateCart();
-//         }
-//     });
-// });
 $(document).on('change', '.cart-quantity input.input-number', function(event) {
-    qty = parseInt($(this).val());
-    min = parseInt($(this).attr('min'));
-    max = parseInt($(this).attr('max'));
+    qty = parseInt($(this).val())
+    min = parseInt($(this).attr('min'))
+    max = parseInt($(this).attr('max'))
     if (qty < min){
-        $(this).val(min);
+        $(this).val(min)
     } else if (qty > max){
-        $(this).val(max);
+        $(this).val(max)
     }
-    updateCartQty(qty);
-});
+    updateCartQtyAPI(qty)
+})
 
-$(document).on('click', '.btn-increment, .btn-decrement', function (e) {
-  var isNegative = $(e.target).closest('.btn-decrement').is('.btn-decrement');
-  var input = $(e.target).closest('.cart-quantity').find('input');
-  min = parseInt(input.attr('min'));
-  max = parseInt(input.attr('max'));
-    var qty = parseInt(input.val());
+function _cartQuantityBtn(data) {
+    var isNegative = $(data).attr("data-type") == "minus" ? true : false,
+    input = $(data).closest('.cart-quantity').find('input'),
+    qty = parseInt(input.val()),
+    min = parseInt(input.attr('min')),
+    max = parseInt(input.attr('max')),
+    cartID = $(data).attr("data-id")
 
     if(isNegative){
-        qty = qty - 1;
+        qty = qty - 1
     }else{
-        qty = qty + 1;
+        qty = qty + 1
     }
 
     if (qty < min){
-        input.val(min);
+        input.val(min)
     } else if (qty > max){
-        input.val(max);
+        input.val(max)
     }else{
-        input.val(qty);
+        input.val(qty)
     }
-    updateCartQty(qty);
-});
 
-function updateCartQty(qty){
-
-    $.ajax({
-        type:"POST",
-        url: laroute.route('cart.updateQuantity'),
-        data: {
-            cart_id : $('.cart-item input.cart_id').val(),
-            qty : qty
-        },
-        success: function(data){
-            $('#cartTopHover span').html(parseInt($('#cartTopHover span').text(), 10) - 1);
-            updateCart();
-        }
-    });
+    updateCartQtyAPI(qty, cartID)
 }
 
+function updateCartQtyAPI(qty, id){
+    $.ajax({
+        type:"PUT",
+        url: "/cart/update-quantity",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            id : parseInt(id),
+            Quantity : parseInt(qty)
+        }),
+        success: function(data){
+            $('#cartTopHover span').html(parseInt($('#cartTopHover span').text(), 10) - 1)
+            updateCart()
+        }
+    })
+}
 
-function updateCart()
-{
+function updateCart(){
     var total = 0;
     var produk = 0;
     var i = 0;
-    var parent = $('form#cart-checkout');
-    parent.find('input[type=hidden].ck').remove();
+    var parent = $('form#cart-checkout')
+    parent.find('input[type=hidden].ck').remove()
     $('.cart-item').each(function () {
         if($(this).find('input[type=checkbox]').is(":checked")){
-            harga = $(this).find('input.harga').val();
-            qty = parseInt($(this).find('input.input-number').val());
-            cart_id = $(this).find('input.cart_id').val();
+            harga = $(this).find('input.harga').val()
+            qty = parseInt($(this).find('input.input-number').val())
+            cart_id = $(this).find('input.cart_id').val()
             total += harga*qty;
             produk += qty;
             i += 1;
-            parent.append(`<input type="hidden" class="ck" name="c_id[]" value="`+cart_id+`">`);
+            parent.append(`<input type="hidden" class="ck" name="c_id[]" value="`+cart_id+`">`)
         }
-    });
+    })
     if($('.cart-item').find('input[type=checkbox]:checked').length > 0)
     {
-        $('#hapus-all').removeClass('d-none');
-        $('.btn-checkout').prop('disabled', false);
+        $('#hapus-all').removeClass('d-none')
+        $('.btn-checkout').prop('disabled', false)
     }else{
-        $('#hapus-all').addClass('d-none');
-        $('.btn-checkout').prop('disabled', true);
+        $('#hapus-all').addClass('d-none')
+        $('.btn-checkout').prop('disabled', true)
     }
-    $('.total_title').html('Total belanja ('+produk+' produk)');
-    $('.total_belanja').text(total);
+    $('.total_title').html('Total belanja ('+produk+' produk)')
+    $('.total_belanja').text(total)
 }
 
-function load_cart()
-{
+function load_cart(){
     $.ajax({
-        url: laroute.route('cart.data'),
+        url: "/cart/read",
         type: "GET",
         dataType: "JSON",
         beforeSend : function(){
@@ -124,35 +110,42 @@ function load_cart()
             <div class="height-50 spinner-grow text-primary width-50" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
-        </div>`);
+        </div>`)
         },
         success: function(response) {
             var dataList = '';
+            var totalBelanja = 0
             if(response.data.length !== 0){
-                $('#cart-content').prepend(__createCartHeader());
+                $('#cart-content').prepend(__createCartHeader())
                 $.each(response.data, function(k, item) {
                     dataList += _createElement(item)
-                });
+                })
+                for (let i = 0; i < response.data.length; i++) {
+                    const element = response.data[i]
+                    totalBelanja = totalBelanja + element.subtotal
+                }
+                $("#total-belanja").text(toRupiah.format(totalBelanja))
+                $("#total").val(totalBelanja)
             }else{
                 dataList += `<div class="height-380 py-5 text-center">
-                    <img class="empty-img" src="${ laroute.url('public/img/placeholder/alamat.png', []) }" width="200px">
+                    <img class="empty-img" src="/img/placeholder/cart_empty.png" width="200px">
                     <div>
-                        <h3 class="font-size-24 font-weight-bold mt-5">Alamat Pengiriman Belum Ditambahkan</h3>
+                        <h3 class="font-size-24 font-weight-bold mt-5">Cart kamu masih kosong</h3>
                         <p class="font-size-16"></p>
-                        <button type="button" class="btn btn-primary btn-lg" id="btn-add_alamat">
-                            <i class="fa fa-plus mr-1"></i>Tambah Alamat</button>
+                        <a href="/produk" class="btn btn-primary btn-lg" id="btn-pilih-barang">
+                            <i class="fa fa-plus mr-1"></i>Pilih Barang</a>
                     </div>
                 </div>`;
             }
-            $('#data-list').append(dataList);
+            $('#data-list').append(dataList)
         },
         complete: function(){
-            $("#data-loading").remove();
+            $("#data-loading").remove()
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error deleting data');
+            alert('Error deleting data')
         }
-    });
+    })
 }
 
 $(document).on('click', '#hapus-all', function () {
@@ -173,12 +166,12 @@ $(document).on('click', '#hapus-all', function () {
             var ck = [];
             $('.product').each(function () {
                 if($(this).find('input[type=checkbox]').is(":checked")){
-                    cart_id = $(this).find('input.cart_id').val();
-                    ck.push(cart_id);
+                    cart_id = $(this).find('input.cart_id').val()
+                    ck.push(cart_id)
                 }
-            });
+            })
             $.ajax({
-                url: laroute.route('cart.hapus'),
+                url: "",
                 type: "POST",
                 data: {
                     c_id :ck
@@ -188,10 +181,10 @@ $(document).on('click', '#hapus-all', function () {
                     Swal.fire({
                         title: 'Tunggu Sebentar...',
                         text: ' ',
-                        imageUrl: laroute.url('public/img/loading.gif', ['']),
+                        imageUrl: '/img/loading.gif',
                         showConfirmButton: false,
                         allowOutsideClick: false,
-                    });
+                    })
                 },
                 success: function() {
                     Swal.fire({
@@ -200,18 +193,18 @@ $(document).on('click', '#hapus-all', function () {
                         timer: 3000,
                         showConfirmButton: false,
                         icon: 'success'
-                    });
-                    load_cart();
+                    })
+                    load_cart()
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Error deleting data');
+                    alert('Error deleting data')
                 }
-            });
+            })
         }else{
-            Swal.close();
+            Swal.close()
         }
-    });
-});
+    })
+})
 
 function __createCartHeader(){
     var header = `<div class="block block-shadow block-bordered block-rounded mb-2">
@@ -235,50 +228,116 @@ function __createCartHeader(){
 return header;
 }
 
-function _createElement(item){
-    var item = `
-    <div class="cart-item">
-        <div class="d-flex">
-            <div class="custom-control custom-checkbox my-auto">
-                <input class="custom-control-input" type="checkbox" id="${ item.id }">
-                <label class="custom-control-label" for="${ item.id }"></label>
-            </div>
-        </div>
-        <div class="cart-item-product">
-            <input type="hidden" class="cart_id" value="${ item.id }">
-            <input type="hidden" class="harga" value="${ item.harga }">
-            <div class="cart-item-product_img">
-                <img src="${ item.produk.fotoUtama }" data-src="" alt="" class="img-fluid lazyImage" data-loaded="true">
-            </div>
-            <div class="cart-item-product_info">
-                <div class="cart-item-product_title">
-                    <a href="">${ item.produk.nama }</a>
-                </div>
-                <div class="cart-item-product_variant">
-                   ${ item.variasi.variant }
-                </div>
-                <div class="cart-item-product_price">
-                    ${ item.harga_frm }
-                </div>
-            </div>
-        </div>
-        <div class="cart-item-action my-auto">
-            <div class="d-flex">
-                <button class="btn btn-secondary btn-sm mr-2">
-                    <i class="si si-trash"></i>
-                </button>
-                <div class="cart-quantity">
-                    <button class="btn-decrement" type="button" data-type="minus">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <input type="number" name="quantity" class="input-number" value="${ item.qty }" min="1" max="${ item.variasi.stok }">
-                    <button class="btn-increment" type="button" data-type="plus">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>`;
+function _createElement(data){
+    const { id, quantity, subtotal, variasi, produk, produk_single_foto } = data
+    const { harga, id: produkID, nama, slug, discount, stok, is_has_variant  } = produk
+    const { variant, harga: hargaVariant, stok: stokVariant } = variasi
+    const { path } = produk_single_foto
+    const pengaliDiscount = discount / 100
+    var item
+    var denganPotongan
 
-return item;
+
+    if (discount > 0) {
+        denganPotongan = subtotal - (subtotal * pengaliDiscount)
+    }
+
+    if (!is_has_variant) {
+        item = `<div class="cart-item">
+            <div class="d-flex">
+                <div class="custom-control custom-checkbox my-auto">
+                    <input class="custom-control-input" type="checkbox" id="${ id }">
+                    <label class="custom-control-label" for="${ id }"></label>
+                </div>
+            </div>
+            <div class="cart-item-product">
+                <input type="hidden" class="harga" value="${ subtotal }" id="subtotal-${id}">
+                <div class="cart-item-product_img">
+                    <img src="${ path }" data-src="" alt="" class="img-fluid lazyImage" data-loaded="true">
+                </div>
+                <div class="cart-item-product_info">
+                    <div class="cart-item-product_title">
+                        <a href="">${ nama }</a>
+                    </div>
+                    <span>${ toRupiah.format(harga) } x (${quantity}) </span>
+                    <div class="cart-item-product_price" id="view-cart-subtotal-${id}">
+                        ${ discount > 0 ? toRupiah.format(denganPotongan) : toRupiah.format(subtotal) }
+                    </div>
+                    ${ discount > 0 ? "<span> sudah dipotong discount ${discount}% </span> " : "" }
+                </div>
+            </div>
+            <div class="cart-item-action my-auto">
+                <div class="d-flex">
+                    <button class="btn btn-secondary btn-sm mr-2">
+                        <i class="si si-trash"></i>
+                    </button>
+
+                    <div class="cart-id">
+                        <input type="hidden" value="${id}">
+                    </div>
+
+                    <div class="cart-quantity">
+                        <button class="btn-decrement" type="button" data-type="minus" onclick="_cartQuantityBtn(this)" data-id=${id}>
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        <input type="number" name="quantity" class="input-number" data-id=${id} value="${ quantity }" min="1" max="${ stok }">
+                        <button class="btn-increment" type="button" data-type="plus" onclick="_cartQuantityBtn(this)" data-id=${id}>
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+    } else {
+        item = `<div class="cart-item">
+            <div class="d-flex">
+                <div class="custom-control custom-checkbox my-auto">
+                    <input class="custom-control-input" type="checkbox" id="${ id }">
+                    <label class="custom-control-label" for="${ id }"></label>
+                </div>
+            </div>
+            <div class="cart-item-product">
+                <input type="hidden" class="harga" value="${ subtotal }" id="subtotal-${id}">
+                <div class="cart-item-product_img">
+                    <img src="${ path }" data-src="" alt="" class="img-fluid lazyImage" data-loaded="true">
+                </div>
+                <div class="cart-item-product_info">
+                    <div class="cart-item-product_title">
+                        <a href="">${ nama }</a>
+                    </div>
+                    <div class="cart-item-product_variant">
+                       ${ variant}
+                    </div>
+                    <span>${ toRupiah.format(hargaVariant) } x (${quantity}) </span>
+                    <div class="cart-item-product_price" id="view-cart-subtotal-${id}">
+                        ${ discount > 0 ? toRupiah.format(denganPotongan) : toRupiah.format(subtotal) }
+                    </div>
+                    ${ discount > 0 ? `<span>dipotong discount ${discount}% </span>` : "" }
+                </div>
+            </div>
+            <div class="cart-item-action my-auto">
+                <div class="d-flex">
+                    <button class="btn btn-secondary btn-sm mr-2">
+                        <i class="si si-trash"></i>
+                    </button>
+
+                    <div class="cart-id">
+                        <input type="hidden" value="${id}">
+                    </div>
+
+                    <div class="cart-quantity">
+                        <button class="btn-decrement" type="button" data-type="minus" onclick="_cartQuantityBtn(this)" data-id=${id}>
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        <input type="number" name="quantity" class="input-number" data-id=${id} value="${ quantity }" min="1" max="${ stokVariant }">
+                        <button class="btn-increment" type="button" data-type="plus" onclick="_cartQuantityBtn(this)" data-id=${id}>
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+    }
+
+    return item
 }

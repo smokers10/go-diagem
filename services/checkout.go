@@ -24,7 +24,7 @@ func CheckoutService(cart *domain.CartRepository, order *domain.OrderRepository,
 func (cs *checkoutServiceImpl) Checkout(req *domain.Checkout) *domain.Response {
 	// deklarasi variable
 	res := domain.Response{}
-	var sub_total float32
+	var subtotal int
 
 	// get cart
 	carts, err := cs.cartRepo.Read(req.UserID)
@@ -37,10 +37,10 @@ func (cs *checkoutServiceImpl) Checkout(req *domain.Checkout) *domain.Response {
 
 	// check cart
 	for i := 0; i < len(carts); i++ {
-		sub_total += carts[i].SubTotal
+		subtotal += carts[i].SubTotal
 	}
 
-	fmt.Println(sub_total)
+	fmt.Println(subtotal)
 
 	res.Message = "on the test"
 	res.Status = http.StatusOK

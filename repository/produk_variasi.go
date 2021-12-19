@@ -37,6 +37,21 @@ func (p *produkVariasiRepository) ReadByProdukID(produkID string) ([]domain.Prod
 	return result, nil
 }
 
+func (p *produkVariasiRepository) ByID(id string) (*domain.ProdukVariasi, error) {
+	result := domain.ProdukVariasi{}
+
+	stmt, err := p.db.Prepare("SELECT id, variant, sku, harga, stok from produk_variasi WHERE id = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	if err := stmt.QueryRowContext(c, id).Scan(&result.ID, &result.Variant, &result.SKU, &result.Harga, &result.Stok); err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
 func (p *produkVariasiRepository) Create(req *domain.ProdukVariasi) (*domain.ProdukVariasi, error) {
 	c := context.Background()
 	tx, err := p.db.BeginTx(c, nil)
@@ -85,6 +100,31 @@ func (p *produkVariasiRepository) Update(req *domain.ProdukVariasi) (*domain.Pro
 	tx.Commit()
 
 	return req, nil
+}
+
+func (p *produkVariasiRepository) UpdateStok(id string, stok int) error {
+	c := context.Background()
+	tx, err := p.db.BeginTx(c, nil)
+	if err != nil {
+		return err
+	}
+
+	stmt, err := tx.Prepare("UPDATE produk_variasi SET stok = ? WHERE id = ?")
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	defer stmt.Close()
+
+	if _, err := stmt.ExecContext(c, stok, id); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+
+	return nil
 }
 
 func (p *produkVariasiRepository) Delete(produkID string, produkVariasiID string) error {

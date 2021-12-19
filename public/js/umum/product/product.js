@@ -1,8 +1,3 @@
-var toRupiah = new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-})
-
 $.ajax({
     url: "/kategori/get",
     success: function(res) {

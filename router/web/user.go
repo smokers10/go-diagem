@@ -36,6 +36,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	profileAPIController := userAPI.ProfileController(resolver.UserService)
 	produkAPIController := userAPI.ProdukController(resolver.ProdukService)
 	kategoriAPIController := userAPI.KategoriController(resolver.KategoriService)
+	cartAPIController := userAPI.CartController(resolver.CartService)
 
 	// router clustering
 	parentPath := app.Group("/")
@@ -76,6 +77,12 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	cart.Get("/checkout", cartController.CheckoutPage)
 	cart.Get("/pembayaran", cartController.PembayaranPage)
 
+	cart.Get("/read", cartAPIController.Read)
+	cart.Post("/add-to-cart", cartAPIController.AddToCart)
+	cart.Put("/update-quantity", cartAPIController.UpdateQuantity)
+	cart.Delete("/delete", cartAPIController.DeleteCart)
+	cart.Get("/total-carts", cartAPIController.CartCount)
+
 	// produk
 	produk := parentPath.Group("/produk", middlewareNotSoStrict)
 	produk.Get("/", produkController.IndexPage)
@@ -103,6 +110,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	kategori.Get("/", kategoriController.IndexPage)
 	kategori.Get("/detail", kategoriController.DetailPage)
 
+	// kategori - API
 	kategori.Get("/get", kategoriAPIController.Read)
 
 	// index page

@@ -1,7 +1,18 @@
+const toRupiah = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+})
+
 jQuery(function() {
     const logged = JSON.parse(localStorage.getItem("logged")) 
-    $("#header-user-logged-name").text(logged.nama)
+    if (logged.nama != null) {
+        $("#header-user-logged-name").text(logged.nama)
+    }
     cart_count()
+
+    $(document).on('click', '#detail-kerangjang', function (){
+        console.log("detail kerangjang SAT!")
+    })
 })
 
 // Log out
@@ -10,21 +21,43 @@ $("#logout-button").on("click", function(){
 })
 
 // Cart
-const createCartItemHeader = (item) => {
-    var item = `<div class="cart-item">
-        <div class="cart-item-prodImg">
-            <img class="img-fluid" src="${ item.produk.fotoUtama }" alt="Image Description">
-        </div>
-        <div class="cart-item-prodInfo">
-            <div class="cart-item-prodName">
-                <a href="#">${ item.produk.nama }</a>
+const createCartItemHeader = (data) => {
+    var item
+    var { quantity, subtotal, produk, produk_single_foto, variasi } = data 
+    var { harga, is_has_variant, nama, slug  } = produk
+    var {variant, harga: hargaVariant} = variasi 
+
+    if (!is_has_variant) {
+        item = `<div class="cart-item">
+            <div class="cart-item-prodImg">
+                <img class="img-fluid" src="${ produk_single_foto.path }" alt="Image Description">
             </div>
-            <span class="cart-item-prodQty">${ item.harga_frm }x(${ item.qty }) Barang</span>
-        </div>
-        <div class="cart-item-prodTotal">
-            ${ item.subTotal_frm }
-        </div>
-    </div>`
+            <div class="cart-item-prodInfo">
+                <div class="cart-item-prodName">
+                    <a href="/produk/detail/${slug}">${ nama }</a>
+                </div>
+                <span class="cart-item-prodQty">${ toRupiah.format(harga) } x (${ quantity }) Barang</span>
+            </div>
+            <div class="cart-item-prodTotal">
+                ${ toRupiah.format(subtotal) }
+            </div>
+        </div>`
+    }else {
+        item = `<div class="cart-item">
+            <div class="cart-item-prodImg">
+                <img class="img-fluid" src="${ produk_single_foto.path }" alt="Image Description">
+            </div>
+            <div class="cart-item-prodInfo">
+                <div class="cart-item-prodName">
+                    <a href="/produk/detail/${slug}">${ nama } (${variant})</a>
+                </div>
+                <span class="cart-item-prodQty">${ toRupiah.format(hargaVariant) } x (${ quantity }) Barang</span>
+            </div>
+            <div class="cart-item-prodTotal">
+                ${ toRupiah.format(subtotal) }
+            </div>
+        </div>`
+    }
 
     return item
 }
@@ -34,16 +67,17 @@ $(document).on('mouseenter','div.btn-cart', function () {
     var content = $(this).find('.cart-content')
     var cart_header = $(this).find('.cart-header')
     $.ajax({
-        url: laroute.route('cart.data'),
+        url: "/cart/read",
         type: "GET",
         dataType: "JSON",
         beforeSend : function(){
             content.html('')
-            content.append(`<div class="py-6 text-center" id="data-loading">
-            <div class="height-50 spinner-grow text-primary width-50" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>`)
+            content.append(`
+            <div class="py-6 text-center" id="data-loading">
+                <div class="height-50 spinner-grow text-primary width-50" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>`)
         },
         success: function(response) {
             cart_header.find('span.cart-count').html(response.data.length)
@@ -55,21 +89,21 @@ $(document).on('mouseenter','div.btn-cart', function () {
                 })
             }else{
                 dataList += `<div class="text-center py-5">
-                <img src="/img/placeholder/cart_is_empty.png" alt="empty-basket" class="max-width-200">
-                <div class="font-size-16 font-weight-bold mt-3">
-                    Yah keranjang belanjaanmu masih kosong!
-                </div>
-            </div>`
+                    <img src="/img/placeholder/cart_is_empty.png" alt="empty-basket" class="max-width-200">
+                    <div class="font-size-16 font-weight-bold mt-3">
+                        Yah keranjang belanjaanmu masih kosong!
+                    </div>
+                </div>`
             }
             content.append(dataList)
         },
         error: function(httpObj, textStatus, errorThrown) {
             content.html(`<div class="text-center py-5">
-            <img src="/img/placeholder/cart_is_empty.png" alt="empty-basket" class="max-width-200">
-            <div class="font-size-16 font-weight-bold mt-3">
-                Yah keranjang belanjaanmu masih kosong!
-            </div>
-        </div>`)
+                <img src="/img/placeholder/cart_is_empty.png" alt="empty-basket" class="max-width-200">
+                <div class="font-size-16 font-weight-bold mt-3">
+                    Yah keranjang belanjaanmu masih kosong!
+                </div>
+            </div>`)
         }
     })
 })
@@ -138,7 +172,7 @@ $(document).on('click', '#btn-add-cart', function () {
     if (checkAddToCartValidity()) {
         $.ajax({
             type: "POST",
-            url: laroute.route('cart.addToCart'),
+            url: "/cart/add-to-cart",
             data: $('#option-choice-form').serializeArray(),
             beforeSend: function () {
                 Swal.fire({
@@ -189,11 +223,11 @@ $(document).on('click', '#btn-add-cart', function () {
 
 function cart_count(){
     $.ajax({
-        url: laroute.route('cart.data'),
+        url: "/cart/total-carts",
         type: "GET",
         dataType: "JSON",
         success: function(response) {
-            $("div.btn-cart").find('.cart-notification').html(response.data.length)
+            $("div.btn-cart").find('.cart-notification').html(response.data.total_carts)
         },
         error: function(httpObj, textStatus, errorThrown) {
             $("div.btn-cart").find('.cart-notification').html(0)
