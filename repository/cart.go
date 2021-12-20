@@ -143,14 +143,14 @@ func (c *cartRepositoryImpl) Delete(req *domain.Cart) error {
 		return err
 	}
 
-	stmt, err := tx.Prepare("DELETE FROM carts WHERE produk_id = ?")
+	stmt, err := tx.Prepare("DELETE FROM carts WHERE id = ? AND user_id = ?")
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 	defer stmt.Close()
 
-	if _, err := stmt.ExecContext(context.Background(), req.ProdukID); err != nil {
+	if _, err := stmt.ExecContext(context.Background(), req.ID, req.UserID); err != nil {
 		tx.Rollback()
 		return err
 	}

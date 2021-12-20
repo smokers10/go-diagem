@@ -185,12 +185,7 @@ $(document).on('click', '#btn-add-cart', function () {
             },
             success: function (response) {
                 Swal.close()
-                $('#cartTopHover span').html(parseInt($('#cartTopHover span').text(), 10) + response.data.incr)
-                $('#addToCart').find('.product__name').html(response.data.produk_nama)
-                $('#addToCart').find('.product__img img').attr("src", response.data.produk_img)
-                $('#addToCart').find('.product__price').html(response.data.produk_price)
-                $('#addToCart').find('.product__subtotal').html(response.data.produk_subtotal)
-                $('#addToCart').find('input[type=hidden].ck').val(response.data.id)
+                cart_count()
                 $('#addToCart').modal()
             },
             error: function (httpObj, textStatus, errorThrown) {
@@ -199,8 +194,7 @@ $(document).on('click', '#btn-add-cart', function () {
         })
     } else {
         var variant =[]
-        $(".product-variant").find('.product-label').each(function(index, obj)
-        {
+        $(".product-variant").find('.product-label').each(function(index, obj){
             variant.push($(this).text().toLocaleLowerCase())
         })
 

@@ -64,47 +64,19 @@
                         <div class="col-lg-4 d-none d-lg-block">
                             <div class="block block-shadow block-bordered block-rounded">
                                 <div class="block-header">
-                                    <div class="font-size-20 font-weight-bold">Ringkasan Belanja</div>
+                                    <div class="font-size-20 font-weight-bold">Total Belanja</div>
                                 </div>
                                 <div class="block-content pt-0 cart-summary">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="">Subtotal</div>
-                                        <div class="">Rp0</div>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="">Diskon</div>
-                                        <div class="">-Rp50000</div>
-                                    </div>
-                                    <hr class="border-2x">
                                     <div class="d-flex font-size-20 font-weight-bold justify-content-between mb-2">
-                                        <div class="">Total Belanja</div>
                                         <input type="hidden" name="total" id="total">
                                         <div class="total_belanja" id="total-belanja">Rp0</div>
                                     </div>
                                 </div>
                                 <div class="block-content block-content-full pt-0">
-                                    <form id="cart-checkout" method="POST" action="#">
-                                        <button class="btn btn-primary btn-block btn-lg btn-checkout" type="submit" disabled>
-                                            Beli
-                                        </button>
-                                    </form>
+                                    <a href="/cart/checkout" class="btn btn-primary btn-block btn-lg btn-checkout">
+                                        Beli
+                                    </a>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-block d-md-none">
-                    <div class="bottomcart">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="css-1j4pkxq">Total Harga</div>
-                                <div class="total_belanja">-</div>
-                            </div>
-                            <div class="col-4">
-                                <button class="btn btn-primary btn-block btn-lg btn-checkout" type="button" onclick="event.preventDefault(); document.getElementById('checkout').submit();"  disabled>
-                                    Checkout
-                                </button>
                             </div>
                         </div>
                     </div>

@@ -63,7 +63,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	alamat.Post("/create", alamatAPIController.Create)
 	alamat.Get("/read", alamatAPIController.Read)
 	alamat.Put("/update", alamatAPIController.Update)
-	alamat.Delete("/Delete", alamatAPIController.Delete)
+	alamat.Delete("/delete", alamatAPIController.Delete)
 
 	// profile
 	profile := parentPath.Group("/profile", middlewareStrict)

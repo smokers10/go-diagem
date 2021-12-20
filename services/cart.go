@@ -108,35 +108,6 @@ func (cs *cartServiceImpl) Delete(req *domain.Cart) *domain.Response {
 	// deklarasi variable
 	res := domain.Response{}
 
-	// ambil data cart
-	cart, err := cs.cartRepo.ByID(req.ID)
-	if err != nil {
-		fmt.Println(err)
-		res.Message = "error saat checking data cart"
-		res.Status = http.StatusInternalServerError
-		return &res
-	}
-
-	// ambil data produk
-	produk, err := cs.produkRepository.ByID(cart.ProdukID)
-	if err != nil {
-		fmt.Println(err)
-		res.Message = "error saat checking data produk"
-		res.Status = http.StatusInternalServerError
-		return &res
-	}
-
-	// restock
-	returnedStok := produk.Stok + cart.Quantity
-
-	// update stok produk
-	if err := cs.produkRepository.UpdateStok(req.ProdukID, returnedStok); err != nil {
-		fmt.Println(err)
-		res.Message = "error saat update stok produk"
-		res.Status = http.StatusInternalServerError
-		return &res
-	}
-
 	if err := cs.cartRepo.Delete(req); err != nil {
 		fmt.Println(err)
 		res.Message = "error saat menghapus data cart"

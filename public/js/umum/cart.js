@@ -21,12 +21,13 @@ $(document).on('change', '.cart-quantity input.input-number', function(event) {
     qty = parseInt($(this).val())
     min = parseInt($(this).attr('min'))
     max = parseInt($(this).attr('max'))
+    id = $(this).attr('data-id')
     if (qty < min){
         $(this).val(min)
     } else if (qty > max){
         $(this).val(max)
     }
-    updateCartQtyAPI(qty)
+    updateCartQtyAPI(qty, id)
 })
 
 function _cartQuantityBtn(data) {
@@ -45,7 +46,7 @@ function _cartQuantityBtn(data) {
 
     if (qty < min){
         input.val(min)
-    } else if (qty > max){
+    }else if (qty > max){
         input.val(max)
     }else{
         input.val(qty)
@@ -69,35 +70,8 @@ function updateCartQtyAPI(qty, id){
             updateCart()
         }
     })
-}
 
-function updateCart(){
-    var total = 0;
-    var produk = 0;
-    var i = 0;
-    var parent = $('form#cart-checkout')
-    parent.find('input[type=hidden].ck').remove()
-    $('.cart-item').each(function () {
-        if($(this).find('input[type=checkbox]').is(":checked")){
-            harga = $(this).find('input.harga').val()
-            qty = parseInt($(this).find('input.input-number').val())
-            cart_id = $(this).find('input.cart_id').val()
-            total += harga*qty;
-            produk += qty;
-            i += 1;
-            parent.append(`<input type="hidden" class="ck" name="c_id[]" value="`+cart_id+`">`)
-        }
-    })
-    if($('.cart-item').find('input[type=checkbox]:checked').length > 0)
-    {
-        $('#hapus-all').removeClass('d-none')
-        $('.btn-checkout').prop('disabled', false)
-    }else{
-        $('#hapus-all').addClass('d-none')
-        $('.btn-checkout').prop('disabled', true)
-    }
-    $('.total_title').html('Total belanja ('+produk+' produk)')
-    $('.total_belanja').text(total)
+    load_cart()
 }
 
 function load_cart(){
@@ -113,10 +87,10 @@ function load_cart(){
         </div>`)
         },
         success: function(response) {
-            var dataList = '';
+            var dataList = ''
             var totalBelanja = 0
+            $("#data-list").html('')
             if(response.data.length !== 0){
-                $('#cart-content').prepend(__createCartHeader())
                 $.each(response.data, function(k, item) {
                     dataList += _createElement(item)
                 })
@@ -135,7 +109,7 @@ function load_cart(){
                         <a href="/produk" class="btn btn-primary btn-lg" id="btn-pilih-barang">
                             <i class="fa fa-plus mr-1"></i>Pilih Barang</a>
                     </div>
-                </div>`;
+                </div>`
             }
             $('#data-list').append(dataList)
         },
@@ -148,7 +122,8 @@ function load_cart(){
     })
 }
 
-$(document).on('click', '#hapus-all', function () {
+function deleteFromCart(el) {
+    const id = $(el).attr("data-id")
     Swal.fire({
         title: "Anda Yakin?",
         text: "Barang yang kamu pilih akan dihapus dari keranjangmu.",
@@ -163,18 +138,11 @@ $(document).on('click', '#hapus-all', function () {
     })
     .then((result) => {
         if (result.value) {
-            var ck = [];
-            $('.product').each(function () {
-                if($(this).find('input[type=checkbox]').is(":checked")){
-                    cart_id = $(this).find('input.cart_id').val()
-                    ck.push(cart_id)
-                }
-            })
             $.ajax({
-                url: "",
-                type: "POST",
+                url: "/cart/delete",
+                type: "DELETE",
                 data: {
-                    c_id :ck
+                    id : parseInt(id)
                 },
                 dataType: "JSON",
                 beforeSend: function(){
@@ -204,28 +172,6 @@ $(document).on('click', '#hapus-all', function () {
             Swal.close()
         }
     })
-})
-
-function __createCartHeader(){
-    var header = `<div class="block block-shadow block-bordered block-rounded mb-2">
-    <div class="block-content block-content-full py-2">
-        <div class="no-gutters row">
-            <div class="col-6 my-auto ">
-                <div class="custom-control custom-checkbox my-auto">
-                    <input class="custom-control-input" type="checkbox" id="select-all">
-                    <label class="custom-control-label" for="select-all">Pilih Semua Produk</label>
-                </div>
-            </div>
-            <div class="col-6 my-auto text-right">
-                <button type="button" class="btn btn-alt-danger btn-sm d-none" id="hapus-all">
-                    <i class="fa fa-trash mr-1"></i>
-                    Hapus
-                </button>
-            </div>
-        </div>
-    </div>
-</div>`;
-return header;
 }
 
 function _createElement(data){
@@ -237,19 +183,12 @@ function _createElement(data){
     var item
     var denganPotongan
 
-
     if (discount > 0) {
         denganPotongan = subtotal - (subtotal * pengaliDiscount)
     }
 
     if (!is_has_variant) {
         item = `<div class="cart-item">
-            <div class="d-flex">
-                <div class="custom-control custom-checkbox my-auto">
-                    <input class="custom-control-input" type="checkbox" id="${ id }">
-                    <label class="custom-control-label" for="${ id }"></label>
-                </div>
-            </div>
             <div class="cart-item-product">
                 <input type="hidden" class="harga" value="${ subtotal }" id="subtotal-${id}">
                 <div class="cart-item-product_img">
@@ -263,12 +202,12 @@ function _createElement(data){
                     <div class="cart-item-product_price" id="view-cart-subtotal-${id}">
                         ${ discount > 0 ? toRupiah.format(denganPotongan) : toRupiah.format(subtotal) }
                     </div>
-                    ${ discount > 0 ? "<span> sudah dipotong discount ${discount}% </span> " : "" }
+                    ${ discount > 0 ? `<span> sudah dipotong discount ${discount}% </span>` : "" }
                 </div>
             </div>
             <div class="cart-item-action my-auto">
                 <div class="d-flex">
-                    <button class="btn btn-secondary btn-sm mr-2">
+                    <button class="btn btn-secondary btn-sm mr-2" data-id="${id}" onclick="deleteFromCart(this)">
                         <i class="si si-trash"></i>
                     </button>
 
@@ -290,12 +229,6 @@ function _createElement(data){
         </div>`
     } else {
         item = `<div class="cart-item">
-            <div class="d-flex">
-                <div class="custom-control custom-checkbox my-auto">
-                    <input class="custom-control-input" type="checkbox" id="${ id }">
-                    <label class="custom-control-label" for="${ id }"></label>
-                </div>
-            </div>
             <div class="cart-item-product">
                 <input type="hidden" class="harga" value="${ subtotal }" id="subtotal-${id}">
                 <div class="cart-item-product_img">
@@ -306,7 +239,9 @@ function _createElement(data){
                         <a href="">${ nama }</a>
                     </div>
                     <div class="cart-item-product_variant">
-                       ${ variant}
+                        <b>
+                        ${ variant}
+                        </b>
                     </div>
                     <span>${ toRupiah.format(hargaVariant) } x (${quantity}) </span>
                     <div class="cart-item-product_price" id="view-cart-subtotal-${id}">
@@ -317,7 +252,7 @@ function _createElement(data){
             </div>
             <div class="cart-item-action my-auto">
                 <div class="d-flex">
-                    <button class="btn btn-secondary btn-sm mr-2">
+                    <button class="btn btn-secondary btn-sm mr-2" data-id="${id}" onclick="deleteFromCart(this)">
                         <i class="si si-trash"></i>
                     </button>
 
@@ -340,4 +275,8 @@ function _createElement(data){
     }
 
     return item
+}
+
+function buy() {
+    
 }
