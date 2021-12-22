@@ -155,6 +155,7 @@ function load_alamat(){
 			}
 
 			$("#selected_alamat").val(JSON.stringify(alamat[loopIteration]))
+			$("#alamatData").append(_createAlamatElement(alamat[loopIteration]))
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error get data')
@@ -185,22 +186,23 @@ function load_detail_cart(){
 	})
 }
 
-function _createAlamatElement(params) {
+function _createAlamatElement(data) {
+	const { alamat, is_utama, nama_kota, nama_provinsi, penerima, phone, kd_pos, nama } = data
 	return `
 		<div>
 			<p class="mb-0">
-				<b class="nama-penerima">nama penerima</b>
-				<span class="nama-alamat">nama alamat</span>
-				<span class="badge badge-success">Utama</span>
+				<b class="nama-penerima">${penerima}</b>
+				<span class="nama-alamat">${nama}</span>
+				${ is_utama ? `<span class="badge badge-success">Utama</span>` : "" }
 			</p>
 
 			<div class="phone">
-				kontak
+				${phone}
 			</div>
 
 			<div class="alamat-lengkap">
-				alamat lengkap<br>
-				kode pos
+				${alamat} ${nama_kota} ${nama_provinsi}<br>
+				${kd_pos}
 			</div>
 		</div>
 	`
