@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/smokers10/go-diagem.git/domain"
+	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 )
 
 type alamatServiceImpl struct {
@@ -106,6 +107,54 @@ func (a *alamatServiceImpl) MakeUtama(id int, user_id int) *domain.Response {
 
 	res.Message = "alamat utama berhasil dibuat"
 	res.Status = http.StatusOK
+	res.Success = true
+	return &res
+}
+
+// PROVINSI & KOTA
+
+func (a *alamatServiceImpl) GetProvinsi() *domain.Response {
+	res := domain.Response{}
+	rs := etc.ReqStruct{
+		Endpoint: "https://api.rajaongkir.com/starter/province",
+		Method:   "GET",
+		Key:      etc.RajaOngkirAPIKey,
+	}
+
+	body, err := etc.ReqAPI(&rs)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error membaca response API"
+		res.Status = 500
+		return &res
+	}
+
+	res.Data = body
+	res.Message = "provinsi berhasil diambil"
+	res.Status = 200
+	res.Success = true
+	return &res
+}
+
+func (a *alamatServiceImpl) GetKota(provinsiID string) *domain.Response {
+	res := domain.Response{}
+	rs := etc.ReqStruct{
+		Endpoint: fmt.Sprintf("https://api.rajaongkir.com/starter/city?province=%s", provinsiID),
+		Method:   "GET",
+		Key:      etc.RajaOngkirAPIKey,
+	}
+
+	body, err := etc.ReqAPI(&rs)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error membaca response API"
+		res.Status = 500
+		return &res
+	}
+
+	res.Data = body
+	res.Message = "provinsi berhasil diambil"
+	res.Status = 200
 	res.Success = true
 	return &res
 }

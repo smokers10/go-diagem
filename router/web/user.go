@@ -37,6 +37,8 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	produkAPIController := userAPI.ProdukController(resolver.ProdukService)
 	kategoriAPIController := userAPI.KategoriController(resolver.KategoriService)
 	cartAPIController := userAPI.CartController(resolver.CartService)
+	checkoutAPIController := userAPI.CheckoutController(resolver.CheckoutService)
+	alamatOriginAPIController := userAPI.AlamatOriginController(resolver.AlamatOriginService)
 
 	// router clustering
 	parentPath := app.Group("/")
@@ -60,10 +62,14 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	// alamat
 	alamat := parentPath.Group("/alamat", middlewareStrict)
 	alamat.Get("/", alamatController.AlamatPage)
+
 	alamat.Post("/create", alamatAPIController.Create)
 	alamat.Get("/read", alamatAPIController.Read)
 	alamat.Put("/update", alamatAPIController.Update)
 	alamat.Delete("/delete", alamatAPIController.Delete)
+	alamat.Put("/make-utama", alamatAPIController.MakeUtama)
+	alamat.Get("/provinsi", alamatAPIController.Provinsi)
+	alamat.Get("/kota/:provinsi_id", alamatAPIController.Kota)
 
 	// profile
 	profile := parentPath.Group("/profile", middlewareStrict)
@@ -82,6 +88,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	cart.Put("/update-quantity", cartAPIController.UpdateQuantity)
 	cart.Delete("/delete", cartAPIController.DeleteCart)
 	cart.Get("/total-carts", cartAPIController.CartCount)
+	cart.Post("/ongkir", checkoutAPIController.Ongkir)
 
 	// produk
 	produk := parentPath.Group("/produk", middlewareNotSoStrict)
@@ -117,4 +124,8 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {
 		return c.Render("home", nil)
 	})
+
+	// alamat origin
+	alamatOrigin := parentPath.Group("/alamat-origin")
+	alamatOrigin.Get("/", alamatOriginAPIController.Read)
 }

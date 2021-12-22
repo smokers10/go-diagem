@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/smokers10/go-diagem.git/domain"
+	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 )
 
 type checkoutControllerImpl struct {
@@ -24,6 +25,17 @@ func (cc *checkoutControllerImpl) Checkout(c *fiber.Ctx) error {
 	}
 
 	response := cc.checkoutService.Checkout(&req)
+
+	return c.Status(response.Status).JSON(response)
+}
+
+func (cc *checkoutControllerImpl) Ongkir(c *fiber.Ctx) error {
+	req := etc.RajaOngkirReqBody{}
+	if err := c.BodyParser(&req); err != nil {
+		panic(err)
+	}
+
+	response := cc.checkoutService.Ongkir(&req)
 
 	return c.Status(response.Status).JSON(response)
 }

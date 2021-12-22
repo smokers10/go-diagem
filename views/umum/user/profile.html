@@ -71,23 +71,7 @@
                                             <label class="form-label" for="field-tgl">Tanggal Lahir
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    <select class="form-control" id="field-tgl" name="tanggal">
-                                                        <option value="">Tanggal</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-4">
-                                                    <select class="form-control" id="field-bln" name="bulan">
-                                                        <option value="">Bulan</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-4">
-                                                    <select class="form-control" id="field-thn" name="tahun">
-                                                        <option value="">Tahun</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            <input type="date" class="form-control" name="tgl_lahir" id="field-tgl-lahir" placeholder="Masukan No. Handphone" value="">
                                             <div class="invalid-feedback" id="error-phone"></div>
                                         </div>
                                         <div class="form-group">
@@ -165,12 +149,10 @@
                     method: "get",
                     success: function(res){
                         const { data } = res
-                        const { nama, email, hp, tahun, bulan, tanggal } = data
+                        const { nama, email, hp, tgl_lahir } = data
                         $("#field-nama").val(nama)
                         $("#field-phone").val(hp)
-                        $("#field-tgl").val(tanggal)
-                        $("#field-bln").val(bulan)
-                        $("#field-thn").val(tahun)
+                        $("#field-tgl-lahir").val(tgl_lahir)
                     }
                 })
             }

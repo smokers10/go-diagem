@@ -276,7 +276,3 @@ function _createElement(data){
 
     return item
 }
-
-function buy() {
-    
-}

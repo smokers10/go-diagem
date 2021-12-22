@@ -1,5 +1,10 @@
 jQuery(function() {
     _loadContent()
+    _getProvinsi() 
+       
+    // state awal modal
+    const inputKota = $("#kota-input") 
+    inputKota.hide()
 
     // triger tambah alamat modal
     $("#btn-add_alamat").click(()=>{
@@ -9,10 +14,41 @@ jQuery(function() {
         $("#field-operation").val("create")
     })
 
+    // onchange select provinsi
+    $("#field-provinsi").change(function() {
+        const provinceID = $(this).val()
+        if (provinceID == "") {
+            inputKota.hide()
+            return
+        }else{
+            inputKota.show()
+            _getKota(provinceID)
+        }
+    })
+
+    // onchange select kota
+    $("#field-kota").change(function() {
+        const values = JSON.parse($(this).val())
+        $("#field-kode-pos").val(values.postal_code)
+    })
+
     // submit add
     $("#alamatModalFrm").submit(function(e){
         e.preventDefault()
-        const formData = new FormData($('#alamatModalFrm')[0])
+        const kota = JSON.parse($("#field-kota").val())
+        const formData = {
+            id : parseInt($("#field-id").val()),
+            alamat : $("#field-alamat").val(),
+            nama : $("#field-nama").val(),
+            penerima : $("#field-penerima").val(),
+            phone : $("#field-phone").val(),
+            kd_pos : $("#field-kode-pos").val(),
+            provinsi_id : kota.province_id,
+            kota_id : kota.city_id,
+            nama_provinsi : kota.province,
+            nama_kota : kota.city_name, 
+        }
+
         var operation = $("#field-operation").val()
         if (operation == "create") {
             _insert(formData)
@@ -63,12 +99,12 @@ function _createElement(item){
         <div class="block-header pb-0">
             <h3 class="block-title font-size-h6">
                 <span class="font-w700">${ item.nama }</span>
-                ${ item.is_utama == 1 ? `<div class="badge badge-secondary">Utama</div>` : "" }
+                ${ item.is_utama == 1 ? `<div class="badge badge-secondary"">Utama</div>` : "" }
             </h3>
             <div class="block-options">
-                <button type="button" class="btn btn-sm btn-secondary btn-edit_alamat" data-id="${ item.id }" data-kode-pos=${item.kd_pos} data-nama="${item.nama}" data-penerima="${item.penerima}" data-phone="${item.phone}" data-alamat="${item.alamat}" onclick="_editAlamat(this)">Ubah</button>
+                <button type="button" class="btn btn-sm btn-secondary btn-edit_alamat" data-id="${ item.id }" data-kode-pos=${item.kd_pos} data-nama="${item.nama}" data-penerima="${item.penerima}" data-phone="${item.phone}" data-alamat="${item.alamat}" data-provid=${item.provinsi_id} data-kotaid="${item.kota_id}" onclick="_editAlamat(this)">Ubah</button>
                 <button type="button" class="btn btn-sm btn-secondary" data-id="${item.id}" onclick="_hapusAlamat(this)">Hapus</button>
-                ${item.is_utama != 1 ? `<button class="btn btn-secondary btn-sm">Jadikan Alamat Utama</button>` : ``}
+                ${item.is_utama != 1 ? `<button class="btn btn-secondary btn-sm" data-id=${item.id} onclick="makeUtama(this)">Jadikan Alamat Utama</button>` : ``}
             </div>
         </div>
         <div class="block-content block-content-full">
@@ -140,6 +176,9 @@ function _editAlamat(e) {
     let phone = selected.attr("data-phone")
     let alamat = selected.attr("data-alamat")
     let kdPos = selected.attr("data-kode-pos")
+    let provinsi = selected.attr("data-provid")
+    let kota = selected.attr("data-kotaid")
+
     $("#alamatModal-title").text("Edit Alamat")
     $("#field-nama").val(nama)
     $("#field-penerima").val(penerima)
@@ -147,6 +186,9 @@ function _editAlamat(e) {
     $("#field-kode-pos").val(kdPos)
     $("#field-phone").val(phone)
     $("#field-id").val(id)
+    $("#field-provinsi").val(provinsi)
+    $("#field-kota").val(kota)
+
     $("#alamatModal").modal('show')
     $("#field-operation").val("update")
 }
@@ -156,10 +198,9 @@ function _insert(formData) {
     $.ajax({
         url: "/alamat/create",
         method: "post",
-        data : formData,
-        cache: false,
-        contentType: false,
-        processData: false,
+        data : JSON.stringify(formData),
+        dataType: "json",
+        contentType: "application/json",
         beforeSend: function(){
             Swal.fire({
                 title: 'Tunggu Sebentar...',
@@ -199,10 +240,9 @@ function _update(formData) {
     $.ajax({
         url: "/alamat/update",
         method: "put",
-        data : formData,
-        cache: false,
-        contentType: false,
-        processData: false,
+        data : JSON.stringify(formData),
+        dataType: "json",
+        contentType: "application/json",
         beforeSend: function(){
             Swal.fire({
                 title: 'Tunggu Sebentar...',
@@ -235,6 +275,71 @@ function _update(formData) {
             Swal.close()
             alert('Error adding data')
         }
+    })
+}
+
+// ajax request - get provinsi
+function _getProvinsi() {
+    $.ajax({
+        url:"/alamat/provinsi",
+        method:"GET",
+        cache: true,
+        success: function (res) {
+            const data = JSON.parse(res.data)
+            const provinsi = data.rajaongkir.results
+            for (let i = 0; i < provinsi.length; i++) {
+                const element = provinsi[i]
+                $("#field-provinsi").append(`<option value="${element.province_id}">${element.province}</option>`)
+            }
+        }
+    })
+}
+
+function _getKota(provinsiID) {
+    $.ajax({
+        url:`/alamat/kota/${provinsiID}`,
+        method:"GET",
+        cache: true,
+        success: function (res) {
+            const data = JSON.parse(res.data)
+            const provinsi = data.rajaongkir.results
+            for (let i = 0; i < provinsi.length; i++) {
+                const element = provinsi[i]
+                $("#field-kota").append(`<option value='${JSON.stringify(element)}'>${element.city_name}</option>`)
+            }
+        }
+    })
+}
+
+function makeUtama(el) {
+    const id = parseInt($(el).attr("data-id"))
+    $.ajax({
+        url: "/alamat/make-utama",
+        method:"PUT",
+        data: {id},
+        beforeSend: function(){
+            Swal.fire({
+                title: 'Tunggu Sebentar...',
+                text: 'Sedang Menetapkan Alamat Utama',
+                imageUrl: '/img/loading.gif',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+            })
+        },
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    title: "Berhasil",
+                    text: "Alamat Utama Berhasil Ditetapkan",
+                    timer: 1500,
+                    showConfirmButton: false,
+                    icon: 'success'
+                })
+                location.reload()
+            }else {
+                Swal.close()
+            }
+        },
     })
 }
 

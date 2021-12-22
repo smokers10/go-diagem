@@ -59,15 +59,8 @@
                                         </button>
                                     </div>
                                 </div>
+                                
                                 <div class="block-content block-content-full">
-                                    <div class="row justify-content-between">
-                                        <div class="col-4">
-                                            <div class="has-search">
-                                                <i class="fa fa-search"></i>
-                                                <input type="search" class="form-control" id="search-data-list" name="keyword">
-                                            </div>
-                                        </div>
-                                    </div>
                                     <input type="hidden" id="current_page" value="1">
                                     <div class="py-50 text-center" id="dataku-loading">
                                         <div class="spinner-border text-primary wh-50" role="status">
@@ -112,16 +105,28 @@
                                 <label class="form-label" for="field-nama">Nama
                                     <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control" name="nama" id="field-nama" placeholder="Masukan Nama Alamat">
+                                <input type="text" class="form-control" name="nama" id="field-nama" placeholder="Nama Alamat Contoh: Rumah, Kostan, dll">
                                 <div class="invalid-feedback" id="error-nama"></div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="field-alamat">Alamat
+                                <label class="form-label" for="field-provinsi">Provinsi
                                     <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control" name="alamat" id="field-alamat" placeholder="Masukan Alamat Lengkap">
-                                <div class="invalid-feedback" id="error-alamat"></div>
+                                <select name="provinsi" id="field-provinsi" class="form-control">
+                                    <option value="">Pilih Provinsi</option>
+                                </select>
+                                <div class="invalid-feedback" id="error-provinsi"></div>
+                            </div>
+
+                            <div class="form-group" id="kota-input">
+                                <label class="form-label" for="field-kota">Kota/Kabupaten
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select name="kota" id="field-kota" class="form-control">
+                                    <option value="">Pilih Kota/Kabupaten</option>
+                                </select>
+                                <div class="invalid-feedback" id="error-kota"></div>
                             </div>
 
                             <div class="form-group">
@@ -130,6 +135,14 @@
                                 </label>
                                 <input type="text" class="form-control" name="kd_pos" id="field-kode-pos" placeholder="Masukan Kode Pos">
                                 <div class="invalid-feedback" id="error-kode-pos"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="field-alamat">Alamat Lengkap
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="alamat" id="field-alamat" placeholder="Masukan Alamat Lengkap">
+                                <div class="invalid-feedback" id="error-alamat"></div>
                             </div>
 
                             <div class="form-group">

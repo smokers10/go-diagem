@@ -22,7 +22,9 @@ func (a *alamatRepository) Create(req *domain.Alamat) (*domain.Alamat, error) {
 		return nil, err
 	}
 
-	stmt, err := tx.Prepare("INSERT INTO alamat (user_id, alamat, nama, penerima, phone, kd_pos, is_utama) VALUES(?, ? ,?, ?, ?, ?, ?)")
+	stmt, err := tx.Prepare(`INSERT INTO alamat 
+	(user_id, alamat, nama, penerima, phone, kd_pos, is_utama, provinsi_id, kota_id, nama_provinsi, nama_kota) 
+	VALUES(?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?)`)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -30,7 +32,7 @@ func (a *alamatRepository) Create(req *domain.Alamat) (*domain.Alamat, error) {
 
 	defer stmt.Close()
 
-	inserted, err := stmt.ExecContext(c, req.UserID, req.Alamat, req.Nama, req.Penerima, req.Phone, req.KDPos, req.IsUtama)
+	inserted, err := stmt.ExecContext(c, req.UserID, req.Alamat, req.Nama, req.Penerima, req.Phone, req.KDPos, req.IsUtama, req.ProvinsiID, req.KotaID, req.NamaProvinsi, req.NamaKota)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -47,7 +49,11 @@ func (a *alamatRepository) Create(req *domain.Alamat) (*domain.Alamat, error) {
 
 func (a *alamatRepository) Read(userID int) ([]domain.Alamat, error) {
 	result := []domain.Alamat{}
-	stmt, err := a.db.Prepare("SELECT id, user_id, alamat, nama, penerima, phone, kd_pos, is_utama FROM alamat WHERE user_id = ?")
+	stmt, err := a.db.Prepare(`
+		SELECT id, alamat, nama, penerima, phone, provinsi_id, kota_id, nama_provinsi, nama_kota, kd_pos, is_utama
+		FROM alamat 
+		WHERE user_id = ?
+	`)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +67,8 @@ func (a *alamatRepository) Read(userID int) ([]domain.Alamat, error) {
 
 	for rows.Next() {
 		row := domain.Alamat{}
-		rows.Scan(&row.ID, &row.UserID, &row.Alamat, &row.Nama, &row.Penerima, &row.Phone, &row.KDPos, &row.IsUtama)
+		rows.Scan(&row.ID, &row.Alamat, &row.Nama, &row.Penerima, &row.Phone, &row.ProvinsiID,
+			&row.KotaID, &row.NamaProvinsi, &row.NamaKota, &row.KDPos, &row.IsUtama)
 		result = append(result, row)
 	}
 
@@ -75,7 +82,9 @@ func (a *alamatRepository) Update(req *domain.Alamat) (*domain.Alamat, error) {
 		return nil, err
 	}
 
-	stmt, err := tx.Prepare("UPDATE alamat SET alamat = ?, nama = ?, penerima = ?, phone = ?, kd_pos = ? WHERE id = ? AND user_id = ?")
+	stmt, err := tx.Prepare(`UPDATE alamat SET 
+	alamat = ?, nama = ?, penerima = ?, phone = ?, kd_pos = ?, provinsi_id = ?, kota_id = ?, nama_provinsi = ?, nama_kota = ?
+	WHERE id = ? AND user_id = ?`)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -83,7 +92,7 @@ func (a *alamatRepository) Update(req *domain.Alamat) (*domain.Alamat, error) {
 
 	defer stmt.Close()
 
-	if _, err := stmt.ExecContext(c, req.Alamat, req.Nama, req.Penerima, req.Phone, req.KDPos, req.ID, req.UserID); err != nil {
+	if _, err := stmt.ExecContext(c, req.Alamat, req.Nama, req.Penerima, req.Phone, req.KDPos, req.ProvinsiID, req.KotaID, req.NamaProvinsi, req.NamaKota, req.ID, req.UserID); err != nil {
 		tx.Rollback()
 		return nil, err
 	}

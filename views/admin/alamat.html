@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+        <title>Admin | Diagem</title>
+
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <!-- Page JS Plugins CSS -->
+        <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+
+        <!-- Fonts, Styles and Codebase framework -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <style>
+            #list-produk_filter {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
+            <!-- Sidebar -->
+            {{template "partials/admin-sidebar" .}}
+            <!-- END Sidebar -->
+
+            <!-- Header -->
+            {{template "partials/admin-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="content">
+                    <form id="form-alamat" onsubmit="return false;">
+                        <input type="hidden" name="alamat-id" id="alamat-id">
+                        <input type="hidden" name="data-daerah" id="data-daerah">
+
+                        <div class="content-heading pt-0 mb-3">
+                            Alamat Origin Diagem
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="block block-rounded">
+                                    <div class="block-header block-header-default">
+                                        <div class="block-title">
+                                            <strong>Alamat Diagem</strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="block-content pb-15">
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-kontak-admin">Kontak Admin</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="field-kontak-admin" name="kontak-admin" placeholder="Masukan Kontak Admin" autocomplete="off">
+                                                <div class="invalid-feedback font-size-sm" id="error-kontak-aktif">Invalid feedback</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-provinsi"><div id="provinsi"></div></label>
+                                            <div class="col-lg-9">
+                                                <select name="provinsi" id="field-provinsi" class="form-control">
+                                                    <option value="">Ganti provinsi</option>
+                                                </select>
+                                                <div class="invalid-feedback font-size-sm" id="error-provinsi">Invalid feedback</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-kota"><div id="kota"></div></label>
+                                            <div class="col-lg-9">
+                                                <select name="kota" id="field-kota" onchange="kotaOnchange()" class="form-control">
+                                                    <option value="">Ganti Provinsi</option>
+                                                </select>
+                                                <div class="invalid-feedback font-size-sm" id="error-kota">Invalid feedback</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-alamat-lengkap">Alamat Lengkap</label>
+                                            <div class="col-lg-9">
+                                                <textarea class="form-control" id="field-alamat-lengkap" name="alamat-lengkap" cols="5" rows="5"></textarea>
+                                                <div class="invalid-feedback font-size-sm" id="error-alamat-lengkap">Invalid feedback</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-pos">Kode POS</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="field-pos" name="pos" placeholder="Masukan Kode POS" autocomplete="off">
+                                                <div class="invalid-feedback font-size-sm" id="error-pos">Invalid feedback</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-lg-3"></div>
+                                            <div class="col-lg-9">
+                                                <button class="btn btn-primary btn-block" type="submit">Simpan</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/admin-footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <script src="/js/admin/general.js"></script>
+        <script>
+            $(document).ready(function(){
+                loadAlamatOrigin()
+
+                // onchange form provinsi
+                $("#field-provinsi").change(function(){
+                    $("#field-kota").html("")
+                    loadKota($(this).val())
+                })
+
+                // submit change
+                $("#form-alamat").submit(function(e){
+                    e.preventDefault()
+                    const datadaerah = JSON.parse($("#data-daerah").val())
+                    const { provinsi_id, kota_id, nama_provinsi, nama_kota } = datadaerah
+                    const data = {
+                        id: parseInt($("#alamat-id").val()),
+                        kontak_admin: $("#field-kontak-admin").val(),
+                        alamat_lengkap: $("#field-alamat-lengkap").val(),
+                        provinsi_id,
+                        kota_id ,
+                        nama_provinsi ,
+                        nama_kota ,
+                        kd_pos : $("#field-pos").val(),
+                    }
+
+                    updateAlamatOrigin(data)
+                })
+            })
+
+            function updateAlamatOrigin(data) {
+                $.ajax({
+                    url: "/admin/alamat-origin/update",
+                    method: "put",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: "application/json",
+                    beforeSend: function(){
+                        Swal.fire({
+                            title: 'Tunggu Sebentar...',
+                            text: '',
+                            imageUrl: '/img/loading.gif',
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                        })
+                    },
+                    success: function(){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Alamat Berhasil Diupdate',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal.close()
+                        alert('Error adding / update data')
+                    }
+                })
+            }
+
+            function loadAlamatOrigin(){
+                loadProvinsi()
+
+                $.ajax({
+                    url:"/admin/alamat-origin/read",
+                    success: function (res) {
+                        const { id, kontak_admin, alamat_lengkap, provinsi_id, kota_id, nama_provinsi, nama_kota, kd_pos } = res.data
+                        loadKota(provinsi_id)
+                        const dataDaerah = {provinsi_id, kota_id, nama_provinsi, nama_kota}
+
+                        $("#provinsi").text(`Provinsi ${nama_provinsi}`)
+                        $("#kota").text(`Kota/Kabupaten ${nama_kota}`)
+                        $("#alamat-id").val(id)
+                        $("#field-kontak-admin").val(kontak_admin)
+                        $("#field-provinsi").val(provinsi_id)
+                        $("#field-kota").val(kota_id)
+                        $("#field-alamat-lengkap").html(alamat_lengkap)
+                        $("#field-pos").val(kd_pos)
+
+                        $("#data-daerah").val(JSON.stringify(dataDaerah))
+
+                    }
+                })
+            }
+
+            function loadProvinsi() {
+                $.ajax({
+                    url:"/admin/rajaongkir/provinsi",
+                    method: "get",
+                    success: function(res){
+                        const data = JSON.parse(res.data)
+                        const { results } = data.rajaongkir
+                        results.forEach(element => {
+                            $("#field-provinsi").append(`<option value="${element.province_id}">${element.province}</option>`)
+                        })
+                    }
+                })
+            }
+
+            function loadKota(provinceID) {
+                $.ajax({
+                    url:`/admin/rajaongkir/kota/${provinceID}`,
+                    method: "get",
+                    success: function(res){
+                        var data = JSON.parse(res.data)
+                        var { results } = data.rajaongkir
+                        results.forEach(element => {
+                            $("#field-kota").append(`<option data-detail='${JSON.stringify(element)}' value='${element.city_id}'>${element.type}  ${element.city_name}</option>`)
+                        })
+                    }
+                })
+            }
+
+            function kotaOnchange() {
+                var selected = document.getElementById("field-kota")
+                var detail = selected.options[selected.selectedIndex].getAttribute("data-detail")
+                var parsedDetail = JSON.parse(detail)
+                var { city_id: kota_id, province_id: provinsi_id, city_name: nama_kota, province: nama_provinsi } = parsedDetail
+
+                $("#data-daerah").val(JSON.stringify({
+                    kota_id,
+                    provinsi_id,
+                    nama_kota,
+                    nama_provinsi,
+                }))
+
+                $("#field-pos").val(parsedDetail.postal_code)
+            }
+
+        </script>
+    </body>
+</html>
+

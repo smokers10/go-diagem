@@ -25,6 +25,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	promoController := admin.PromoController()
 	userAdministratifController := admin.UserAdministratifController()
 	userController := admin.UserController()
+	alamatOriginController := admin.AlamatOriginController()
 
 	// controller API ini
 	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
@@ -36,6 +37,8 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	sliderAPIController := adminAPI.SliderController(resolver.SliderService)
 	userAdminController := adminAPI.UserAdminController(resolver.AdminService)
 	userAPIController := adminAPI.UserController(resolver.UserService)
+	alamatOriginAPIController := adminAPI.AlamatOriginController(resolver.AlamatOriginService)
+	rajaongkir := adminAPI.RajaOngkir(resolver.AlamatService)
 
 	// router clustering
 	adminParentPath := app.Group("/admin")
@@ -163,4 +166,17 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 
 	// home
 	adminParentPath.Get("/home", middleware.AdminWeb(session, "admin", "super admin", "marketing"), homeController.HomePage)
+
+	// alamat origin
+	alamatOrigin := adminParentPath.Group("/alamat-origin", middleware.AdminWeb(session, "admin", "super admin"))
+	// alamat origin page
+	alamatOrigin.Get("/", alamatOriginController.IndexPage)
+	// alamat origin action
+	alamatOrigin.Get("/read", alamatOriginAPIController.Read)
+	alamatOrigin.Put("/update", alamatOriginAPIController.Update)
+
+	// raja ongkir API
+	rajaongkirPath := adminParentPath.Group("/rajaongkir", middleware.AdminWeb(session, "admin", "super admin"))
+	rajaongkirPath.Get("/provinsi", rajaongkir.Provinsi)
+	rajaongkirPath.Get("/kota/:provinsi_id", rajaongkir.Kota)
 }
