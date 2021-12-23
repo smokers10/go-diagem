@@ -53,7 +53,7 @@ func (cs *checkoutServiceImpl) Checkout(req *domain.Checkout) *domain.Response {
 func (cs *checkoutServiceImpl) Ongkir(req *etc.RajaOngkirReqBody) *domain.Response {
 	res := domain.Response{}
 	url := "https://api.rajaongkir.com/starter/cost"
-	payload := fmt.Sprintf("origin=%s&destination=%s&weight=%d&courier=%s", req.Origin, req.Destination, req.Weight, req.Curier)
+	payload := fmt.Sprintf("origin=%s&destination=%s&weight=%d&courier=%s", req.Origin, req.Destination, req.Weight, req.Courier)
 	reader := strings.NewReader(payload)
 	request, err := http.NewRequest("POST", url, reader)
 	if err != nil {
@@ -62,7 +62,7 @@ func (cs *checkoutServiceImpl) Ongkir(req *etc.RajaOngkirReqBody) *domain.Respon
 		return &res
 	}
 
-	request.Header.Add("key", "your-api-key")
+	request.Header.Add("key", etc.RajaOngkirAPIKey)
 	request.Header.Add("content-type", "application/x-www-form-urlencoded")
 
 	response, err := http.DefaultClient.Do(request)

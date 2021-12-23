@@ -74,6 +74,10 @@ function updateCartQtyAPI(qty, id){
     load_cart()
 }
 
+function updateCart(){
+    location.reload()
+}
+
 function load_cart(){
     $.ajax({
         url: "/cart/read",

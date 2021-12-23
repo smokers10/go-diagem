@@ -1,20 +1,39 @@
 $(document).ready(function () {
+	var alamatModal = $('#alamatPilih')
+	$("#paket-pengiriman").hide()
+	$("#hidden-summary").hide()
+	$("#submit-checkout").hide()
+
 	load_detail_cart()
 	load_alamat()
 	loadAlamatOrigin()
-	var alamatModal = $('#alamatPilih')
 
-    var wizard = $("#wizard").steps({
-		headerTag: "h4",
-		bodyTag: "section",
-		transitionEffect: "fade",
-		autoFocus: true,
-		enablePagination: false,
-		enableAllSteps: false,
-		enableKeyNavigation: false,
-		onStepChanged: function (event, currentIndex, newIndex) {}
+	$("input[name=courier]").change(function() {
+		ongkir()
 	})
-	
+
+	$(document).on('change', 'input[name=pilihPaket]:radio', function() {
+		selected = $('input[name="pilihPaket"]:checked')
+		value = JSON.parse(selected.val())
+		$("#courier-paket").val(value.service)
+		$("#ongkir").val(value.cost.value)
+
+		// hitung final total
+		var final = parseInt($("#sub_total").val()) + parseInt($("#ongkir").val())
+		$("#final_total").val(final)
+
+		// assign ke DOM
+		$("#ongkir_show").text(toRupiah.format(value.cost.value))
+		$("#total_belanja").text(toRupiah.format(final))
+
+		// tampilkan button checkout
+		$("#submit-checkout").show()
+		$("#hidden-summary").show()
+
+		// scroll to top
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	})
+
 	$("#btn-next").on("click", function() {
 		wizard.steps('next')
 		$(this).addClass('hide')
@@ -24,91 +43,10 @@ $(document).ready(function () {
 	$("form#checkout").submit(function (e) {
 		e.preventDefault()
 		var formData = new FormData($('form#checkout')[0])
-		$.ajax({
-			url: laroute.route('checkout.simpan'),
-			type: 'POST',
-			data: formData,
-			cache: false,
-			contentType: false,
-			processData: false,
-			beforeSend: function(){
-				Swal.fire({
-					title: 'Tunggu Sebentar...',
-					text: ' ',
-					imageUrl: '/img/loading.gif',
-					showConfirmButton: false,
-					allowOutsideClick: false,
-				})
-			},
-			success: function (response) {
-				$('.is-invalid').removeClass('is-invalid')
-				if (response.fail == false) {
-					Swal.fire({
-						title: "Berhasil",
-						text: "Alamat Berhasil Diperbaharui!",
-						timer: 3000,
-						showConfirmButton: false,
-						icon: 'success'
-					})
-				} else {
-					Swal.close()
-					for (control in response.errors) {
-						$('#field-' + control).addClass('is-invalid')
-						$('#error-' + control).html(response.errors[control])
-					}
-				}
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				Swal.close()
-				alert('Error adding / update data')
-			}
-		})
+		
 	})
 	
 	$(".btn-pilih_alamat").on("click", function() {
-		$.ajax({
-			url: '/alamat/read',
-			type: "GET",
-			dataType: "JSON",
-			success: function(response) {
-				$.each(response.data, function(k, v) {
-					if(v.is_utama == 1){
-						utama = 'checked';
-					}else{
-						utama = '';
-					}
-
-					$("#pilihAlamat").append(`<div class="col-md-12">
-							<label class="aiz-megabox d-block bg-white" for="alamat-`+ v.id +`">
-							<span class="d-flex p-3 aiz-megabox-elem">
-								<label class="align-items-center as-radio-button as-radio-button mr-3">
-									<input type="radio" name="alamatpilih" id="alamat-${v.id} " class="as-radio-button__input pilihAlamat" value='${JSON.stringify(v)}' ${utama}>
-									<span class="as-radio-button__check"></span>
-								</label>
-								<span class="flex-grow-1 pl-3">
-									<div>
-										<span class="font-weight-bold">`+ v.penerima +`</span>
-										<span>( ${v.nama} )</span>
-									</div>
-									<div>
-										<span> ${v.phone} </span>
-									</div>
-									<div>
-										<span> ${v.alamat} </span> 
-									</div>
-									<div>
-										<span>${v.nama_provinsi} - ${v.nama_kota} </span>
-									</div>
-								</span>
-							</span>
-						</label>
-					</div>`)
-				})
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				alert('Error deleting data')
-			}
-		})
 		alamatModal.find('h5.modal-title').html('Pilih Alamat Pengiriman')
         alamatModal.modal({
             backdrop: 'static',
@@ -118,11 +56,39 @@ $(document).ready(function () {
 
 	$(document).on('change', 'input[name=alamatpilih]:radio', function () {
 		selected = $('input[name="alamatpilih"]:checked')
+
 		alamat = JSON.parse(selected.val())
-		console.log(alamat)
+		data = JSON.parse(selected.attr("data-detail"))
+
+		// assigement
+		$("#selected_alamat").val(JSON.stringify(data))
+		$("#alamatData").html("")
+		$("#alamatData").append(_createAlamatElement(data))
+		$("#destination").val(data.kota_id)
+
+		// hide
+		alamatModal.modal("hide")
+	
+		ongkir()
+	})
+
+	$("#btn-finish-checkout").on('click', function (e) {
+		var alamat = JSON.parse($("#selected_alamat").val())
+		
+		const data = {
+			alamat_id : alamat.id,
+			ongkir : parseInt($("#ongkir").val()),
+			kurir : $("#courier").val(),
+			paket_kurir : $("#courier-paket").val(),
+		}
+
+		console.log(data)
+
+		alert("halo")
 	})
 })
 
+// alamat
 function load_alamat(){
 	$.ajax({
         url: "/alamat/read",
@@ -131,31 +97,20 @@ function load_alamat(){
         success: function(response) {
             const alamatData = $("#alamatData")
 			const alamat = response.data
-			var loopIteration
 			alamatData.html(``)
-			if (alamat.length == 0) {
-				alamatData.append(`
-					<div class="text-center">
-						<img class="empty-img" src="/img/placeholder/alamat.png">
-						<div>
-							<h3 class="font-size-24 font-weight-bold mt-1">Alamat Pengiriman Belum Ada</h3>
-							<a href="/alamat" class="btn btn-primary btn-lg"><i class="fa fa-plus mr-1"></i>Tambah Alamat</a>
-						</div>
+			alamatData.append(`
+				<div class="text-center">
+					<img class="empty-img" src="/img/placeholder/alamat.png" height="250" width="250">
+					<div>
+						<h3 class="font-size-24 font-weight-bold mt-1">Silahkan pilih alamat pengiriman</h3>
+						<a href="/alamat" class="btn btn-primary btn-lg"><i class="fa fa-plus mr-1"></i>Tambah Alamat Jika Belum Ada</a>
 					</div>
-				`)
-				return
-			}
+				</div>
+			`)
 
-			for (let i = 0; i < alamat.length; i++) {
-				const el = alamat[i]
-				loopIteration = i
-				if (el.is_utama) {
-					break	
-				}
-			}
-
-			$("#selected_alamat").val(JSON.stringify(alamat[loopIteration]))
-			$("#alamatData").append(_createAlamatElement(alamat[loopIteration]))
+			alamat.forEach(element => {
+				_createAlamatForChoosing(element)
+			})
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('error get data')
@@ -163,26 +118,13 @@ function load_alamat(){
     })
 }
 
-function load_detail_cart(){
+function loadAlamatOrigin() {
 	$.ajax({
-		url: "/cart/read",
-		type: "GET",
-        dataType: "JSON",
-		success: function(response) {
-			const data = response.data
-			var totalBelanja = 0
-			for (let i = 0; i < response.data.length; i++) {
-				const element = response.data[i]
-				totalBelanja = totalBelanja + element.subtotal
-			}
-			data.forEach(dataEl => {
-				$("#detail-belanja").append(_createCartElement(dataEl))
-			})
-			$("#total-belanja").text(toRupiah.format(totalBelanja))
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error deleting data')
-        }
+		url:"/alamat-origin",
+		success: function(res) {
+			const data = res.data
+			$("#origin").val(data.kota_id)
+		}
 	})
 }
 
@@ -206,6 +148,63 @@ function _createAlamatElement(data) {
 			</div>
 		</div>
 	`
+}
+
+function _createAlamatForChoosing(v) {
+	$("#pilihAlamat").append(`<div class="col-md-12">
+			<label class="aiz-megabox d-block bg-white">
+			<span class="d-flex p-3 aiz-megabox-elem">
+				<label class="align-items-center as-radio-button as-radio-button mr-3">
+					<input type="radio" name="alamatpilih" data-detail='${JSON.stringify(v)}' class="as-radio-button__input pilihAlamat" value='${JSON.stringify(v)}'>
+					<span class="as-radio-button__check"></span>
+				</label>
+				<span class="flex-grow-1 pl-3">
+					<div>
+						<span class="font-weight-bold">${v.penerima}</span>
+						<span>( ${v.nama} )</span>
+					</div>
+					<div>
+						<span> ${v.phone} </span>
+					</div>
+					<div>
+						<span> ${v.alamat} </span> 
+					</div>
+					<div>
+						<span>${v.nama_provinsi} - ${v.nama_kota} </span>
+					</div>
+				</span>
+			</span>
+		</label>
+	</div>`)
+}
+
+// cart element
+
+function load_detail_cart(){
+	$.ajax({
+		url: "/cart/read",
+		type: "GET",
+        dataType: "JSON",
+		success: function(response) {
+			const data = response.data
+			var totalBelanja = 0
+			var totalBerat = 0
+			for (let i = 0; i < response.data.length; i++) {
+				const element = response.data[i]
+				totalBelanja = totalBelanja + element.subtotal
+				totalBerat = totalBerat + (element.produk.berat * element.quantity)
+			}
+			data.forEach(dataEl => {
+				$("#detail-belanja").append(_createCartElement(dataEl))
+			})
+			$("#total-belanja").text(toRupiah.format(totalBelanja))
+			$("#sub_total").val(totalBelanja)
+			$("#weight").val(totalBerat)
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error deleting data')
+        }
+	})
 }
 
 function _createCartElement(data) {
@@ -251,24 +250,115 @@ function _createCartElement(data) {
 	`
 }
 
-function load_ongkir(params) {
+// ongkir
+function ongkir() {
+	const data = {
+		origin : $("#origin").val(),
+		destination : $("#destination").val(),
+		weight : parseInt($("#weight").val()),
+		courier : $("input[name=courier]:checked").val()
+	}
+
+	$("#courier").val($("input[name=courier]:checked").val())
+
+	if (data.destination == "") {
+		alert("silahkan pilih alamat tujuan")
+		return
+	}
+
+	if (!data.courier) {
+		alert("silahkan pilih kurir")
+		return
+	}
+
+	load_ongkir(data)
+}
+
+function load_ongkir(data) {
 	$.ajax({
 		url:"/cart/ongkir",
 		method: "post",
-        data : JSON.stringify(formData),
+        data : JSON.stringify(data),
         dataType: "json",
         contentType: "application/json",
-		success: function (params) {
-			console.log(params)
+		success: function (res) {
+			var dataRes = JSON.parse(res.data)
+			var level1 = dataRes.rajaongkir
+			var result = level1.results[0]
+			var { costs, name } = result
+			$("#penyedia-paket").text(`Paket Yang Tersedia di ${name}`)
+			$("#data-paket").html("")
+			costs.forEach(data => {
+				$("#data-paket").append(createCostElement(data.cost[0], data.service, data.description)) 
+			})
+			$("#paket-pengiriman").show()
 		}
 	})
 }
 
-function loadAlamatOrigin() {
+function createCostElement(cost, service, description) {
+	value = {cost, service}
+	return `
+	<div class="col-md-12">
+			<label class="aiz-megabox d-block bg-white">
+			<span class="d-flex p-3 aiz-megabox-elem">
+				<label class="align-items-center as-radio-button as-radio-button mr-3">
+					<input type="radio" name="pilihPaket" class="as-radio-button__input" value='${JSON.stringify(value)}'>
+					<span class="as-radio-button__check"></span>
+				</label>
+				<span class="flex-grow-1 pl-3">
+					<div>
+						<span>Paket ${service}</span>
+						<span class="font-weight-bold">${description}</span>
+						<span>(${cost.etd} hari)</span>
+					</div>
+					<div>
+						<span> ${ toRupiah.format(cost.value)} </span>
+					</div>
+				</span>
+			</span>
+		</label>
+	</div>
+	`
+}
+
+// submit checkout
+function submitCheckout(data) {
 	$.ajax({
-		url:"/alamat-origin",
-		success: function(res) {
-			
+		url: "",
+		type: 'POST',
+		data: data,
+		dataType: "json",
+		contentType: "application/json",
+		beforeSend: function(){
+			Swal.fire({
+				title: 'Tunggu Sebentar...',
+				text: ' ',
+				imageUrl: '/img/loading.gif',
+				showConfirmButton: false,
+				allowOutsideClick: false,
+			})
+		},
+		success: function (response) {
+			if (response.success) {
+				Swal.fire({
+					title: "Checkout Selesai",
+					text: "Silahkan bayar tagihan Anda",
+					timer: 3000,
+					showConfirmButton: false,
+					icon: 'success'
+				})
+			} else {
+				Swal.close()
+				for (control in response.errors) {
+					$('#field-' + control).addClass('is-invalid')
+					$('#error-' + control).html(response.errors[control])
+				}
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			Swal.close()
+			alert('Error adding / update data')
 		}
 	})
 }

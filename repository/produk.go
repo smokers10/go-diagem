@@ -163,7 +163,7 @@ func (p *produkRepositoryImpl) ByIDSimplified(id string) (*domain.ProdukDetailed
 	result := domain.ProdukDetailed{}
 
 	// get single produk
-	query := `SELECT id, nama, harga, slug, stok, discount, is_has_variant FROM produk WHERE id = ? AND deleted = false`
+	query := `SELECT id, nama, harga, slug, stok, discount, is_has_variant, berat FROM produk WHERE id = ? AND deleted = false`
 
 	statement, err := p.db.Prepare(query)
 	if err != nil {
@@ -172,7 +172,7 @@ func (p *produkRepositoryImpl) ByIDSimplified(id string) (*domain.ProdukDetailed
 
 	defer statement.Close()
 
-	statement.QueryRowContext(context.Background(), id).Scan(&result.ID, &result.Nama, &result.Harga, &result.Slug, &result.Stok, &result.Discount, &result.IsHasVariant)
+	statement.QueryRowContext(context.Background(), id).Scan(&result.ID, &result.Nama, &result.Harga, &result.Slug, &result.Stok, &result.Discount, &result.IsHasVariant, &result.Berat)
 
 	return &result, nil
 }

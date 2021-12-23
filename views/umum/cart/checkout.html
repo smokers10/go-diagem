@@ -68,73 +68,118 @@
             <!-- Main Container -->
             <main id="main-container">
                 <div class="content">
-                    <form method="POST" action="#">
-                        <input type="hidden" id="ongkir">
-                        <input type="hidden" id="sub_total">
-                        <input type="hidden" id="final_total">
-                        <input type="hidden" id="selected_alamat">
-                        
-                        <div class="row">
-                            <div class="col-md-8 col-sm-12">
-                                <div class="block block-bordered block-shadow block-rounded mb-3">
-                                    <div class="block-header border-3x border-bottom">
-                                        <h3 class="block-title font-weight-bold">
-                                            <i class="fa fa-truck mr-1"></i>Kirim ke mana?
-                                        </h3>
-                                        <button type="button" class="btn btn-outline-primary float-right btn-sm btn-pilih_alamat">Pilih Alamat Lain</button>
-                                    </div>
-
-                                    <div class="block-content block-content-full" id="alamatData">
-                                    </div>
+                    <input type="hidden" id="sub_total">
+                    <input type="hidden" id="final_total">
+                    <input type="hidden" id="selected_alamat">
+                    <input type="hidden" id="ongkir">
+                    <input type="hidden" id="origin">
+                    <input type="hidden" id="destination">
+                    <input type="hidden" id="weight">
+                    <input type="hidden" id="courier">
+                    <input type="hidden" id="courier-paket">
+                    
+                    <div class="row">
+                        <div class="col-md-8 col-sm-12">                                
+                            <div class="block block-bordered block-shadow block-rounded">
+                                <div class="block-header border-3x border-bottom">
+                                    <h3 class="block-title font-weight-bold">
+                                        Detail Belanja
+                                    </h3>
                                 </div>
-                                
-                                <div class="block block-bordered block-shadow block-rounded">
-                                    <div class="block-header border-3x border-bottom">
-                                        <h3 class="block-title font-weight-bold">
-                                            Detail Belanja
-                                        </h3>
-                                    </div>
-                                    <div class="block-content block-content-full pt-0" id="detail-belanja">
-                                        
+                                <div class="block-content block-content-full pt-0" id="detail-belanja">
+                                    
+                                </div>
+                            </div>
+
+                            <div class="block block-bordered block-shadow block-rounded mb-3">
+                                <div class="block-header border-3x border-bottom">
+                                    <h3 class="block-title font-weight-bold">
+                                        <i class="fa fa-truck mr-1"></i>Kirim ke mana?
+                                    </h3>
+                                    <button type="button" class="btn btn-outline-primary float-right btn-sm btn-pilih_alamat">Pilih Alamat</button>
+                                </div>
+
+                                <div class="block-content block-content-full" id="alamatData">
+                                </div>
+                            </div>
+
+                            <div class="block block-bordered block-shadow block-rounded mb-3">
+                                <div class="block-header border-3x border-bottom">
+                                    <h3 class="block-title font-weight-bold">
+                                        <i class="fa fa-truck mr-1"></i>Pilih Jasa Pengiriman
+                                    </h3>
+                                </div>
+
+                                <div class="block-content block-content-full">
+                                    <div class="row">
+                                        <div class="form-group mr-4">
+                                            <input type="radio" id="jne" name="courier" value="jne">
+                                            <img src="/img/courier/jne.png" alt="jne" height="45" width="80">
+                                        </div>
+
+                                        <div class="form-group mr-4">
+                                            <input type="radio" id="pos" name="courier" value="pos">
+                                            <img src="/img/courier/Pos-Indonesia.svg.png" alt="pos" height="45" width="80">
+                                        </div>
+
+                                        <div class="form-group mr-4">
+                                            <input type="radio" id="tiki" name="courier" value="tiki">
+                                            <img src="/img/courier/Cek-Resi-TIKI.png" alt="tiki" height="45" width="80">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-4 d-none d-md-block">
-                                <div class="block block-shadow block-bordered block-rounded">
-                                    <div class="block-header">
-                                        <div class="font-size-20 font-weight-bold">Ringkasan Belanja</div>
-                                    </div>
-                                    <div class="block-content pt-0 cart-summary">
-                                        <div class="d-flex justify-content-between">
-                                            <div class="">Subtotal</div>
-                                            <div class="" id="total-belanja"></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <div class="">Ongkir</div>
-                                            <div class="" id="ongkir"></div>
-                                        </div>
-                                        <hr class="border-2x">
-                                        <div class="d-flex font-size-20 font-weight-bold justify-content-between mb-2">
-                                            <div class="">Total</div>
-                                            <div class="total_belanja">Rp0</div>
-                                        </div>
-                                    </div>
-                                    <div class="block-content pt-0 ">
-                                        <div class="font-size-20 font-weight-bold">Metode Pembayaran</div>
-                                        <button class="btn btn-outline-primary btn-block btn-lg" type="submit" id="btn-bayar">
-                                            Pilih Pembayaran
-                                        </button>
-                                    </div>
-                                    <div class="block-content block-content-full pt-0">
-                                        <button class="btn btn-primary btn-block btn-lg" type="submit" id="btn-bayar">
-                                            Bayar
-                                        </button>
-                                    </div>
+                            <div class="block block-bordered block-shadow block-rounded mb-3" id="paket-pengiriman">
+                                <div class="block-header border-3x border-bottom">
+                                    <h3 class="block-title font-weight-bold">
+                                        <i class="fa fa-truck mr-1"></i><div id="penyedia-paket"></div>
+                                    </h3>
+                                </div>
+
+                                <div class="block-content block-content-full" id="data-paket">
+                                    
                                 </div>
                             </div>
                         </div>
-                    </form>
+
+                        <div class="col-md-4 d-none d-md-block">
+                            <div class="block block-shadow block-bordered block-rounded">
+                                <div class="block-header">
+                                    <div class="font-size-20 font-weight-bold">Ringkasan Belanja</div>
+                                </div>
+
+                                <div class="block-content pt-0 cart-summary">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="">Subtotal</div>
+                                        <div class="" id="total-belanja"></div>
+                                    </div>
+
+                                    <div id="hidden-summary">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="">Ongkir</div>
+                                            <div class="" id="ongkir_show">Rp0</div>
+                                        </div>
+
+                                        <hr class="border-2x">
+                                        <div class="d-flex font-size-20 font-weight-bold justify-content-between mb-2">
+                                            <div class="">Total</div>
+                                            <div id="total_belanja">Rp0</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="submit-checkout" class="mt-4">
+                                    <div class="block-content block-content-full pt-0">
+                                        <button class="btn btn-primary btn-block btn-lg" id="btn-finish-checkout">
+                                            Selesai Checkout
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
             <!-- END Main Container -->
@@ -157,7 +202,7 @@
                         </div>
                         <div class="modal-body pt-0">
                             <div class="row gutters-5" id="pilihAlamat">
-            
+                                
                             </div>
                         </div>
                     </div>
