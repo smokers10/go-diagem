@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 
 	"github.com/smokers10/go-diagem.git/domain"
@@ -15,6 +16,7 @@ func AlamatOriginRepository(database *sql.DB) domain.AlamatOriginRepository {
 }
 
 func (aor *alamatOriginRepositoryImpl) Read() (*domain.AlamatOrigin, error) {
+	c := context.Background()
 	result := domain.AlamatOrigin{}
 	stmt, err := aor.db.Prepare(`SELECT id, kontak_admin, alamat_lengkap, provinsi_id, kota_id, nama_provinsi, nama_kota, kd_pos FROM alamat_origin LIMIT 1`)
 	if err != nil {
@@ -29,6 +31,7 @@ func (aor *alamatOriginRepositoryImpl) Read() (*domain.AlamatOrigin, error) {
 }
 
 func (aor *alamatOriginRepositoryImpl) Update(req *domain.AlamatOrigin) (*domain.AlamatOrigin, error) {
+	c := context.Background()
 	tx, err := aor.db.BeginTx(c, nil)
 	if err != nil {
 		return nil, err

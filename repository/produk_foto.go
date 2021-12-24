@@ -16,6 +16,7 @@ func ProdukFotoRepository(database *sql.DB) domain.ProdukFotoRepository {
 }
 
 func (p *produkFotoRepositoryImpl) ReadByProdukID(produkID string) ([]domain.ProdukFoto, error) {
+	c := context.Background()
 	result := []domain.ProdukFoto{}
 	stmt, err := p.db.Prepare("SELECT id, produk_id, path, is_utama FROM produk_foto WHERE produk_id = ?")
 	if err != nil {
@@ -37,6 +38,7 @@ func (p *produkFotoRepositoryImpl) ReadByProdukID(produkID string) ([]domain.Pro
 }
 
 func (p *produkFotoRepositoryImpl) GetUtamaOnly(produkID string) (*domain.ProdukFoto, error) {
+	c := context.Background()
 	result := domain.ProdukFoto{}
 	stmt, err := p.db.Prepare("SELECT id, produk_id, path, is_utama FROM produk_foto WHERE produk_id = ? and is_utama = true LIMIT 1")
 	if err != nil {

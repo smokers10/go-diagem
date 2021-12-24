@@ -24,6 +24,7 @@ type ServiceResolver struct {
 	UserService          *domain.UserService
 	VerificationService  *domain.VerifikasiService
 	CheckoutService      *domain.CheckoutService
+	OrderService         *domain.OrderService
 }
 
 func MYSQLResolver(mysql *sql.DB) ServiceResolver {
@@ -42,8 +43,8 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	sliderRepo := repository.SliderRepository(mysql)
 	userRepo := repository.UserRepository(mysql)
 	verificationRepo := repository.VerificationRepository(mysql)
-	orderRepo := repository.OrderRepository(mysql)
 	orderItemRepo := repository.OrderItemRepository(mysql)
+	orderRepo := repository.OrderRepository(mysql)
 
 	//setup service
 	adminServ := services.AdminService(&adminRepo)
@@ -60,7 +61,8 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	sliderServ := services.SliderService(&sliderRepo)
 	userServ := services.UserService(&userRepo)
 	verificationServ := services.VerificationService(&verificationRepo, &userRepo)
-	checkoutServ := services.CheckoutService(&cartRepo, &orderRepo, &orderItemRepo)
+	checkoutServ := services.CheckoutService(&cartRepo)
+	orderServ := services.OrderService(&orderRepo, &produkRepo, &produkVariasiRepo, &cartRepo, &orderItemRepo)
 
 	return ServiceResolver{
 		AdminService:         &adminServ,
@@ -78,5 +80,6 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 		UserService:          &userServ,
 		VerificationService:  &verificationServ,
 		CheckoutService:      &checkoutServ,
+		OrderService:         &orderServ,
 	}
 }

@@ -168,3 +168,19 @@ func (a *alamatRepository) MakeUtamaFalse(id int, user_id int) error {
 	tx.Commit()
 	return nil
 }
+
+func (a *alamatRepository) ByID(id int) (*domain.Alamat, error) {
+	result := domain.Alamat{}
+	stmt, err := a.db.Prepare(`SELECT id, alamat, nama, penerima, phone, provinsi_id, kota_id, nama_provinsi, nama_kota, kd_pos, is_utama
+		FROM alamat 
+		WHERE user_id = ? LIMIT 1
+	`)
+	if err != nil {
+		return nil, err
+	}
+
+	stmt.QueryRow(id).Scan(result.ID, result.Alamat, result.Nama, result.Penerima, result.Phone, result.ProvinsiID,
+		result.KotaID, result.NamaProvinsi, result.NamaKota, result.KDPos, result.IsUtama)
+
+	return &result, nil
+}

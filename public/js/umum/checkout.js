@@ -1,9 +1,6 @@
 $(document).ready(function () {
 	var alamatModal = $('#alamatPilih')
 	$("#paket-pengiriman").hide()
-	$("#hidden-summary").hide()
-	$("#submit-checkout").hide()
-
 	load_detail_cart()
 	load_alamat()
 	loadAlamatOrigin()
@@ -34,18 +31,6 @@ $(document).ready(function () {
 		window.scrollTo({ top: 0, behavior: 'smooth' })
 	})
 
-	$("#btn-next").on("click", function() {
-		wizard.steps('next')
-		$(this).addClass('hide')
-		$('#btn-bayar').removeClass('hide')
-	})
-
-	$("form#checkout").submit(function (e) {
-		e.preventDefault()
-		var formData = new FormData($('form#checkout')[0])
-		
-	})
-	
 	$(".btn-pilih_alamat").on("click", function() {
 		alamatModal.find('h5.modal-title').html('Pilih Alamat Pengiriman')
         alamatModal.modal({
@@ -82,9 +67,7 @@ $(document).ready(function () {
 			paket_kurir : $("#courier-paket").val(),
 		}
 
-		console.log(data)
-
-		alert("halo")
+		submitCheckout(data)
 	})
 })
 
@@ -263,13 +246,17 @@ function ongkir() {
 
 	if (data.destination == "") {
 		alert("silahkan pilih alamat tujuan")
+		$("#btn-finish-checkout").prop("disabled", true)
 		return
 	}
 
 	if (!data.courier) {
 		alert("silahkan pilih kurir")
+		$("#btn-finish-checkout").prop("disabled", true)
 		return
 	}
+
+	$("#btn-finish-checkout").prop("disabled", false)
 
 	load_ongkir(data)
 }
@@ -325,15 +312,15 @@ function createCostElement(cost, service, description) {
 // submit checkout
 function submitCheckout(data) {
 	$.ajax({
-		url: "",
+		url: "/cart/order",
 		type: 'POST',
-		data: data,
+		data: JSON.stringify(data),
 		dataType: "json",
 		contentType: "application/json",
 		beforeSend: function(){
 			Swal.fire({
 				title: 'Tunggu Sebentar...',
-				text: ' ',
+				text: 'Pesanan Anda Sedang Diproses',
 				imageUrl: '/img/loading.gif',
 				showConfirmButton: false,
 				allowOutsideClick: false,
@@ -349,11 +336,11 @@ function submitCheckout(data) {
 					icon: 'success'
 				})
 			} else {
-				Swal.close()
-				for (control in response.errors) {
-					$('#field-' + control).addClass('is-invalid')
-					$('#error-' + control).html(response.errors[control])
-				}
+				Swal.fire({
+					title: "Checkout Gagal",
+					text: response.message,
+					icon: 'error'
+				})
 			}
 		},
 		error: function (jqXHR, textStatus, errorThrown) {

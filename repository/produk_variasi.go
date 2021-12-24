@@ -38,8 +38,8 @@ func (p *produkVariasiRepository) ReadByProdukID(produkID string) ([]domain.Prod
 }
 
 func (p *produkVariasiRepository) ByID(id string) (*domain.ProdukVariasi, error) {
+	c := context.Background()
 	result := domain.ProdukVariasi{}
-
 	stmt, err := p.db.Prepare("SELECT id, variant, sku, harga, stok from produk_variasi WHERE id = ?")
 	if err != nil {
 		return nil, err

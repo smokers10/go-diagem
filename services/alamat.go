@@ -12,8 +12,8 @@ type alamatServiceImpl struct {
 	alamatRepository domain.AlamatRepository
 }
 
-func AlamtService(alamt *domain.AlamatRepository) domain.AlamatService {
-	return &alamatServiceImpl{alamatRepository: *alamt}
+func AlamtService(alamat *domain.AlamatRepository) domain.AlamatService {
+	return &alamatServiceImpl{alamatRepository: *alamat}
 }
 
 func (a *alamatServiceImpl) Create(req *domain.Alamat) *domain.Response {

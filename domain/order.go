@@ -1,49 +1,44 @@
 package domain
 
 type Order struct {
-	ID           string  `json:"id" form:"id"`
-	UserID       int     `json:"user_id" form:"user_id"`
-	AlamatID     int     `json:"alamat_id" form:"alamat_id"`
-	Status       string  `json:"status" form:"status"`
-	SubTotal     float32 `json:"sub_total" form:"sub_total"`
-	BiayaKirim   string  `json:"biaya_kirim" form:"biaya_kirim"`
-	InvoiceNo    string  `json:"invoice_no" form:"invoice_no"`
-	TglTransaksi string  `json:"tgl_transaksi" form:"tgl_transaksi"`
-	FinalTotal   string  `json:"final_total" form:"final_total"`
-	CreatedAt    string  `json:"created_at" form:"created_at"`
-	UpdatedAt    string  `json:"updated_at" form:"updated_at"`
+	ID         string `json:"id,omitempty" form:"id"`
+	Status     string `json:"status,omitempty" form:"status"`
+	UserID     int    `json:"user_id,omitempty" form:"user_id"`
+	AlamatID   int    `json:"alamat_id,omitempty" form:"alamat_id"`
+	Kurir      string `json:"kurir,omitempty" form:"kurir"`
+	PaketKurir string `json:"paket_kurir,omitempty" form:"paket_kurir"`
+	Ongkir     int    `json:"ongkir,omitempty" form:"ongkir"`
+	InvoiceNo  string `json:"invoice_no,omitempty" form:"invoice_no"`
+	TglOrder   string `json:"tgl_order,omitempty" form:"tgl_order"`
 }
 
 type OrderDetail struct {
-	ID           string      `json:"id" form:"id"`
-	User         User        `json:"user" form:"user"`
-	Alamat       Alamat      `json:"alamat" form:"alamat"`
-	Item         []OrderItem `json:"item" from:"item"`
-	Pembayaran   OrderItem   `json:"pembayaran" from:"pembayaran"`
-	Status       string      `json:"status" form:"status"`
-	SubTotal     float32     `json:"sub_total" form:"sub_total"`
-	BiayaKirim   string      `json:"biaya_kirim" form:"biaya_kirim"`
-	InvoiceNo    string      `json:"invoice_no" form:"invoice_no"`
-	TglTransaksi string      `json:"tgl_transaksi" form:"tgl_transaksi"`
-	FinalTotal   string      `json:"final_total" form:"final_total"`
-	CreatedAt    string      `json:"created_at" form:"created_at"`
-	UpdatedAt    string      `json:"updated_at" form:"updated_at"`
+	ID         string            `json:"id,omitempty" form:"id"`
+	Status     string            `json:"status,omitempty" form:"status"`
+	UserID     int               `json:"user_id,omitempty" form:"user_id"`
+	AlamatID   int               `json:"alamat_id,omitempty" form:"alamat_id"`
+	Kurir      string            `json:"kurir,omitempty" form:"kurir"`
+	PaketKurir string            `json:"paket_kurir,omitempty" form:"paket_kurir"`
+	Ongkir     string            `json:"ongkir,omitempty" form:"ongkir"`
+	InvoiceNo  string            `json:"invoice_no,omitempty" form:"invoice_no"`
+	TglOrder   string            `json:"tgl_order,omitempty" form:"tgl_order"`
+	OrderItem  []OrderItemDetail `json:"order_item,omitempty" form:"order_item"`
+	Alamat     Alamat            `json:"alamat,omitempty" form:"alamat"`
+	User       User              `json:"user,omitempty" form:"user"`
 }
 
 type OrderService interface {
-	//Khusu Admin
-	Read() *Response
-
-	//Khusus Umum
-	MyOrder(userID int) *Response
+	Create(req *Order) *Response
+	ReadAll() *Response
+	Detail(orderID string) *Response
+	UpdateStatus(orderID string, status string) *Response
+	ReadByUser(userID int) *Response
 }
 
 type OrderRepository interface {
-	//khusus Admin
-	// Read() ([]Order, error)
-
-	// khusus umum
-	Create(req *Order) (*Order, error)
-	// GetByID(id int) (*Order, error)
-	// GetByUserID(UserID int) ([]Order, error)
+	Create(req *Order) error
+	UpdateStatus(orderID string, status string) error
+	GetByID(orderID string) (*OrderDetail, error)
+	GetByUserID(userID int) ([]Order, error)
+	Read() ([]OrderDetail, error)
 }

@@ -11,16 +11,12 @@ import (
 )
 
 type checkoutServiceImpl struct {
-	cartRepo      domain.CartRepository
-	orderRepo     domain.OrderRepository
-	orderItemRepo domain.OrderItemRepository
+	cartRepo domain.CartRepository
 }
 
-func CheckoutService(cart *domain.CartRepository, order *domain.OrderRepository, orderItem *domain.OrderItemRepository) domain.CheckoutService {
+func CheckoutService(cart *domain.CartRepository) domain.CheckoutService {
 	return &checkoutServiceImpl{
-		cartRepo:      *cart,
-		orderRepo:     *order,
-		orderItemRepo: *orderItem,
+		cartRepo: *cart,
 	}
 }
 
@@ -67,7 +63,8 @@ func (cs *checkoutServiceImpl) Ongkir(req *etc.RajaOngkirReqBody) *domain.Respon
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
-		res.Message = "error saat do response"
+		fmt.Println(response)
+		res.Message = "error saat do response, perikasi koneksi internet"
 		res.Status = 500
 		return &res
 	}

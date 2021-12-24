@@ -35,4 +35,5 @@ type AlamatRepository interface {
 	Delete(id int, user_id int) error
 	MakeUtama(id int, user_id int) error
 	MakeUtamaFalse(id int, user_id int) error
+	ByID(id int) (*Alamat, error)
 }

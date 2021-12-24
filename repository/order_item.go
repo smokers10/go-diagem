@@ -7,34 +7,74 @@ import (
 	"github.com/smokers10/go-diagem.git/domain"
 )
 
-type orderItemRepositoryImpl struct {
+type orderItemRepository struct {
 	db *sql.DB
 }
 
 func OrderItemRepository(database *sql.DB) domain.OrderItemRepository {
-	return &orderItemRepositoryImpl{db: database}
+	return &orderItemRepository{db: database}
 }
 
-func (oi *orderItemRepositoryImpl) Create(req *domain.OrderItem) (*domain.OrderItem, error) {
+func (oir *orderItemRepository) Create(req *domain.OrderItem) error {
 	c := context.Background()
-	tx, err := oi.db.BeginTx(c, nil)
+	tx, err := oir.db.BeginTx(c, nil)
+	if err != nil {
+		return err
+	}
+
+	stmt, err := tx.Prepare(`INSERT INTO order_item (order_checkout_id, produk_id, variasi_id, quantity) VALUES(?, ?, ?, ?)`)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if _, err := stmt.Exec(req.OrderCheckoutID, req.ProdukID, req.VariasiID, req.Quantity); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+
+	return nil
+}
+
+func (oir *orderItemRepository) ByOrderID(orderID string) ([]domain.OrderItemDetail, error) {
+	result := []domain.OrderItemDetail{}
+	produkRepository := ProdukRepository(oir.db)
+	produkVariasiRepository := ProdukVariasiRepository(oir.db)
+	stmt, err := oir.db.Prepare(`SELECT id, order_checkout_id, produk_id, variasi_id, quantity WHERE order_checkout_id = ?`)
 	if err != nil {
 		return nil, err
 	}
 
-	stmt, err := tx.Prepare("INSERT INTO order_item (order_id, produk_id, variasi_id, harga, quantity, sub_total) VALUES (?, ?, ?, ?, ?, ?)")
+	rows, err := stmt.Query(orderID)
 	if err != nil {
 		return nil, err
 	}
 
-	inserted, err := stmt.ExecContext(c, req.OrderID, req.ProdukID, req.VariasiID, req.Harga, req.Quantity, req.SubTotal)
-	if err != nil {
-		return nil, err
+	for rows.Next() {
+		row := domain.OrderItemDetail{}
+
+		rows.Scan(&row.ID, &row.OrderCheckoutID, &row.ProdukID, &row.VariasiID, &row.Quantity)
+
+		// ambil data produk
+		produk, err := produkRepository.ByID(row.ProdukID)
+		if err != nil {
+			return nil, err
+		}
+		row.Produk = *produk
+
+		// ambil data variasi (jika ada)
+		if produk.IsHasVariant {
+			varian, err := produkVariasiRepository.ByID(row.VariasiID)
+			if err != nil {
+				return nil, err
+			}
+			row.Variasi = *varian
+		}
+
+		result = append(result, row)
 	}
 
-	id, _ := inserted.LastInsertId()
-
-	req.ID = int(id)
-
-	return req, nil
+	return result, nil
 }
