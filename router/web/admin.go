@@ -38,8 +38,8 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	userAdminController := adminAPI.UserAdminController(resolver.AdminService)
 	userAPIController := adminAPI.UserController(resolver.UserService)
 	alamatOriginAPIController := adminAPI.AlamatOriginController(resolver.AlamatOriginService)
+	bankAPIController := adminAPI.BankController(resolver.BankService)
 	rajaongkir := adminAPI.RajaOngkir(resolver.AlamatService)
-
 	// router clustering
 	adminParentPath := app.Group("/admin")
 
@@ -79,7 +79,9 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 
 	// keuangan
 	keuangan := adminParentPath.Group("/keuangan", middleware.AdminWeb(session, "admin", "super admin"))
-	keuangan.Get("/rekening", keuanganController.RekeningPage)
+	keuangan.Get("/va", keuanganController.RekeningPage)
+	keuangan.Put("/update", bankAPIController.Update)
+	keuangan.Get("/get", bankAPIController.Read)
 
 	// produk
 	produk := adminParentPath.Group("/produk", middleware.AdminWeb(session, "admin", "super admin"))

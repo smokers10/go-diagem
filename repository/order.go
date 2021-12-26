@@ -45,7 +45,7 @@ func (or *orderRepository) UpdateStatus(orderID string, status string) error {
 		return err
 	}
 
-	stmt, err := tx.Prepare("UPDATE order SET status = ? WHERE id = ?")
+	stmt, err := tx.Prepare("UPDATE order_checkout SET status = ? WHERE id = ?")
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -66,7 +66,7 @@ func (or *orderRepository) GetByID(orderID string) (*domain.OrderDetail, error) 
 	userRepo := UserRepository(or.db)
 	orderItemRepo := OrderItemRepository(or.db)
 
-	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order WHERE id = ? LIMIT 1")
+	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order_checkout WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func (or *orderRepository) GetByID(orderID string) (*domain.OrderDetail, error) 
 func (or *orderRepository) GetByUserID(userID int) ([]domain.Order, error) {
 	result := []domain.Order{}
 
-	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order WHERE user_id = ?")
+	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order_checkout WHERE user_id = ?")
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +121,7 @@ func (or *orderRepository) Read() ([]domain.OrderDetail, error) {
 	result := []domain.OrderDetail{}
 	userRepo := UserRepository(or.db)
 
-	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order")
+	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order_checkout")
 	if err != nil {
 		return nil, err
 	}

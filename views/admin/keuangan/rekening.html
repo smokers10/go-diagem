@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-        <title>Admin | Tokonya</title>
+        <title>Admin | Diagem</title>
 
-        <meta name="description" content="Tokonya">
-        <meta name="author" content="Tokonya">
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
         <meta name="robots" content="noindex, nofollow">
 
         <!-- Open Graph Meta -->
-        <meta property="og:title" content="Tokonya">
-        <meta property="og:site_name" content="Tokonya">
-        <meta property="og:description" content="Tokonya">
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
         <meta property="og:type" content="website">
         <meta property="og:url" content="">
         <meta property="og:image" content="">
@@ -50,135 +50,77 @@
                 <!-- Page Content -->
                 <div class="content">
                     <div class="content-heading pt-0 mb-3">
-                        Rekening Bank
-                        <button type="button" class="btn btn-primary float-right" id="btn-add_rekening">Tambah Rekening</button>
+                        Virtual Account
                     </div>
                     <div class="block">
-                        <div class="block-content bg-body-light">
-                            <!-- Search -->
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="search_box" placeholder="Masukan Kata Kunci..">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-secondary">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END Search -->
-                        </div>
                         <div class="block-content pb-15">
-                            <table class="table table-hover table-vcenter mb-0" id="list-rekening">
+                            <table class="table table-hover table-vcenter mb-0" >
                                 <thead>
                                     <tr>
-                                        <th class="font-weight-bold">Nama Bank</th>
-                                        <th class="font-weight-bold">Kode Bank</th>
-                                        <th class="font-weight-bold">Nomor Rekening</th>
-                                        <th class="font-weight-bold">Atas Nama</th>
-                                        <th class="font-weight-bold" width="20% text-right"></th>
+                                        <th class="font-weight-bold">Bank</th>
+                                        <th class="font-weight-bold">No Virtual Acount</th>
+                                        <th class="font-weight-bold">Status</th>
+                                        <th class="font-weight-bold">Aksi</th>
                                     </tr>
                                 </thead>
+                                <tbody id="list-va">
+
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                
-                <div class="modal" id="modalRekening">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <form onsubmit="return false" id="form-rekening">
-                                <input type="hidden" name="id" id="field-id" value="">
-                                <div class="block-header block-header-default">
-                                    <h3 class="block-title modal-title">Judul Modal</h3>
-                                    <div class="block-options">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">
-                                                <i class="fa fa-times-circle"></i>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="block-content py-0">
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="field-bank">Nama Bank</label>
-                                        <input type="text" class="form-control" id="field-bank" name="bank" placeholder="Masukan Nama Bank" autocomplete="off">
-                                        <div class="invalid-feedback font-size-sm" id="error-bank">Invalid feedback</div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="field-kode">Kode Bank</label>
-                                        <input type="text" class="form-control" id="field-kode" name="kode" placeholder="Masukan Kode Bank" autocomplete="off">
-                                        <div class="invalid-feedback font-size-sm" id="error-kode">Invalid feedback</div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="field-rekening">No. Rekening</label>
-                                        <input type="text" class="form-control" id="field-rekening" name="rekening" placeholder="Masukan No. Rekening" autocomplete="off">
-                                        <div class="invalid-feedback font-size-sm" id="error-rekening">Invalid feedback</div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="field-nama">Atas Nama</label>
-                                        <input type="text" class="form-control" id="field-nama" name="nama" placeholder="Masukan Atas Nama" autocomplete="off">
-                                        <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="field-nama">Icon</label>
-                                        <div class="div">                        
-                                            <img id="thumbPrev" class="border border-2x border-primary img-fluid mb-2" src="https://via.placeholder.com/128x64.png?text=ICON+BANK"/>
-                                        </div>
-                                        <div class="div">
-                                            <div class="btn btn-primary">
-                                                <input type="file" class="file-upload" id="uploadThumb" accept="image/*" name="icon">
-                                                <i class="si si-camera mr-1"></i>Pilih Icon
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fa fa-check"></i> Simpan
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="modal" id="cropModal">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="block-header block-header-default">
-                                    <h3 class="block-title modal-title">Potong & Sesuaikan Icon</h3>
-                                <div class="block-options">
-                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                        <i class="si si-close"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="block-content pb-15">
-                                <div id="resizer"></div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <button class="btn btn-alt-primary rotate btn-block text-center" data-deg="90">
-                                            <i class="fa fa-undo"></i>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button class="btn btn-alt-primary rotate btn-block text-center" data-deg="-90" >
-                                        <i class="fa fa-redo"></i></button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button class="btn btn-alt-primary btn-block" id="upload">Potong Dan Simpan</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- END Page Content -->
-
             </main>
             <!-- END Main Container -->
+
+            <div class="modal" id="foto-produk-modal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title modal-title">Edit Virtual Account</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="si si-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <form action="">
+                            <input type="hidden" id="id-va">
+                            <div class="block-content pb-15">
+                                <div class="form-group">
+                                    <label for="no-va">No Virtual Account</label>
+                                    <input type="text" name="no-va" id="no-va" class="form-control">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="status">Status Account</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="true">Aktif</option>
+                                        <option value="false">Tidak Aktif</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="no-va">Bank</label>
+                                    <select name="bank" id="bank" class="form-control" disabled>
+                                        <option value="bni_va">BNI</option>
+                                        <option value="bca_va">BCA</option>
+                                        <option value="bri_va">BRI</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary" onclick="submitEdit(this)">
+                                <i class="fa fa-check"></i> Simpan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Footer -->
             {{template "partials/admin-footer" .}}
@@ -186,46 +128,102 @@
         </div>
         <script src="/js/laravel.app.js"></script>
         <script src="/js/laroute.js"></script>
-        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
-        <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
         <script src="/js/common.js"></script>
         <script src="/js/functions.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
-        <script src="/js/plugins/select2/js/select2.full.min.js"></script>
-        <script src="/js/plugins/select2/js/i18n/id.js"></script>
-        <script src="/js/admin/rekening.js"></script>
         <script src="/js/admin/general.js"></script>
         <script>
-            $('.dataTables_filter input[type="search"]').
-            attr('placeholder','Search in this blog ....').
-            css({'width':'500px','display':'inline-block'});
-            $.extend( true, $.fn.dataTable.defaults, {
-                "responsive": true,
-                "pageLength": 20,
-                "lengthChange": false,
-                "language": {
-                    'loadingRecords': '&nbsp;',
-                    "sEmptyTable":	 "Tidak ada data yang tersedia pada tabel ini",
-                    "sProcessing":   '<div class="spinner-grow text-primary pt-25" role="status"><span class="sr-only">Loading...</span></div>',
-                    "sLengthMenu":   "Tampilkan _MENU_",
-                    "sZeroRecords":  "Tidak ditemukan data yang sesuai",
-                    "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                    "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
-                    "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
-                    "sInfoPostFix":  "",
-                    "sSearch":       "Cari:",
-                    "sUrl":          "",
-                    "oPaginate": {
-                        "sFirst":    "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext":     "Selanjutnya",
-                        "sLast":     "Terakhir"
+            $(document).ready(function(){
+                loadVA()
+            })
+
+            function loadVA() {
+                $.ajax({
+                    url: "/admin/keuangan/get",
+                    success: function(res) {
+                        res.data.forEach(el => {
+                            $("#list-va").append(createVAElement(el))
+                        })
                     }
-                },
-            });
+                })
+            }
+
+            function createVAElement(data) {
+                const { id, no_va, status, vendor } = data
+                var vendorText
+
+                switch (vendor) {
+                    case "bni_va":
+                        vendorText = "BNI"
+                        break
+                    case "bca_va":
+                        vendorText = "BCA"
+                        break
+                    default:
+                        vendorText = "BRI"
+                        break
+                }
+
+                return `
+                    <tr>
+                        <td>${vendorText}</td>
+                        <td>${no_va}</td>
+                        <td>
+                            <button class="btn ${status ? "btn-success" : "btn-secondary"}"> ${status ? "Aktif" : "Tidak Aktif"} </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" detail='${JSON.stringify(data)}' onclick="EditVA(this)">Edit</button>
+                        </td>
+                    </tr>
+                `
+            }
+
+            function EditVA(e) {
+                const data = JSON.parse($(e).attr("detail"))
+                const { id, no_va, status, vendor } = data
+                console.log(data)
+                $("#foto-produk-modal").modal('show')
+                $("#id-va").val(id)
+                $("#no-va").val(no_va)
+                $("#bank").val(vendor)
+                $("#status").val(status)
+                status ? $("#status").val("true") : $("#status").val("false")
+            }
+
+            function submitEdit(e) {
+                var status = $("#status").val() == "true" ? true : false 
+                const data = {
+                    id : parseInt($("#id-va").val()),
+                    no_va: $("#no-va").val(),
+                    status,
+                    bank :  $("#bank").val(),
+                }
+                $.ajax({
+                    url:"/admin/keuangan/update",
+                    type:"PUT",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: "application/json",
+                    beforeSend: function(){
+                        Swal.fire({
+                            title: 'Tunggu Sebentar...',
+                            text: '',
+                            imageUrl: '/img/loading.gif',
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                        })
+                    },
+                    success: function(res) {
+                        $("#foto-produk-modal").modal('hide')
+                        Swal.fire({
+                            title: 'Virtual Account Berhasil Diupdate!',
+                            icon: 'success',
+                            timer: 3000,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                        })
+                    }
+                })
+            }
         </script>
     </body>
 </html>

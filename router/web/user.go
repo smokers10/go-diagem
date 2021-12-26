@@ -29,6 +29,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	mitraController := user.MitraController()
 	postController := user.PostController()
 	kategoriController := user.KategoriController()
+	pesananController := user.OrderController()
 
 	// API Controller init
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
@@ -40,6 +41,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	checkoutAPIController := userAPI.CheckoutController(resolver.CheckoutService)
 	alamatOriginAPIController := userAPI.AlamatOriginController(resolver.AlamatOriginService)
 	orderAPIController := userAPI.OrderController(resolver.OrderService)
+	feedbackAPIController := userAPI.FeedbackController(resolver.FeedbackService)
 
 	// router clustering
 	parentPath := app.Group("/")
@@ -126,6 +128,20 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {
 		return c.Render("home", nil)
 	})
+
+	// pesanan page
+	pesanan := parentPath.Group("/pesanan", middlewareStrict)
+	pesanan.Get("/", pesananController.IndexPage)
+	pesanan.Get("/invoice/:order_id", pesananController.Invoice)
+	pesanan.Get("/get", orderAPIController.Read)
+	pesanan.Get("/detail/:order_id", orderAPIController.DetailOrder)
+
+	// feedback
+	feedback := parentPath.Group("/feedback")
+	feedback.Get("/", feedbackAPIController.Read)
+	feedback.Get("/get-my-feedback", feedbackAPIController.GetMyFeedback, middlewareStrict)
+	feedback.Post("/give-feedback", feedbackAPIController.GiveFeedback, middlewareStrict)
+	feedback.Put("/update", feedbackAPIController.EditFeedback, middlewareStrict)
 
 	// alamat origin
 	alamatOrigin := parentPath.Group("/alamat-origin")

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
+        <meta name="robots" content="noindex, nofollow">
+        
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    </head>
+    <body class="bg-white">
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
+            {{template "partials/user-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="content">
+                    <div class="row cols-xs-space cols-sm-space cols-md-space">
+                        <div class="col-lg-3">
+                            {{template "partials/user-menu" .}}
+                        </div>
+
+                        <div class="col-lg-9">
+                            <div class="block block-bordered block-rounded block-shadow">
+                                <div class="block-header">
+                                    <ul class="nav nav-pills card-header-pills">
+                                        <li class="nav-item">
+                                            <a href="#" class="navigation-filter nav-link active">Semua</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="navigation-filter nav-link">Belum Dibayar</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="navigation-filter nav-link">Dikemas</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="navigation-filter nav-link">Dikirim</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="navigation-filter nav-link">Selesai</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="navigation-filter nav-link">Dibatalkan</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="block-content block-content-full">
+                                    <table class="table" style="width:100%" id="table-invoice">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">No Invoice</th>
+                                                <th scope="col">Kurir</th>
+                                                <th scope="col">Tanggal Dipesan</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="order-show">
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $("#table-invoice").hide()
+                getPesanan()
+
+                $(".navigation-filter").click(function(){
+                    navigateFilter(this)
+                })
+            })
+
+            function navigateFilter(data) {
+                $(".navigation-filter").removeClass("active")
+                $(data).addClass("active")
+            }
+
+            function getPesanan() {
+                var displayArea = $("#order-show")
+                $.ajax({
+                    url: "/pesanan/get",
+                    success: function(res){
+                        if (res.data.length == 0) {
+                            $("#table-invoice").hide()
+                            displayArea.html(`
+                                <center>
+                                    <div class="height-380 py-5">
+                                        <img class="empty-img" src="/img/placeholder/empty.png">
+                                        <div>
+                                            <h3 class="font-size-24 font-weight-bold mt-5">Belum Ada Transaksi Yang Dilakukan</h3>
+                                            <p class="font-size-16">Daftar transaksi anda masih kosong. Yuk segera mulai belanja perhiasan di Diagem</p>
+                                        </div>
+                                    </div>
+                                </center>
+                            `)
+                        }else {
+                            $("#table-invoice").show()
+                            res.data.forEach(el => {
+                                $("#order-show").append(createPesananElement(el))
+                            })
+                        }
+                    }
+                })
+            }
+
+            function createPesananElement(data) {
+                const {id, invoice_no, kurir, status, tgl_order} = data
+                return `
+                    <tr>
+                        <td>${invoice_no}</td>
+                        <td>${kurir}</td>
+                        <td>${tgl_order}</td>
+                        <td>${status}</td>
+                        <td>
+                            <a href="/pesanan/invoice/${id}">
+                                Lihat Detail
+                            </a>
+                        </td>
+                    </tr>
+                `
+            }
+        </script>
+    </body>
+</html>

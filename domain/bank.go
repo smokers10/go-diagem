@@ -1,14 +1,19 @@
 package domain
 
 type Bank struct {
-	ID        int    `json:"id,omitempty" form:"id"`
-	Name      string `json:"name,omitempty" form:"name"`
-	Code      string `json:"code,omitempty" form:"code"`
-	Icon      string `json:"icon,omitempty" form:"icon"`
-	CreatedAt string `json:"created_at,omitempty" form:"created_at"`
-	UpdatedAt string `json:"updated_at,omitempty" form:"updated_at"`
+	ID     int    `json:"id,omitempty" form:"id"`
+	NoVa   string `json:"no_va,omitempty" form:"no_va"`
+	Status bool   `json:"status" form:"status"`
+	Vendor string `json:"vendor" form:"vendor"`
 }
 
-type BankService interface{}
+type BankService interface {
+	Update(req *Bank) *Response
+	Read() *Response
+}
 
-type BankRepository interface{}
+type BankRepository interface {
+	Update(req *Bank) error
+	GetActive() ([]Bank, error)
+	Read() ([]Bank, error)
+}

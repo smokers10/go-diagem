@@ -19,12 +19,13 @@ type ServiceResolver struct {
 	ProdukFoto           *domain.ProdukFotoService
 	ProdukVariasiService *domain.ProdukVariasiService
 	PromoService         *domain.PromoService
-	RekeningService      *domain.RekeningService
 	SliderService        *domain.SliderService
 	UserService          *domain.UserService
 	VerificationService  *domain.VerifikasiService
 	CheckoutService      *domain.CheckoutService
 	OrderService         *domain.OrderService
+	FeedbackService      *domain.FeedbackService
+	BankService          *domain.BankService
 }
 
 func MYSQLResolver(mysql *sql.DB) ServiceResolver {
@@ -39,12 +40,13 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	produkFoto := repository.ProdukFotoRepository(mysql)
 	produkVariasiRepo := repository.ProdukVariasiRepository(mysql)
 	promoRepo := repository.PromoRepository(mysql)
-	rekeningRepo := repository.RekeningRepository(mysql)
 	sliderRepo := repository.SliderRepository(mysql)
 	userRepo := repository.UserRepository(mysql)
 	verificationRepo := repository.VerificationRepository(mysql)
 	orderItemRepo := repository.OrderItemRepository(mysql)
 	orderRepo := repository.OrderRepository(mysql)
+	feedbackRepo := repository.FeedbackRepository(mysql)
+	bankRepo := repository.BankRepository(mysql)
 
 	//setup service
 	adminServ := services.AdminService(&adminRepo)
@@ -57,12 +59,13 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	produkFotoServ := services.ProdukFoto(&produkFoto)
 	produkVariasiServ := services.ProdukVariasiService(&produkVariasiRepo)
 	promoServ := services.PromoService(&promoRepo)
-	rekeningServ := services.RekeningService(&rekeningRepo)
 	sliderServ := services.SliderService(&sliderRepo)
 	userServ := services.UserService(&userRepo)
 	verificationServ := services.VerificationService(&verificationRepo, &userRepo)
 	checkoutServ := services.CheckoutService(&cartRepo)
 	orderServ := services.OrderService(&orderRepo, &produkRepo, &produkVariasiRepo, &cartRepo, &orderItemRepo)
+	feedbackServ := services.FeedbackService(&feedbackRepo)
+	bankServ := services.BankService(&bankRepo)
 
 	return ServiceResolver{
 		AdminService:         &adminServ,
@@ -75,11 +78,12 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 		ProdukFoto:           &produkFotoServ,
 		ProdukVariasiService: &produkVariasiServ,
 		PromoService:         &promoServ,
-		RekeningService:      &rekeningServ,
 		SliderService:        &sliderServ,
 		UserService:          &userServ,
 		VerificationService:  &verificationServ,
 		CheckoutService:      &checkoutServ,
 		OrderService:         &orderServ,
+		FeedbackService:      &feedbackServ,
+		BankService:          &bankServ,
 	}
 }

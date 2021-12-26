@@ -15,7 +15,6 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	produkController := admin.ProdukController(resolver.ProdukService)
 	produkVariasiController := admin.ProdukVariasiController(resolver.ProdukVariasiService)
 	promoController := admin.PromoController(resolver.PromoService)
-	rekeningController := admin.RekeningController(resolver.RekeningService)
 	sliderController := admin.SliderController(resolver.SliderService)
 	userAdminController := admin.UserAdminController(resolver.AdminService)
 
@@ -62,13 +61,6 @@ func AdminAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	promo.Get("/:id", promoController.Detail)
 	promo.Put("/update", promoController.Update)
 	promo.Delete("/delete", promoController.Delete)
-
-	// rekening
-	rekening := parent.Group("/rekening", middleware.Admin("marketing", "super admin"))
-	rekening.Post("/create", rekeningController.Create)
-	rekening.Get("/list", rekeningController.Read)
-	rekening.Put("/update", rekeningController.Update)
-	rekening.Delete("/delete", rekeningController.Delete)
 
 	// slider
 	slider := parent.Group("/slider", middleware.Admin("marketing", "super admin"))
