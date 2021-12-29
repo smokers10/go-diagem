@@ -68,6 +68,7 @@ function _loadContent(){
         success: function(response) {
             var dataList = ''
             if(response.data.length !== 0){
+                $("#data-list").html("")
                 $.each(response.data, function(k, item) {
                     dataList += _createElement(item)
                 })
@@ -158,7 +159,7 @@ function _hapusAlamat(e) {
                             icon: 'success'
                         })
                         
-                        $(`#alamat-${selectedID}`).remove()
+                        _loadContent()
                     }else {
                         Swal.close()
                     }
@@ -222,8 +223,7 @@ function _insert(formData) {
                 })
 
                 // appending alamat baru
-                let newElement = _createElement(response.data)
-                $('#data-list').append(newElement)
+                _loadContent()
             }else {
                 Swal.close()
             }
@@ -264,9 +264,7 @@ function _update(formData) {
                 })
 
                 // update element alamat
-                let data = response.data
-                let updateElement = _createElement(data)
-                $(`#alamat-${data.id}`).html(updateElement)
+                _loadContent()
             }else {
                 Swal.close()
             }
@@ -305,7 +303,7 @@ function _getKota(provinsiID) {
             const provinsi = data.rajaongkir.results
             for (let i = 0; i < provinsi.length; i++) {
                 const element = provinsi[i]
-                $("#field-kota").append(`<option value='${JSON.stringify(element)}'>${element.city_name}</option>`)
+                $("#field-kota").append(`<option value='${JSON.stringify(element)}'>${element.type} ${element.city_name}</option>`)
             }
         }
     })

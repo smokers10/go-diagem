@@ -45,6 +45,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	verificationRepo := repository.VerificationRepository(mysql)
 	orderItemRepo := repository.OrderItemRepository(mysql)
 	orderRepo := repository.OrderRepository(mysql)
+	orderBayarRepo := repository.OrderBayarRepository(mysql)
 	feedbackRepo := repository.FeedbackRepository(mysql)
 	bankRepo := repository.BankRepository(mysql)
 
@@ -63,7 +64,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	userServ := services.UserService(&userRepo)
 	verificationServ := services.VerificationService(&verificationRepo, &userRepo)
 	checkoutServ := services.CheckoutService(&cartRepo)
-	orderServ := services.OrderService(&orderRepo, &produkRepo, &produkVariasiRepo, &cartRepo, &orderItemRepo)
+	orderServ := services.OrderService(&orderRepo, &produkRepo, &produkVariasiRepo, &cartRepo, &orderItemRepo, &userRepo, &alamatRepo, &bankRepo, &orderBayarRepo)
 	feedbackServ := services.FeedbackService(&feedbackRepo)
 	bankServ := services.BankService(&bankRepo)
 

@@ -49,39 +49,39 @@ function hapus(id) {
     })
     .then((result) => {
         if (result.value) {
-        $.ajax({
-            url: "/admin/kategori/delete",
-            data : {id},
-            type: "DELETE",
-            dataType: "JSON",
-            beforeSend: function(){
-                Swal.fire({
-                    title: 'Tunggu Sebentar...',
-                    text: ' ',
-                    imageUrl: '/img/loading.gif',
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                })
-            },
-            success: function(response) {
-                if (response.success) {
+            $.ajax({
+                url: "/admin/kategori/delete",
+                data : {id},
+                type: "DELETE",
+                dataType: "JSON",
+                beforeSend: function(){
                     Swal.fire({
-                        title: "Berhasil",
-                        text: 'Kategori Berhasil Dihapus!',
-                        timer: 3000,
+                        title: 'Tunggu Sebentar...',
+                        text: ' ',
+                        imageUrl: '/img/loading.gif',
                         showConfirmButton: false,
-                        icon: 'success'
+                        allowOutsideClick: false,
                     })
-                    $('#list-kategori').DataTable().ajax.reload()
-                }else {
-                    alert("kesalahan terjadi hubungi developer")
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Berhasil",
+                            text: 'Kategori Berhasil Dihapus!',
+                            timer: 3000,
+                            showConfirmButton: false,
+                            icon: 'success'
+                        })
+                        $('#list-kategori').DataTable().ajax.reload()
+                    }else {
+                        alert("kesalahan terjadi hubungi developer")
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    Swal.close()
+                    alert('Error deleting data')
                 }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                Swal.close()
-                alert('Error deleting data')
-            }
-        })
+            })
         }else{
             Swal.close()
         }

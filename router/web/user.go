@@ -84,7 +84,6 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	cart := parentPath.Group("/cart", middlewareStrict)
 	cart.Get("/", cartController.IndexPage)
 	cart.Get("/checkout", cartController.CheckoutPage)
-	cart.Get("/pembayaran", cartController.PembayaranPage)
 
 	cart.Get("/read", cartAPIController.Read)
 	cart.Post("/add-to-cart", cartAPIController.AddToCart)

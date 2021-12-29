@@ -79,3 +79,35 @@ func (br *bankRepositoryImpl) Read() ([]domain.Bank, error) {
 
 	return result, nil
 }
+
+func (br *bankRepositoryImpl) Segmented() (*domain.BankSegmented, error) {
+	segmented := domain.BankSegmented{}
+	stmt, err := br.db.Prepare("SELECT id, no_va, vendor, status FROM bank")
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		row := domain.Bank{}
+		rows.Scan(&row.ID, &row.NoVa, &row.Vendor, &row.Status)
+		if row.Vendor == "bni_va" {
+			segmented.BNI.VANumber = row.NoVa
+		}
+
+		if row.Vendor == "bri_va" {
+			segmented.BRI.VANumber = row.NoVa
+		}
+
+		if row.Vendor == "bca_va" {
+			segmented.BCA.SubCompanyNumber = "n/a"
+			segmented.BCA.VANumber = row.NoVa
+		}
+	}
+
+	return &segmented, nil
+}

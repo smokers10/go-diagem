@@ -162,7 +162,6 @@ function _createAlamatForChoosing(v) {
 }
 
 // cart element
-
 function load_detail_cart(){
 	$.ajax({
 		url: "/cart/read",
@@ -174,7 +173,15 @@ function load_detail_cart(){
 			var totalBerat = 0
 			for (let i = 0; i < response.data.length; i++) {
 				const element = response.data[i]
-				totalBelanja = totalBelanja + element.subtotal
+				const discount = element.produk.discount
+				if (discount > 0) {
+					let pengali = discount / 100
+					let dipotong = element.subtotal - (element.subtotal * pengali)
+					totalBelanja = totalBelanja + dipotong
+				}else {
+					totalBelanja = totalBelanja + element.subtotal
+				}
+
 				totalBerat = totalBerat + (element.produk.berat * element.quantity)
 			}
 			data.forEach(dataEl => {
@@ -328,13 +335,7 @@ function submitCheckout(data) {
 		},
 		success: function (response) {
 			if (response.success) {
-				Swal.fire({
-					title: "Checkout Selesai",
-					text: "Silahkan bayar tagihan Anda",
-					timer: 3000,
-					showConfirmButton: false,
-					icon: 'success'
-				})
+				bayarsekarang(response.data.token)
 			} else {
 				Swal.fire({
 					title: "Checkout Gagal",
@@ -348,4 +349,26 @@ function submitCheckout(data) {
 			alert('Error adding / update data')
 		}
 	})
+}
+
+function bayarsekarang(token) {
+	Swal.fire({
+        title: "Checkout Selesai",
+        text: "Mau Bayar Sekarang?",
+        icon: "success",
+        showCancelButton: true,
+        confirmButtonText: 'Ya!',
+        cancelButtonText: 'Lain Kali',
+        reverseButtons: true,
+        allowOutsideClick: false,
+        confirmButtonColor: '#af1310',
+        cancelButtonColor: '#fffff',
+    })
+    .then((result) => {
+       	if (result.value) {
+			snap.pay(token)
+	   	} else {
+			Swal.close()
+	   	}
+    })
 }

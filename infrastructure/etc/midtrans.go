@@ -2,7 +2,6 @@ package etc
 
 import (
 	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -11,17 +10,17 @@ import (
 )
 
 const (
-	clientMidtransKey = "Mid-client-qSHcGy_zZfUArqlP"
-	serverMidtransKey = "Mid-server-kaHeYZv7SmquzLF1slqQm859"
+	server_key = "SB-Mid-server-72w4BpkX9z-gC8HCHmbu84dZ"
+	password   = "Suckitjiwa666"
 )
 
 var enablePayments = []string{"bca_klikpay", "bca_va", "bni_va", "bri_va"}
 
 type Midtrans struct {
-	TransactionDetail TransactionDetail `json:"transaction_detail"`
-	CustomerDetail    CustomerDetail    `json:"customer_detail"`
-	ItemDetail        []ItemDetail      `json:"item_detail"`
-	EnabledPayments   []string          `json:"enable_payments"`
+	TransactionDetail TransactionDetail `json:"transaction_details"`
+	CustomerDetail    CustomerDetail    `json:"customer_details"`
+	ItemDetail        []ItemDetail      `json:"item_details"`
+	EnabledPayments   []string          `json:"enabled_payments"`
 	BCA               BCA               `json:"bca_va"`
 	BNI               BNI               `json:"bni_va"`
 	BRI               BRI               `json:"bri_va"`
@@ -55,15 +54,20 @@ type ShippingAddress struct {
 }
 
 type TransactionDetail struct {
-	OrderID     string `json:"order_id"`
-	GrossAmount int    `json:"gross_amount"`
+	OrderID     string  `json:"order_id"`
+	GrossAmount float32 `json:"gross_amount"`
 }
 
 type ItemDetail struct {
 	ID       string `json:"id"`
 	Price    string `json:"price"`
-	Quantity string `json:"Quantity"`
+	Quantity string `json:"quantity"`
 	Name     string `json:"name"`
+}
+
+type midtransResponse struct {
+	Token       string `json:"token"`
+	RedirectURL string `json:"redirect_url"`
 }
 
 func MidtransSnap() *Midtrans {
@@ -81,35 +85,32 @@ func (m *Midtrans) Domain() string {
 	return domain
 }
 
-func (m *Midtrans) AuthString() string {
-	preformatedKey := fmt.Sprintf("%s:", serverMidtransKey)
-	return base64.StdEncoding.EncodeToString([]byte(preformatedKey))
-}
-
-func (m *Midtrans) Transaction() (string, error) {
+func (m *Midtrans) Transaction() (*midtransResponse, error) {
+	httpRes := midtransResponse{}
 	endpoint := fmt.Sprintf("https://%s/snap/v1/transactions", m.Domain())
 	m.EnabledPayments = enablePayments
 	payload, _ := json.Marshal(m)
 
 	req, err := http.NewRequest("POST", endpoint, bytes.NewBuffer(payload))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Add("Authorization", m.AuthString())
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/json")
+	req.SetBasicAuth(server_key, "")
 
 	response, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return string(body), nil
+	json.Unmarshal(body, &httpRes)
+
+	return &httpRes, nil
 }

@@ -100,7 +100,15 @@ function load_cart(){
                 })
                 for (let i = 0; i < response.data.length; i++) {
                     const element = response.data[i]
-                    totalBelanja = totalBelanja + element.subtotal
+                    const discount = element.produk.discount
+                    if (discount > 0) {
+                        let pengali = discount / 100
+                        let dipotong = element.subtotal - (element.subtotal * pengali)
+                        totalBelanja = totalBelanja + dipotong
+
+                    }else {
+                        totalBelanja = totalBelanja + element.subtotal
+                    }
                 }
                 $("#total-belanja").text(toRupiah.format(totalBelanja))
                 $("#total").val(totalBelanja)

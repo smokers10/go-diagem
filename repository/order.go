@@ -95,8 +95,9 @@ func (or *orderRepository) GetByID(orderID string) (*domain.OrderDetail, error) 
 	return &result, nil
 }
 
-func (or *orderRepository) GetByUserID(userID int) ([]domain.Order, error) {
-	result := []domain.Order{}
+func (or *orderRepository) GetByUserID(userID int) ([]domain.OrderDetail, error) {
+	orderBayarRepo := OrderBayarRepository(or.db)
+	result := []domain.OrderDetail{}
 
 	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order_checkout WHERE user_id = ?")
 	if err != nil {
@@ -109,8 +110,13 @@ func (or *orderRepository) GetByUserID(userID int) ([]domain.Order, error) {
 	}
 
 	for rows.Next() {
-		row := domain.Order{}
+		row := domain.OrderDetail{}
 		rows.Scan(&row.ID, &row.Status, &row.UserID, &row.AlamatID, &row.Kurir, &row.PaketKurir, &row.Ongkir, &row.InvoiceNo, &row.TglOrder)
+		ob, err := orderBayarRepo.ByOrderID(row.ID)
+		if err != nil {
+			return nil, err
+		}
+		row.OrderBayar = *ob
 		result = append(result, row)
 	}
 

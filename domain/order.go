@@ -22,6 +22,7 @@ type OrderDetail struct {
 	Ongkir     string            `json:"ongkir,omitempty" form:"ongkir"`
 	InvoiceNo  string            `json:"invoice_no,omitempty" form:"invoice_no"`
 	TglOrder   string            `json:"tgl_order,omitempty" form:"tgl_order"`
+	OrderBayar OrderBayar        `json:"order_bayar,omitempty" form:"order_bayar"`
 	OrderItem  []OrderItemDetail `json:"order_item,omitempty" form:"order_item"`
 	Alamat     Alamat            `json:"alamat,omitempty" form:"alamat"`
 	User       User              `json:"user,omitempty" form:"user"`
@@ -39,6 +40,6 @@ type OrderRepository interface {
 	Create(req *Order) error
 	UpdateStatus(orderID string, status string) error
 	GetByID(orderID string) (*OrderDetail, error)
-	GetByUserID(userID int) ([]Order, error)
+	GetByUserID(userID int) ([]OrderDetail, error)
 	Read() ([]OrderDetail, error)
 }
