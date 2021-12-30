@@ -140,7 +140,6 @@
 
                 // onchange form provinsi
                 $("#field-provinsi").change(function(){
-                    $("#field-kota").html("")
                     loadKota($(this).val())
                 })
 
@@ -196,28 +195,26 @@
             }
 
             function loadAlamatOrigin(){
-                loadProvinsi()
-
                 $.ajax({
                     url:"/admin/alamat-origin/read",
                     success: function (res) {
                         const { id, kontak_admin, alamat_lengkap, provinsi_id, kota_id, nama_provinsi, nama_kota, kd_pos } = res.data
-                        loadKota(provinsi_id)
                         const dataDaerah = {provinsi_id, kota_id, nama_provinsi, nama_kota}
-
-                        $("#provinsi").text(`Provinsi ${nama_provinsi}`)
-                        $("#kota").text(`Kota/Kabupaten ${nama_kota}`)
+                        
+                        $("#provinsi").text(`Provinsi`)
+                        $("#kota").text(`Kota/Kabupaten`)
                         $("#alamat-id").val(id)
                         $("#field-kontak-admin").val(kontak_admin)
-                        $("#field-provinsi").val(provinsi_id)
-                        $("#field-kota").val(kota_id)
+                        $("#field-provinsi").attr("data-provid", provinsi_id)
+                        $("#field-kota").attr("data-kotaid", kota_id)
                         $("#field-alamat-lengkap").html(alamat_lengkap)
                         $("#field-pos").val(kd_pos)
-
                         $("#data-daerah").val(JSON.stringify(dataDaerah))
-
+                        loadKota(provinsi_id)
                     }
                 })
+
+                loadProvinsi()
             }
 
             function loadProvinsi() {
@@ -227,8 +224,9 @@
                     success: function(res){
                         const data = JSON.parse(res.data)
                         const { results } = data.rajaongkir
+                        const value = $("#field-provinsi").attr("data-provid")
                         results.forEach(element => {
-                            $("#field-provinsi").append(`<option value="${element.province_id}">${element.province}</option>`)
+                            $("#field-provinsi").append(`<option value="${element.province_id}" ${element.province_id == value ? "selected" : ""}>${element.province}</option>`)
                         })
                     }
                 })
@@ -241,8 +239,10 @@
                     success: function(res){
                         var data = JSON.parse(res.data)
                         var { results } = data.rajaongkir
+                        $("#field-kota").html('')
+                        const value = $("#field-kota").attr("data-kota")
                         results.forEach(element => {
-                            $("#field-kota").append(`<option data-detail='${JSON.stringify(element)}' value='${element.city_id}'>${element.type}  ${element.city_name}</option>`)
+                            $("#field-kota").append(`<option data-detail='${JSON.stringify(element)}' value='${element.city_id}' ${element.city_id == value ? "selected" : ""}>${element.type}  ${element.city_name}</option>`)
                         })
                     }
                 })
@@ -253,17 +253,14 @@
                 var detail = selected.options[selected.selectedIndex].getAttribute("data-detail")
                 var parsedDetail = JSON.parse(detail)
                 var { city_id: kota_id, province_id: provinsi_id, city_name: nama_kota, province: nama_provinsi } = parsedDetail
-
                 $("#data-daerah").val(JSON.stringify({
                     kota_id,
                     provinsi_id,
                     nama_kota,
                     nama_provinsi,
                 }))
-
                 $("#field-pos").val(parsedDetail.postal_code)
             }
-
         </script>
     </body>
 </html>
