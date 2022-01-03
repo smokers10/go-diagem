@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/smokers10/go-diagem.git/domain"
 )
@@ -114,6 +115,10 @@ func (or *orderRepository) GetByUserID(userID int) ([]domain.OrderDetail, error)
 		if err != nil {
 			return nil, err
 		}
+
+		// get order payment
+		fmt.Println(row)
+
 		result = append(result, row)
 	}
 

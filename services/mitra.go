@@ -34,6 +34,12 @@ func (m *mitraServiceImpl) Create(req *domain.Mitra) *domain.Response {
 		return &res
 	}
 
+	if mitra.SellerID == req.SellerID {
+		res.Message = fmt.Sprintf("ID seller %s sudah terdaftar", req.SellerID)
+		res.Status = http.StatusConflict
+		return &res
+	}
+
 	//panggil repository simpan
 	insertedMitra, err := m.mitraRepository.Create(req)
 	if err != nil {

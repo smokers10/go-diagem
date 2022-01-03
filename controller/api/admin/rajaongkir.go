@@ -23,3 +23,8 @@ func (a *rajaongkir) Kota(c *fiber.Ctx) error {
 	response := a.alamatService.GetKota(provinsiID)
 	return c.Status(response.Status).JSON(response)
 }
+
+func (a *rajaongkir) AllKota(c *fiber.Ctx) error {
+	response := a.alamatService.GetAllKota()
+	return c.Status(response.Status).JSON(response)
+}

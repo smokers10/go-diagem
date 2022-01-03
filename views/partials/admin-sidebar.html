@@ -59,7 +59,7 @@
                 
                 <li id="order-submenu">
                     <a id="atur-order" class="" href="/admin/order">
-                        <i class="si si-people"></i>Order</span>
+                        <i class="fas fa-box"></i>Order</span>
                     </a>
                 </li>
 
@@ -105,7 +105,7 @@
 
                 <li id="slider-submenu">
                     <a id="slider" class="" href="/admin/slider">
-                        <i class="si si-people"></i>Slider</span>
+                        <i class="fas fa-sliders-h"></i>Slider</span>
                     </a>
                 </li>
 
@@ -186,7 +186,13 @@
         document.getElementById("user").classList.add("active")
     }
 
+    // alamat origin
     if (childPath == "alamat-origin") {
         document.getElementById("alamat-origin").classList.add("active")
+    }
+
+    // order/pesanan
+    if (childPath == "order") {
+        document.getElementById("atur-order").classList.add("active")
     }
 </script>

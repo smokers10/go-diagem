@@ -26,6 +26,7 @@ type AlamatService interface {
 	MakeUtama(id int, user_id int) *Response
 	GetProvinsi() *Response
 	GetKota(provinsiID string) *Response
+	GetAllKota() *Response
 }
 
 type AlamatRepository interface {

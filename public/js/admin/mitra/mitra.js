@@ -11,6 +11,12 @@ jQuery(function() {
             {
                 "data": null,
                 "render": function(data, type, row) {
+                    return data.seller_id
+                },
+            },
+            {
+                "data": null,
+                "render": function(data, type, row) {
                     return data.kontak
                 },
             },
@@ -18,6 +24,12 @@ jQuery(function() {
                 "data": null,
                 "render": function(data, type, row) {
                     return data.email
+                },
+            },
+            {
+                "data": null,
+                "render": function(data, type, row) {
+                    return data.kota
                 },
             },
             {

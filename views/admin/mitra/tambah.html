@@ -66,17 +66,25 @@
                                     
                                     <div class="block-content pb-15">
                                         <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label" for="field-nama">Nama Reseller</label>
+                                            <label class="col-lg-3 col-form-label" for="field-nama">Nama Seller</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="field-nama" name="nama" placeholder="Masukan Nama Reseller" autocomplete="off">
+                                                <input type="text" class="form-control" id="field-nama" name="nama" placeholder="Masukan Nama Seller" autocomplete="off" required>
                                                 <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-id_seller">ID Seller</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="field-id_seller" name="seller_id" placeholder="Masukan ID Seller" autocomplete="off" size="6" maxlength="6" required>
+                                                <div class="invalid-feedback font-size-sm" id="error-id_seller">Invalid feedback</div>
                                             </div>
                                         </div>
                 
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label" for="field-email">Email</label>
                                             <div class="col-lg-9">
-                                                <input type="email" class="form-control" id="field-email" name="email" placeholder="Masukan Nama pengguna Reseller" autocomplete="off">
+                                                <input type="email" class="form-control" id="field-email" name="email" placeholder="Masukan Nama penggunSeller" autocomplete="off" required>
                                                 <div class="invalid-feedback font-size-sm" id="error-email">Invalid feedback</div>
                                             </div>
                                         </div>
@@ -84,15 +92,23 @@
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label" for="field-kontak">Kontak</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="field-kontak" name="kontak" placeholder="Masukan Nama Reseller" autocomplete="off">
+                                                <input type="text" class="form-control" id="field-kontak" name="kontak" placeholder="Masukan Nama seller" autocomplete="off" required>
                                                 <div class="invalid-feedback font-size-sm" id="error-kontak">Invalid feedback</div>
                                             </div>
                                         </div>
-                
+
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label" for="field-kota">Domisili</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="field-kota" name="kota" placeholder="Masukan Domisili Seller" autocomplete="off" required>
+                                                <div class="invalid-feedback font-size-sm" id="error-kota">Invalid feedback</div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label" for="field-alamat">Alamat Lengkap</label>
                                             <div class="col-lg-9">
-                                                <textarea class="form-control" name="alamat" id="field-alamat" cols="30" rows="10" placeholder="Masukan alamat Reseller"></textarea>
+                                                <textarea class="form-control" name="alamat" id="field-alamat" cols="30" rows="10" placeholder="Masukan alamat seller"></textarea>
                                                 <div class="invalid-feedback font-size-sm" id="error-alamat">Invalid feedback</div>
                                             </div>
                                         </div>

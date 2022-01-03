@@ -41,38 +41,36 @@ $(function () {
             //     searchable: false
             // },
         ]
-    });
+    })
     $(".pencarian").keyup(function(){
-        table.draw();
-    });
+        table.draw()
+    })
+})
 
-  
-
-  });
-$(document).on('click', '.menu_tabs', function () {
-    status = $(this).attr("data-status");
-    $tabs = $(this);
-    // $tabs.addClass("active");
-    $('.menu_tabs').each(function(index, currentElement) {
-        if($(this).attr("data-status") !== status)
-        {
-            $(this).removeClass('active');
-        }else
-        {
-            $tabs.addClass('active');
-        }
-    });
-    $.ajax({
-        type: "GET",
-        url: laroute.route('mitra.order'),
-        data: {
-            status: status,
-            tgl_mulai : '17-18-2020',
-            tgl_akhir : '17-18-2020',
-        },
-        success: function (response) {
-            $('#tbl_variasi tbody').html(response.html);
-        }
-    });
-    window.history.replaceState(null, null, "?status="+status);
-});
+// $(document).on('click', '.menu_tabs', function () {
+//     status = $(this).attr("data-status");
+//     $tabs = $(this);
+//     // $tabs.addClass("active");
+//     $('.menu_tabs').each(function(index, currentElement) {
+//         if($(this).attr("data-status") !== status)
+//         {
+//             $(this).removeClass('active');
+//         }else
+//         {
+//             $tabs.addClass('active');
+//         }
+//     });
+//     $.ajax({
+//         type: "GET",
+//         url: laroute.route('mitra.order'),
+//         data: {
+//             status: status,
+//             tgl_mulai : '17-18-2020',
+//             tgl_akhir : '17-18-2020',
+//         },
+//         success: function (response) {
+//             $('#tbl_variasi tbody').html(response.html);
+//         }
+//     });
+//     window.history.replaceState(null, null, "?status="+status);
+// });

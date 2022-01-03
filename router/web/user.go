@@ -30,6 +30,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	postController := user.PostController()
 	kategoriController := user.KategoriController()
 	pesananController := user.OrderController()
+	resellerController := user.ResellerController()
 
 	// API Controller init
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
@@ -145,4 +146,8 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	// alamat origin
 	alamatOrigin := parentPath.Group("/alamat-origin")
 	alamatOrigin.Get("/", alamatOriginAPIController.Read)
+
+	// reseller
+	reseller := parentPath.Group("/reseller")
+	reseller.Get("/", resellerController.IndexPage)
 }

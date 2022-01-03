@@ -158,3 +158,26 @@ func (a *alamatServiceImpl) GetKota(provinsiID string) *domain.Response {
 	res.Success = true
 	return &res
 }
+
+func (a *alamatServiceImpl) GetAllKota() *domain.Response {
+	res := domain.Response{}
+	rs := etc.ReqStruct{
+		Endpoint: "https://api.rajaongkir.com/starter/city",
+		Method:   "GET",
+		Key:      etc.RajaOngkirAPIKey,
+	}
+
+	body, err := etc.ReqAPI(&rs)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error membaca response API"
+		res.Status = 500
+		return &res
+	}
+
+	res.Data = body
+	res.Message = "provinsi berhasil diambil"
+	res.Status = 200
+	res.Success = true
+	return &res
+}

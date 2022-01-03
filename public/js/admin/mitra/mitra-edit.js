@@ -3,18 +3,18 @@ const CPSplit = currentPath.split("/")
 const resellerID = CPSplit[4]
 
 jQuery(document).ready(function(){
-    console.log(resellerID)
-
     $.ajax({
         url:`/admin/reseller/get/${resellerID}`,
         success:function(res){
             const data = res.data
-            const {nama, email, kontak, alamat} = data
+            const {nama, email, kontak, alamat, seller_id, kota} = data
             $("#field-id").val(resellerID)
             $("#field-nama").val(nama)
             $("#field-email").val(email)
             $("#field-kontak").val(kontak)
             $("#field-alamat").val(alamat)
+            $("#field-kota").val(kota)
+            $("#field-id_seller").val(seller_id)
         },
         error: function (jqXHR, textStatus, errorThrown) {
             Swal.close()

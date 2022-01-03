@@ -34,14 +34,14 @@ func (ob *orderBayarRepository) UpdateStatus(token string, status string) error 
 
 func (ob *orderBayarRepository) ByToken(token string) (*domain.OrderBayar, error) {
 	result := domain.OrderBayar{}
-	stmt, _ := ob.db.Prepare("SELECT id, order_checkout_id, jumlah, status, token, redirect_url, tgl_bayar WHERE token = ?")
+	stmt, _ := ob.db.Prepare("SELECT id, order_checkout_id, jumlah, status, token, redirect_url, tgl_bayar WHERE token = ? LIMIT 1")
 	stmt.QueryRow(token).Scan(&result.ID, &result.OrderCheckoutID, &result.Jumlah, &result.Status, &result.Token, &result.RedirectURL, &result.TGLBayar)
 	return &result, nil
 }
 
 func (ob *orderBayarRepository) ByOrderID(OrderID string) (*domain.OrderBayar, error) {
 	result := domain.OrderBayar{}
-	stmt, _ := ob.db.Prepare("SELECT id, order_checkout_id, jumlah, status, token, redirect_url, tgl_bayar WHERE order_checkout_id = ?")
-	stmt.QueryRow(OrderID).Scan(&result.ID, &result.OrderCheckoutID, &result.Jumlah, &result.Status, &result.Token, &result.RedirectURL, &result.TGLBayar)
+	stmt, _ := ob.db.Prepare("SELECT id, order_checkout_id, jumlah, status, token, redirect_url, tgl_bayar WHERE token = ? LIMIT 1")
+	stmt.QueryRow(&result.ID, &result.OrderCheckoutID, &result.Jumlah, &result.Status, &result.Token, &result.RedirectURL, &result.TGLBayar)
 	return &result, nil
 }

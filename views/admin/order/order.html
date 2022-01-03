@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-        <title>Admin | Tokonya</title>
+        <title>Admin | Diagem</title>
 
-        <meta name="description" content="Tokonya">
-        <meta name="author" content="Tokonya">
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
         <meta name="robots" content="noindex, nofollow">
 
         <!-- Open Graph Meta -->
-        <meta property="og:title" content="Tokonya">
-        <meta property="og:site_name" content="Tokonya">
-        <meta property="og:description" content="Tokonya">
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
         <meta property="og:type" content="website">
         <meta property="og:url" content="">
         <meta property="og:image" content="">
@@ -113,55 +113,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
         <script src="/js/plugins/moment/moment-with-locales.min.js"></script>
         <script src="/js/plugins/bootstrap-daterangepicker/daterangepicker.min.js"></script>
-        <script src="/js/admin/order/order.js"></script>
         <script src="/js/admin/general.js"></script>
         <script>
-            function GFG_Fun(status) {
-                window.history.replaceState(null, null, "?status="+status);
-            }
-
-            function GetURLParameter(sParam)
-            {
-                var sPageURL = window.location.search.substring(1);
-                var sURLVariables = sPageURL.split('&');
-                for (var i = 0; i < sURLVariables.length; i++)
-                {
-                    var sParameterName = sURLVariables[i].split('=');
-                    if (sParameterName[0] == sParam)
-                    {
-                        return sParameterName[1];
-                    }
-                }
-            }
-        </script>
-        <script>
-            $('.dataTables_filter input[type="search"]').
-            attr('placeholder','Search in this blog ....').
-            css({'width':'500px','display':'inline-block'});
-            $.extend( true, $.fn.dataTable.defaults, {
-                "responsive": true,
-                "pageLength": 20,
-                "lengthChange": false,
-                "language": {
-                    'loadingRecords': '&nbsp;',
-                    "sEmptyTable":	 "Tidak ada data yang tersedia pada tabel ini",
-                    "sProcessing":   '<div class="spinner-grow text-primary pt-25" role="status"><span class="sr-only">Loading...</span></div>',
-                    "sLengthMenu":   "Tampilkan _MENU_",
-                    "sZeroRecords":  "Tidak ditemukan data yang sesuai",
-                    "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-                    "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
-                    "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
-                    "sInfoPostFix":  "",
-                    "sSearch":       "Cari:",
-                    "sUrl":          "",
-                    "oPaginate": {
-                        "sFirst":    "Pertama",
-                        "sPrevious": "Sebelumnya",
-                        "sNext":     "Selanjutnya",
-                        "sLast":     "Terakhir"
-                    }
-                },
-            });
+            $(document).ready(function(){
+                $.ajax({
+                    url: "/admin/order/get",
+                    
+                })
+            })
         </script>
     </body>
 </html>

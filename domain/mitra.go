@@ -1,11 +1,13 @@
 package domain
 
 type Mitra struct {
-	ID     int    `json:"id,omitempty" form:"id"`
-	Nama   string `json:"nama,omitempty" form:"nama"`
-	Kontak string `json:"kontak,omitempty" form:"kontak"`
-	Alamat string `json:"alamat,omitempty" form:"alamat"`
-	Email  string `json:"email,omitempty" form:"email"`
+	ID       int    `json:"id,omitempty" form:"id"`
+	Nama     string `json:"nama,omitempty" form:"nama"`
+	SellerID string `json:"seller_id,omitempty" form:"seller_id"`
+	Kontak   string `json:"kontak,omitempty" form:"kontak"`
+	Alamat   string `json:"alamat,omitempty" form:"alamat"`
+	Email    string `json:"email,omitempty" form:"email"`
+	Kota     string `json:"kota,omitempty" form:"kota"`
 }
 
 type MitraService interface {
