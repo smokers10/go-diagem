@@ -101,8 +101,11 @@
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label" for="field-kota">Domisili</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="field-kota" name="kota" placeholder="Masukan Domisili Seller" autocomplete="off" required>
-                                                <div class="invalid-feedback font-size-sm" id="error-kota">Invalid feedback</div>
+                                                <input type="hidden" name="kota_id" id="kota_id">
+                                                <input type="hidden" name="kota" id="kota">
+                                                <select id="field-kota" class="form-control" onchange="chooseAlamtEvent(this)" required>
+                                                    <option value="">Pilih Domisili</option>
+                                                </select>
                                             </div>
                                         </div>
                 

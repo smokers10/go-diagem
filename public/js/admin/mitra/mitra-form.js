@@ -43,4 +43,21 @@ jQuery(document).ready(function(){
             }
         })
     })
+
+    $.ajax({
+        url:"/rajaongkir/kota",
+        success: function(res){
+            var data = JSON.parse(res.data)
+            var { results } = data.rajaongkir
+            results.forEach(element => {
+                $("#field-kota").append(`<option value='${JSON.stringify(element)}'">${element.type} ${element.city_name}</option>`)
+            })
+        }
+    })
 })
+
+function chooseAlamtEvent(el) {
+    var data = JSON.parse($(el).val())
+    $("#kota").val(data.city_name)
+    $("#kota_id").val(data.city_id)
+}

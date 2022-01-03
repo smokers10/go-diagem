@@ -7,14 +7,26 @@ jQuery(document).ready(function(){
         url:`/admin/reseller/get/${resellerID}`,
         success:function(res){
             const data = res.data
-            const {nama, email, kontak, alamat, seller_id, kota} = data
+            const {nama, email, kontak, alamat, seller_id, kota, kota_id} = data
             $("#field-id").val(resellerID)
             $("#field-nama").val(nama)
             $("#field-email").val(email)
             $("#field-kontak").val(kontak)
             $("#field-alamat").val(alamat)
-            $("#field-kota").val(kota)
+            $("#kota").val(kota)
+            $("#kota_id").val(kota_id)
             $("#field-id_seller").val(seller_id)
+
+            $.ajax({
+                url:"/rajaongkir/kota",
+                success: function(res){
+                    var data = JSON.parse(res.data)
+                    var { results } = data.rajaongkir
+                    results.forEach(element => {
+                        $("#field-kota").append(`<option value='${JSON.stringify(element)}'"  ${element.city_id == kota_id ? "selected" : ""}>${element.type} ${element.city_name}</option>`)
+                    })
+                }
+            })
         },
         error: function (jqXHR, textStatus, errorThrown) {
             Swal.close()
@@ -66,3 +78,9 @@ jQuery(document).ready(function(){
         })
     })
 })
+
+function chooseAlamtEvent(el) {
+    var data = JSON.parse($(el).val())
+    $("#kota").val(data.city_name)
+    $("#kota_id").val(data.city_id)
+}

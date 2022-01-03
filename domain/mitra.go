@@ -8,6 +8,7 @@ type Mitra struct {
 	Alamat   string `json:"alamat,omitempty" form:"alamat"`
 	Email    string `json:"email,omitempty" form:"email"`
 	Kota     string `json:"kota,omitempty" form:"kota"`
+	KotaID   string `json:"kota_id,omitempty" form:"kota_id"`
 }
 
 type MitraService interface {

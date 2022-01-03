@@ -16,14 +16,14 @@ func MitraRepository(database *sql.DB) domain.MitraRepository {
 }
 
 func (m *mitraRepositoryImpl) Create(req *domain.Mitra) (*domain.Mitra, error) {
-	statement, err := m.db.Prepare("INSERT INTO mitra (nama, seller_id, kontak, alamat, email, kota) VALUES(?, ?, ?, ?, ?, ?)")
+	statement, err := m.db.Prepare("INSERT INTO mitra (nama, seller_id, kontak, alamat, email, kota, kota_id) VALUES(?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	result, err := statement.ExecContext(context.Background(), req.Nama, req.SellerID, req.Kontak, req.Alamat, req.Email, req.Kota)
+	result, err := statement.ExecContext(context.Background(), req.Nama, req.SellerID, req.Kontak, req.Alamat, req.Email, req.Kota, req.KotaID)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (m *mitraRepositoryImpl) Create(req *domain.Mitra) (*domain.Mitra, error) {
 
 func (m *mitraRepositoryImpl) Read() ([]domain.Mitra, error) {
 	result := []domain.Mitra{}
-	statement, err := m.db.Prepare("SELECT id, seller_id, nama, kontak, email, alamat, kota FROM mitra")
+	statement, err := m.db.Prepare("SELECT id, seller_id, nama, kontak, email, alamat, kota, kota_id FROM mitra")
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (m *mitraRepositoryImpl) Read() ([]domain.Mitra, error) {
 
 	for rows.Next() {
 		row := domain.Mitra{}
-		rows.Scan(&row.ID, &row.SellerID, &row.Nama, &row.Kontak, &row.Email, &row.Alamat, &row.Kota)
+		rows.Scan(&row.ID, &row.SellerID, &row.Nama, &row.Kontak, &row.Email, &row.Alamat, &row.Kota, &row.KotaID)
 		result = append(result, row)
 	}
 
@@ -59,14 +59,14 @@ func (m *mitraRepositoryImpl) Read() ([]domain.Mitra, error) {
 
 func (m *mitraRepositoryImpl) ByID(id int) (*domain.Mitra, error) {
 	result := domain.Mitra{}
-	stmt, err := m.db.Prepare("SELECT id, seller_id, nama, email, alamat, kontak, kota FROM mitra WHERE id = ? LIMIT 1")
+	stmt, err := m.db.Prepare("SELECT id, seller_id, nama, email, alamat, kontak, kota, kota_id FROM mitra WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
 	defer stmt.Close()
 
-	stmt.QueryRowContext(context.Background(), id).Scan(&result.ID, &result.SellerID, &result.Nama, &result.Email, &result.Alamat, &result.Kontak, &result.Kota)
+	stmt.QueryRowContext(context.Background(), id).Scan(&result.ID, &result.SellerID, &result.Nama, &result.Email, &result.Alamat, &result.Kontak, &result.Kota, &result.KotaID)
 
 	return &result, nil
 }
@@ -86,14 +86,14 @@ func (m *mitraRepositoryImpl) ByEmail(email string) (*domain.Mitra, error) {
 }
 
 func (m *mitraRepositoryImpl) Update(req *domain.Mitra) (*domain.Mitra, error) {
-	statement, err := m.db.Prepare("UPDATE mitra SET nama = ?, kontak = ?, alamat = ?, email = ?, kota = ?, seller_id = ? WHERE id = ?")
+	statement, err := m.db.Prepare("UPDATE mitra SET nama = ?, kontak = ?, alamat = ?, email = ?, kota = ?, seller_id = ?, kota_id = ? WHERE id = ?")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.Nama, req.Kontak, req.Alamat, req.Email, req.Kota, req.SellerID, req.ID); err != nil {
+	if _, err := statement.ExecContext(context.Background(), req.Nama, req.Kontak, req.Alamat, req.Email, req.Kota, req.SellerID, req.KotaID, req.ID); err != nil {
 		return nil, err
 	}
 

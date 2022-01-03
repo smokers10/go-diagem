@@ -36,7 +36,38 @@
 
             <!-- Main Container -->
             <main id="main-container">
-            
+                <div class="bg-image" style="background-image: url('/img/banner/banner-for-all.jpg');">
+                    <div class="content content-full d-flex min-height-200 text-center">
+                        <div class="m-auto">
+                            <h1 class="font-w700 mb-10">Our Seller</h1>
+                            <h2 class="h4 font-w400 text-muted"></h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content" id="seller-content">
+                    <div class="justify-content-between mb-4 row">
+                        <div class="col-6">
+                            <form id="product-search">
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <input type="text" class="form-control" id="product-name" placeholder="Cari nama/ID seller">
+                                    <div class="input-group-prepend">
+                                        <button class="input-group-text" id="search-btn"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="col-6">
+                            <select class="form-control" id="product-kota">
+                                <option value="">Pilih Domisili</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="current-page" value="1">
+                    <div class="row" id="product-list"></div>
+                </div>
             </main>
             <!-- END Main Container -->
 
@@ -49,5 +80,19 @@
         <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="/js/umum/general.js"></script>
         <script src="/js/functions.js"></script>
+        <script>
+            $(document).ready(function(){
+                $.ajax({
+                    url:"/rajaongkir/kota",
+                    success: function(res){
+                        var data = JSON.parse(res.data)
+                        var { results } = data.rajaongkir
+                        results.forEach(element => {
+                            $("#product-kota").append(`<option value='${element.city_id}'>${element.type} ${element.city_name}</option>`)
+                        })
+                    }
+                })
+            })
+        </script>
     </body>
 </html>
