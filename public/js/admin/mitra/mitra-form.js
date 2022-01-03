@@ -34,12 +34,13 @@ jQuery(document).ready(function(){
                         allowOutsideClick: false,
                     })
                 } else {
-                    alert("terjadi kesalahan silahkan hubungi developer")
+                    Swal.close();
+                    alert(res.message)
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 Swal.close();
-                alert('Error adding / update data');
+                alert("terjadi kesalahan pada sistem")
             }
         })
     })

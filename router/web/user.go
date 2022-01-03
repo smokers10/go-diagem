@@ -44,6 +44,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	orderAPIController := userAPI.OrderController(resolver.OrderService)
 	feedbackAPIController := userAPI.FeedbackController(resolver.FeedbackService)
 	rajaongkirAPIController := userAPI.RajaOngkir(resolver.AlamatService)
+	sellerAPIController := userAPI.MitraController(resolver.MitraService)
 
 	// router clustering
 	parentPath := app.Group("/")
@@ -151,6 +152,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	// reseller
 	reseller := parentPath.Group("/seller")
 	reseller.Get("/", resellerController.IndexPage)
+	reseller.Get("/get", sellerAPIController.Get)
 
 	// raja ongkir API
 	rajaongkirPath := parentPath.Group("/rajaongkir")

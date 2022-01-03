@@ -31,7 +31,11 @@
     <body class="bg-white">
         <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
             <!-- Header -->
+            {{if .Logged.IsLogged}}
             {{template "partials/user-header" .}}
+            {{else}}
+            {{template "partials/user-unlogged-header" .}}
+             {{end}}
             <!-- END Header -->
 
             <!-- Main Container -->
@@ -46,27 +50,31 @@
                 </div>
 
                 <div class="content" id="seller-content">
-                    <div class="justify-content-between mb-4 row">
-                        <div class="col-6">
-                            <form id="product-search">
-                                <div class="input-group mb-2 mr-sm-2">
-                                    <input type="text" class="form-control" id="product-name" placeholder="Cari nama/ID seller">
-                                    <div class="input-group-prepend">
-                                        <button class="input-group-text" id="search-btn"><i class="fas fa-search"></i></button>
+                    <div class="justify-content-between mb-4">
+                        <form id="seller-search">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <input type="text" class="form-control" id="seller-name" placeholder="Cari nama/ID seller">
+                                        <div class="input-group-prepend">
+                                            <button class="input-group-text" id="search-btn"><i class="fas fa-search"></i></button>
+                                        </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                        
-                        <div class="col-6">
-                            <select class="form-control" id="product-kota">
-                                <option value="">Pilih Domisili</option>
                                 
-                            </select>
-                        </div>
+                                <div class="col-6">
+                                    <select class="form-control" id="seller-kota">
+                                        <option value="">Pilih Domisili</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <input type="hidden" id="current-page" value="1">
-                    <div class="row" id="product-list"></div>
+
+                    <div class="row" id="seller-list">
+
+                    </div>
                 </div>
             </main>
             <!-- END Main Container -->
@@ -82,17 +90,64 @@
         <script src="/js/functions.js"></script>
         <script>
             $(document).ready(function(){
+                loadSeller()
+                
                 $.ajax({
                     url:"/rajaongkir/kota",
                     success: function(res){
                         var data = JSON.parse(res.data)
                         var { results } = data.rajaongkir
                         results.forEach(element => {
-                            $("#product-kota").append(`<option value='${element.city_id}'>${element.type} ${element.city_name}</option>`)
+                            $("#seller-kota").append(`<option value='${element.city_id}'>${element.type} ${element.city_name}</option>`)
                         })
                     }
                 })
+
+                $("#seller-search").submit(function(e){
+                    e.preventDefault()
+                    loadSeller()
+                })
+
+                $("#seller-kota").change(function(){
+                    loadSeller()
+                })
             })
+            
+            function loadSeller() {
+                const name = $("#seller-name").val() || ""
+                const kota = $("#seller-kota").val() || ""
+
+                $.ajax({
+                    url:`/seller/get`,
+                    data: {
+                        nama: name, kota: kota
+                    },
+                    success: function(res) {
+                        $("#seller-list").html("")
+                        const data = res.data
+                        data.forEach(element => {
+                            $("#seller-list").append(createSellerElement(element))
+                        });
+                    }
+                })
+            }
+
+            function createSellerElement(data) {
+                return `
+                    <div class="col-3">
+                        <div class="card shadow p-2">
+                            <div class="card-header">
+                                ${data.nama}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title" style="margin-bottom: 5px;">${data.kota}</h5>
+                                <p class="card-text"><i class="fas fa-map"></i>${data.alamat}</p>
+                            </div>
+                            <a href="https://api.whatsapp.com/send?phone=${data.kontak}&text=Hai%20Saya%20tertarik%20untuk%20membeli%20perhiasan%20dari%20diagem" class="btn btn-primary btn-block"><i class="fab fa-whatsapp"></i> Chat Via Whatsap</a>
+                        </div>
+                    </div>
+                `
+            }
         </script>
     </body>
 </html>

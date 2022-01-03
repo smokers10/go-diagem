@@ -73,14 +73,14 @@ func (m *mitraRepositoryImpl) ByID(id int) (*domain.Mitra, error) {
 
 func (m *mitraRepositoryImpl) ByEmail(email string) (*domain.Mitra, error) {
 	result := domain.Mitra{}
-	stmt, err := m.db.Prepare("SELECT id, seller_id, nama, email, alamat, kontak FROM mitra WHERE email = ? LIMIT 1")
+	stmt, err := m.db.Prepare("SELECT email FROM mitra WHERE email = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
 	defer stmt.Close()
 
-	stmt.QueryRowContext(context.Background(), email).Scan(&result.ID, &result.SellerID, &result.Nama, &result.Email, &result.Alamat, &result.Kontak)
+	stmt.QueryRowContext(context.Background(), email).Scan(&result.Email)
 
 	return &result, nil
 }
@@ -113,4 +113,45 @@ func (m *mitraRepositoryImpl) Delete(id int) error {
 	}
 
 	return nil
+}
+
+func (m *mitraRepositoryImpl) ReadWithFilter(req *domain.Mitra) ([]domain.Mitra, error) {
+	result := []domain.Mitra{}
+	statement, err := m.db.Prepare(`
+		SELECT id, seller_id, nama, kontak, email, alamat, kota, kota_id FROM mitra
+		WHERE 
+		nama LIKE CONCAT('%', ?, '%')
+		AND kota_id LIKE CONCAT('%', ?, '%')
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer statement.Close()
+
+	rows, err := statement.QueryContext(context.Background(), req.Nama, req.KotaID)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		row := domain.Mitra{}
+		rows.Scan(&row.ID, &row.SellerID, &row.Nama, &row.Kontak, &row.Email, &row.Alamat, &row.Kota, &row.KotaID)
+		result = append(result, row)
+	}
+
+	return result, nil
+}
+
+func (m *mitraRepositoryImpl) BySellerID(sellerID string) (*domain.Mitra, error) {
+	result := domain.Mitra{}
+	stmt, err := m.db.Prepare("SELECT seller_id FROM mitra WHERE seller_id = ? LIMIT 1")
+	if err != nil {
+		return nil, err
+	}
+
+	defer stmt.Close()
+
+	stmt.QueryRowContext(context.Background(), sellerID).Scan(&result.SellerID)
+
+	return &result, nil
 }

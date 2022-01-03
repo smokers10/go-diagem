@@ -20,23 +20,30 @@ func (m *mitraServiceImpl) Create(req *domain.Mitra) *domain.Response {
 	res := domain.Response{}
 
 	//check email apakah sudah digunakan
-	mitra, err := m.mitraRepository.ByEmail(req.Email)
+	emailOK, err := m.emailIsOK(req.Email)
 	if err != nil {
 		fmt.Println(err.Error())
-		res.Message = "error saat check ketersedian akun mitra"
+		res.Message = "error saat check email"
 		res.Status = http.StatusInternalServerError
 		return &res
 	}
 
-	if mitra.Email != "" {
-		res.Message = fmt.Sprintf("mitra dengan email %s sudah terdaftar", req.Email)
-		res.Status = http.StatusConflict
+	if !emailOK {
+		res.Message = "email sudah digunakan"
 		return &res
 	}
 
-	if mitra.SellerID == req.SellerID {
-		res.Message = fmt.Sprintf("ID seller %s sudah terdaftar", req.SellerID)
-		res.Status = http.StatusConflict
+	// check seller id
+	sellerIDOK, err := m.sellerIDIsOk(req.SellerID)
+	if err != nil {
+		fmt.Println(err.Error())
+		res.Message = "error saat check email"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	if !sellerIDOK {
+		res.Message = "seller ID sudah digunakan"
 		return &res
 	}
 
@@ -135,4 +142,52 @@ func (m *mitraServiceImpl) GetOne(id int) *domain.Response {
 	res.Success = true
 
 	return &res
+}
+
+func (m *mitraServiceImpl) ReadWithFilter(req *domain.Mitra) *domain.Response {
+	//deklarasi var
+	res := domain.Response{}
+
+	mitra, err := m.mitraRepository.ReadWithFilter(req)
+	if err != nil {
+		fmt.Println(err.Error())
+		res.Message = "error saat mengambil data mitra"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Data = mitra
+	res.Message = "mitra berhasil diambil"
+	res.Status = http.StatusOK
+	res.Success = true
+
+	return &res
+}
+
+// out of abstrak checking email
+func (m *mitraServiceImpl) emailIsOK(email string) (bool, error) {
+	mitra, err := m.mitraRepository.ByEmail(email)
+	if err != nil {
+		return false, err
+	}
+
+	if mitra.Email != "" {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+// out of abstrak checking seller id
+func (m *mitraServiceImpl) sellerIDIsOk(sellerID string) (bool, error) {
+	mitra, err := m.mitraRepository.BySellerID(sellerID)
+	if err != nil {
+		return false, err
+	}
+
+	if mitra.SellerID != "" {
+		return false, nil
+	}
+
+	return true, nil
 }

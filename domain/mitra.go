@@ -19,6 +19,7 @@ type MitraService interface {
 
 	//Untuk Umum
 	Read() *Response
+	ReadWithFilter(req *Mitra) *Response
 	GetOne(id int) *Response
 }
 
@@ -26,7 +27,9 @@ type MitraRepository interface {
 	Create(req *Mitra) (*Mitra, error)
 	Read() ([]Mitra, error)
 	ByID(id int) (*Mitra, error)
+	BySellerID(sellerId string) (*Mitra, error)
 	ByEmail(email string) (*Mitra, error)
 	Update(req *Mitra) (*Mitra, error)
 	Delete(id int) error
+	ReadWithFilter(req *Mitra) ([]Mitra, error)
 }
