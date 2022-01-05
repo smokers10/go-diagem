@@ -42,6 +42,12 @@
                     <a class="" href="/" id="beranda"><i class="si si-cup"></i><span class="sidebar-mini-hide">Beranda</span></a>
                 </li>
 
+                <li id="blog-submenu">
+                    <a id="blog" class="" href="/admin/blog">
+                        <i class="fas fa-paste"></i>Blog</span>
+                    </a>
+                </li>
+
                 <li id="produk-submenu">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-social-dropbox"></i><span class="sidebar-mini-hide">Produk</span></a>
                     <ul>
@@ -194,5 +200,10 @@
     // order/pesanan
     if (childPath == "order") {
         document.getElementById("atur-order").classList.add("active")
+    }
+
+    // blog
+    if (childPath == "blog") {
+        document.getElementById("blog").classList.add("active")
     }
 </script>

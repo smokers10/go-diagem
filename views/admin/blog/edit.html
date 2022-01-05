@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+        <title>Admin | Diagem</title>
+
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <!-- Page JS Plugins CSS -->
+        <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+
+        <!-- Fonts, Styles and Codebase framework -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="/js/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="/js/plugins/summernote/summernote-bs4.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
+    </head>
+    <body>
+        <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
+            <!-- Sidebar -->
+            {{template "partials/admin-sidebar" .}}
+            <!-- END Sidebar -->
+
+            <!-- Header -->
+            {{template "partials/admin-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+
+                <!-- Page Content -->
+                <div class="content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- Default Elements -->
+                            <div class="block">
+                                <div class="block-content">
+                                    <form id="form-promo" onsubmit="return false;" enctype="multipart/form-data">
+                                        <input type="hidden" id="method" value="store">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <input type="hidden" id="id-blog">
+
+                                                <div class="form-group row">
+                                                    <label class="col-12" for="field-judul">Judul</label>
+                                                    <div class="col-12">
+                                                        <input type="text" class="form-control" id="field-judul" name="judul" placeholder="Masukan Judul" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-12">Isi Post</label>
+                                                    <div class="col-12">
+                                                        <textarea class="form-control" id="field-deskripsi" name="deskripsi" placeholder="Masukan Deskripsi Event" rows="8" required></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <!-- SEO INfo -->
+                                                <div class="form-group row mb-3">
+                                                    <div class="col-lg-12">
+                                                        <div class="content-heading mb-0 pt-0">SEO Info</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-12" for="seo-keyword">SEO Keyword</label>
+                                                    <div class="col-12">
+                                                        <input type="text" class="form-control" id="seo-keyword" name="seo-keyword" placeholder="Masukan SEO Keyword" required>
+                                                        <div class="form-text text-muted font-size-sm text-right">Gunakan tanda koma "," sebagai pemisah!</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-12" for="seo-tags">SEO Tags</label>
+                                                    <div class="col-12">
+                                                        <input type="text" class="form-control" id="seo-tags" name="seo-tags" placeholder="Masukan SEO Tags" required>
+                                                        <div class="form-text text-muted font-size-sm text-right">Gunakan tanda koma "," sebagai pemisah!</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-12" for="seo_deskripsi">SEO Deksripsi</label>
+                                                    <div class="col-12">
+                                                        <textarea class="form-control" id="seo-deskripsi" name="seo-deskripsi" maxlength="115" data-always-show="true" data-placement="top" placeholder="Masukan SEO Deskripsi" rows="2" required></textarea>
+                                                        <div class="form-text text-muted font-size-sm text-right">Maksimal 115 Karakter</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4">
+                                                <div class="form-group row mb-3">
+                                                    <div class="col-lg-12">
+                                                        <div class="content-heading mb-0 pt-0">Status</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-4">Publikasi</label>
+                                                    <div class="col-8">
+                                                        <label class="css-control css-control-primary css-radio">
+                                                            <input type="radio" id="is-publish-checked" class="css-control-input" name="is-publish" value="1">
+                                                            <span class="css-control-indicator"></span> Publikasikan
+                                                        </label>
+                                                        <label class="css-control css-control-secondary css-radio">
+                                                            <input type="radio" id="is-publish-unchecked" class="css-control-input" name="is-publish" value="0">
+                                                            <span class="css-control-indicator"></span> Draft
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="form-group row mb-3">
+                                                    <div class="col-12">
+                                                        <button type="submit" class="btn btn-primary btn-block"><i class="si si-check mr-5"></i>Simpan</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-3">
+                                                    <div class="col-lg-12">
+                                                        <div class="content-heading mb-0 pt-0">Media Info</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row gutters-tiny items-push">
+                                                    <label class="col-12">Thumbnail</label>
+                                                    <div class="col-lg-12">
+                                                        <div class="text-center mb-15">
+                                                            <img id="img_preview" src="/img/poster.png" width="100%">
+                                                        </div>
+                                                        <input type="hidden" name="image" id="image">
+                                                        <div class="btn btn-primary btn-block">
+                                                            <input type="file" class="file-upload" id="file-upload" accept="image/*">
+                                                            Pilih Foto
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- END Default Elements -->
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+
+            </main>
+            <!-- END Main Container -->
+
+            <!-- crop modal -->
+            <div class="modal" id="cropModal">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title modal-title">Potong & Sesuaikan Sampul</h3>
+                            <div class="block-options">
+                                <button type="button" class="close btn-primary" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content pb-15">
+                            <div id="resizer"></div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button class="btn btn-info rotate btn-block text-center" data-deg="90">
+                                        <i class="fa fa-undo"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-info rotate btn-block text-center" data-deg="-90" >
+                                    <i class="fa fa-redo"></i></button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary btn-block" id="sampulSave">Potong Dan Simpan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END crop modal -->
+            
+            <!-- Footer -->
+            {{template "partials/admin-footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <script src="/js/plugins/select2/js/select2.full.min.js"></script>
+        <script src="/js/plugins/select2/js/i18n/id.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
+        <script src="/js/plugins/jquery-tags-input/jquery.tagsinput.min.js"></script>
+        <script src="/js/plugins/summernote/summernote-bs4.min.js"></script>
+        <script src="/js/plugins/moment/moment.min.js"></script>
+        <script src="/js/admin/general.js"></script>
+        <script>
+            // get current URL path
+            const currentPath = location.pathname
+            const CPSplit = currentPath.split("/")  
+            const promoID = CPSplit[4]
+
+            // get selected promo data
+            $.ajax({
+                url: `/admin/blog/get/${promoID}`,
+                success: function(response) {
+                    const data = response.data
+                    const {
+                        id, judul, isi, image, seo_deskripsi, seo_keyword, 
+                        seo_tags, is_publish
+                    } = data
+
+                    $("#id-blog").val(id)
+                    $("#field-judul").val(judul)
+                    $("#seo-keyword").val(seo_keyword)
+                    $("#seo-tags").val(seo_tags)
+                    $("#seo-deskripsi").html(seo_deskripsi)
+                    $("#field-deskripsi").summernote('pasteHTML', isi)
+
+                    image ? $("#img_preview").attr("src", "/"+image.split("public/")[1]) : $("#img_preview").attr("src", "/img/poster.png")
+                    is_publish ? $("#is-publish-checked").prop("checked", true) : $("#is-publish-unchecked").prop("checked", true)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Swal.close()
+                    alert('Error adding / update data')
+                }
+            })
+
+            jQuery(document).ready(function () {
+                var croppie = null
+                var el = document.getElementById('resizer')
+                moment.locale('id')
+
+                $.getImage = function(input, croppie) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader()
+                        reader.onload = function(e) {
+                            croppie.bind({
+                                url: e.target.result,
+                            })
+                        }
+                        reader.readAsDataURL(input.files[0])
+                    }
+                }
+
+                $("#file-upload").on("change", function(event) {
+                    $("#cropModal").modal()
+                    croppie = new Croppie(el, {
+                        viewport: {
+                            width: 700,
+                            height: 332,
+                            type: 'square'
+                        },
+                        original : {
+                            width: 700,
+                            height: 332,
+                            type: 'square'
+                        },
+                        boundary: {
+                            width: 730,
+                            height: 376,
+                        },
+                        enableOrientation: true
+                    })
+                    $.getImage(event.target, croppie)
+                })
+
+                $("#sampulSave").on("click", function() {
+                    croppie.result({
+                        type: 'base64',
+                        size: 'original',
+                        format:'jpeg',
+                        size: { width: 1376, height: 652 }
+                    }).then(function(base64result) {
+                        $("#cropModal").modal("hide")
+                        $("#img_preview").attr("src", base64result)
+                        $("#image").val(base64result)
+
+                        let base64 = base64result.split(";base64,")[1]
+                        let filetype = base64result.split(";base64,")[0]
+                        let format = filetype.split("data:image/")[1]
+                        let data = JSON.stringify({
+                            id: $("#id-blog").val(),
+                            thumbnail: {base64,format},
+                        })
+
+                        $.ajax({
+                            url: "/admin/blog/update-thumbnail",
+                            type: "put",
+                            data,
+                            dataType: "json",
+                            contentType: "application/json",
+                            beforeSend: function(){
+                                Swal.fire({
+                                    title: 'Tunggu Sebentar...',
+                                    text: 'Data Sedang Diproses!',
+                                    imageUrl:'/img/loading.gif',
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                })
+                            },
+                            success: function (response) {
+                                Swal.close()
+                                $('.is-invalid').removeClass('is-invalid')
+                                if (response.success) {
+                                    $('#modal_embed').modal('hide')
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sampul Berhasil Diupdate',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                } else {
+                                    Swal.close()
+                                    for (control in response.errors) {
+                                        $('#field-' + control).addClass('is-invalid')
+                                        $('#error-' + control).html(response.errors[control])
+                                        $.notify({
+                                            icon: 'fa fa-times',
+                                            message: response.errors[control]
+                                        },{
+                                            delay: 7000,
+                                            type: 'danger'
+                                        })
+                                    }
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                Swal.close()
+                                alert('Error adding / update data')
+                            }
+                        })
+                    })
+                })
+
+                $(".rotate").on("click", function() {
+                    croppie.rotate(parseInt($(this).data('deg')))
+                })
+
+                $('#cropModal').on('hidden.bs.modal', function (e) {
+                    setTimeout(function() { croppie.destroy() }, 100)
+                })
+
+                $('#field-deskripsi').summernote({
+                    height: '250px',
+                    toolbar: [
+                        ['undo', ['undo',]],
+                        ['redo', ['redo',]],
+                        ['style', ['bold', 'italic', 'underline','clear']],
+                        ['font', ['strikethrough',]],
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                    ]
+                })
+
+                $("#form-promo").on('submit', function (e) {
+                    e.preventDefault()
+                    var url = "/admin/blog/update",
+                    type = "PUT";
+
+                    let src = $("#img_preview").attr("src")
+                    const base64 = src.split(";base64,")[1]
+                    const filetype = src.split(";base64,")[0]
+                    const format = filetype.split("data:image/")[1]
+
+                    const data = JSON.stringify({
+                        id: $("#id-blog").val(),
+                        judul: $("#field-judul").val(),
+                        isi: $("#field-deskripsi").val(),
+                        seo_keyword: $("#seo-keyword").val(),
+                        seo_tags: $("#seo-tags").val(),
+                        seo_deskripsi: $("#seo-deskripsi").val(),
+                        is_publish: $("input[name=is-publish]:checked").val() == "1",
+                        thumbnail: {base64,format},
+                    })
+
+                    // submit form
+                    $.ajax({
+                        url,
+                        type,
+                        data,
+                        dataType: "json",
+                        contentType: "application/json",
+                        beforeSend: function(){
+                            Swal.fire({
+                                title: 'Tunggu Sebentar...',
+                                text: 'Data Sedang Diproses!',
+                                imageUrl:'/img/loading.gif',
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                            })
+                        },
+                        success: function (response) {
+                            Swal.close()
+                            $('.is-invalid').removeClass('is-invalid')
+                            if (response.success) {
+                                $('#modal_embed').modal('hide')
+                                Swal.fire({
+                                    title: `Berhasil!`,
+                                    showConfirmButton: false,
+                                    icon: 'success',
+                                    html: `
+                                        "Blog Baru Berhasil Diupdate!"
+                                        <br><br>
+                                        <a href="/admin/blog" class="btn btn-keluar btn-alt-danger"><i class="si si-close mr-1"></i>Keluar</a>`,
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                })
+                            } else {
+                                Swal.close()
+                                for (control in response.errors) {
+                                    $('#field-' + control).addClass('is-invalid')
+                                    $('#error-' + control).html(response.errors[control])
+                                    $.notify({
+                                        icon: 'fa fa-times',
+                                        message: response.errors[control]
+                                    },{
+                                        delay: 7000,
+                                        type: 'danger'
+                                    })
+                                }
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            Swal.close()
+                            alert('Error adding / update data')
+                        }
+                    })
+                })
+            })
+        </script>
+    </body>
+</html>

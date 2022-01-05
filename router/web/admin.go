@@ -26,6 +26,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	userAdministratifController := admin.UserAdministratifController()
 	userController := admin.UserController()
 	alamatOriginController := admin.AlamatOriginController()
+	blogController := admin.BlogController(resolver.BlogService)
 
 	// controller API ini
 	mitraAPIController := adminAPI.MitraController(resolver.MitraService)
@@ -50,12 +51,27 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	adminParentPath.Post("/login", guestOnly, authenticationController.Login)
 	adminParentPath.Get("/logout", authenticationController.Logout)
 
+	// blog
+	blog := adminParentPath.Group("/blog", middleware.AdminWeb(session, "admin", "super admin"))
+	blog.Get("/", blogController.IndexPage)
+	blog.Get("/tambah", blogController.TambahPage)
+	blog.Get("/edit/:slug", blogController.EditPage)
+
+	blog.Get("/get", blogController.ReadAll)
+	blog.Get("/get/:slug", blogController.Detail)
+	blog.Post("/create", blogController.Create)
+	blog.Put("/update", blogController.Update)
+	blog.Put("/update-thumbnail", blogController.UpdateThumbnail)
+	blog.Delete("/delete", blogController.Delete)
+
 	// reseller
 	mitra := adminParentPath.Group("/reseller", middleware.AdminWeb(session, "admin", "super admin"))
+
 	// reseller page
 	mitra.Get("/", mitraController.IndexPage)
 	mitra.Get("/tambah", mitraController.TambahPage)
 	mitra.Get("/edit/:id", mitraController.EditPage)
+
 	// reseller - action
 	mitra.Get("/get", mitraAPIController.Read)
 	mitra.Get("/get/:id", mitraAPIController.GetOne)
@@ -175,8 +191,10 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 
 	// alamat origin
 	alamatOrigin := adminParentPath.Group("/alamat-origin", middleware.AdminWeb(session, "admin", "super admin"))
+
 	// alamat origin page
 	alamatOrigin.Get("/", alamatOriginController.IndexPage)
+
 	// alamat origin action
 	alamatOrigin.Get("/read", alamatOriginAPIController.Read)
 	alamatOrigin.Put("/update", alamatOriginAPIController.Update)
