@@ -170,7 +170,7 @@ function _initialPriceState(discount, harga) {
         $("#harga-produk").text(toRupiah.format(potongan))
         $("#harga-produk-original").text(toRupiah.format(harga))
         $("#subtotal").text(toRupiah.format(subtot)) 
-    }else {
+    } else {
         subtot = parseInt($("#buy-quantity").val()) * harga
         $("#harga").text(toRupiah.format(harga))
         $("#harga-produk").text(toRupiah.format(harga))

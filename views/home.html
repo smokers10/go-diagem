@@ -142,7 +142,6 @@
                 <div class="content content-full">
                     <div class="row mb-lg-4">
                         <div class="col-lg-8">
-                            
                             <a class="bg-image block block-rounded-2 block-link-pop" style="background-image: url('/img/banner/RING-D.webp')" 
                             href="#">
                                 <div class="bg-black-op block-content block-content-full d-flex min-height-300">
@@ -226,55 +225,58 @@
                     </div>
 
                     <div class="row" id="latest-post">
-                        <div class="px-2">
-                            <a class="block block-link-pop d-flex flex-column" href="javascript:void(0)">
-                                <div class="block-content block-content-full bg-pulse min-height-175 flex-grow-0">
-                                    <span class="badge badge-secondary font-w700 p-2 text-uppercase">
-                                        Example Post 
-                                    </span>
-                                    <h3 class="h2 text-white-op text-center mt-30">
-                                        Post Image 1
-                                    </h3>
-                                </div>
-                                <div class="block-content flex-grow-1">
-                                    <h5 class="mb-5">
-                                        Create a blog site in under 2 hours
-                                    </h5>
-                                    <p class="text-muted">
-                                        Scott Young · 24 min
-                                    </p>
-                                </div>
-                                <div class="block-content py-15 bg-body-light flex-grow-0">
-                                    <div class="row no-gutters font-size-sm text-center">
-                                        <div class="col-4">
-                                            <span class="text-muted font-w600">
-                                                <i class="fa fa-fw fa-eye mr-5"></i> 9.3k
-                                            </span>
-                                        </div>
-                                        <div class="col-4">
-                                            <span class="text-muted font-w600">
-                                                <i class="fa fa-fw fa-heart mr-5"></i> 480
-                                            </span>
-                                        </div>
-                                        <div class="col-4">
-                                            <span class="text-muted font-w600">
-                                                <i class="fa fa-fw fa-comments mr-5"></i> 463
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+
                     </div>
                 </div>
             </main>
         </div>
 
         {{template "partials/footer" .}}
-    
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
         <script src="/js/functions.js"></script>
         <script src="/js/plugins/slick/slick.js"></script>
         <script src="https://alexandrebuffet.fr/codepen/slider/slick-animation.min.js"></script>
-        <script src="/js/umum/home.js"></script>
+        <!-- <script src="/js/umum/home.js"></script> -->
+        <script>
+            $(document).ready(function() {
+                loadLatestBlog()
+            })
+
+            function loadLatestBlog() {
+                $.ajax({
+                    url:"/blog/latest",
+                    success: function (res) {
+                        const data = res.data
+                        $("#latest-post").html('')
+                        data.forEach(el => {
+                            $("#latest-post").append(createBlogElement(el))
+                        })
+                    }
+                })
+            }
+
+            function createBlogElement(data) {
+                var imageUrl = data.image
+                var splitedImageUrl = imageUrl.split("public")
+                return `
+                    <div class="col-md-4">
+                        <div class="px-2">
+                            <a class="block block-link-pop d-flex flex-column" href="javascript:void(0)">
+                                <img src="${splitedImageUrl[1]}" class="block-content block-content-full min-height-175 flex-grow-0">
+                                <div class="block-content flex-grow-1">
+                                    <h5 class="mb-5">
+                                        ${data.judul}
+                                    </h5>
+                                    <p class="text-muted">
+                                        ${data.tgl_publish}
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                `
+            }
+        </script>
     </body>
 </html>

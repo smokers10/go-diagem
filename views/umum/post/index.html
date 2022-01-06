@@ -30,48 +30,41 @@
     <body class="bg-white">
         <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
             <!-- Header -->
-            {{template "partials/user-header" .}}
+            {{if .Logged.IsLogged}}
+                {{template "partials/user-header" .}}
+                {{else}}
+                {{template "partials/user-unlogged-header" .}}
+            {{end}}
             <!-- END Header -->
 
             <!-- Main Container -->
             <main id="main-container">
                 <!-- Page Content -->
-                <div class="bg-image" style="background-image: url('public/img/banner/banner-for-all.jpg')">
+                <div class="bg-image" style="background-image: url('/img/banner/banner-for-all.jpg')">
                     <div class="content content-full d-flex min-height-200 text-center">
                         <div class="m-auto">
                             <h1 class="font-w700 mb-10">Our Blog</h1>
-                            <h2 class="h4 font-w400 text-muted">Everything looks nice and smooth!</h2>
+                            <h2 class="h4 font-w400 text-muted"></h2>
                         </div>
                     </div>
                 </div>
                 
                 <div class="content" id="post-content">
-                    <input type="hidden" id="current-page" value="1">
-                    <div class="row" id="post-list">
-                        <div class="col-6 col-xl-4 px-2">
-                            <div class="block block-shadow block-bordered mb-2">
-                                <div class="block-content block-content-full p-0">
-                                    <a class="badge badge-primary font-w700 badge-kategori p-2 text-white">
-                                        Tidak Dikategorikan
-                                    </a>
-                                    <a href="#">
-                                        <img src="https://cdn.shopify.com/s/files/1/0051/9159/8198/articles/ghona-blog-9_600x400_crop_center.jpg?v=1622605712" class="img-fluid">
-                                    </a>
-                                </div>
-                                <div class="block-content p-3">
-                                    <h2 class="font-size-14-down-lg font-size-18 font-w700 mb-1" style="min-height: 46px;">
-                                        <a class="title" href="#">Onide Nidie Inida Modfa</a>
-                                    </h2>
-                                    <div class="row">
-                                        <div class="col">
-                                            <span class="text-muted">
-                                                <i class="si si-clock mr-1"></i> 3 Bulan Yang Lalu
-                                            </span>
-                                        </div>
+                    <div class="mb-4 row">
+                        <div class="col-12">
+                            <form id="blog-search">
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <input type="text" class="form-control" id="judul-blog" placeholder="Cari judul blog">
+                                    <div class="input-group-prepend">
+                                        <button class="input-group-text" id="search-btn"><i class="fas fa-search"></i></button>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
+                    </div>
+
+                    <div class="row" id="post-list">
+                        
                     </div>
                 </div>
                 <!-- END Page Content -->
@@ -87,5 +80,61 @@
         <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="/js/umum/general.js"></script>
         <script src="/js/functions.js"></script>
+        <script>
+            $(document).ready(function() {
+                loadBlog()
+
+                $("#blog-search").submit(function(e) {
+                    e.preventDefault()
+                    judul = $("#judul-blog").val()
+                    loadBlog(judul)
+                })
+            })
+
+            function loadBlog(judul) {
+                var preprocessedTitle = judul ? judul : ""
+                $.ajax({
+                    url: "/blog/get",
+                    data: {judul:preprocessedTitle},
+                    success: function(res) {
+                        const data = res.data
+                        $("#post-list").html("")
+                        data.forEach(element => {
+                            $("#post-list").append(createBlogElement(element))
+                        })
+                    }
+                })
+            }
+
+            function createBlogElement(data) {
+                var imageUrl = data.image
+                var splitedImageUrl = imageUrl.split("public")
+
+                return `
+                    <div class="col-6 col-xl-4 px-2">
+                        <div class="block block-shadow block-bordered mb-2">
+                            <div class="block-content block-content-full p-0">
+                                <a href="/blog/read/${data.slug}">
+                                    <img src="${splitedImageUrl[1]}" class="img-fluid">
+                                </a>
+                            </div>
+
+                            <div class="block-content p-3">
+                                <h2 class="font-size-14-down-lg font-size-18 font-w700 mb-1" style="min-height: 46px;">
+                                    <a class="title" href="/blog/read/${data.slug}">${data.judul}</a>
+                                </h2>
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="text-muted">
+                                            <i class="si si-clock mr-1"></i> ${data.tgl_publish}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        </script>
     </body>
 </html>

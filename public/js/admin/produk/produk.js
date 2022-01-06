@@ -24,7 +24,15 @@ $('#data-barang').DataTable({
         {
             "data":null,
             "render":function(data, type, row){
-                return data.harga ? toRupiah.format(data.harga) : `<a href="/admin/produk/edit/${data.id}">lihat detail</a>`
+                let { variasi } = data
+
+                if (typeof variasi == "object" || typeof variasi == Object) {
+                    let firstItem = variasi[0]
+                    let lastItem = variasi[variasi.length - 1]
+                    return `${toRupiah.format(firstItem.harga)} - ${toRupiah.format(lastItem.harga)}`
+                } 
+
+                return toRupiah.format(data.harga)
             }
         },
         {

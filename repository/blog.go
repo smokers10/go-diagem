@@ -91,15 +91,18 @@ func (br *blogRepositoryImpl) ReadAll() ([]domain.Blog, error) {
 }
 
 //khusus umum
-func (br *blogRepositoryImpl) PublishedOnly() ([]domain.Blog, error) {
+func (br *blogRepositoryImpl) PublishedOnly(judul string) ([]domain.Blog, error) {
 	result := []domain.Blog{}
 
 	stmt, _ := br.db.Prepare(`
 		SELECT id, judul, slug, isi, image, is_publish, seo_keyword, seo_tags, seo_deskripsi, tgl_publish, tgl_update 
-		FROM blogs WHERE is_publish = true
+		FROM blogs 
+		WHERE 
+		judul LIKE CONCAT('%', ?, '%')
+		AND is_publish = true
 	`)
 
-	rows, _ := stmt.Query()
+	rows, _ := stmt.Query(judul)
 	defer rows.Close()
 
 	for rows.Next() {
@@ -108,6 +111,8 @@ func (br *blogRepositoryImpl) PublishedOnly() ([]domain.Blog, error) {
 		rows.Scan(&row.ID, &row.Judul, &row.Slug, &row.Isi,
 			&row.Image, &row.IsPublish, &row.SEOKeyword, &row.SEOTags, &row.SEODeskripsi,
 			&row.TGLPublish, &row.TGLUpdate)
+
+		result = append(result, row)
 	}
 
 	return result, nil
@@ -127,6 +132,29 @@ func (br *blogRepositoryImpl) BySlug(slug string) (*domain.Blog, error) {
 		&result.TGLPublish, &result.TGLUpdate)
 
 	return &result, nil
+}
+
+func (br *blogRepositoryImpl) Latest() ([]domain.Blog, error) {
+	result := []domain.Blog{}
+
+	stmt, _ := br.db.Prepare(`
+		SELECT id, judul, slug, isi, image, is_publish, seo_keyword, seo_tags, seo_deskripsi, tgl_publish, tgl_update 
+		FROM blogs 
+		ORDER BY tgl_publish DESC 
+		LIMIT 10
+	`)
+
+	rows, _ := stmt.Query()
+
+	for rows.Next() {
+		row := domain.Blog{}
+		rows.Scan(&row.ID, &row.Judul, &row.Slug, &row.Isi,
+			&row.Image, &row.IsPublish, &row.SEOKeyword, &row.SEOTags, &row.SEODeskripsi,
+			&row.TGLPublish, &row.TGLUpdate)
+		result = append(result, row)
+	}
+
+	return result, nil
 }
 
 //for transaction

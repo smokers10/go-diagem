@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html"
 	"github.com/smokers10/go-diagem.git/infrastructure/database"
 	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
@@ -24,7 +25,9 @@ func main() {
 	app.Static("/", "./public")
 
 	// error recovery
-	// app.Use(recover.New())
+	if mode := os.Getenv("PRODUCTION_MODE"); mode != "" || mode == "local" {
+		app.Use(recover.New())
+	}
 
 	// koneksi database
 	mysql, err := database.MYSQLConn(os.Getenv("PRODUCTION_MODE"))

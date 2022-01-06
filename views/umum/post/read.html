@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <title>Diagem</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta name="keywords" id="seo-keywords">
+        <meta name="description" id="seo-description">
+        <meta name="tags" id="seo-tags">
+        <meta name="author" content="Diagem">
+        
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/img/favicons/favicon.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+        
+        <!-- Fonts and Codebase framework -->
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    </head>
+
+    <body class="bg-white">
+        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            <!-- Header -->
+            {{if .Logged.IsLogged}}
+                {{template "partials/user-header" .}}
+                {{else}}
+                {{template "partials/user-unlogged-header" .}}
+            {{end}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="content">
+                    <div class="block">
+                        <div class="block block-shadow block-bordered mb-2">
+                            <div class="block-content p-3">
+                                <div class="mb-5">
+                                    <h1 class="font-size-50 font-w700" style="min-height: 46px;" id="judul"></h1>
+
+                                    <span class="text-muted">
+                                        <i class="si si-clock mr-1 d-inline"> </i> <div class="d-inline font-size-18" id="tgl_publish"></div>
+                                    </span>
+                                </div>
+
+                                <div class="block-content block-content-full p-0">
+                                    <img class="img-fluid" id="image" height="200" width="1122">
+                                </div>
+
+                                <div id="isi" class="font-size-18 mt-5">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+            <!-- Footer -->
+            {{template "partials/footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/umum/general.js"></script>
+        <script src="/js/functions.js"></script>
+        <script>
+            const currentPath = location.pathname
+            const CPSplit = currentPath.split("/")  
+            const slug = CPSplit[3]
+
+            $(document).ready(function() {
+                $.ajax({
+                    url:`/blog/get/${slug}`,
+                    success: function(res) {
+                        const {seo_keyword, seo_tags, seo_deskripsi, judul, isi, tgl_publish, image, } = res.data
+                        var splitedImageUrl = image.split("public")
+                        // assign to DOM
+                        $("#seo-keywords").attr("content",seo_keyword)
+                        $("#seo-tags").attr("content",seo_tags)
+                        $("#seo-description").attr("content",seo_deskripsi)
+                        $("#judul").text(judul)
+                        $("#tgl_publish").text(tgl_publish)
+                        $("#image").attr("src", splitedImageUrl[1])
+                        $("#image").attr("alt", judul)
+                        $("#isi").html(isi)
+                    }
+                })
+            })
+        </script>
+    </body>
+</html>

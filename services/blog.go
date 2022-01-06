@@ -179,9 +179,9 @@ func (bs *blogServiceImpl) UpdateThumbnail(req *domain.Blog) *domain.Response {
 }
 
 // khusus umum
-func (bs *blogServiceImpl) PublishedOnly() *domain.Response {
+func (bs *blogServiceImpl) PublishedOnly(judul string) *domain.Response {
 	// call repository
-	response, err := bs.blogRepository.PublishedOnly()
+	response, err := bs.blogRepository.PublishedOnly(judul)
 	if err != nil {
 		fmt.Println(err)
 		return &domain.Response{
@@ -201,6 +201,24 @@ func (bs *blogServiceImpl) PublishedOnly() *domain.Response {
 func (bs *blogServiceImpl) Detail(slug string) *domain.Response {
 	// call repository
 	response, err := bs.blogRepository.BySlug(slug)
+	if err != nil {
+		fmt.Println(err)
+		return &domain.Response{
+			Message: "error saat mengambil blog",
+			Status:  500,
+		}
+	}
+
+	return &domain.Response{
+		Data:    response,
+		Status:  200,
+		Success: true,
+		Message: "blog berhasil diambil",
+	}
+}
+
+func (bs *blogServiceImpl) Latest() *domain.Response {
+	response, err := bs.blogRepository.Latest()
 	if err != nil {
 		fmt.Println(err)
 		return &domain.Response{

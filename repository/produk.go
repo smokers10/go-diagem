@@ -54,9 +54,10 @@ func (p *produkRepositoryImpl) Create(req *domain.Produk) (*domain.ProdukDetaile
 func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.ProdukDetailed, error) {
 	result := []domain.ProdukDetailed{}
 	produkFoto := ProdukFotoRepository(p.db)
+	variants := ProdukVariasiRepository(p.db)
 	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.stok, 
 	produk.harga, produk.dilihat, produk.created_at, produk.updated_at,
-	kategori.nama, kategori.id, kategori.slug
+	kategori.nama, kategori.id, kategori.slug, produk.discount
 	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
 	WHERE produk.nama LIKE CONCAT('%', ?, '%') 
 	AND produk.kategori_id LIKE CONCAT('%', ?, '%') 
@@ -83,7 +84,7 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 		// scan
 		rows.Scan(&row.ID, &row.Nama, &row.Slug, &row.Deskripsi,
 			&row.SpesifikasiTemp, &row.Stok, &row.Harga, &row.Dilihat, &row.CreatedAt, &row.UpdatedAt,
-			&row.Kategori.Nama, &row.Kategori.ID, &row.Kategori.Slug,
+			&row.Kategori.Nama, &row.Kategori.ID, &row.Kategori.Slug, &row.Discount,
 		)
 
 		// unmarshal spesifikasi
@@ -98,6 +99,14 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 		}
 
 		row.ProdukSingleFoto = *fotoUtama
+
+		// get variant
+		variants, err := variants.ReadByProdukID(row.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		row.Variasi = variants
 
 		// append hasil scan
 		result = append(result, row)

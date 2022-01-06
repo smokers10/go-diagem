@@ -103,27 +103,47 @@ function load_content(){
             el.html('')
             $.each(response.data, function(k, v) {
                 let data = response.data[k]
-                let {produk_single_foto, nama, slug, harga} = data
-                el.append(`
-                <div class="col-6 col-lg-3 d-flex align-items-stretch">
-                    <div class="product">
-                        <div class="product-content">
-                            <div class="product-img">
-                                <img src="${ produk_single_foto.path }" class="img-fluid"/>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-title"><a href="/produk/detail/${slug}">${ nama }</a></div>
-                                <div class="product-price">${ harga ? toRupiah.format(harga) : `<a href="/produk/detail/${slug}">lihat detail</a>` }</div>
-                            </div>
-                        </div>
-                    </div> 
-                </div>            
-                `)
+                let {produk_single_foto, nama, slug, harga, variasi, discount} = data
+                let {path} = produk_single_foto
+                let hargaText = ""
+                console.log(data)
+
+                if (typeof variasi == undefined || typeof variasi == "undefined") {
+                    hargaText = toRupiah.format(harga)
+                    el.append(createContentElement(path, slug, nama, hargaText, discount))
+                }else {
+                    let firstItem = variasi[0]
+                    let lastItem = variasi[variasi.length - 1]
+                    hargaText = `${toRupiah.format(firstItem.harga)} - ${toRupiah.format(lastItem.harga)}`
+                    el.append(createContentElement(path, slug, nama, hargaText, discount))
+                }
             })
-            // window.history.pushState({ additionalInformation: 'Updated the URL with JS' }, "Produk Detail | Semua Produk", this.url)
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error adding / update data');
         }
     })
+}
+
+function createContentElement(path, slug, nama, harga, discount) {
+    return `
+        <div class="col-6 col-lg-3 d-flex align-items-stretch">
+            <a href="/produk/detail/${slug}"> 
+                <div class="product">
+                    <div class="product-content">
+                        <div class="product-img">
+                            <img src="${path}" class="img-fluid"/>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">${nama}</div>
+                            <div class="product-price">${harga}</div>
+                            ${
+                                discount ? `<b> discount <span class="product-price__discount" id="besaran-discount">${discount}%</span></b>` : ``
+                            }
+                        </div>
+                    </div>
+                </div> 
+            </a>
+        </div>    
+    `
 }

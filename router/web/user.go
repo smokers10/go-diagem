@@ -27,7 +27,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	produkController := user.ProdukController()
 	promoController := user.PromoController()
 	mitraController := user.MitraController()
-	postController := user.PostController()
+	postController := user.PostController(resolver.BlogService)
 	kategoriController := user.KategoriController()
 	pesananController := user.OrderController()
 	resellerController := user.ResellerController()
@@ -117,11 +117,14 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	// post
 	post := parentPath.Group("/blog")
 	post.Get("/", postController.IndexPage)
+	post.Get("/read/:slug", postController.ReadBlogPage)
+	post.Get("/get", postController.GetAll)
+	post.Get("/get/:slug", postController.ReadBlog)
+	post.Get("/latest", postController.GetLatest)
 
 	// kategori
 	kategori := parentPath.Group("/kategori")
 	kategori.Get("/", kategoriController.IndexPage)
-	kategori.Get("/detail", kategoriController.DetailPage)
 
 	// kategori - API
 	kategori.Get("/get", kategoriAPIController.Read)

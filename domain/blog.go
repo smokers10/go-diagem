@@ -31,8 +31,9 @@ type BlogService interface {
 	UpdateThumbnail(req *Blog) *Response
 
 	//khusus umum
-	PublishedOnly() *Response
+	PublishedOnly(judul string) *Response
 	Detail(slug string) *Response
+	Latest() *Response
 }
 
 type BlogRepository interface {
@@ -44,8 +45,9 @@ type BlogRepository interface {
 	ReadAll() ([]Blog, error)
 
 	//khusus umum
-	PublishedOnly() ([]Blog, error)
+	PublishedOnly(judul string) ([]Blog, error)
 	BySlug(slug string) (*Blog, error)
+	Latest() ([]Blog, error)
 
 	//for transaction
 	GetSqlInstance() *sql.DB
