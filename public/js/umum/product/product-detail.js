@@ -124,10 +124,34 @@ function _createVarianElement(data) {
     `
 }
 
+function fotoOnclick(el){
+    var fotoProdukMain = $("#foto-produk-main");
+    var fotoProdukNav = document.getElementById('foto-produk-nav');
+
+    let src = $(el).attr("src")
+    fotoProdukMain.attr("src", src)
+}
+
+function imgOnclick(el){
+    var modal = document.getElementById("myModal");
+    var img = $("#foto-produk-main");
+    var modalImg = document.getElementById("mainImg");
+    var captionText = document.getElementById("caption");
+    var span = document.getElementsByClassName("close-img")[0];
+    
+    modal.style.display = "block";
+    modalImg.src = $(el).attr("src");
+    // captionText.innerHTML = this.alt;
+
+    span.onclick = function() { 
+        modal.style.display = "none";
+    }
+}
+
 function _createImageNav(path) {
     return `
-        <div class="slider-nav__item co-4">
-            <img src="${path}" class="h-100" alt="navigasi foto" />
+        <div class="co-4">
+            <img src="${path}" class="slider-nav__item h-100" alt="navigasi foto" onclick="fotoOnclick(this)"/>
         </div>
     `
 }

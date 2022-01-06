@@ -76,10 +76,10 @@
                                 <div class="product-slides mb-0">
                                     <!-- for each image foto -->
                                     <div class="item-detail">
-                                        <img class="img-fluid" src="/img/placeholder/product.png" id="foto-produk-main" alt="Image Description">
+                                        <img class="img-fluid zoomImg" src="/img/placeholder/product.png" id="foto-produk-main" alt="Image Description" onclick="imgOnclick(this)">
                                     </div>
                                 </div>
-                                <div class="product-slides-nav row" id="foto-produk-nav"></div>
+                                <div class="product-slides-nav row ml-0 mr-0" id="foto-produk-nav"></div>
                             </div>
 
                             <div class="col-md-7">
@@ -152,13 +152,52 @@
                                         </a>
                                     {{end}}
                                 </div>
+
+                                <div class="content pl-0 pr-0 pt-50">
+                                    <div class="block">
+                                        <div class="block-header p-0 sticky-navigation">
+                                            <ul class="nav nav-tabs nav-tabs-alt" id="myTab" role="tablist">
+                                                <li class="nav-item">
+                                                  <a class="nav-link active" id="spec-tab" data-toggle="tab" href="#spec" role="tab" aria-controls="spec" aria-selected="true">Spesifikasi</a>
+                                                </li>
+                
+                                                <li class="nav-item">
+                                                  <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Deskripsi</a>
+                                                </li>
+                
+                                                <li class="nav-item">
+                                                  <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">Ulasan</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+            
+                                        <div class="tab-content block-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="spec" role="tabpanel" aria-labelledby="spec-tab">
+                                                <h4 class="font-w400">Spesifikasi</h4>
+                                                <table class="table" id="table-spec">
+                                                    <tbody>
+            
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+                                                <h4 class="font-w400">Deskripsi</h4>
+                                                <div id="deskripsi"></div>
+                                            </div>
+                                            <div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
+                                                <h4 class="font-w400">Ulasan</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="bg-body">
-                    <div class="content">
+                    <!-- <div class="content">
                         <div class="block">
                             <div class="block-header p-0 sticky-navigation">
                                 <ul class="nav nav-tabs nav-tabs-alt" id="myTab" role="tablist">
@@ -194,7 +233,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+                </div>
+                <div id="myModal" class="modal-img">
+                    <span class="close-img">&times;</span>
+                    <img class="modal-content modal-dialog-centered" id="mainImg">
                 </div>
                 <!-- END Page Content -->
             </main>
@@ -213,5 +256,9 @@
         <script src="/js/plugins/slick/slick.js"></script>
         <script src="/js/plugins/jquery-raty/jquery.raty.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-zoom@1.7.21/jquery.zoom.min.js"></script>
+
+        <script>
+           
+        </script>
     </body>
 </html>
