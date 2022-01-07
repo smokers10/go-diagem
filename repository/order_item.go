@@ -42,7 +42,7 @@ func (oir *orderItemRepository) ByOrderID(orderID string) ([]domain.OrderItemDet
 	result := []domain.OrderItemDetail{}
 	produkRepository := ProdukRepository(oir.db)
 	produkVariasiRepository := ProdukVariasiRepository(oir.db)
-	stmt, err := oir.db.Prepare(`SELECT id, order_checkout_id, produk_id, variasi_id, quantity WHERE order_checkout_id = ?`)
+	stmt, err := oir.db.Prepare(`SELECT id, order_checkout_id, produk_id, variasi_id, quantity FROM order_item WHERE order_checkout_id = ?`)
 	if err != nil {
 		return nil, err
 	}

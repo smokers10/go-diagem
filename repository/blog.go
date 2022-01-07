@@ -120,7 +120,6 @@ func (br *blogRepositoryImpl) PublishedOnly(judul string) ([]domain.Blog, error)
 
 func (br *blogRepositoryImpl) BySlug(slug string) (*domain.Blog, error) {
 	result := domain.Blog{}
-
 	stmt, _ := br.db.Prepare(`
 		SELECT id, judul, slug, isi, image, is_publish, seo_keyword, seo_tags, seo_deskripsi, tgl_publish, tgl_update 
 		FROM blogs 

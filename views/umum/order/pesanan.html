@@ -75,6 +75,7 @@
                                                 <th scope="col">Kurir</th>
                                                 <th scope="col">Tanggal Dipesan</th>
                                                 <th scope="col">Status</th>
+                                                <th scope="col">Pembayaran</th>
                                                 <th scope="col"></th>
                                             </tr>
                                         </thead>
@@ -145,16 +146,17 @@
             }
 
             function createPesananElement(data) {
-                const {id, invoice_no, kurir, status, tgl_order} = data
+                const {id, invoice_no, kurir, status, tgl_order, order_bayar} = data
                 return `
                     <tr>
                         <td>${invoice_no}</td>
                         <td>${kurir}</td>
                         <td>${tgl_order}</td>
                         <td>${status}</td>
+                        <td>${order_bayar.status}</td>
                         <td>
                             <a href="/pesanan/invoice/${id}">
-                                Lihat Detail
+                                Detail
                             </a>
                         </td>
                     </tr>

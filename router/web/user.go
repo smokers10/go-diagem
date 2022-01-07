@@ -115,7 +115,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	mitra.Get("/", mitraController.IndexPage)
 
 	// post
-	post := parentPath.Group("/blog")
+	post := parentPath.Group("/blog", middlewareNotSoStrict)
 	post.Get("/", postController.IndexPage)
 	post.Get("/read/:slug", postController.ReadBlogPage)
 	post.Get("/get", postController.GetAll)
@@ -139,7 +139,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	pesanan.Get("/", pesananController.IndexPage)
 	pesanan.Get("/invoice/:order_id", pesananController.Invoice)
 	pesanan.Get("/get", orderAPIController.Read)
-	pesanan.Get("/detail/:order_id", orderAPIController.DetailOrder)
+	pesanan.Get("/get/:order_id", orderAPIController.DetailOrder)
 
 	// feedback
 	feedback := parentPath.Group("/feedback")
@@ -150,14 +150,14 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 
 	// alamat origin
 	alamatOrigin := parentPath.Group("/alamat-origin")
-	alamatOrigin.Get("/", alamatOriginAPIController.Read)
+	alamatOrigin.Get("/", alamatOriginAPIController.Read, middlewareNotSoStrict)
 
 	// reseller
-	reseller := parentPath.Group("/seller")
+	reseller := parentPath.Group("/seller", middlewareNotSoStrict)
 	reseller.Get("/", resellerController.IndexPage)
 	reseller.Get("/get", sellerAPIController.Get)
 
 	// raja ongkir API
 	rajaongkirPath := parentPath.Group("/rajaongkir")
-	rajaongkirPath.Get("/kota", rajaongkirAPIController.Kota)
+	rajaongkirPath.Get("/kota", rajaongkirAPIController.Kota, middlewareStrict)
 }

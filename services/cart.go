@@ -55,17 +55,9 @@ func (cs *cartServiceImpl) AddtoCart(req *domain.Cart) *domain.Response {
 		return &res
 	}
 
-	if produk.Stok == 0 {
-		res.Message = "barang sudah habis"
+	if cs.isStockInsuficient(produk, req) {
+		res.Message = "stok tidak memadai"
 		res.Status = http.StatusOK
-		res.Success = false
-		return &res
-	}
-
-	if produk.Stok < req.Quantity {
-		res.Message = "jumlah stok tidak memenuhi"
-		res.Status = http.StatusOK
-		res.Success = false
 		return &res
 	}
 
@@ -76,7 +68,7 @@ func (cs *cartServiceImpl) AddtoCart(req *domain.Cart) *domain.Response {
 		return &res
 	}
 
-	res.Message = "barang sudah habis"
+	res.Message = "barang masuk ke keranjang"
 	res.Status = http.StatusOK
 	res.Success = true
 	return &res
@@ -226,4 +218,27 @@ func (cs *cartServiceImpl) UpdateQuantityNonVariant(produkID string, req *domain
 	res.Status = http.StatusOK
 	res.Success = true
 	return &res
+}
+
+// DILUAR ABTRAKSI DOMAIN SERVICE
+func (cs *cartServiceImpl) isStockInsuficient(produk *domain.ProdukDetailed, req *domain.Cart) bool {
+	if produk.IsHasVariant {
+		// check stok jika punya varian
+		variant := produk.Variasi
+		for i := 0; i < len(variant); i++ {
+			if variant[i].ID == req.VariasiID {
+				if variant[i].Stok < req.Quantity {
+					fmt.Println("stock is insufficient")
+					return true
+				}
+			}
+		}
+	} else {
+		if produk.Stok < req.Quantity {
+			fmt.Println("stock is insufficient")
+			return true
+		}
+	}
+
+	return false
 }

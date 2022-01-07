@@ -62,7 +62,15 @@
         <script src="/js/functions.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
         <script>
-            
+            const currentPath = location.pathname
+            const CPSplit = currentPath.split("/")  
+            const id = CPSplit[3]
+
+            $(document).ready(function() {
+                $.ajax({
+                    url:`/pesanan/get/${id}`
+                })
+            })
         </script>
     </body>
 </html>

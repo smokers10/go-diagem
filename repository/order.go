@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/smokers10/go-diagem.git/domain"
 )
@@ -74,30 +73,35 @@ func (or *orderRepository) GetByID(orderID string) (*domain.OrderDetail, error) 
 
 	stmt.QueryRow(orderID).Scan(&result.ID, &result.Status, &result.UserID, &result.AlamatID, &result.Kurir, &result.PaketKurir, &result.Ongkir, &result.InvoiceNo, &result.TglOrder)
 
+	// ambil alamat
 	alamat, err := alamatRepo.ByID(result.AlamatID)
 	if err != nil {
 		return nil, err
 	}
 
+	// ambil user
 	user, err := userRepo.ByID(result.UserID)
 	if err != nil {
 		return nil, err
 	}
 
-	orderItem, err := orderItemRepo.ByOrderID(result.ID)
+	// ambil item pesanan
+	items, err := orderItemRepo.ByOrderID(orderID)
 	if err != nil {
 		return nil, err
 	}
 
+	// assign
 	result.Alamat = *alamat
 	result.User = *user
-	result.OrderItem = orderItem
+	result.OrderItem = items
 
 	return &result, nil
 }
 
 func (or *orderRepository) GetByUserID(userID int) ([]domain.OrderDetail, error) {
 	result := []domain.OrderDetail{}
+	orderPaymentRepo := OrderBayarRepository(or.db)
 
 	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order_checkout WHERE user_id = ?")
 	if err != nil {
@@ -117,7 +121,12 @@ func (or *orderRepository) GetByUserID(userID int) ([]domain.OrderDetail, error)
 		}
 
 		// get order payment
-		fmt.Println(row)
+		payment, err := orderPaymentRepo.ByOrderID(row.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		row.OrderBayar = *payment
 
 		result = append(result, row)
 	}
