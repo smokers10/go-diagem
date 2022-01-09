@@ -110,6 +110,8 @@ func (m *Midtrans) Transaction() (*midtransResponse, error) {
 		return nil, err
 	}
 
+	fmt.Println(body)
+
 	json.Unmarshal(body, &httpRes)
 
 	return &httpRes, nil
