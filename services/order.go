@@ -171,6 +171,8 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 		return &res
 	}
 
+	fmt.Println(midtrans.ItemDetail)
+
 	// generate invoice
 	year, month, day := time.Now().Date()
 	unixTime := time.Now().Unix()
@@ -211,6 +213,16 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 		return &res
 	}
 
+	// commit / rollback
+	if midres.RedirectURL == "" || midres.Token == "" {
+		tx.Rollback()
+		res.Message = "checkout gagal coba lagi"
+		res.Status = 200
+		return &res
+	}
+
+	tx.Commit()
+
 	// pindahkan data cart ke order item
 	for _, cart := range carts {
 		orderItem := domain.OrderItem{
@@ -220,9 +232,8 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 			Quantity:        cart.Quantity,
 		}
 
-		if err := osc.orderItemRepository.Create(&orderItem, tx); err != nil {
+		if err := osc.orderItemRepository.Create(&orderItem); err != nil {
 			fmt.Println(err)
-			tx.Rollback()
 			res.Message = "error saat menyimpan data order item"
 			res.Status = 500
 			return &res
@@ -231,15 +242,7 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 		osc.cartRepository.Delete(&domain.Cart{ID: cart.ID, UserID: cart.UserID})
 	}
 
-	// commit / rollback
-	if midres.RedirectURL == "" || midres.Token == "" {
-		tx.Rollback()
-	}
-
-	tx.Commit()
-
-	// write response sukses
-	res.Data = midres
+	res.Data = map[string]string{"order_id": req.ID}
 	res.Message = "checkout berhasil"
 	res.Status = 200
 	res.Success = true

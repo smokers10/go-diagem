@@ -18,17 +18,13 @@ func OrderRepository(database *sql.DB) domain.OrderRepository {
 func (or *orderRepository) Create(req *domain.Order, tx *sql.Tx) error {
 	stmt, err := tx.Prepare("INSERT INTO order_checkout (id, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no) VALUE(?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 	defer stmt.Close()
 
 	if _, err := stmt.Exec(req.ID, req.UserID, req.AlamatID, req.Kurir, req.PaketKurir, req.Ongkir, req.InvoiceNo); err != nil {
-		tx.Rollback()
 		return err
 	}
-
-	tx.Commit()
 
 	return nil
 }

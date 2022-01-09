@@ -333,7 +333,7 @@ function submitCheckout(data) {
 		},
 		success: function (response) {
 			if (response.success) {
-				finalMessage()
+				finalMessage(response.data.order_id)
 				$("#btn-finish-checkout").prop('disabled', true)
 			} else {
 				Swal.fire({
@@ -350,7 +350,7 @@ function submitCheckout(data) {
 	})
 }
 
-function finalMessage(token) {
+function finalMessage(order_id) {
 	Swal.fire({
         title: "Checkout Selesai",
         text: "Mau Bayar Sekarang?",
@@ -365,7 +365,7 @@ function finalMessage(token) {
     })
     .then((result) => {
        	if (result.value) {
-			snap.pay(token)
+			location.replace(`/pesanan/invoice/${order_id}`)
 	   	} else {
 			Swal.close()
 	   	}

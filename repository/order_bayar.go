@@ -16,7 +16,7 @@ func OrderBayarRepository(database *sql.DB) domain.OrderBayarRepository {
 }
 
 func (ob *orderBayarRepository) Create(req *domain.OrderBayar, tx *sql.Tx) error {
-	stmt, _ := ob.db.Prepare("INSERT INTO order_bayar(order_checkout_id, jumlah, token, redirect_url) VALUES (?, ?, ?, ?)")
+	stmt, _ := tx.Prepare("INSERT INTO order_bayar(order_checkout_id, jumlah, token, redirect_url) VALUES (?, ?, ?, ?)")
 	defer stmt.Close()
 	if _, err := stmt.Exec(req.OrderCheckoutID, req.Jumlah, req.Token, req.RedirectURL); err != nil {
 		return err

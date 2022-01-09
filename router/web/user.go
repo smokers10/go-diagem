@@ -97,7 +97,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	cart.Post("/order", orderAPIController.Order)
 
 	// produk
-	produk := parentPath.Group("/produk")
+	produk := parentPath.Group("/produk", middlewareNotSoStrict)
 	produk.Get("/", produkController.IndexPage)
 	produk.Get("/detail/:slug", produkController.DetailPage)
 	produk.Post("/get", produkAPIController.Read)

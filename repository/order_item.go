@@ -14,20 +14,16 @@ func OrderItemRepository(database *sql.DB) domain.OrderItemRepository {
 	return &orderItemRepository{db: database}
 }
 
-func (oir *orderItemRepository) Create(req *domain.OrderItem, tx *sql.Tx) error {
-	stmt, err := tx.Prepare(`INSERT INTO order_item (order_checkout_id, produk_id, variasi_id, quantity) VALUES(?, ?, ?, ?)`)
+func (oir *orderItemRepository) Create(req *domain.OrderItem) error {
+	stmt, err := oir.db.Prepare(`INSERT INTO order_item (order_checkout_id, produk_id, variasi_id, quantity) VALUES(?, ?, ?, ?)`)
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 	defer stmt.Close()
 
 	if _, err := stmt.Exec(req.OrderCheckoutID, req.ProdukID, req.VariasiID, req.Quantity); err != nil {
-		tx.Rollback()
 		return err
 	}
-
-	tx.Commit()
 
 	return nil
 }
