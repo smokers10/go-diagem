@@ -1,5 +1,7 @@
 package domain
 
+import "database/sql"
+
 type OrderItem struct {
 	ID              int    `json:"id,omitempty" form:"id"`
 	OrderCheckoutID string `json:"order_id,omitempty" form:"order_id"`
@@ -19,6 +21,6 @@ type OrderItemDetail struct {
 }
 
 type OrderItemRepository interface {
-	Create(req *OrderItem) error
+	Create(req *OrderItem, tx *sql.Tx) error
 	ByOrderID(orderID string) ([]OrderItemDetail, error)
 }

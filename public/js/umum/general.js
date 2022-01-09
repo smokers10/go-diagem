@@ -186,7 +186,13 @@ $(document).on('click', '#btn-add-cart', function () {
                 })
             },
             success: function (response) {
-                Swal.close()
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Produk Masuk Ke Kerajang',
+                    text: 'Silahkan pilih barang lagi',
+                    showConfirmButton: false,
+                    timer: 3000,                    
+                })
                 cart_count()
                 $('#addToCart').modal()
             },

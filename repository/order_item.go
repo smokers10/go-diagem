@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"context"
 	"database/sql"
 
 	"github.com/smokers10/go-diagem.git/domain"
@@ -15,18 +14,13 @@ func OrderItemRepository(database *sql.DB) domain.OrderItemRepository {
 	return &orderItemRepository{db: database}
 }
 
-func (oir *orderItemRepository) Create(req *domain.OrderItem) error {
-	c := context.Background()
-	tx, err := oir.db.BeginTx(c, nil)
-	if err != nil {
-		return err
-	}
-
+func (oir *orderItemRepository) Create(req *domain.OrderItem, tx *sql.Tx) error {
 	stmt, err := tx.Prepare(`INSERT INTO order_item (order_checkout_id, produk_id, variasi_id, quantity) VALUES(?, ?, ?, ?)`)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
+	defer stmt.Close()
 
 	if _, err := stmt.Exec(req.OrderCheckoutID, req.ProdukID, req.VariasiID, req.Quantity); err != nil {
 		tx.Rollback()
@@ -46,6 +40,7 @@ func (oir *orderItemRepository) ByOrderID(orderID string) ([]domain.OrderItemDet
 	if err != nil {
 		return nil, err
 	}
+	defer stmt.Close()
 
 	rows, err := stmt.Query(orderID)
 	if err != nil {

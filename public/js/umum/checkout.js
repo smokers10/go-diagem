@@ -59,14 +59,12 @@ $(document).ready(function () {
 
 	$("#btn-finish-checkout").on('click', function (e) {
 		var alamat = JSON.parse($("#selected_alamat").val())
-		
 		const data = {
 			alamat_id : alamat.id,
 			ongkir : parseInt($("#ongkir").val()),
 			kurir : $("#courier").val(),
 			paket_kurir : $("#courier-paket").val(),
 		}
-
 		submitCheckout(data)
 	})
 })
@@ -335,7 +333,8 @@ function submitCheckout(data) {
 		},
 		success: function (response) {
 			if (response.success) {
-				bayarsekarang(response.data.token)
+				finalMessage()
+				$("#btn-finish-checkout").prop('disabled', true)
 			} else {
 				Swal.fire({
 					title: "Checkout Gagal",
@@ -351,7 +350,7 @@ function submitCheckout(data) {
 	})
 }
 
-function bayarsekarang(token) {
+function finalMessage(token) {
 	Swal.fire({
         title: "Checkout Selesai",
         text: "Mau Bayar Sekarang?",

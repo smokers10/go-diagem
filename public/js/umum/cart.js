@@ -175,6 +175,7 @@ function deleteFromCart(el) {
                         icon: 'success'
                     })
                     load_cart()
+                    cart_count()
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error deleting data')
@@ -288,3 +289,4 @@ function _createElement(data){
 
     return item
 }
+

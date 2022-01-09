@@ -32,3 +32,8 @@ func (p *produkControllerImpl) Detail(c *fiber.Ctx) error {
 
 	return c.Status(response.Status).JSON(response)
 }
+
+func (p *produkControllerImpl) GetPopular(c *fiber.Ctx) error {
+	response := p.produkService.GetPopular()
+	return c.Status(response.Status).JSON(response)
+}

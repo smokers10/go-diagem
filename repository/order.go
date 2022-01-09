@@ -15,18 +15,13 @@ func OrderRepository(database *sql.DB) domain.OrderRepository {
 	return &orderRepository{db: database}
 }
 
-func (or *orderRepository) Create(req *domain.Order) error {
-	c := context.Background()
-	tx, err := or.db.BeginTx(c, nil)
-	if err != nil {
-		return err
-	}
-
+func (or *orderRepository) Create(req *domain.Order, tx *sql.Tx) error {
 	stmt, err := tx.Prepare("INSERT INTO order_checkout (id, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no) VALUE(?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
+	defer stmt.Close()
 
 	if _, err := stmt.Exec(req.ID, req.UserID, req.AlamatID, req.Kurir, req.PaketKurir, req.Ongkir, req.InvoiceNo); err != nil {
 		tx.Rollback()
@@ -50,6 +45,7 @@ func (or *orderRepository) UpdateStatus(orderID string, status string) error {
 		tx.Rollback()
 		return err
 	}
+	defer stmt.Close()
 
 	if _, err := stmt.Exec(status, orderID); err != nil {
 		tx.Rollback()
@@ -65,11 +61,13 @@ func (or *orderRepository) GetByID(orderID string) (*domain.OrderDetail, error) 
 	alamatRepo := AlamatRepository(or.db)
 	userRepo := UserRepository(or.db)
 	orderItemRepo := OrderItemRepository(or.db)
+	paymentRepo := OrderBayarRepository(or.db)
 
 	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order_checkout WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
+	defer stmt.Close()
 
 	stmt.QueryRow(orderID).Scan(&result.ID, &result.Status, &result.UserID, &result.AlamatID, &result.Kurir, &result.PaketKurir, &result.Ongkir, &result.InvoiceNo, &result.TglOrder)
 
@@ -91,10 +89,17 @@ func (or *orderRepository) GetByID(orderID string) (*domain.OrderDetail, error) 
 		return nil, err
 	}
 
+	// payment repo
+	payment, err := paymentRepo.ByOrderID(orderID)
+	if err != nil {
+		return nil, err
+	}
+
 	// assign
 	result.Alamat = *alamat
 	result.User = *user
 	result.OrderItem = items
+	result.OrderBayar = *payment
 
 	return &result, nil
 }
@@ -112,6 +117,7 @@ func (or *orderRepository) GetByUserID(userID int) ([]domain.OrderDetail, error)
 	if err != nil {
 		return nil, err
 	}
+	defer stmt.Close()
 
 	for rows.Next() {
 		row := domain.OrderDetail{}
@@ -142,6 +148,7 @@ func (or *orderRepository) Read() ([]domain.OrderDetail, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer stmt.Close()
 
 	rows, err := stmt.Query()
 	if err != nil {
@@ -164,4 +171,8 @@ func (or *orderRepository) Read() ([]domain.OrderDetail, error) {
 	}
 
 	return result, nil
+}
+
+func (or *orderRepository) GetSQLInstance() *sql.DB {
+	return or.db
 }

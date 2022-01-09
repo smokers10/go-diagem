@@ -1,0 +1,1 @@
+document.getElementById('midtrans-client').setAttribute("data-client-key", "SB-Mid-client-ewW6RazKMGNAf6FY")

@@ -290,3 +290,67 @@ func (p *produkRepositoryImpl) UpdateStok(produkID string, stok int) error {
 
 	return nil
 }
+
+func (p *produkRepositoryImpl) GetPopular() ([]domain.ProdukDetailed, error) {
+	result := []domain.ProdukDetailed{}
+	produkFoto := ProdukFotoRepository(p.db)
+	variants := ProdukVariasiRepository(p.db)
+	query := `SELECT produk.id, produk.nama, produk.slug, produk.deskripsi, produk.spesifikasi, produk.stok, 
+	produk.harga, produk.dilihat, produk.created_at, produk.updated_at,
+	kategori.nama, kategori.id, kategori.slug, produk.discount
+	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
+	WHERE produk.deleted = false 
+	ORDER BY produk.jumlah_penjualan DESC
+	LIMIT 10`
+
+	statement, err := p.db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer statement.Close()
+
+	rows, err := statement.QueryContext(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		row := domain.ProdukDetailed{}
+
+		// temporary
+		spesifikasi := []domain.ProdukSpesifikasi{}
+
+		// scan
+		rows.Scan(&row.ID, &row.Nama, &row.Slug, &row.Deskripsi,
+			&row.SpesifikasiTemp, &row.Stok, &row.Harga, &row.Dilihat, &row.CreatedAt, &row.UpdatedAt,
+			&row.Kategori.Nama, &row.Kategori.ID, &row.Kategori.Slug, &row.Discount,
+		)
+
+		// unmarshal spesifikasi
+		json.Unmarshal([]byte(row.SpesifikasiTemp), &spesifikasi)
+		row.Spesifikasi = spesifikasi
+		row.SpesifikasiTemp = ""
+
+		// get foto utama
+		fotoUtama, err := produkFoto.GetUtamaOnly(row.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		row.ProdukSingleFoto = *fotoUtama
+
+		// get variant
+		variants, err := variants.ReadByProdukID(row.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		row.Variasi = variants
+
+		// append hasil scan
+		result = append(result, row)
+	}
+
+	return result, nil
+}

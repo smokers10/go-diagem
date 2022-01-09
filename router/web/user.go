@@ -97,13 +97,12 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	cart.Post("/order", orderAPIController.Order)
 
 	// produk
-	produk := parentPath.Group("/produk", middlewareNotSoStrict)
+	produk := parentPath.Group("/produk")
 	produk.Get("/", produkController.IndexPage)
 	produk.Get("/detail/:slug", produkController.DetailPage)
-
-	// produk - api
 	produk.Post("/get", produkAPIController.Read)
 	produk.Get("/get/:slug", produkAPIController.Detail)
+	produk.Get("/popular", produkAPIController.GetPopular)
 
 	// promo
 	promo := parentPath.Group("/promo")

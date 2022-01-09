@@ -266,3 +266,23 @@ func (p *produkServiceImpl) DetailBySlug(slug string) *domain.Response {
 
 	return &res
 }
+
+func (p *produkServiceImpl) GetPopular() *domain.Response {
+	res := domain.Response{}
+
+	// panggil repository terkait
+	produk, err := p.produkRepository.GetPopular()
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error saat mengambil produk"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
+	res.Data = produk
+	res.Message = "produk popular berhasil diambil"
+	res.Status = http.StatusOK
+	res.Success = true
+
+	return &res
+}

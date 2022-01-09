@@ -27,7 +27,6 @@ func setConfig(mode string) *config {
 		con.MAX_IDLE_CONNECTION_LIFE_TIME = 1
 	} else {
 		URI := os.Getenv("MYSQL_URI")
-
 		con.URI = URI
 		con.MAX_CONNECTION = 10
 		con.MAX_CONNECTION_LIFE_TIME = 1

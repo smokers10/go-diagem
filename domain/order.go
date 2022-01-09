@@ -1,5 +1,7 @@
 package domain
 
+import "database/sql"
+
 type Order struct {
 	ID         string `json:"id,omitempty" form:"id"`
 	Status     string `json:"status,omitempty" form:"status"`
@@ -37,9 +39,10 @@ type OrderService interface {
 }
 
 type OrderRepository interface {
-	Create(req *Order) error
+	Create(req *Order, tx *sql.Tx) error
 	UpdateStatus(orderID string, status string) error
 	GetByID(orderID string) (*OrderDetail, error)
 	GetByUserID(userID int) ([]OrderDetail, error)
 	Read() ([]OrderDetail, error)
+	GetSQLInstance() *sql.DB
 }

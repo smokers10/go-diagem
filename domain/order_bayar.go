@@ -1,5 +1,7 @@
 package domain
 
+import "database/sql"
+
 type OrderBayar struct {
 	ID              int     `json:"id,omitempty" form:"id"`
 	OrderCheckoutID string  `json:"order_checkout_id,omitempty" form:"order_checkout_id"`
@@ -11,7 +13,7 @@ type OrderBayar struct {
 }
 
 type OrderBayarRepository interface {
-	Create(req *OrderBayar) error
+	Create(req *OrderBayar, tx *sql.Tx) error
 	UpdateStatus(token string, status string) error
 	ByToken(token string) (*OrderBayar, error)
 	ByOrderID(OrderID string) (*OrderBayar, error)

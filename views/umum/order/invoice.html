@@ -26,6 +26,9 @@
         <!-- Fonts and Codebase framework -->
         <link rel="stylesheet" id="css-main" href="/css/app.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+
+        <!-- Midtrns -->
+        <script id="midtrans-client" type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-ewW6RazKMGNAf6FY"></script>
     </head>
     <body class="bg-white">
         <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
@@ -38,12 +41,110 @@
                 <!-- Page Content -->
                 <div class="content">
                     <div class="row cols-xs-space cols-sm-space cols-md-space">
-                        <div class="col-lg-3">
-                            {{template "partials/user-menu" .}}
-                        </div>
+                        <div class="col-lg-12">
+                            <div class="block block-bordered block-rounded block-shadow">
+                                <div class="block-header">
+                                    <h3>Invoice</h3>
+                                    <div class="d-flex justify-content-end">
+                                        <h5 id="invoice-no"></h5><br>
+                                    </div>
+                                </div>
+                                
+                                <div class="block-content block-content-full">
+                                    <!-- header inv -->
+                                    <div class="mb-5">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <table style="border: none !important;">
+                                                    <thead>
+                                                        <tr>
+                                                            <td class="col-3"></td>
+                                                            <td class="col-8"></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><b>Nama Penerima</b></td>
+                                                            <td id="nama-penerima"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Alamat Penerima</b></td>
+                                                            <td id="alamat-penerima"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Kontak Penerima</b></td>
+                                                            <td id="kotak-penerima"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Tgl Transaksi</b></td>
+                                                            <td id="buy-date"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end header inv -->
 
-                        <div class="col-lg-9">
-                            
+                                    <!-- item -->
+                                    <h4>Item Belanja</h4>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Nama</th>
+                                                <th scope="col">Harga</th>
+                                                <th scope="col">Discount</th>
+                                                <th scope="col">Qty</th>
+                                                <th scope="col">Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="order-item-list">
+                                            
+                                        </tbody>
+                                    </table>
+                                    <!-- end item -->
+                                    
+                                    <!-- summary -->
+                                    <div class="row mt-5" style="margin-top: 40%;">
+                                        <div class="col-lg-8">
+                                        </div>
+
+                                        <div class="col-lg-4">
+                                            <h4>Rincian Belanja</h4>
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Subtotal</td>
+                                                        <td id="subtotal"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Ongkir</td>
+                                                        <td id="ongkir"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Total</td>
+                                                        <td id="total"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Status Pesanan</b></td>
+                                                        <td id="status-pesanan"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Status Pembayaran</b></td>
+                                                        <td id="status-pembayaran"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <button class="btn btn-success btn-block" id="pay-button"><i class="fas fa-credit-card"></i> Bayar</button>
+                                        </div>
+                                    </div>
+                                    <!-- end summary -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -68,9 +169,133 @@
 
             $(document).ready(function() {
                 $.ajax({
-                    url:`/pesanan/get/${id}`
+                    url:`/pesanan/get/${id}`,
+                    success: function (res) {
+                        const { alamat, order_item, order_bayar, user, invoice_no, ongkir, kurir, paket_kurir, status, tgl_order} = res.data
+                        const { alamat:alamat_penerima, kd_pos, nama_kota, nama_provinsi, penerima, phone } = alamat
+                        const { nama, email, hp } = user
+                        const { jumlah, status: status_pembayaran, token } = order_bayar
+                        var statusPembayaran = ""
+
+                        $("#invoice-no").text(`No. Invoice ${invoice_no}`)
+                        $("#buy-date").text(`Tanggal ${tgl_order}`)
+                        
+                        $("#nama-penerima").text(penerima)
+                        $("#alamat-penerima").text(`${alamat_penerima} ${nama_kota} ${nama_provinsi}`)
+                        $("#kotak-penerima").text(phone)
+                        $("#ongkir").text(toRupiah.format(ongkir))
+                        $("#total").text(toRupiah.format(jumlah))
+
+                        switch (status_pembayaran) {
+                            case "belum lunas":
+                                statusPembayaran = `<div class="text-dark"><b>${status_pembayaran}</b></div>`
+                                break;
+
+                            case "lunas":
+                                statusPembayaran = `<div class="text-success"><b>${status_pembayaran}</b></div>`
+                                break;
+
+                            case "batal":
+                                statusPembayaran = `<div class="text-danger"><b>${status_pembayaran}</b></div>`
+                                break;
+                        
+                            default:
+                                statusPembayaran = `<div class="text-warning"><b>${status_pembayaran}</b></div>`
+                                break;
+                        }
+
+                        $("#pay-button").attr('token', token)
+                        status_pembayaran != "belum lunas" ? $("#pay-button").hide() : "" 
+
+                        $("#status-pesanan").html(`<b>${status}</b>`)
+                        $("#status-pembayaran").html(statusPembayaran)
+
+                        order_item.forEach(el => {
+                            $("#order-item-list").append(createOrderItemElement(el))
+                        })
+
+                        calculateSubtotal(order_item)
+                    }
+                })
+
+                $.ajax({
+                    url:"/alamat-origin"
+                })
+
+                $("#pay-button").click(function() {
+                    var load = $(this).attr('token')
+                    console.log(load);
+                    // snap.pay(load)
                 })
             })
+
+            function createOrderItemElement(el) {
+                let { produk, variasi, quantity } = el
+                let { nama, harga, discount, is_has_variant } = produk
+                let { harga:harga_variasi, sku, variant } = variasi
+                let pengaliDiscount = discount / 100
+                var priceText = ""
+                var subtotal = ""
+
+                if (is_has_variant) {
+                    priceText = toRupiah.format(harga_variasi)
+
+                    if (discount > 0) {
+                        subtotal = toRupiah.format(harga_variasi - (harga_variasi*pengaliDiscount)) 
+                    }else {
+                        subtotal = toRupiah.format(harga_variasi * quantity)
+                    }
+                }else {
+                    priceText = toRupiah.format(harga)
+
+                    if (discount) {
+                        subtotal = toRupiah.format(harga - (harga * pengaliDiscount))
+                    } else {
+                        subtotal = toRupiah.format(harga * quantity)
+                    }
+                }
+
+                return `
+                    <tr>
+                        <td>${nama} ${ is_has_variant ? `(${variant})`: ""}</td>
+                        <td>${priceText}</td>
+                        <td>${discount ? `${discount}%` : ''}</td>
+                        <td>${quantity}</td>
+                        <td>${subtotal}</td>
+                    </tr>
+                `
+            }
+
+            function calculateSubtotal(orderItem) {
+                let total = 0
+                
+                orderItem.forEach(el => {
+                    let { produk, variasi, quantity } = el
+                    let { harga, discount, is_has_variant } = produk
+                    let { harga:harga_variasi} = variasi
+                    let pengaliDiscount = discount / 100
+
+                    if (is_has_variant) {
+                        if (discount > 0) {
+                            subtotal = harga_variasi - (harga_variasi * pengaliDiscount)
+                            total = total + subtotal
+                        }else {
+                            subtotal = harga_variasi * quantity
+                            total = total + subtotal
+                        }
+                    }else {
+                        if (discount) {
+                            subtotal = harga - (harga * pengaliDiscount)
+                            total = total + subtotal
+                        } else {
+                            subtotal = harga * quantity
+                            total = total + subtotal
+                        }
+                    }
+                })
+
+                $("#subtotal").text(toRupiah.format(total))
+            }
         </script>
     </body>
 </html>

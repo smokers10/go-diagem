@@ -177,9 +177,19 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 	invoiceNo := fmt.Sprintf("DGM-%d%d%d%d", unixTime, day, int(month), year)
 	req.InvoiceNo = invoiceNo
 
-	// buat order
-	if err := osc.orderRepository.Create(req); err != nil {
+	// mulai transaction db
+	tx, err := osc.orderRepository.GetSQLInstance().Begin()
+	if err != nil {
 		fmt.Println(err)
+		res.Message = "error saat memulai transaksi"
+		res.Status = 500
+		return &res
+	}
+
+	// buat order
+	if err := osc.orderRepository.Create(req, tx); err != nil {
+		fmt.Println(err)
+		tx.Rollback()
 		res.Message = "error saat menyimpan data order"
 		res.Status = 500
 		return &res
@@ -193,8 +203,9 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 		RedirectURL:     midres.RedirectURL,
 	}
 
-	if err := osc.orderBayarRepository.Create(&orderPayment); err != nil {
+	if err := osc.orderBayarRepository.Create(&orderPayment, tx); err != nil {
 		fmt.Println(err)
+		tx.Rollback()
 		res.Message = "error saat membuat pembayaran"
 		res.Status = 500
 		return &res
@@ -209,8 +220,9 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 			Quantity:        cart.Quantity,
 		}
 
-		if err := osc.orderItemRepository.Create(&orderItem); err != nil {
+		if err := osc.orderItemRepository.Create(&orderItem, tx); err != nil {
 			fmt.Println(err)
+			tx.Rollback()
 			res.Message = "error saat menyimpan data order item"
 			res.Status = 500
 			return &res
@@ -218,6 +230,13 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 
 		osc.cartRepository.Delete(&domain.Cart{ID: cart.ID, UserID: cart.UserID})
 	}
+
+	// commit / rollback
+	if midres.RedirectURL == "" || midres.Token == "" {
+		tx.Rollback()
+	}
+
+	tx.Commit()
 
 	// write response sukses
 	res.Data = midres

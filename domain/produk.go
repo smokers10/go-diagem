@@ -1,27 +1,28 @@
 package domain
 
 type Produk struct {
-	ID           string           `json:"id,omitempty" form:"id"`
-	Nama         string           `json:"nama,omitempty" form:"nama"`
-	Slug         string           `json:"slug,omitempty" form:"slug"`
-	Deskripsi    string           `json:"deskripsi,omitempty" form:"deskripsi"`
-	Spesifikasi  string           `json:"spesifikasi,omitempty" form:"spesifikasi"`
-	KategoriID   string           `json:"kategori_id,omitempty" form:"kategori_id"`
-	Dilihat      int64            `json:"dilihat" form:"dilihat"`
-	Berat        int              `json:"berat,omitempty" form:"berat"`
-	SatuanBerat  string           `json:"satuan_berat,omitempty" form:"satuan_berat"`
-	Lebar        float32          `json:"lebar,omitempty" form:"lebar"`
-	Panjang      float32          `json:"panjang,omitempty" form:"panjang"`
-	Tinggi       float32          `json:"tinggi,omitempty" form:"tinggi"`
-	Kode         string           `json:"kode,omitempty" form:"kode"`
-	Harga        int              `json:"harga,omitempty" form:"harga"`
-	Stok         int              `json:"stok,omitempty" form:"stok"`
-	Variasi      []ProdukVariasi  `json:"variasi,omitempty" form:"variasi"`
-	ProdukFoto   []FotoProdukFile `json:"produk_foto,omitempty" form:"produk_foto"`
-	IsHasVariant bool             `json:"is_has_variant,omitempty" form:"is_has_varian"`
-	Discount     int              `json:"discount,omitempty" form:"discount"`
-	CreatedAt    string           `json:"created_at,omitempty" form:"created_at"`
-	UpdatedAt    string           `json:"updated_at,omitempty" form:"updated_at"`
+	ID              string           `json:"id,omitempty" form:"id"`
+	Nama            string           `json:"nama,omitempty" form:"nama"`
+	Slug            string           `json:"slug,omitempty" form:"slug"`
+	Deskripsi       string           `json:"deskripsi,omitempty" form:"deskripsi"`
+	Spesifikasi     string           `json:"spesifikasi,omitempty" form:"spesifikasi"`
+	KategoriID      string           `json:"kategori_id,omitempty" form:"kategori_id"`
+	Dilihat         int64            `json:"dilihat" form:"dilihat"`
+	Berat           int              `json:"berat,omitempty" form:"berat"`
+	SatuanBerat     string           `json:"satuan_berat,omitempty" form:"satuan_berat"`
+	Lebar           float32          `json:"lebar,omitempty" form:"lebar"`
+	Panjang         float32          `json:"panjang,omitempty" form:"panjang"`
+	Tinggi          float32          `json:"tinggi,omitempty" form:"tinggi"`
+	Kode            string           `json:"kode,omitempty" form:"kode"`
+	Harga           int              `json:"harga,omitempty" form:"harga"`
+	Stok            int              `json:"stok,omitempty" form:"stok"`
+	Variasi         []ProdukVariasi  `json:"variasi,omitempty" form:"variasi"`
+	ProdukFoto      []FotoProdukFile `json:"produk_foto,omitempty" form:"produk_foto"`
+	JumlahPenjualan int              `json:"jumlah_penjualan,omitempty" form:"jumlah_penjualan"`
+	IsHasVariant    bool             `json:"is_has_variant,omitempty" form:"is_has_varian"`
+	Discount        int              `json:"discount,omitempty" form:"discount"`
+	CreatedAt       string           `json:"created_at,omitempty" form:"created_at"`
+	UpdatedAt       string           `json:"updated_at,omitempty" form:"updated_at"`
 }
 
 type ProdukDetailed struct {
@@ -44,8 +45,10 @@ type ProdukDetailed struct {
 	Kode             string              `json:"kode,omitempty" form:"kode"`
 	Harga            int                 `json:"harga,omitempty" form:"harga"`
 	Stok             int                 `json:"stok,omitempty" form:"stok"`
+	JumlahPenjualan  int                 `json:"jumlah_penjualan,omitempty" form:"jumlah_penjualan"`
 	IsHasVariant     bool                `json:"is_has_variant,omitempty" form:"is_has_varian"`
 	Discount         int                 `json:"discount,omitempty" form:"discount"`
+	KategoriID       string              `json:"kategori_id,omitempty" form:"kategori_id"`
 	CreatedAt        string              `json:"created_at,omitempty" form:"created_at"`
 	UpdatedAt        string              `json:"updated_at,omitempty" form:"updated_at"`
 }
@@ -83,6 +86,7 @@ type ProdukService interface {
 	Read(filter *ProdukFilter) *Response
 	Detail(id string) *Response
 	DetailBySlug(slug string) *Response
+	GetPopular() *Response
 }
 
 type ProdukRepository interface {
@@ -94,4 +98,5 @@ type ProdukRepository interface {
 	Update(req *Produk) (*Produk, error)
 	UpdateStok(produkID string, stok int) error
 	Delete(id string) error
+	GetPopular() ([]ProdukDetailed, error)
 }
