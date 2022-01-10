@@ -240,7 +240,7 @@
                     priceText = toRupiah.format(harga_variasi)
 
                     if (discount > 0) {
-                        subtotal = toRupiah.format(harga_variasi - (harga_variasi*pengaliDiscount)) 
+                        subtotal = toRupiah.format((harga_variasi - (harga_variasi*pengaliDiscount)) * quantity) 
                     }else {
                         subtotal = toRupiah.format(harga_variasi * quantity)
                     }
@@ -248,7 +248,7 @@
                     priceText = toRupiah.format(harga)
 
                     if (discount) {
-                        subtotal = toRupiah.format(harga - (harga * pengaliDiscount))
+                        subtotal = toRupiah.format((harga - (harga * pengaliDiscount)) * quantity)
                     } else {
                         subtotal = toRupiah.format(harga * quantity)
                     }
