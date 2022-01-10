@@ -64,6 +64,7 @@ $(document).ready(function () {
 			ongkir : parseInt($("#ongkir").val()),
 			kurir : $("#courier").val(),
 			paket_kurir : $("#courier-paket").val(),
+			total: parseInt($("#final_total").val())
 		}
 		submitCheckout(data)
 	})

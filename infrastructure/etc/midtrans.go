@@ -54,20 +54,24 @@ type ShippingAddress struct {
 }
 
 type TransactionDetail struct {
-	OrderID     string  `json:"order_id"`
-	GrossAmount float32 `json:"gross_amount"`
+	OrderID     string `json:"order_id"`
+	GrossAmount int    `json:"gross_amount"`
 }
 
 type ItemDetail struct {
 	ID       string `json:"id"`
-	Price    string `json:"price"`
-	Quantity string `json:"quantity"`
+	Price    int    `json:"price"`
+	Quantity int    `json:"quantity"`
 	Name     string `json:"name"`
 }
 
 type midtransResponse struct {
 	Token       string `json:"token"`
 	RedirectURL string `json:"redirect_url"`
+}
+
+type midtransErrorResponse struct {
+	ErrorMessages []string `json:"error_messages, omitempty"`
 }
 
 func MidtransSnap() *Midtrans {
@@ -87,6 +91,7 @@ func (m *Midtrans) Domain() string {
 
 func (m *Midtrans) Transaction() (*midtransResponse, error) {
 	httpRes := midtransResponse{}
+	httpErrorRes := midtransErrorResponse{}
 	endpoint := fmt.Sprintf("https://%s/snap/v1/transactions", m.Domain())
 	m.EnabledPayments = enablePayments
 	payload, _ := json.Marshal(m)
@@ -110,7 +115,14 @@ func (m *Midtrans) Transaction() (*midtransResponse, error) {
 		return nil, err
 	}
 
-	fmt.Println(body)
+	if status := response.Status; status == "400 Bad Request" {
+		json.Unmarshal(body, &httpErrorRes)
+		fmt.Println(httpErrorRes)
+		fmt.Println()
+		fmt.Println(m.ItemDetail)
+		fmt.Println()
+		fmt.Println(m.TransactionDetail.GrossAmount)
+	}
 
 	json.Unmarshal(body, &httpRes)
 

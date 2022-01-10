@@ -2,7 +2,6 @@ package services
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -41,8 +40,7 @@ func OrderService(order *domain.OrderRepository, produk *domain.ProdukRepository
 func (osc *orderService) Create(req *domain.Order) *domain.Response {
 	res := domain.Response{}
 	itemDetails := []etc.ItemDetail{}
-	var total float32
-	total = total + float32(req.Ongkir)
+	total := req.Total
 
 	// ambil data cart
 	carts, err := osc.cartRepository.Read(req.UserID)
@@ -102,35 +100,14 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 		}
 	}
 
-	// hitung total & assign item detail
-	for _, cart := range carts {
-		itemDetail := etc.ItemDetail{}
-		var subtotal float32
-
-		// perhitungan harga
-		if cart.Produk.Discount > 0 {
-			var pengali float32 = float32(cart.Produk.Discount) / 100
-			potongan := float32(float32(cart.SubTotal) - (float32(cart.SubTotal) * pengali))
-			subtotal = potongan
-		} else {
-			subtotal = float32(cart.SubTotal)
-		}
-
-		total = total + subtotal
-
-		// asign item detail
-		itemDetail.ID = cart.ProdukID
-		itemDetail.Name = cart.Produk.Nama
-		itemDetail.Quantity = strconv.Itoa(cart.Quantity)
-		itemDetail.Price = fmt.Sprintf("%f", subtotal)
-		itemDetails = append(itemDetails, itemDetail)
-	}
+	// Set Item Detail
+	itemDetails = append(itemDetails, osc.SetItemDetail(carts)...)
 
 	// assign ongkir ke item detail agar gross amount midtrans tidak error
 	ongkir_detail := etc.ItemDetail{
 		ID:       "ongkir",
-		Price:    strconv.Itoa(req.Ongkir),
-		Quantity: "1",
+		Price:    req.Ongkir,
+		Quantity: 1,
 		Name:     req.Kurir + " - " + req.PaketKurir,
 	}
 
@@ -171,8 +148,6 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 		return &res
 	}
 
-	fmt.Println(midtrans.ItemDetail)
-
 	// generate invoice
 	year, month, day := time.Now().Date()
 	unixTime := time.Now().Unix()
@@ -200,7 +175,7 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 	// buat pembayaran order
 	orderPayment := domain.OrderBayar{
 		OrderCheckoutID: req.ID,
-		Jumlah:          total,
+		Jumlah:          float32(total),
 		Token:           midres.Token,
 		RedirectURL:     midres.RedirectURL,
 	}
@@ -319,4 +294,41 @@ func (osc *orderService) ReadByUser(userID int) *domain.Response {
 func (osc *orderService) IsStokSufficient(stok int, quantity int) bool {
 	check := stok - quantity
 	return check < 0
+}
+
+// OUT OF ORDER SERVICE SCOPE - mendapatkan item detail dari carts
+func (osc *orderService) SetItemDetail(carts []domain.CartDetail) (itemDetails []etc.ItemDetail) {
+	for _, cart := range carts {
+		if cart.Produk.IsHasVariant {
+			if cart.Produk.Discount > 0 {
+				var pengali float32 = float32(cart.Produk.Discount) / 100
+				price := float32(float32(cart.Variasi.Harga) - (float32(cart.Variasi.Harga) * pengali))
+				itemDetails = append(itemDetails, osc.AssignItemDetail(&cart, int(price)))
+			} else {
+				price := cart.Variasi.Harga
+				itemDetails = append(itemDetails, osc.AssignItemDetail(&cart, int(price)))
+			}
+		} else {
+			if cart.Produk.Discount > 0 {
+				var pengali float32 = float32(cart.Produk.Discount) / 100
+				price := float32(float32(cart.Produk.Harga) - (float32(cart.Produk.Harga) * pengali))
+				itemDetails = append(itemDetails, osc.AssignItemDetail(&cart, int(price)))
+			} else {
+				price := float32(cart.Produk.Harga)
+				itemDetails = append(itemDetails, osc.AssignItemDetail(&cart, int(price)))
+			}
+		}
+	}
+
+	return itemDetails
+}
+
+// OUT OF ORDER SERVICE SCOPE - assign item detail dari carts ke struct etc.ItemDetail
+func (osc *orderService) AssignItemDetail(cart *domain.CartDetail, processedPrice int) (itemDetail etc.ItemDetail) {
+	itemDetail.ID = cart.ProdukID
+	itemDetail.Name = cart.Produk.Nama
+	itemDetail.Quantity = cart.Quantity
+	itemDetail.Price = processedPrice
+
+	return itemDetail
 }

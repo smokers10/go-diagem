@@ -10,6 +10,7 @@ type Order struct {
 	Kurir      string `json:"kurir,omitempty" form:"kurir"`
 	PaketKurir string `json:"paket_kurir,omitempty" form:"paket_kurir"`
 	Ongkir     int    `json:"ongkir,omitempty" form:"ongkir"`
+	Total      int    `json:"total,omitempty" form:"total"`
 	InvoiceNo  string `json:"invoice_no,omitempty" form:"invoice_no"`
 	TglOrder   string `json:"tgl_order,omitempty" form:"tgl_order"`
 }
