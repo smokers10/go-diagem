@@ -2,6 +2,7 @@ package etc
 
 import (
 	"bytes"
+	"crypto/sha512"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -74,6 +75,18 @@ type midtransErrorResponse struct {
 	ErrorMessages []string `json:"error_messages, omitempty"`
 }
 
+type midtransStatusResponse struct {
+	TransactionStatus string `json:"transaction_status"`
+	StatusMessage     string `json:"status_message"`
+	StatusCode        string `json:"status_code"`
+}
+
+type StatusSignature struct {
+	OrderID     string
+	StatusCode  string
+	GrossAmount string
+}
+
 func MidtransSnap() *Midtrans {
 	return &Midtrans{}
 }
@@ -85,6 +98,17 @@ func (m *Midtrans) Domain() string {
 		domain = "app.sandbox.midtrans.com"
 	} else {
 		domain = "app.midtrans.com"
+	}
+	return domain
+}
+
+func (m *Midtrans) APIDomain() string {
+	production := os.Getenv("PRODUCTION_MODE")
+	var domain string
+	if production == "" || production == "development" || production == "local" {
+		domain = "api.sandbox.midtrans.com"
+	} else {
+		domain = "api.midtrans.com"
 	}
 	return domain
 }
@@ -127,4 +151,53 @@ func (m *Midtrans) Transaction() (*midtransResponse, error) {
 	json.Unmarshal(body, &httpRes)
 
 	return &httpRes, nil
+}
+
+func (m *Midtrans) CheckStatus(signatureMaterial *StatusSignature) (*midtransStatusResponse, error) {
+	// deklarasi variable penting
+	var httpResponse midtransStatusResponse
+	endpoint := fmt.Sprintf("https://%s/v2/%s/status", m.APIDomain(), signatureMaterial.OrderID)
+	signatureInput := fmt.Sprintf("%s%s%s%s", signatureMaterial.OrderID, signatureMaterial.StatusCode, signatureMaterial.GrossAmount, server_key)
+
+	// buat SHA512 dari signatureInput untuk Authorization username
+	sha := sha512.New()
+	sha.Write([]byte(signatureInput))
+	signature := string(sha.Sum(nil))
+
+	// make request
+	req, err := http.NewRequest("GET", endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// set request header
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/json")
+	req.SetBasicAuth(signature, "")
+
+	// kirim request and handle response dari http request
+	response, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	// read response body
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(response.Status)
+	fmt.Println()
+	fmt.Println(endpoint)
+	fmt.Println()
+	fmt.Println(signatureMaterial)
+	fmt.Println()
+	fmt.Println(server_key)
+
+	// parse response ke struct
+	json.Unmarshal(body, &httpResponse)
+
+	return &httpResponse, nil
 }

@@ -368,7 +368,7 @@ function finalMessage(order_id) {
        	if (result.value) {
 			location.replace(`/pesanan/invoice/${order_id}`)
 	   	} else {
-			Swal.close()
+			location.replace(`/pesanan`)
 	   	}
     })
 }

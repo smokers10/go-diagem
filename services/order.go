@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -251,6 +252,22 @@ func (osc *orderService) Detail(orderID string) *domain.Response {
 		res.Status = 500
 		return &res
 	}
+
+	midtrans := etc.MidtransSnap()
+	status, err := midtrans.CheckStatus(&etc.StatusSignature{
+		StatusCode:  "200",
+		OrderID:     order.ID,
+		GrossAmount: strconv.Itoa(int(order.OrderBayar.Jumlah)),
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error saat mengambil status transaksi"
+		res.Status = 500
+		return &res
+	}
+
+	fmt.Println(status)
 
 	res.Data = order
 	res.Message = "detail order berhasil diambil"
