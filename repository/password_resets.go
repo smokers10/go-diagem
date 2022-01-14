@@ -16,14 +16,14 @@ func PasswordResetRepository(database *sql.DB) domain.PasswordResetsRepository {
 }
 
 func (pr *passwordResetRepositoryImpl) Create(req *domain.PasswordResets) error {
-	statement, err := pr.db.Prepare("INSERT INTO password_resets email, token VALUES(? ,?)")
+	stmt, err := pr.db.Prepare(`INSERT INTO password_resets (email, token, code, created_at) VALUE(?, ?, ?, now())`)
 	if err != nil {
 		return err
 	}
 
-	defer statement.Close()
+	defer stmt.Close()
 
-	if _, err := statement.ExecContext(context.Background(), req.Email, req.Token); err != nil {
+	if _, err := stmt.Exec(req.Email, req.Token, req.Kode); err != nil {
 		return err
 	}
 
@@ -45,17 +45,33 @@ func (pr *passwordResetRepositoryImpl) Delete(email string) error {
 	return nil
 }
 
-func (pr *passwordResetRepositoryImpl) ByEmail(email string) (passwordResets *domain.PasswordResets, err error) {
-	statement, err := pr.db.Prepare("SELECT * FROM password_resets WHERE email = ? LIMIT 1")
+func (pr *passwordResetRepositoryImpl) ByEmail(email string) (*domain.PasswordResets, error) {
+	result := domain.PasswordResets{}
+	statement, err := pr.db.Prepare("SELECT email, token, code FROM password_resets WHERE email = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 
 	defer statement.Close()
 
-	if err := statement.QueryRowContext(context.Background(), email).Scan(&passwordResets); err != nil {
+	if err := statement.QueryRowContext(context.Background(), email).Scan(&result.Email, &result.Token, &result.Kode); err != nil {
 		return nil, err
 	}
 
-	return passwordResets, nil
+	return &result, nil
+}
+
+func (pr *passwordResetRepositoryImpl) Update(req *domain.PasswordResets) error {
+	stmt, err := pr.db.Prepare(`UPDATE password_resets SET token = ?, code = ? WHERE email = ?`)
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(req.Token, req.Kode, req.Email); err != nil {
+		return err
+	}
+
+	return nil
 }

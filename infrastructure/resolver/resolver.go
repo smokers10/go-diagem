@@ -27,6 +27,7 @@ type ServiceResolver struct {
 	OrderService         *domain.OrderService
 	FeedbackService      *domain.FeedbackService
 	BankService          *domain.BankService
+	ResetPasswordService *domain.PasswordResetsService
 }
 
 func MYSQLResolver(mysql *sql.DB) ServiceResolver {
@@ -50,6 +51,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	feedbackRepo := repository.FeedbackRepository(mysql)
 	bankRepo := repository.BankRepository(mysql)
 	blogRepo := repository.BlogRepository(mysql)
+	resetPasswordRepo := repository.PasswordResetRepository(mysql)
 
 	//setup service
 	adminServ := services.AdminService(&adminRepo)
@@ -70,6 +72,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	feedbackServ := services.FeedbackService(&feedbackRepo)
 	bankServ := services.BankService(&bankRepo)
 	blogServ := services.BlogService(&blogRepo)
+	resetPasswordServ := services.PasswordResetService(&resetPasswordRepo, &userRepo)
 
 	return ServiceResolver{
 		AdminService:         &adminServ,
@@ -90,5 +93,6 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 		OrderService:         &orderServ,
 		FeedbackService:      &feedbackServ,
 		BankService:          &bankServ,
+		ResetPasswordService: &resetPasswordServ,
 	}
 }

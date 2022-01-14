@@ -47,41 +47,35 @@
                                 <div class="block block-bordered block-rounded block-shadow">
                                     <div class="block-content block-content-full">
                                         <div class="text-center">
-                                            <h2 class="font-weight-bold mb-0">Masuk Ke Akun Kamu</h2>
-                                            <p>Belum punya akun? <a href="/register">Daftar</a> di sini</p>
+                                            <h2 class="font-weight-bold mb-0">Reset Password</h2>
+                                            <p>Ingat password Anda? <a href="/login">login</a> di sini</p>
                                         </div>
-                                        <form id="form-login" onsubmit="return false;">
+                                        <form id="form-reset-password" onsubmit="return false;">
                                             <div class="form-group">
-                                                <label class="form-label" for="field_login-email">Alamat Email
+                                                <label class="form-label" for="field-code">Email
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" name="email" id="field_login-email" placeholder="Masukan Alamat Email">
-                                                <div class="invalid-feedback" id="error_login-email"></div>
+                                                <input type="text" class="form-control" name="code" id="field-code" placeholder="Masukan kode reset" maxlength="6" required>
                                             </div>
+
                                             <div class="form-group">
-                                                <label class="form-label" for="field_login-password">Password
+                                                <label class="form-label" for="field-password">Password Baru
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="password" class="form-control" name="password" id="field_login-password" placeholder="Masukan Password">
-                                                <div class="invalid-feedback" id="error_login-password"></div>
+                                                <input type="password" class="form-control" name="password" id="field-password" placeholder="Masukan kode reset" minlength="6" required>
                                             </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label" for="field-confirm-password">Konfirmasi Password
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="password" class="form-control" name="confirm-password" id="field-confirm-password" placeholder="Masukan kode reset" minlength="6" required>
+                                            </div>
+
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-primary btn-block">
-                                                    Masuk Sekarang
+                                                    Simpan Password Baru
                                                 </button>
-                                            </div>
-                                            <div class="form-group row mb-2">
-                                                <div class="col-sm-6 d-sm-flex align-items-center">
-                                                    <div class="custom-control custom-checkbox mr-auto ml-0 mb-0">
-                                                        <input type="checkbox" class="custom-control-input" id="login-remember-me" name="remember">
-                                                        <label class="custom-control-label" for="login-remember-me">Ingat Saya</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 text-sm-right">
-                                                    <a class="font-weight-bold" href="/forgot-password">
-                                                        Lupa Password?
-                                                    </a>
-                                                </div>
                                             </div>
                                         </form>
                                     </div>
@@ -100,7 +94,6 @@
         </div>
         <script src="/js/laravel.app.js"></script>
         <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="/js/umum/auth/login.js"></script>
         <script src="/js/functions.js"></script>
     </body>
 </html>

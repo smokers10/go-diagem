@@ -31,6 +31,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	kategoriController := user.KategoriController()
 	pesananController := user.OrderController()
 	resellerController := user.ResellerController()
+	resetPasswordController := user.ResetPasswordController(resolver.ResetPasswordService)
 
 	// API Controller init
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
@@ -55,6 +56,12 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	parentPath.Get("/register", middlewareGuestOnly, authencticationController.RegisterPage)
 	parentPath.Post("/register", middlewareGuestOnly, authencticationController.Register)
 	parentPath.Get("/logout", authencticationController.Logout)
+
+	resetPassword := parentPath.Group("forgot-password")
+	resetPassword.Get("/", resetPasswordController.ForgotPasswordPage)
+	resetPassword.Get("/reset/:token", resetPasswordController.ResetPasswordPage)
+	resetPassword.Post("/create", resetPasswordController.Create)
+	resetPassword.Post("/reset", resetPasswordController.Reset)
 
 	// verifikasi
 	verifikasi := parentPath.Group("/verifikasi", middlewareVerification)

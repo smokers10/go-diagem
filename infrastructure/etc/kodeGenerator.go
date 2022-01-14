@@ -1,8 +1,14 @@
 package etc
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 const letterBytes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
 const (
 	letterIdxBits = 6
 	letterIdxMask = 1<<letterIdxBits - 1
@@ -15,6 +21,18 @@ func KodeGenerator(n int) string {
 			b[i] = letterBytes[idx]
 			i++
 		}
+	}
+	return string(b)
+}
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+func KodeGeneratorImproved(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
 	}
 	return string(b)
 }
