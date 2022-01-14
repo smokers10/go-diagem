@@ -7,12 +7,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
-)
 
-const (
-	server_key = "SB-Mid-server-72w4BpkX9z-gC8HCHmbu84dZ"
-	password   = "Suckitjiwa666"
+	"github.com/smokers10/go-diagem.git/infrastructure/config"
 )
 
 var enablePayments = []string{"bca_klikpay", "bca_va", "bni_va", "bri_va"}
@@ -92,9 +88,8 @@ func MidtransSnap() *Midtrans {
 }
 
 func (m *Midtrans) Domain() string {
-	production := os.Getenv("PRODUCTION_MODE")
 	var domain string
-	if production == "" || production == "development" || production == "local" {
+	if mode := config.ReadConfig().APP_Production_Mode; mode == "local" || mode == "development" {
 		domain = "app.sandbox.midtrans.com"
 	} else {
 		domain = "app.midtrans.com"
@@ -103,9 +98,8 @@ func (m *Midtrans) Domain() string {
 }
 
 func (m *Midtrans) APIDomain() string {
-	production := os.Getenv("PRODUCTION_MODE")
 	var domain string
-	if production == "" || production == "development" || production == "local" {
+	if mode := config.ReadConfig().APP_Production_Mode; mode == "local" || mode == "development" {
 		domain = "api.sandbox.midtrans.com"
 	} else {
 		domain = "api.midtrans.com"
@@ -126,7 +120,7 @@ func (m *Midtrans) Transaction() (*midtransResponse, error) {
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	req.SetBasicAuth(server_key, "")
+	req.SetBasicAuth(config.ReadConfig().Midtrans_Server_key, "")
 
 	response, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -157,7 +151,7 @@ func (m *Midtrans) CheckStatus(signatureMaterial *StatusSignature) (*midtransSta
 	// deklarasi variable penting
 	var httpResponse midtransStatusResponse
 	endpoint := fmt.Sprintf("https://%s/v2/%s/status", m.APIDomain(), signatureMaterial.OrderID)
-	signatureInput := fmt.Sprintf("%s%s%s%s", signatureMaterial.OrderID, signatureMaterial.StatusCode, signatureMaterial.GrossAmount, server_key)
+	signatureInput := fmt.Sprintf("%s%s%s%s", signatureMaterial.OrderID, signatureMaterial.StatusCode, signatureMaterial.GrossAmount, config.ReadConfig().Midtrans_Server_key)
 
 	// buat SHA512 dari signatureInput untuk Authorization username
 	sha := sha512.New()
@@ -194,7 +188,7 @@ func (m *Midtrans) CheckStatus(signatureMaterial *StatusSignature) (*midtransSta
 	fmt.Println()
 	fmt.Println(signatureMaterial)
 	fmt.Println()
-	fmt.Println(server_key)
+	fmt.Println(config.ReadConfig().Midtrans_Server_key)
 
 	// parse response ke struct
 	json.Unmarshal(body, &httpResponse)

@@ -5,31 +5,25 @@ import (
 
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/gofiber/storage/mysql"
+	"github.com/smokers10/go-diagem.git/infrastructure/config"
 )
 
 func MYSQLSessionStore(productionStore string) *session.Store {
-	if productionStore == "" || productionStore == "local" || productionStore == "development" {
-		mysql := mysql.New(mysql.Config{
-			Host:       "127.0.0.1",
-			Port:       3306,
-			Username:   "local_admin",
-			Password:   "suckitjiwa",
-			Database:   "diagem",
-			Table:      "session",
-			Reset:      false,
-			GCInterval: 10 * time.Second,
-		})
+	mysqlConfig := config.ReadConfig()
 
-		return session.New(session.Config{
-			Storage:    mysql,
-			Expiration: (24 * time.Hour) * 7,
-		})
-	} else {
-		mysql := mysql.New(mysql.ConfigDefault)
+	mysql := mysql.New(mysql.Config{
+		Host:       mysqlConfig.MYSQL_Host,
+		Port:       mysqlConfig.MYSQL_Port,
+		Username:   mysqlConfig.MYSQL_Username,
+		Password:   mysqlConfig.MYSQL_Password,
+		Database:   mysqlConfig.MYSQL_Database,
+		Table:      mysqlConfig.MYSQL_SessionTable,
+		Reset:      false,
+		GCInterval: 10 * time.Second,
+	})
 
-		return session.New(session.Config{
-			Storage:    mysql,
-			Expiration: (24 * time.Hour) * 7,
-		})
-	}
+	return session.New(session.Config{
+		Storage:    mysql,
+		Expiration: (24 * time.Hour) * 7,
+	})
 }

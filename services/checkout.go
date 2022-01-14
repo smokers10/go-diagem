@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/smokers10/go-diagem.git/domain"
+	"github.com/smokers10/go-diagem.git/infrastructure/config"
 	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 )
 
@@ -58,7 +59,7 @@ func (cs *checkoutServiceImpl) Ongkir(req *etc.RajaOngkirReqBody) *domain.Respon
 		return &res
 	}
 
-	request.Header.Add("key", etc.RajaOngkirAPIKey)
+	request.Header.Add("key", config.ReadConfig().Rajaongkir_API_Key)
 	request.Header.Add("content-type", "application/x-www-form-urlencoded")
 
 	response, err := http.DefaultClient.Do(request)

@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html"
+	"github.com/smokers10/go-diagem.git/infrastructure/config"
 	"github.com/smokers10/go-diagem.git/infrastructure/database"
 	"github.com/smokers10/go-diagem.git/infrastructure/resolver"
 	"github.com/smokers10/go-diagem.git/infrastructure/session"
@@ -15,6 +16,8 @@ import (
 )
 
 func main() {
+	config := config.ReadConfig()
+
 	engine := html.New("./views", ".html")
 
 	app := fiber.New(fiber.Config{
@@ -25,12 +28,12 @@ func main() {
 	app.Static("/", "./public")
 
 	// error recovery
-	if mode := os.Getenv("PRODUCTION_MODE"); mode != "" || mode == "local" {
+	if mode := config.APP_Production_Mode; mode == "production" {
 		app.Use(recover.New())
 	}
 
 	// koneksi database
-	mysql, err := database.MYSQLConn(os.Getenv("PRODUCTION_MODE"))
+	mysql, err := database.MYSQLConn()
 	if err != nil {
 		panic(err)
 	}
@@ -47,10 +50,6 @@ func main() {
 	web.AdminWebPage(app, session, &serviceResolver)
 	web.UserWebPage(app, session, &serviceResolver)
 
-	app.Get("/test", func(c *fiber.Ctx) error {
-		return c.Render("test-page", nil)
-	})
-
 	// serving
-	log.Fatal(app.Listen(":8001"))
+	log.Fatal(app.Listen(config.APP_PORT))
 }
