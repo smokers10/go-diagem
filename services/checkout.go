@@ -59,7 +59,7 @@ func (cs *checkoutServiceImpl) Ongkir(req *etc.RajaOngkirReqBody) *domain.Respon
 		return &res
 	}
 
-	request.Header.Add("key", config.ReadConfig().Rajaongkir_API_Key)
+	request.Header.Add("key", config.ReadConfig().ETC.Rajaongkir_API_Key)
 	request.Header.Add("content-type", "application/x-www-form-urlencoded")
 
 	response, err := http.DefaultClient.Do(request)

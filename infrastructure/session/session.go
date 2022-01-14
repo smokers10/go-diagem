@@ -9,7 +9,7 @@ import (
 )
 
 func MYSQLSessionStore(productionStore string) *session.Store {
-	mysqlConfig := config.ReadConfig()
+	mysqlConfig := config.ReadConfig().Database
 
 	mysql := mysql.New(mysql.Config{
 		Host:       mysqlConfig.MYSQL_Host,

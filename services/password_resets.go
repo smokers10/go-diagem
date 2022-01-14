@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/smokers10/go-diagem.git/domain"
+	SMTPEmail "github.com/smokers10/go-diagem.git/infrastructure/email"
 	"github.com/smokers10/go-diagem.git/infrastructure/encryption"
 	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 )
@@ -65,6 +66,10 @@ func (prs *passwordResetServiceImpl) Create(email string) *domain.Response {
 	// jika currentRPW ada, update yang ada
 	if currentRPW.Token != "" {
 		prs.passwordResetRepository.Update(req)
+	}
+
+	if err := SMTPEmail.Fire([]string{"nadzarmutaqin4@gmail.com"}); err != nil {
+		panic(err)
 	}
 
 	return &domain.Response{

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -16,7 +17,8 @@ import (
 )
 
 func main() {
-	config := config.ReadConfig()
+	fmt.Println(config.ReadConfig())
+	config := config.ReadConfig().Application
 
 	engine := html.New("./views", ".html")
 
@@ -37,6 +39,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// send email test
 
 	// resolver init
 	serviceResolver := resolver.MYSQLResolver(mysql)

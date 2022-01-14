@@ -3,9 +3,9 @@ package services
 import (
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/smokers10/go-diagem.git/domain"
+	"github.com/smokers10/go-diagem.git/infrastructure/config"
 	"github.com/smokers10/go-diagem.git/infrastructure/encryption"
 	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 	"github.com/smokers10/go-diagem.git/infrastructure/jwt"
@@ -36,12 +36,12 @@ func (v *verificationServiceImpl) Create(req *domain.Verifikasi) *domain.Respons
 	}
 
 	// generate kode verifikasi
-	kode := etc.KodeGenerator(6)
+	kode := etc.KodeGeneratorImproved(6)
 
 	// encrypt kode verifikasi
 	req.Kode = encryption.Hash(kode)
 
-	if os.Getenv("PRODUCTION_MODE") == "local" || os.Getenv("PRODUCTION_MODE") == "" {
+	if mode := config.ReadConfig().Application.APP_Production_Mode; mode == "development" {
 		fmt.Println(kode)
 	}
 

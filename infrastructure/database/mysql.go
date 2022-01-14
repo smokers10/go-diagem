@@ -13,7 +13,7 @@ import (
 	parameter mode adalah penentu apakah dalam mode deploy(online) atau development(pengembangan)
 */
 func MYSQLConn() (database *sql.DB, err error) {
-	configMYSQL := config.ReadConfig()
+	configMYSQL := config.ReadConfig().Database
 
 	db, err := sql.Open("mysql", configMYSQL.MYSQL_URI)
 	if err != nil {

@@ -1,21 +1,35 @@
 {
-    "mysql_host": "127.0.0.1",
-    "mysql_port": 3306,
-    "mysql_username": "local_admin",
-    "mysql_database": "diagem",
-    "mysql_password": "suckitjiwa",
-    "mysql_session_table" : "session",
+    "database" : {
+        "mysql_host": "127.0.0.1",
+        "mysql_port": 3306,
+        "mysql_username": "local_admin",
+        "mysql_database": "diagem",
+        "mysql_password": "suckitjiwa",
+        "mysql_session_table" : "session",
+    
+        "mysql_uri" : "local_admin:suckitjiwa@/diagem",
+        "mysql_max_connection" : 5,
+        "mysql_max_connection_life_time": 1,
+        "mysql_max_idle_connection": 5,
+        "mysql_max_idle_connection_life_time": 1
+    },
 
-    "mysql_uri" : "local_admin:suckitjiwa@/diagem",
-    "mysql_max_connection" : 5,
-    "mysql_max_connection_life_time": 1,
-    "mysql_max_idle_connection": 5,
-    "mysql_max_idle_connection_life_time": 1,
+    "application" : {
+        "app_secret" : "$2a$12$k7aYe7AY670ex9ktx3YFAepBlgoNSpl2NaCZZUBCFTS3y8GEpwVT.",
+        "app_port": ":8001",
+        "app_production_mode": "development"
+    },
 
-    "app_secret" : "$2a$12$k7aYe7AY670ex9ktx3YFAepBlgoNSpl2NaCZZUBCFTS3y8GEpwVT.",
-    "app_port": ":8001",
-    "app_production_mode": "development",
+    "smtp" : {
+        "SMTP_host" : "smtp.gmail.com",
+        "SMTP_port" : 587,
+        "SMTP_sender_name" : "Diagem <solarislight80@gmail.com>",
+        "SMTP_auth_username" : "solarislight80@gmail.com",
+        "SMTP_auth_password" : "suckitjiwa666"
+    },
 
-    "midtrans_server_key" : "SB-Mid-server-72w4BpkX9z-gC8HCHmbu84dZ",
-    "rajaongkir_api_key" : "349fad2d2d362ce4c866cde248ef0bf9"
+    "etc" : {
+        "midtrans_server_key" : "SB-Mid-server-72w4BpkX9z-gC8HCHmbu84dZ",
+        "rajaongkir_api_key" : "349fad2d2d362ce4c866cde248ef0bf9"
+    }
 }

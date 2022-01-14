@@ -119,7 +119,7 @@ func (a *alamatServiceImpl) GetProvinsi() *domain.Response {
 	rs := etc.ReqStruct{
 		Endpoint: "https://api.rajaongkir.com/starter/province",
 		Method:   "GET",
-		Key:      config.ReadConfig().Rajaongkir_API_Key,
+		Key:      config.ReadConfig().ETC.Rajaongkir_API_Key,
 	}
 
 	body, err := etc.ReqAPI(&rs)
@@ -142,7 +142,7 @@ func (a *alamatServiceImpl) GetKota(provinsiID string) *domain.Response {
 	rs := etc.ReqStruct{
 		Endpoint: fmt.Sprintf("https://api.rajaongkir.com/starter/city?province=%s", provinsiID),
 		Method:   "GET",
-		Key:      config.ReadConfig().Rajaongkir_API_Key,
+		Key:      config.ReadConfig().ETC.Rajaongkir_API_Key,
 	}
 
 	body, err := etc.ReqAPI(&rs)
@@ -165,7 +165,7 @@ func (a *alamatServiceImpl) GetAllKota() *domain.Response {
 	rs := etc.ReqStruct{
 		Endpoint: "https://api.rajaongkir.com/starter/city",
 		Method:   "GET",
-		Key:      config.ReadConfig().Midtrans_Server_key,
+		Key:      config.ReadConfig().ETC.Midtrans_Server_key,
 	}
 
 	body, err := etc.ReqAPI(&rs)
