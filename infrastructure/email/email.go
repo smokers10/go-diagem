@@ -50,8 +50,9 @@ func (s *SMTPEmail) NativeFire(to []string, subjectEmail string, template string
 
 	// construct email body
 	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
+	from := fmt.Sprintf("From: %s\n", config.SMTP_Sender_Name)
 	subject := fmt.Sprintf("Subject: %s \n", subjectEmail)
-	message := []byte(subject + mime + template)
+	message := []byte(from + subject + mime + template)
 
 	err := smtp.SendMail(addr, auth, config.SMTP_Auth_Username, to, message)
 	if err != nil {
