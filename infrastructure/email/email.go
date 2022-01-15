@@ -61,7 +61,7 @@ func (s *SMTPEmail) NativeFire(to []string, subjectEmail string, template string
 	return nil
 }
 
-func (s *SMTPEmail) VerificationTemplate(to string, code string, redirect string) string {
+func (s *SMTPEmail) VerificationTemplate(to string, code string) string {
 	tmplt := fmt.Sprintf(`
 	<!DOCTYPE html>
 	<html lang="en">

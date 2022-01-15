@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/smokers10/go-diagem.git/domain"
-	"github.com/smokers10/go-diagem.git/infrastructure/config"
+	Email "github.com/smokers10/go-diagem.git/infrastructure/email"
 	"github.com/smokers10/go-diagem.git/infrastructure/encryption"
 	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 	"github.com/smokers10/go-diagem.git/infrastructure/jwt"
@@ -35,14 +35,28 @@ func (v *verificationServiceImpl) Create(req *domain.Verifikasi) *domain.Respons
 		return &res
 	}
 
+	// ambil data user
+	user, err := v.userRepository.ByID(req.UserID)
+	if err != nil {
+		fmt.Println(err)
+		res.Message = "error saat mengambil data user"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
 	// generate kode verifikasi
 	kode := etc.KodeGeneratorImproved(6)
 
 	// encrypt kode verifikasi
 	req.Kode = encryption.Hash(kode)
 
-	if mode := config.ReadConfig().Application.APP_Production_Mode; mode == "development" {
-		fmt.Println(kode)
+	// send kode ke email
+	template := Email.SMTP().VerificationTemplate(user.Nama, kode)
+	if err := Email.SMTP().NativeFire([]string{user.Email}, "Verifikasi Akun", template); err != nil {
+		fmt.Println(err)
+		res.Message = "error saat mengirim kode via email"
+		res.Status = http.StatusInternalServerError
+		return &res
 	}
 
 	// jika verifikasi dengan user_id sudah ada update jika tidak buat baru.

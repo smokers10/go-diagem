@@ -68,9 +68,10 @@ func (prs *passwordResetServiceImpl) Create(email string) *domain.Response {
 		prs.passwordResetRepository.Update(req)
 	}
 
+	// kirim kode reset password via email
 	redirect := config.ReadConfig().Application.APP_Base_URL + "/forgot-password" + "/reset/" + token.String()
 	template := Email.SMTP().ForgotPasswordTemplate(user.Nama, kode, redirect)
-	if err := Email.SMTP().Fire([]string{email}, "Lupa Password", template); err != nil {
+	if err := Email.SMTP().NativeFire([]string{email}, "Lupa Password", template); err != nil {
 		fmt.Println(err)
 		return &domain.Response{
 			Message: "error saat kirim email",
