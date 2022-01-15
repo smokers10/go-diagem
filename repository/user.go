@@ -128,7 +128,7 @@ func (ur *userRepositoryImpl) Update(req *domain.UserBasicData) (user *domain.Us
 }
 
 func (ur *userRepositoryImpl) UpdatePassword(new_password string, id int) error {
-	statment, err := ur.db.Prepare("UPDATE users password = ? WHERE id = ?")
+	statment, err := ur.db.Prepare("UPDATE users SET password = ? WHERE id = ?")
 	if err != nil {
 		return err
 	}

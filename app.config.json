@@ -6,7 +6,6 @@
         "mysql_database": "diagem",
         "mysql_password": "suckitjiwa",
         "mysql_session_table" : "session",
-    
         "mysql_uri" : "local_admin:suckitjiwa@/diagem",
         "mysql_max_connection" : 5,
         "mysql_max_connection_life_time": 1,
@@ -17,7 +16,8 @@
     "application" : {
         "app_secret" : "$2a$12$k7aYe7AY670ex9ktx3YFAepBlgoNSpl2NaCZZUBCFTS3y8GEpwVT.",
         "app_port": ":8001",
-        "app_production_mode": "development"
+        "app_production_mode": "development",
+        "app_base_url": "http://localhost:8001"
     },
 
     "smtp" : {

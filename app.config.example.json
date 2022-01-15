@@ -17,7 +17,8 @@
     "application" : {
         "app_secret" : "",
         "app_port": ":80",
-        "app_production_mode": "development"
+        "app_production_mode": "development",
+        "app_base_url": "localhost:8001"
     },
 
     "smtp" : {

@@ -5,7 +5,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/smokers10/go-diagem.git/domain"
-	SMTPEmail "github.com/smokers10/go-diagem.git/infrastructure/email"
+	"github.com/smokers10/go-diagem.git/infrastructure/config"
+	Email "github.com/smokers10/go-diagem.git/infrastructure/email"
 	"github.com/smokers10/go-diagem.git/infrastructure/encryption"
 	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 )
@@ -49,7 +50,6 @@ func (prs *passwordResetServiceImpl) Create(email string) *domain.Response {
 	// buat token
 	token, _ := uuid.NewRandom()
 	kode := etc.KodeGeneratorImproved(6)
-	fmt.Println(kode)
 
 	// simpan request reset
 	req := &domain.PasswordResets{
@@ -68,8 +68,14 @@ func (prs *passwordResetServiceImpl) Create(email string) *domain.Response {
 		prs.passwordResetRepository.Update(req)
 	}
 
-	if err := SMTPEmail.Fire([]string{"nadzarmutaqin4@gmail.com"}); err != nil {
-		panic(err)
+	redirect := config.ReadConfig().Application.APP_Base_URL + "/forgot-password" + "/reset/" + token.String()
+	template := Email.SMTP().ForgotPasswordTemplate(user.Nama, kode, redirect)
+	if err := Email.SMTP().Fire([]string{email}, "Lupa Password", template); err != nil {
+		fmt.Println(err)
+		return &domain.Response{
+			Message: "error saat kirim email",
+			Status:  500,
+		}
 	}
 
 	return &domain.Response{
@@ -80,7 +86,61 @@ func (prs *passwordResetServiceImpl) Create(email string) *domain.Response {
 }
 
 func (prs *passwordResetServiceImpl) Reset(req *domain.PasswordResets) *domain.Response {
-	res := domain.Response{}
+	// ambil data reset password berdasarkan token
+	resetPWData, err := prs.passwordResetRepository.ByToken(req.Token)
+	if err != nil {
+		fmt.Println(err)
+		return &domain.Response{
+			Message: "error saat mengambil data reset password",
+			Status:  500,
+		}
+	}
 
-	return &res
+	// validasi keberadaan reset password
+	if resetPWData.Token == "" {
+		return &domain.Response{
+			Message: "Sesi Reset Password Tidak Valid",
+			Status:  200,
+		}
+	}
+
+	// comparasi kode inputan dengan kode dari database
+	if !encryption.Compare(resetPWData.Kode, req.Kode) {
+		return &domain.Response{
+			Message: "Kode Reset Password Tidak Valid",
+			Status:  200,
+		}
+	}
+
+	// ambil data user
+	user, err := prs.userRepository.ByEmail(resetPWData.Email)
+	if err != nil {
+		return &domain.Response{
+			Message: "error saat mengambil data user",
+			Status:  500,
+		}
+	}
+
+	// update password
+	if err := prs.userRepository.UpdatePassword(encryption.Hash(req.NewPassword), user.ID); err != nil {
+		fmt.Println(err)
+		return &domain.Response{
+			Message: "error saat mengupdate password",
+			Status:  500,
+		}
+	}
+
+	// hapus sesi reset password
+	if err := prs.passwordResetRepository.Delete(resetPWData.Email); err != nil {
+		return &domain.Response{
+			Message: "error saat menghapus sesi reset password",
+			Status:  500,
+		}
+	}
+
+	// final response
+	return &domain.Response{
+		Message: "Password Berhasil Diubah",
+		Success: true,
+	}
 }

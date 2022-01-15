@@ -54,9 +54,21 @@ func (pr *passwordResetRepositoryImpl) ByEmail(email string) (*domain.PasswordRe
 
 	defer statement.Close()
 
-	if err := statement.QueryRowContext(context.Background(), email).Scan(&result.Email, &result.Token, &result.Kode); err != nil {
+	statement.QueryRowContext(context.Background(), email).Scan(&result.Email, &result.Token, &result.Kode)
+
+	return &result, nil
+}
+
+func (pr *passwordResetRepositoryImpl) ByToken(token string) (*domain.PasswordResets, error) {
+	result := domain.PasswordResets{}
+	statement, err := pr.db.Prepare("SELECT email, token, code FROM password_resets WHERE token = ? LIMIT 1")
+	if err != nil {
 		return nil, err
 	}
+
+	defer statement.Close()
+
+	statement.QueryRowContext(context.Background(), token).Scan(&result.Email, &result.Token, &result.Kode)
 
 	return &result, nil
 }

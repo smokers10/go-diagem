@@ -16,6 +16,7 @@ type APP struct {
 	APP_Secret          string `json:"app_secret"`
 	APP_PORT            string `json:"app_port"`
 	APP_Production_Mode string `json:"app_production_mode"`
+	APP_Base_URL        string `json:"app_base_url"`
 }
 
 type MYSQL struct {

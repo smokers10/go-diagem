@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" class="no-focus">
     <head>
-        <title>Diagem Login</title>
+        <title>Reset Password</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <meta name="description" content="Diagem Project">
@@ -52,7 +52,7 @@
                                         </div>
                                         <form id="form-reset-password" onsubmit="return false;">
                                             <div class="form-group">
-                                                <label class="form-label" for="field-code">Email
+                                                <label class="form-label" for="field-code">Kode Reset
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 <input type="text" class="form-control" name="code" id="field-code" placeholder="Masukan kode reset" maxlength="6" required>
@@ -95,5 +95,68 @@
         <script src="/js/laravel.app.js"></script>
         <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="/js/functions.js"></script>
+        <script>
+            $(document).ready(function() {
+                $("#form-reset-password").submit(function(e) {
+                    e.preventDefault()
+                    const currentPath = location.pathname
+                    const CPSplit = currentPath.split("/")  
+                    const token = CPSplit[3]
+
+                    const data = {
+                        token,
+                        kode : $("#field-code").val(),
+                        new_password : $("#field-password").val(),
+                        conf_password : $("#field-confirm-password").val()
+                    }  
+                    submit(data)
+                })
+            })
+
+            function submit(data) {
+                $.ajax({
+                    url:"/forgot-password/reset",
+                    type:"post",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: "application/json",
+                    beforeSend: function(){
+                        Swal.fire({
+                            title: 'Tunggu Sebentar...',
+                            text: '',
+                            imageUrl: '/img/loading.gif',
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                        })
+                    },
+                    success: function (response) {
+                        if (!response.success) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: response.message,
+                                text: 'Silahkan Coba Lagi',
+                                showConfirmButton: false,
+                                timer : 3000,
+                            })
+                        }else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: response.message,
+                                text: 'Password Anda Telah Berubah',
+                                showConfirmButton: false,
+                                timer : 3000,
+                            })
+                            setTimeout(() => {
+                                location.replace("/login")
+                            }, 3000);
+                        }                        
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal.close()
+                        alert('Error adding / update data')
+                    }
+                })
+            }
+        </script>
     </body>
 </html>

@@ -7,7 +7,7 @@ import (
 
 const letterBytes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+var letterRunes = []rune("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 const (
 	letterIdxBits = 6
