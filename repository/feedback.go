@@ -52,12 +52,10 @@ func (fr *feedbackRepositoryImpl) Update(req *domain.Feedback) error {
 }
 
 func (fr *feedbackRepositoryImpl) Read(ProdukID string) ([]domain.FeedbackDetailed, error) {
-	c := context.Background()
 	userRepository := UserRepository(fr.db)
 	result := []domain.FeedbackDetailed{}
-	tx, _ := fr.db.BeginTx(c, nil)
 
-	stmt, _ := tx.Prepare(`SELECT id, comment, rating, user_id FROM feedback WHERE produk_id = ?`)
+	stmt, _ := fr.db.Prepare(`SELECT id, comment, rating, user_id, created_at FROM feedback WHERE produk_id = ?`)
 	defer stmt.Close()
 
 	rows, err := stmt.Query(ProdukID)
@@ -67,7 +65,7 @@ func (fr *feedbackRepositoryImpl) Read(ProdukID string) ([]domain.FeedbackDetail
 
 	for rows.Next() {
 		row := domain.FeedbackDetailed{}
-		rows.Scan(&row.ID, &row.Comment, &row.Rating, &row.UserID)
+		rows.Scan(&row.ID, &row.Comment, &row.Rating, &row.UserID, &row.CreatedAt)
 
 		// get user
 		user, err := userRepository.ByID(row.UserID)
@@ -82,24 +80,15 @@ func (fr *feedbackRepositoryImpl) Read(ProdukID string) ([]domain.FeedbackDetail
 	return result, nil
 }
 
-func (fr *feedbackRepositoryImpl) ByUserId(UserID int) ([]domain.FeedbackDetailed, error) {
-	c := context.Background()
-	result := []domain.FeedbackDetailed{}
-	tx, _ := fr.db.BeginTx(c, nil)
-
-	stmt, _ := tx.Prepare(`SELECT id, comment, rating FROM feedback WHERE user_id = ?`)
+func (fr *feedbackRepositoryImpl) OnProduct(userid int, productID string) (domain.FeedbackDetailed, error) {
+	result := domain.FeedbackDetailed{}
+	stmt, err := fr.db.Prepare(`SELECT id, comment, rating, user_id FROM feedback WHERE user_id = ? AND produk_id = ?`)
+	if err != nil {
+		return result, err
+	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query(UserID)
-	if err != nil {
-		return nil, err
-	}
-
-	for rows.Next() {
-		row := domain.FeedbackDetailed{}
-		rows.Scan(&row.ID, &row.Comment, &row.Rating)
-		result = append(result, row)
-	}
+	stmt.QueryRow(userid, productID).Scan(&result.ID, &result.Comment, &result.Rating, &result.UserID)
 
 	return result, nil
 }

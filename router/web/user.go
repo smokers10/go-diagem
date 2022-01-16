@@ -149,10 +149,9 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 
 	// feedback
 	feedback := parentPath.Group("/feedback")
-	feedback.Get("/", feedbackAPIController.Read)
-	feedback.Get("/get-my-feedback", feedbackAPIController.GetMyFeedback, middlewareStrict)
-	feedback.Post("/give-feedback", feedbackAPIController.GiveFeedback, middlewareStrict)
-	feedback.Put("/update", feedbackAPIController.EditFeedback, middlewareStrict)
+	feedback.Get("/:produk_id", feedbackAPIController.Read)
+	feedback.Post("/create", middlewareStrict, feedbackAPIController.GiveFeedback)
+	feedback.Put("/update", middlewareStrict, feedbackAPIController.EditFeedback)
 
 	// alamat origin
 	alamatOrigin := parentPath.Group("/alamat-origin")

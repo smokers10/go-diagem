@@ -16,16 +16,15 @@
 
     "application" : {
         "app_secret" : "",
-        "app_port": ":80",
+        "app_port": ":8000",
         "app_production_mode": "development",
-        "app_base_url": "localhost:8001"
+        "app_base_url": "localhost:8000"
     },
 
     "smtp" : {
-        "SMTP_host" : "",
-        "SMTP_port" : 2525,
+        "SMTP_host" : "smtp.gmail.com",
+        "SMTP_port" : 587,
         "SMTP_sender_name" : "",
-        "SMTP_auth_email" : "",
         "SMTP_auth_username" : "",
         "SMTP_auth_password" : ""
     },

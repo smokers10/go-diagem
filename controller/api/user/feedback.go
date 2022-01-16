@@ -18,6 +18,9 @@ func (fc *feedbackController) GiveFeedback(c *fiber.Ctx) error {
 	if err := c.BodyParser(&req); err != nil {
 		panic(err)
 	}
+
+	req.UserID = c.Locals("id").(int)
+
 	response := fc.feedbackSrv.Create(&req)
 	return c.Status(response.Status).JSON(response)
 }
@@ -43,11 +46,5 @@ func (fc *feedbackController) Delete(c *fiber.Ctx) error {
 func (fc *feedbackController) Read(c *fiber.Ctx) error {
 	produkID := c.Params("produk_id")
 	response := fc.feedbackSrv.Read(produkID)
-	return c.Status(response.Status).JSON(response)
-}
-
-func (fc *feedbackController) GetMyFeedback(c *fiber.Ctx) error {
-	userID := c.Locals("id").(int)
-	response := fc.feedbackSrv.ByUserID(userID)
 	return c.Status(response.Status).JSON(response)
 }

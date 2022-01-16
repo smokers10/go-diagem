@@ -12,6 +12,17 @@ $(document).ready(function(){
         offset: 583
     })
 
+    $("#feedback-form").submit(function(e) {
+        e.preventDefault()
+        data = {
+            comment : $("#comment").val(),
+            rating : $("#rating").val(),
+            produk_id : $("#id-produk").val()
+        }
+
+        submitFeedback(data)
+    })
+
     $.ajax({
         url:`/produk/get/${slug}`,
         success: function(response) {
@@ -65,6 +76,9 @@ $(document).ready(function(){
                     $("#variasi").append(_createVariantElement(data))
                 })
             }
+
+            // ambil feedback
+            getFeedback(id)
         }
     })
 })
@@ -222,4 +236,64 @@ function _chooseVarian(data) {
     $("#id-varian").val(variantID)
     
     _initialPriceState(discount, harga)
+}
+
+// feed back & rating zone
+
+function getFeedback(productID) {
+    $.ajax({
+        url:`/feedback/${productID}`,
+        success: function(res){
+            const { data } = res
+            data.forEach(element => {
+                $("#feedback").append(createFeedbackElement(element))
+            });
+        }
+    })
+}
+
+function submitFeedback(data) {
+    console.log(data)
+    $.ajax({
+        url:"/feedback/create",
+        type: "post",
+        data: JSON.stringify(data),
+        dataType: "json",
+        contentType: "application/json",
+        beforeSend: function(){
+            Swal.fire({
+                title: 'Tunggu Sebentar...',
+                text: '',
+                imageUrl: '/img/loading.gif',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+            })
+        },
+        success: function () {
+            Swal.fire({
+                title: `Berhasil!`,
+                text: "Rating & Ulasan Anda tersimpan",
+                icon: 'success',
+                showCancelButton: false,
+                showConfirmButton: false,
+            })
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            Swal.close()
+            alert('Error adding / update feedback')
+        }
+    })
+}
+
+function createFeedbackElement(data) {
+    return `
+        <div class="media">
+            <div class="media-body">
+                <h5 class="mt-0 mb-0">${data.user.nama}</h5>
+                <h6>pada ${data.created_at}</h6>
+                <p>${data.comment}</p>
+                <hr>
+            </div>
+        </div>
+    `
 }

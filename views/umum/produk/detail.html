@@ -180,61 +180,132 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+
                                             <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
                                                 <h4 class="font-w400">Deskripsi</h4>
                                                 <div id="deskripsi"></div>
                                             </div>
+
                                             <div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
-                                                <h4 class="font-w400">Ulasan</h4>
+                                                <h4 class="font-w400">Rating Produk</h4>
+                                                <div class="row mb-5">
+                                                    <div class="col-md-3">
+                                                        <center>
+                                                            <h1>
+                                                                4.0
+                                                            </h1>
+                                                            <h5>dari 5</h5>
+                                                        </center>
+                                                    </div>
+
+                                                    <div class="col-md-9">
+                                                        <div class="row mb-5">
+                                                            <div class="col-2">
+                                                                <b>Excellent</b>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%; border-radius: 5px;">
+                                                                        40 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-5">
+                                                            <div class="col-2">
+                                                                <b>Good</b>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%; border-radius: 5px;">
+                                                                        40 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-5">
+                                                            <div class="col-2">
+                                                                <b>Average</b>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%; border-radius: 5px;">
+                                                                        40 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-5">
+                                                            <div class="col-2">
+                                                                <b>Poor</b>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%; border-radius: 5px;">
+                                                                        40 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-5">
+                                                            <div class="col-2">
+                                                                <b>Terrible</b>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%; border-radius: 5px;">
+                                                                        40 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{if .Logged.IsLogged}}
+                                                <form id="feedback-form" action="#" method="post">
+                                                    <h4 class="font-w400">Ulasan Produk</h4>
+
+                                                    <div class="form-group">
+                                                        <label for="rating">Rating</label>
+                                                        <select name="rating" id="rating" class="form-control" required>
+                                                            <option value="">pilih rating produk</option>
+                                                            <option value="1">Terrible</option>
+                                                            <option value="2">Poor</option>
+                                                            <option value="3">Average</option>
+                                                            <option value="4">Good</option>
+                                                            <option value="5">Excellent</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="comment">Komentar</label>
+                                                        <textarea name="comment" id="comment" class="form-control" cols="10" rows="5" placeholder="Berikan pendapat Anda tentang produk ini..." required></textarea>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary">Beri Ulasan</button>
+                                                    </div>
+                                                </form>
+                                                <hr>
+                                                {{end}}
+
+                                                <div id="feedback mt-5">
+                                                    
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="bg-body">
-                    <!-- <div class="content">
-                        <div class="block">
-                            <div class="block-header p-0 sticky-navigation">
-                                <ul class="nav nav-tabs nav-tabs-alt" id="myTab" role="tablist">
-                                    <li class="nav-item">
-                                      <a class="nav-link active" id="spec-tab" data-toggle="tab" href="#spec" role="tab" aria-controls="spec" aria-selected="true">Spesifikasi</a>
-                                    </li>
-    
-                                    <li class="nav-item">
-                                      <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Deskripsi</a>
-                                    </li>
-    
-                                    <li class="nav-item">
-                                      <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">Ulasan</a>
-                                    </li>
-                                </ul>
-                            </div>
 
-                            <div class="tab-content block-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="spec" role="tabpanel" aria-labelledby="spec-tab">
-                                    <h4 class="font-w400">Spesifikasi</h4>
-                                    <table class="table" id="table-spec">
-                                        <tbody>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
-                                    <h4 class="font-w400">Deskripsi</h4>
-                                    <div id="deskripsi"></div>
-                                </div>
-                                <div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
-                                    <h4 class="font-w400">Ulasan</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
                 <div id="myModal" class="modal-img">
                     <span class="close-img">&times;</span>
                     <img class="modal-content modal-dialog-centered" id="mainImg">
@@ -256,9 +327,5 @@
         <script src="/js/plugins/slick/slick.js"></script>
         <script src="/js/plugins/jquery-raty/jquery.raty.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-zoom@1.7.21/jquery.zoom.min.js"></script>
-
-        <script>
-           
-        </script>
     </body>
 </html>

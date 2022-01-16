@@ -16,12 +16,31 @@ func FeedbackService(feedback *domain.FeedbackRepository) domain.FeedbackService
 
 func (fs *feedbackServiceImpl) Create(req *domain.Feedback) *domain.Response {
 	res := domain.Response{}
+
+	// check commentar
+	checkFeedback, err := fs.feedbackRepository.OnProduct(req.UserID, req.ProdukID)
+	if err != nil {
+		return &domain.Response{
+			Message: "error saat check feedback",
+			Status:  500,
+		}
+	}
+
+	if checkFeedback.UserID != 0 {
+		return &domain.Response{
+			Message: "Hanya bisa membuat feedback satu kali",
+			Status:  200,
+		}
+	}
+
+	// buat feedback
 	if err := fs.feedbackRepository.Create(req); err != nil {
 		fmt.Println(err)
 		res.Message = "Error saat menyimpan data feedback"
 		res.Status = 500
 		return &res
 	}
+
 	res.Message = "feeback berhasil disimpan"
 	res.Status = 200
 	res.Success = true
@@ -47,28 +66,13 @@ func (fs *feedbackServiceImpl) Read(produkID string) *domain.Response {
 	feedback, err := fs.feedbackRepository.Read(produkID)
 	if err != nil {
 		fmt.Println(err)
-		res.Message = "Error saat menyimpan data feedback"
+		res.Message = "Error saat mengambil data feedback"
 		res.Status = 500
 		return &res
 	}
-	res.Data = feedback
-	res.Message = "feeback berhasil disimpan"
-	res.Status = 200
-	res.Success = true
-	return &res
-}
 
-func (fs *feedbackServiceImpl) ByUserID(userID int) *domain.Response {
-	res := domain.Response{}
-	feedback, err := fs.feedbackRepository.ByUserId(userID)
-	if err != nil {
-		fmt.Println(err)
-		res.Message = "Error saat menyimpan data feedback"
-		res.Status = 500
-		return &res
-	}
 	res.Data = feedback
-	res.Message = "feeback berhasil disimpan"
+	res.Message = "feeback berhasil diambil"
 	res.Status = 200
 	res.Success = true
 	return &res

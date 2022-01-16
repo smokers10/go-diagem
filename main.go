@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -17,7 +16,6 @@ import (
 )
 
 func main() {
-	fmt.Println(config.ReadConfig())
 	config := config.ReadConfig().Application
 
 	engine := html.New("./views", ".html")

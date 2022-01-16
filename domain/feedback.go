@@ -22,14 +22,13 @@ type FeedbackRepository interface {
 	Create(req *Feedback) error
 	Update(req *Feedback) error
 	Read(ProdukID string) ([]FeedbackDetailed, error)
-	ByUserId(UserID int) ([]FeedbackDetailed, error)
 	Delete(req *Feedback) error
+	OnProduct(userid int, productID string) (FeedbackDetailed, error)
 }
 
 type FeedbackService interface {
 	Create(req *Feedback) *Response
 	Update(req *Feedback) *Response
 	Read(produkID string) *Response
-	ByUserID(userID int) *Response
 	Delete(req *Feedback) *Response
 }
