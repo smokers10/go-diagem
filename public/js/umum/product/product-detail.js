@@ -78,7 +78,7 @@ $(document).ready(function(){
             }
 
             // ambil feedback
-            getFeedback(id)
+            LoadAllFeedback(id)
         }
     })
 })
@@ -240,18 +240,6 @@ function _chooseVarian(data) {
 
 // feed back & rating zone
 
-function getFeedback(productID) {
-    $.ajax({
-        url:`/feedback/${productID}`,
-        success: function(res){
-            const { data } = res
-            data.forEach(element => {
-                $("#feedback").append(createFeedbackElement(element))
-            });
-        }
-    })
-}
-
 function submitFeedback(data) {
     console.log(data)
     $.ajax({
@@ -276,7 +264,12 @@ function submitFeedback(data) {
                 icon: 'success',
                 showCancelButton: false,
                 showConfirmButton: false,
+                timer: 3000
             })
+
+            setInterval(() => {
+                location.reload()
+            }, 3000);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             Swal.close()
@@ -290,6 +283,9 @@ function createFeedbackElement(data) {
         <div class="media">
             <div class="media-body">
                 <h5 class="mt-0 mb-0">${data.user.nama}</h5>
+                <div class="mb-5">
+                    ${createStarElement(data.rating)}
+                </div>
                 <h6>pada ${data.created_at}</h6>
                 <p>${data.comment}</p>
                 <hr>
@@ -297,3 +293,70 @@ function createFeedbackElement(data) {
         </div>
     `
 }
+
+function createStarElement(starCount) {
+    var starDump = ""
+    for (let i = 0; i < 5; i++) {
+        if (i < starCount) starDump += `<i class="fas fa-star fa-lg text-primary"></i>`; 
+        else starDump += `<i class="far fa-star fa-lg"></i>`;
+    }
+    return starDump
+}
+
+// trigger pengambilan feedback by rating 
+function getFeedbackByRating(el) {
+    const target = $(el)
+    const productID = $("#id-produk").val()
+    const rating = target.attr("data-rating")
+
+    rating == "all" ? LoadAllFeedback(productID) : LoadFeedbackByRating(productID, rating)
+}
+
+// untuk mengambil data feedback sesuai rating
+function LoadFeedbackByRating(productID, rating) {
+    $.ajax({
+        url:`/feedback/${productID}/${rating}`,
+        beforeSend: function(){
+            Swal.fire({
+                title: 'Tunggu Sebentar...',
+                text: '',
+                imageUrl: '/img/loading.gif',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+            })
+        },
+        success: function(res){
+            const { data } = res
+            const { feedback_list } = data
+            $("#feedback-ulasan").html("")
+            feedback_list.forEach(element => {
+                $("#feedback-ulasan").append(createFeedbackElement(element))
+            })
+            Swal.close()
+        }
+    })
+}
+
+// untuk mengambil semua data feedback 
+function LoadAllFeedback(productID) {
+    $.ajax({
+        url:`/feedback/${productID}`,
+        success: function(res){
+            const { data } = res
+            const { feedback_list, by_rate } = data
+
+            $("#1-star").text(`Bintang 1 (${by_rate.one_star})`)
+            $("#2-star").text(`Bintang 2 (${by_rate.two_star})`)
+            $("#3-star").text(`Bintang 3 (${by_rate.three_star})`)
+            $("#4-star").text(`Bintang 4 (${by_rate.four_star})`)
+            $("#5-star").text(`Bintang 5 (${by_rate.five_star})`)
+
+            $("#feedback-ulasan").html("")
+            feedback_list.forEach(element => {
+                $("#feedback-ulasan").append(createFeedbackElement(element))
+            })
+        }
+    })
+}
+
+

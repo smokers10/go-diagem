@@ -150,6 +150,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	// feedback
 	feedback := parentPath.Group("/feedback")
 	feedback.Get("/:produk_id", feedbackAPIController.Read)
+	feedback.Get("/:produk_id/:rating", feedbackAPIController.ByRating)
 	feedback.Post("/create", middlewareStrict, feedbackAPIController.GiveFeedback)
 	feedback.Put("/update", middlewareStrict, feedbackAPIController.EditFeedback)
 

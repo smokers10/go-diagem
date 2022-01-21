@@ -91,3 +91,21 @@ func (fs *feedbackServiceImpl) Delete(req *domain.Feedback) *domain.Response {
 	res.Success = true
 	return &res
 }
+
+func (fs *feedbackServiceImpl) ByRating(productID string, rating int) *domain.Response {
+	feedback, err := fs.feedbackRepository.ByRating(productID, rating)
+	if err != nil {
+		fmt.Println(err)
+		return &domain.Response{
+			Message: "error saat mengambil data feedback",
+			Status:  500,
+		}
+	}
+
+	return &domain.Response{
+		Message: "data feedback berhasil diambil",
+		Status:  200,
+		Success: true,
+		Data:    feedback,
+	}
+}
