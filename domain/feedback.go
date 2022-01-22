@@ -27,8 +27,9 @@ type FeedbackRateCount struct {
 }
 
 type FeedbackData struct {
-	FeedbackList []FeedbackDetailed `json:"feedback_list"`
-	ByRate       FeedbackRateCount  `json:"by_rate"`
+	FeedbackList  []FeedbackDetailed `json:"feedback_list"`
+	ByRate        FeedbackRateCount  `json:"by_rate"`
+	AverageRating float32            `json:"average_rating"`
 }
 
 type FeedbackRepository interface {

@@ -329,9 +329,11 @@ function LoadFeedbackByRating(productID, rating) {
             const { data } = res
             const { feedback_list } = data
             $("#feedback-ulasan").html("")
-            feedback_list.forEach(element => {
-                $("#feedback-ulasan").append(createFeedbackElement(element))
-            })
+            if (feedback_list) {
+                feedback_list.forEach(element => {
+                    $("#feedback-ulasan").append(createFeedbackElement(element))
+                })
+            }
             Swal.close()
         }
     })
@@ -343,13 +345,16 @@ function LoadAllFeedback(productID) {
         url:`/feedback/${productID}`,
         success: function(res){
             const { data } = res
-            const { feedback_list, by_rate } = data
+            const { feedback_list, by_rate, average_rating } = data
 
             $("#1-star").text(`Bintang 1 (${by_rate.one_star})`)
             $("#2-star").text(`Bintang 2 (${by_rate.two_star})`)
             $("#3-star").text(`Bintang 3 (${by_rate.three_star})`)
             $("#4-star").text(`Bintang 4 (${by_rate.four_star})`)
             $("#5-star").text(`Bintang 5 (${by_rate.five_star})`)
+
+            $("#rating-score").text(average_rating)
+            $("#rating-star").append(createStarElement(parseInt(average_rating)))
 
             $("#feedback-ulasan").html("")
             feedback_list.forEach(element => {

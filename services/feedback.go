@@ -62,20 +62,29 @@ func (fs *feedbackServiceImpl) Update(req *domain.Feedback) *domain.Response {
 }
 
 func (fs *feedbackServiceImpl) Read(produkID string) *domain.Response {
-	res := domain.Response{}
 	feedback, err := fs.feedbackRepository.Read(produkID)
 	if err != nil {
 		fmt.Println(err)
-		res.Message = "Error saat mengambil data feedback"
-		res.Status = 500
-		return &res
+		return &domain.Response{
+			Message: "error saat mengambil data feedback",
+			Status:  500,
+		}
 	}
 
-	res.Data = feedback
-	res.Message = "feeback berhasil diambil"
-	res.Status = 200
-	res.Success = true
-	return &res
+	// perhitungan rata-rata rating
+	// dasar litelatur : https://calculator.academy/average-rating-calculator-star-rating/#f1p1|f2p0
+	// R total jumlah rating
+	// AR rata-rata rating
+	R := float32(feedback.ByRate.OneStar + feedback.ByRate.TwoStar + feedback.ByRate.ThreeStar + feedback.ByRate.FourStar + feedback.ByRate.FiveStar)
+	AR := (1*float32(feedback.ByRate.OneStar) + 2*float32(feedback.ByRate.TwoStar) + 3*float32(feedback.ByRate.ThreeStar) + 4*float32(feedback.ByRate.FourStar) + 5*float32(feedback.ByRate.FiveStar)) / R
+	feedback.AverageRating = AR
+
+	return &domain.Response{
+		Data:    feedback,
+		Message: "feeback berhasil diambil",
+		Status:  200,
+		Success: true,
+	}
 }
 
 func (fs *feedbackServiceImpl) Delete(req *domain.Feedback) *domain.Response {
