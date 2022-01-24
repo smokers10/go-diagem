@@ -2,7 +2,6 @@ package etc
 
 import (
 	"bytes"
-	"crypto/sha512"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -68,7 +67,7 @@ type midtransResponse struct {
 }
 
 type midtransErrorResponse struct {
-	ErrorMessages []string `json:"error_messages, omitempty"`
+	ErrorMessages []string `json:"error_messages,omitempty"`
 }
 
 type midtransStatusResponse struct {
@@ -151,12 +150,6 @@ func (m *Midtrans) CheckStatus(signatureMaterial *StatusSignature) (*midtransSta
 	// deklarasi variable penting
 	var httpResponse midtransStatusResponse
 	endpoint := fmt.Sprintf("https://%s/v2/%s/status", m.APIDomain(), signatureMaterial.OrderID)
-	signatureInput := fmt.Sprintf("%s%s%s%s", signatureMaterial.OrderID, signatureMaterial.StatusCode, signatureMaterial.GrossAmount, config.ReadConfig().ETC.Midtrans_Server_key)
-
-	// buat SHA512 dari signatureInput untuk Authorization username
-	sha := sha512.New()
-	sha.Write([]byte(signatureInput))
-	signature := string(sha.Sum(nil))
 
 	// make request
 	req, err := http.NewRequest("GET", endpoint, nil)
@@ -167,7 +160,7 @@ func (m *Midtrans) CheckStatus(signatureMaterial *StatusSignature) (*midtransSta
 	// set request header
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	req.SetBasicAuth(signature, "")
+	req.SetBasicAuth(config.ReadConfig().ETC.Midtrans_Server_key, "")
 
 	// kirim request and handle response dari http request
 	response, err := http.DefaultClient.Do(req)
@@ -181,14 +174,6 @@ func (m *Midtrans) CheckStatus(signatureMaterial *StatusSignature) (*midtransSta
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(response.Status)
-	fmt.Println()
-	fmt.Println(endpoint)
-	fmt.Println()
-	fmt.Println(signatureMaterial)
-	fmt.Println()
-	fmt.Println(config.ReadConfig().ETC.Midtrans_Server_key)
 
 	// parse response ke struct
 	json.Unmarshal(body, &httpResponse)
