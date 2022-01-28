@@ -276,15 +276,27 @@ func (p *produkRepositoryImpl) Delete(id string) error {
 	return nil
 }
 
-func (p *produkRepositoryImpl) UpdateStok(produkID string, stok int) error {
-	statement, err := p.db.Prepare(`UPDATE produk SET stok = ? WHERE id = ?`)
+func (p *produkRepositoryImpl) UpdateStok(produkID string, changeValue int, operationType string) error {
+	product, err := p.ByIDSimplified(produkID)
 	if err != nil {
 		return err
 	}
 
-	defer statement.Close()
+	if operationType == "addition" {
+		product.Stok = product.Stok + changeValue
+	}
 
-	if _, err := statement.ExecContext(context.Background(), stok, produkID); err != nil {
+	if operationType == "subtraction" {
+		product.Stok = product.Stok - changeValue
+	}
+
+	stmt, err := p.db.Prepare(`UPDATE produk SET stok = ? WHERE id = ?`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(product.Stok, produkID); err != nil {
 		return err
 	}
 

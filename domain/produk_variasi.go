@@ -22,6 +22,6 @@ type ProdukVariasiRepository interface {
 	ByID(id string) (*ProdukVariasi, error)
 	Create(req *ProdukVariasi) (*ProdukVariasi, error)
 	Update(req *ProdukVariasi) (*ProdukVariasi, error)
-	UpdateStok(id string, stok int) error
+	UpdateStokVariant(id string, changeValue int, operationType string) error
 	Delete(produkID string, produkVariasiID string) error
 }

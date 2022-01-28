@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/google/uuid"
@@ -12,7 +13,7 @@ import (
 type orderService struct {
 	orderRepository         domain.OrderRepository
 	produkRepository        domain.ProdukRepository
-	produkVariasiRepository domain.ProdukRepository
+	produkVariasiRepository domain.ProdukVariasiRepository
 	cartRepository          domain.CartRepository
 	orderItemRepository     domain.OrderItemRepository
 	userRepository          domain.UserRepository
@@ -27,7 +28,7 @@ func OrderService(order *domain.OrderRepository, produk *domain.ProdukRepository
 	return &orderService{
 		orderRepository:         *order,
 		produkRepository:        *produk,
-		produkVariasiRepository: *produk,
+		produkVariasiRepository: *variasi,
 		cartRepository:          *cart,
 		orderItemRepository:     *item,
 		userRepository:          *user,
@@ -150,10 +151,14 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 
 	// generate invoice
 	year, month, day := time.Now().Date()
-	unixTime := time.Now().Unix()
-	invoiceNo := fmt.Sprintf("DGM-%d%d%d%d", unixTime, day, int(month), year)
+	rand.Seed(time.Now().UnixNano())
+	min := 1000
+	max := 10000
+	randomNumb := rand.Intn(max-min+1) + min
+	invoiceNo := fmt.Sprintf("DGM-%d-%d%d%d", randomNumb, day, int(month), year)
 	req.InvoiceNo = invoiceNo
 
+	// ================================ vital part! ==================================================
 	// mulai transaction db
 	tx, err := osc.orderRepository.GetSQLInstance().Begin()
 	if err != nil {
@@ -214,8 +219,27 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 			return &res
 		}
 
+		// update stok
+		if !cart.Produk.IsHasVariant {
+			if err := osc.produkRepository.UpdateStok(cart.Produk.ID, cart.Quantity, "subtraction"); err != nil {
+				fmt.Println(err)
+				res.Message = "kesalahan saat update stok produk"
+				res.Status = 200
+				return &res
+			}
+		} else {
+			if err := osc.produkVariasiRepository.UpdateStokVariant(cart.VariasiID, cart.Quantity, "subtraction"); err != nil {
+				fmt.Println(err)
+				res.Message = "kesalahan saat update stok produk"
+				res.Status = 200
+				return &res
+			}
+		}
+
 		osc.cartRepository.Delete(&domain.Cart{ID: cart.ID, UserID: cart.UserID})
 	}
+
+	// ================================ end vital part! =============================================
 
 	res.Data = map[string]string{"order_id": req.ID}
 	res.Message = "checkout berhasil"
@@ -233,6 +257,34 @@ func (osc *orderService) ReadAll() *domain.Response {
 		res.Message = "error saat mengambil data order"
 		res.Status = 500
 		return &res
+	}
+
+	// check status transkasi
+	for _, o := range order {
+		if o.OrderBayar.Status != "settlement" {
+			midtrans, err := etc.MidtransSnap().CheckStatus(o.ID)
+			if err != nil {
+				fmt.Println(err)
+				return &domain.Response{
+					Message: "error saat check status transaksi",
+					Status:  500,
+				}
+			}
+
+			if midtrans.StatusCode != "404" {
+				// jika ada perubahan
+				if o.OrderBayar.Status != midtrans.TransactionStatus {
+					err := osc.orderBayarRepository.UpdateStatus(o.OrderBayar.Token, midtrans.TransactionStatus)
+					if err != nil {
+						fmt.Println(err)
+						return &domain.Response{
+							Message: "error update status transkasi",
+							Status:  500,
+						}
+					}
+				}
+			}
+		}
 	}
 
 	res.Data = order
@@ -311,6 +363,34 @@ func (osc *orderService) ReadByUser(userID int) *domain.Response {
 		res.Message = "error saat mengambil data order"
 		res.Status = 500
 		return &res
+	}
+
+	// check status transkasi
+	for _, o := range order {
+		if o.OrderBayar.Status != "settlement" {
+			midtrans, err := etc.MidtransSnap().CheckStatus(o.ID)
+			if err != nil {
+				fmt.Println(err)
+				return &domain.Response{
+					Message: "error saat check status transaksi",
+					Status:  500,
+				}
+			}
+
+			if midtrans.StatusCode != "404" {
+				// jika ada perubahan
+				if o.OrderBayar.Status != midtrans.TransactionStatus {
+					err := osc.orderBayarRepository.UpdateStatus(o.OrderBayar.Token, midtrans.TransactionStatus)
+					if err != nil {
+						fmt.Println(err)
+						return &domain.Response{
+							Message: "error update status transkasi",
+							Status:  500,
+						}
+					}
+				}
+			}
+		}
 	}
 
 	res.Data = order

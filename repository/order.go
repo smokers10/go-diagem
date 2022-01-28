@@ -139,6 +139,7 @@ func (or *orderRepository) GetByUserID(userID int) ([]domain.OrderDetail, error)
 func (or *orderRepository) Read() ([]domain.OrderDetail, error) {
 	result := []domain.OrderDetail{}
 	userRepo := UserRepository(or.db)
+	orderPaymentRepo := OrderBayarRepository(or.db)
 
 	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order_checkout")
 	if err != nil {
@@ -155,6 +156,12 @@ func (or *orderRepository) Read() ([]domain.OrderDetail, error) {
 		row := domain.OrderDetail{}
 		rows.Scan(&row.ID, &row.Status, &row.UserID, &row.AlamatID, &row.Kurir, &row.PaketKurir, &row.Ongkir, &row.InvoiceNo, &row.TglOrder)
 
+		// get order payment
+		payment, err := orderPaymentRepo.ByOrderID(row.ID)
+		if err != nil {
+			return nil, err
+		}
+
 		// get user
 		user, err := userRepo.ByID(row.UserID)
 		if err != nil {
@@ -162,6 +169,7 @@ func (or *orderRepository) Read() ([]domain.OrderDetail, error) {
 		}
 
 		row.User = *user
+		row.OrderBayar = *payment
 
 		result = append(result, row)
 	}

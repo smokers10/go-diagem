@@ -44,57 +44,27 @@
 
             <!-- Main Container -->
             <main id="main-container">
-
                 <!-- Page Content -->
                 <div class="content">
-                    <div class="content-heading pt-0 mb-3">
-                        Order
-                    </div>
-                    <div class="block">
-                        <ul class="nav nav-tabs nav-tabs-alt">
-                            <li class="nav-item">
-                                <a class="nav-link menu_tabs active" href="javascript:void(0)" data-status="terbaru">Semua</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link menu_tabs" href="javascript:void(0)" data-status="belum_dibayar">Belum Dibayar</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link menu_tabs" href="javascript:void(0)" data-status="perlu_dikirim">Perlu Dikirim</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link menu_tabs" href="javascript:void(0)" data-status="dikirim">Dikirim</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link menu_tabs" href="javascript:void(0)" data-status="selesai">Selesai</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link menu_tabs" href="javascript:void(0)" data-status="pembatalan">Pembatalan</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link menu_tabs" href="javascript:void(0)" data-status="pengiriman">Pengembalian</a>
-                            </li>
-                        </ul>
-                        
-                        <div class="block-content tab-content">
-                            <div class="tab-pane active" id="btabs-alt-static-home" role="tabpanel">
-                                <table class="table table-striped table-vcenter" id="list-order">
-                                    <thead>
-                                        <tr>
-                                            <th class="font-weight-bold" width="20%">TANGGAL</th>
-                                            <th class="font-weight-bold" width="15%">NO. INVOICE</th>
-                                            <th class="font-weight-bold">STATUS</th>
-                                            <th class="font-weight-bold">PRODUK</th>
-                                            <th class="font-weight-bold">JUMLAH</th>
-                                            <th class="font-weight-bold">CUSTOMER</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                    <div class="block block-bordered block-rounded block-shadow">
+                        <div class="block-content block-content-full">
+                            <table class="table" style="width:100%" id="table-invoice">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No Invoice</th>
+                                        <th scope="col">Kurir</th>
+                                        <th scope="col">Tanggal Dipesan</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Pembayaran</th>
+                                        <th scope="col">Pelanggan</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
                 <!-- END Page Content -->
-
             </main>
             <!-- END Main Container -->
 
@@ -110,16 +80,120 @@
         <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
         <script src="/js/common.js"></script>
         <script src="/js/functions.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
-        <script src="/js/plugins/moment/moment-with-locales.min.js"></script>
+        <script src="/js/plugins/moment/moment.min.js"></script>
         <script src="/js/plugins/bootstrap-daterangepicker/daterangepicker.min.js"></script>
         <script src="/js/admin/general.js"></script>
         <script>
             $(document).ready(function(){
-                $.ajax({
-                    url: "/admin/order/get",
-                    
+                $('#table-invoice').DataTable({
+                    "ajax":"/admin/order/get",
+                    "columns":[
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return data.invoice_no
+                            },
+                        },
+
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return data.kurir
+                            },
+                        },
+
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return moment(`${data.tgl_order}`).format('ll')
+                            }
+                        },
+
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return data.status
+                            }
+                        },
+
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                var statusPembayaran = ""
+
+                                switch (data.order_bayar.status) {
+                                    case "pending":
+                                        statusPembayaran = "Pending" 
+                                        break;
+
+                                    case "capture":
+                                        statusPembayaran = `Telah Dibayar`
+                                        break;
+
+                                    case "settlement":
+                                        statusPembayaran = `Lunas`
+                                        break;
+
+                                    case "deny":
+                                        statusPembayaran = `Ditolak`
+                                    break;
+                                
+                                    case "cancel":
+                                        statusPembayaran = `Dibatalkan`
+                                    break;
+
+                                    case "expire":
+                                        statusPembayaran = `Kadaluarsa`
+                                    break;
+
+                                    case "failure":
+                                        statusPembayaran = `Gagal`
+                                    break;
+
+                                    case "chargeback":
+                                        statusPembayaran = `Sengketa`
+                                    break;
+
+                                    case "refund":
+                                        statusPembayaran = `Refund`
+                                    break;
+
+                                    case "partial_refund":
+                                        statusPembayaran = `Refund Sebagian`
+                                    break;
+
+                                    case "partial_chargeback":
+                                        statusPembayaran = `Sengketa Sebagian`
+                                    break;
+
+                                    default:
+                                        statusPembayaran = `authorize`
+                                        break;
+                                }
+
+
+                                return statusPembayaran
+                            }
+                        },
+
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return data.user.nama
+                            }
+                        },
+
+                        {
+                            "data":null,
+                            "orderable":false,
+                            "render":function(data, type, row){
+                                return `<a href="/pesanan/invoice/${data.id}" class="btn btn-primary"> <b>Invoice</b>  </a>`
+                            }
+                        }
+                    ],
                 })
+
+                $("#table-invoice_filter").addClass("d-flex justify-content-end")
             })
         </script>
     </body>

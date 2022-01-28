@@ -96,7 +96,7 @@ type ProdukRepository interface {
 	ByIDSimplified(id string) (*ProdukDetailed, error)
 	BySlugs(slug string) (*ProdukDetailed, error)
 	Update(req *Produk) (*Produk, error)
-	UpdateStok(produkID string, stok int) error
+	UpdateStok(produkID string, changeValue int, operationType string) error
 	Delete(id string) error
 	GetPopular() ([]ProdukDetailed, error)
 }

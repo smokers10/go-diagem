@@ -40,8 +40,6 @@ func (cs *checkoutServiceImpl) Checkout(req *domain.Checkout) *domain.Response {
 		subtotal += carts[i].SubTotal
 	}
 
-	fmt.Println(subtotal)
-
 	res.Message = "on the test"
 	res.Status = http.StatusOK
 	return &res
