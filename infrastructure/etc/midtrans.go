@@ -72,14 +72,10 @@ type midtransErrorResponse struct {
 
 type midtransStatusResponse struct {
 	TransactionStatus string `json:"transaction_status"`
+	TransactionTime   string `json:"transaction_time"`
 	StatusMessage     string `json:"status_message"`
 	StatusCode        string `json:"status_code"`
-}
-
-type StatusSignature struct {
-	OrderID     string
-	StatusCode  string
-	GrossAmount string
+	OrderID           string `json:"order_id"`
 }
 
 func MidtransSnap() *Midtrans {
@@ -146,10 +142,10 @@ func (m *Midtrans) Transaction() (*midtransResponse, error) {
 	return &httpRes, nil
 }
 
-func (m *Midtrans) CheckStatus(signatureMaterial *StatusSignature) (*midtransStatusResponse, error) {
+func (m *Midtrans) CheckStatus(orderID string) (*midtransStatusResponse, error) {
 	// deklarasi variable penting
 	var httpResponse midtransStatusResponse
-	endpoint := fmt.Sprintf("https://%s/v2/%s/status", m.APIDomain(), signatureMaterial.OrderID)
+	endpoint := fmt.Sprintf("https://%s/v2/%s/status", m.APIDomain(), orderID)
 
 	// make request
 	req, err := http.NewRequest("GET", endpoint, nil)

@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"time"
 
 	"github.com/smokers10/go-diagem.git/domain"
 )
@@ -25,10 +24,9 @@ func (ob *orderBayarRepository) Create(req *domain.OrderBayar, tx *sql.Tx) error
 }
 
 func (ob *orderBayarRepository) UpdateStatus(token string, status string) error {
-	now := time.Now().Local()
-	stmt, _ := ob.db.Prepare("UPDATE order_bayar SET status = ?, tgl_bayar = ? WHERE token = ?")
+	stmt, _ := ob.db.Prepare("UPDATE order_bayar SET status = ?, tgl_bayar = now() WHERE token = ?")
 	defer stmt.Close()
-	if _, err := stmt.Exec(status, now, token); err != nil {
+	if _, err := stmt.Exec(status, token); err != nil {
 		return err
 	}
 	return nil

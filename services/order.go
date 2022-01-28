@@ -2,7 +2,6 @@ package services
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -243,36 +242,49 @@ func (osc *orderService) ReadAll() *domain.Response {
 }
 
 func (osc *orderService) Detail(orderID string) *domain.Response {
-	res := domain.Response{}
-
+	// ambil detail order
 	order, err := osc.orderRepository.GetByID(orderID)
 	if err != nil {
 		fmt.Println(err)
-		res.Message = "error saat mengambil detail order"
-		res.Status = 500
-		return &res
+		return &domain.Response{
+			Message: "error saat mengambil data order detail",
+			Status:  500,
+		}
 	}
 
-	midtrans := etc.MidtransSnap()
-	status, err := midtrans.CheckStatus(&etc.StatusSignature{
-		StatusCode:  "200",
-		OrderID:     order.ID,
-		GrossAmount: strconv.Itoa(int(order.OrderBayar.Jumlah)),
-	})
+	// check apakah status pembayaran lunas atau belum
+	// jika belum lakukan request check status transaksi midtrans
+	if order.OrderBayar.Status != "settlement" {
+		midtrans, err := etc.MidtransSnap().CheckStatus(orderID)
+		if err != nil {
+			fmt.Println(err)
+			return &domain.Response{
+				Message: "error saat check status transaksi",
+				Status:  500,
+			}
+		}
 
-	if err != nil {
-		fmt.Println(err)
-		res.Message = "error saat mengambil status transaksi"
-		res.Status = 500
-		return &res
+		if midtrans.StatusCode != "404" {
+			// jika ada perubahan
+			if order.OrderBayar.Status != midtrans.TransactionStatus {
+				err := osc.orderBayarRepository.UpdateStatus(order.OrderBayar.Token, midtrans.TransactionStatus)
+				if err != nil {
+					fmt.Println(err)
+					return &domain.Response{
+						Message: "error update status transkasi",
+						Status:  500,
+					}
+				}
+			}
+		}
 	}
 
-	fmt.Println(status)
-
-	res.Data = order
-	res.Message = "detail order berhasil diambil"
-	res.Status = 200
-	return &res
+	return &domain.Response{
+		Message: "detail transaksi berhasil di ambil",
+		Success: true,
+		Data:    order,
+		Status:  200,
+	}
 }
 
 func (osc *orderService) UpdateStatus(orderID string, status string) *domain.Response {

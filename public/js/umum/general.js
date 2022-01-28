@@ -170,6 +170,60 @@ function getVariantPrice() {
     }
 }
 
+$(document).on('click', '#btn-buy-now', function () {
+    if (checkAddToCartValidity()) {
+        $.ajax({
+            type: "POST",
+            url: "/cart/add-to-cart",
+            data: $('#option-choice-form').serializeArray(),
+            beforeSend: function () {
+                Swal.fire({
+                    title: 'Tunggu Sebentar...',
+                    text: 'Data Sedang Di Proses!',
+                    imageUrl: '/img/loading.gif',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                })
+            },
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Produk Masuk Ke Kerajang',
+                    text: 'Tunggu Kami Arahkan Ke Proses selanjutnya ya :)',
+                    showConfirmButton: false,
+                    timer: 3000,                    
+                })
+                cart_count()
+                $('#addToCart').modal()
+                location.replace("/cart")
+            },
+            error: function (httpObj, textStatus, errorThrown) {
+                Swal.close()
+            }
+        })
+    } else {
+        var variant =[]
+        $(".product-variant").find('.product-label').each(function(index, obj){
+            variant.push($(this).text().toLocaleLowerCase())
+        })
+
+        var alertText = ''
+        if(variant.length > 1){
+            alertText = `Pilih ${ variant[0] } & ${ variant[1] } dulu, ya`
+        }else{
+            alertText = `Pilih ${ variant[0] } dulu, ya`
+        }
+
+        Swal.fire({
+            title: "Oops!",
+            text: alertText,
+            timer: 3000,
+            showConfirmButton: false,
+            icon: 'warning'
+        })
+    }
+})
+
 $(document).on('click', '#btn-add-cart', function () {
     if (checkAddToCartValidity()) {
         $.ajax({

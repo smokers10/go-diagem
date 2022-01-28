@@ -44,29 +44,6 @@
 
                         <div class="col-lg-9">
                             <div class="block block-bordered block-rounded block-shadow">
-                                <div class="block-header">
-                                    <ul class="nav nav-pills card-header-pills">
-                                        <li class="nav-item">
-                                            <a href="#" class="navigation-filter nav-link active">Semua</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="navigation-filter nav-link">Belum Dibayar</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="navigation-filter nav-link">Dikemas</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="navigation-filter nav-link">Dikirim</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="navigation-filter nav-link">Selesai</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="navigation-filter nav-link">Dibatalkan</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
                                 <div class="block-content block-content-full">
                                     <table class="table" style="width:100%" id="table-invoice">
                                         <thead>
@@ -79,9 +56,6 @@
                                                 <th scope="col"></th>
                                             </tr>
                                         </thead>
-                                        <tbody id="order-show">
-                                            
-                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -102,66 +76,113 @@
         <script src="/js/umum/general.js"></script>
         <script src="/js/functions.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
         <script>
             $(document).ready(function(){
-                $("#table-invoice").hide()
-                getPesanan()
+                $('#table-invoice').DataTable({
+                    "ajax":"/pesanan/get",
+                    "columns":[
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return data.invoice_no
+                            },
+                        },
 
-                $(".navigation-filter").click(function(){
-                    navigateFilter(this)
-                })
-            })
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return data.kurir
+                            },
+                        },
 
-            function navigateFilter(data) {
-                $(".navigation-filter").removeClass("active")
-                $(data).addClass("active")
-            }
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return data.tgl_order
+                            }
+                        },
 
-            function getPesanan() {
-                var displayArea = $("#order-show")
-                $.ajax({
-                    url: "/pesanan/get",
-                    success: function(res){
-                        if (res.data.length == 0) {
-                            $("#table-invoice").hide()
-                            displayArea.html(`
-                                <center>
-                                    <div class="height-380 py-5">
-                                        <img class="empty-img" src="/img/placeholder/empty.png">
-                                        <div>
-                                            <h3 class="font-size-24 font-weight-bold mt-5">Belum Ada Transaksi Yang Dilakukan</h3>
-                                            <p class="font-size-16">Daftar transaksi anda masih kosong. Yuk segera mulai belanja perhiasan di Diagem</p>
-                                        </div>
-                                    </div>
-                                </center>
-                            `)
-                        }else {
-                            $("#table-invoice").show()
-                            res.data.forEach(el => {
-                                $("#order-show").append(createPesananElement(el))
-                            })
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return data.status
+                            }
+                        },
+
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                var statusPembayaran = ""
+
+                                switch (data.order_bayar.status) {
+                                    case "pending":
+                                        statusPembayaran = "Menunggu Pembayaran" 
+                                        break;
+
+                                    case "capture":
+                                        statusPembayaran = `Telah Dibayar`
+                                        break;
+
+                                    case "settlement":
+                                        statusPembayaran = `Lunas`
+                                        break;
+
+                                    case "deny":
+                                        statusPembayaran = `Ditolak`
+                                    break;
+                                
+                                    case "cancel":
+                                        statusPembayaran = `Dibatalkan`
+                                    break;
+
+                                    case "expire":
+                                        statusPembayaran = `Kadaluarsa`
+                                    break;
+
+                                    case "failure":
+                                        statusPembayaran = `Gagal`
+                                    break;
+
+                                    case "chargeback":
+                                        statusPembayaran = `Sengketa`
+                                    break;
+
+                                    case "refund":
+                                        statusPembayaran = `Refund`
+                                    break;
+
+                                    case "partial_refund":
+                                        statusPembayaran = `Refund Sebagian`
+                                    break;
+
+                                    case "partial_chargeback":
+                                        statusPembayaran = `Sengketa Sebagian`
+                                    break;
+
+                                    default:
+                                        statusPembayaran = `authorize`
+                                        break;
+                                }
+
+
+                                return statusPembayaran
+                            }
+                        },
+
+                        {
+                            "data":null,
+                            "orderable":false,
+                            "render":function(data, type, row){
+                                return `<a href="/pesanan/invoice/${data.id}" class="btn btn-primary"> <b>Invoice</b>  </a>`
+                            }
                         }
-                    }
+                    ],
                 })
-            }
 
-            function createPesananElement(data) {
-                const {id, invoice_no, kurir, status, tgl_order, order_bayar} = data
-                return `
-                    <tr>
-                        <td>${invoice_no}</td>
-                        <td>${kurir}</td>
-                        <td>${tgl_order}</td>
-                        <td>${status}</td>
-                        <td>${order_bayar.status}</td>
-                        <td>
-                            <a href="/pesanan/invoice/${id}">
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
-                `
-            }
+                $("#table-invoice_filter").addClass("d-flex justify-content-end")
+            })
         </script>
     </body>
 </html>

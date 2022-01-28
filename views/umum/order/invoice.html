@@ -187,28 +187,60 @@
                         $("#total").text(toRupiah.format(jumlah))
 
                         switch (status_pembayaran) {
-                            case "belum lunas":
-                                statusPembayaran = `<div class="text-dark"><b>${status_pembayaran}</b></div>`
+                            case "pending":
+                                statusPembayaran = "Menunggu Pembayaran" 
                                 break;
 
-                            case "lunas":
-                                statusPembayaran = `<div class="text-success"><b>${status_pembayaran}</b></div>`
+                            case "capture":
+                                statusPembayaran = `Telah Dibayar`
                                 break;
 
-                            case "batal":
-                                statusPembayaran = `<div class="text-danger"><b>${status_pembayaran}</b></div>`
+                            case "settlement":
+                                statusPembayaran = `Lunas`
                                 break;
+
+                            case "deny":
+                                statusPembayaran = `Ditolak`
+                            break;
                         
+                            case "cancel":
+                                statusPembayaran = `Dibatalkan`
+                            break;
+
+                            case "expire":
+                                statusPembayaran = `Kadaluarsa`
+                            break;
+
+                            case "failure":
+                                statusPembayaran = `Gagal`
+                            break;
+
+                            case "chargeback":
+                                statusPembayaran = `Sengketa`
+                            break;
+
+                            case "refund":
+                                statusPembayaran = `Refund`
+                            break;
+
+                            case "partial_refund":
+                                statusPembayaran = `Refund Sebagian`
+                            break;
+
+                            case "partial_chargeback":
+                                statusPembayaran = `Sengketa Sebagian`
+                            break;
+
                             default:
-                                statusPembayaran = `<div class="text-warning"><b>${status_pembayaran}</b></div>`
+                                statusPembayaran = `authorize`
                                 break;
                         }
 
                         $("#pay-button").attr('token', token)
-                        status_pembayaran != "belum lunas" ? $("#pay-button").hide() : "" 
+                        status_pembayaran != "pending" ? $("#pay-button").hide() : "" 
 
                         $("#status-pesanan").html(`<b>${status}</b>`)
-                        $("#status-pembayaran").html(statusPembayaran)
+                        $("#status-pembayaran").html(`<div class="text-dark"><b>${statusPembayaran}</b></div>`)
 
                         order_item.forEach(el => {
                             $("#order-item-list").append(createOrderItemElement(el))

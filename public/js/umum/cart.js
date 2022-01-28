@@ -122,6 +122,7 @@ function load_cart(){
                             <i class="fa fa-plus mr-1"></i>Pilih Barang</a>
                     </div>
                 </div>`
+                $("#checkout-btn").hide()
             }
             $('#data-list').append(dataList)
         },
@@ -174,8 +175,9 @@ function deleteFromCart(el) {
                         showConfirmButton: false,
                         icon: 'success'
                     })
-                    load_cart()
-                    cart_count()
+                    setTimeout(() => {
+                        location.reload()
+                    }, 1500)
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error deleting data')
