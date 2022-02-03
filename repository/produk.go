@@ -60,7 +60,7 @@ func (p *produkRepositoryImpl) Read(filter *domain.ProdukFilter) ([]domain.Produ
 	kategori.nama, kategori.id, kategori.slug, produk.discount
 	FROM produk JOIN kategori ON kategori.id = produk.kategori_id 
 	WHERE produk.nama LIKE CONCAT('%', ?, '%') 
-	AND produk.kategori_id LIKE CONCAT('%', ?, '%') 
+	AND produk.kategori_id LIKE CONCAT('%', ?, '%')
 	AND produk.deleted = false ORDER BY ` + filter.ClarifyOrder.TableName + " " + filter.ClarifyOrder.OrderMethod
 
 	statement, err := p.db.Prepare(query)

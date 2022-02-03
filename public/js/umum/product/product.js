@@ -1,5 +1,5 @@
 $.ajax({
-    url: "/kategori/get",
+    url: "/produk/kategori",
     success: function(res) {
         const data = res.data
         data.forEach(el => {

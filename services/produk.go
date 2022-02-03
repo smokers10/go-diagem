@@ -210,21 +210,6 @@ func (p *produkServiceImpl) Read(filter *domain.ProdukFilter) *domain.Response {
 	return &res
 }
 
-func clarifyFilter(filter *domain.ProdukFilter) {
-	// sort by
-	switch filter.ShortBy {
-	case "harga-tertinggi":
-		filter.ClarifyOrder.TableName = "produk.harga"
-		filter.ClarifyOrder.OrderMethod = "DESC"
-	case "harga-terendah":
-		filter.ClarifyOrder.TableName = "produk.harga"
-		filter.ClarifyOrder.OrderMethod = "ASC"
-	default:
-		filter.ClarifyOrder.TableName = "produk.created_at"
-		filter.ClarifyOrder.OrderMethod = "DESC"
-	}
-}
-
 func (p *produkServiceImpl) Detail(id string) *domain.Response {
 	// dekalarasi var
 	res := domain.Response{}
@@ -285,4 +270,20 @@ func (p *produkServiceImpl) GetPopular() *domain.Response {
 	res.Success = true
 
 	return &res
+}
+
+// cralufy filter
+func clarifyFilter(filter *domain.ProdukFilter) {
+	// sort by
+	switch filter.ShortBy {
+	case "harga-tertinggi":
+		filter.ClarifyOrder.TableName = "produk.harga"
+		filter.ClarifyOrder.OrderMethod = "DESC"
+	case "harga-terendah":
+		filter.ClarifyOrder.TableName = "produk.harga"
+		filter.ClarifyOrder.OrderMethod = "ASC"
+	default:
+		filter.ClarifyOrder.TableName = "produk.created_at"
+		filter.ClarifyOrder.OrderMethod = "DESC"
+	}
 }

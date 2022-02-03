@@ -28,7 +28,6 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	promoController := user.PromoController()
 	mitraController := user.MitraController()
 	postController := user.PostController(resolver.BlogService)
-	kategoriController := user.KategoriController()
 	pesananController := user.OrderController()
 	resellerController := user.ResellerController()
 	resetPasswordController := user.ResetPasswordController(resolver.ResetPasswordService)
@@ -38,12 +37,12 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	alamatAPIController := userAPI.AlamatController(resolver.AlamatService)
 	profileAPIController := userAPI.ProfileController(resolver.UserService)
 	produkAPIController := userAPI.ProdukController(resolver.ProdukService)
-	kategoriAPIController := userAPI.KategoriController(resolver.KategoriService)
 	cartAPIController := userAPI.CartController(resolver.CartService)
 	checkoutAPIController := userAPI.CheckoutController(resolver.CheckoutService)
 	alamatOriginAPIController := userAPI.AlamatOriginController(resolver.AlamatOriginService)
 	orderAPIController := userAPI.OrderController(resolver.OrderService)
 	feedbackAPIController := userAPI.FeedbackController(resolver.FeedbackService)
+	kategoriAPIController := userAPI.KategoriController(resolver.KategoriService)
 	rajaongkirAPIController := userAPI.RajaOngkir(resolver.AlamatService)
 	sellerAPIController := userAPI.MitraController(resolver.MitraService)
 
@@ -110,6 +109,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	produk.Post("/get", produkAPIController.Read)
 	produk.Get("/get/:slug", produkAPIController.Detail)
 	produk.Get("/popular", produkAPIController.GetPopular)
+	produk.Get("/kategori", kategoriAPIController.Read)
 
 	// promo
 	promo := parentPath.Group("/promo")
@@ -127,18 +127,6 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	post.Get("/get", postController.GetAll)
 	post.Get("/get/:slug", postController.ReadBlog)
 	post.Get("/latest", postController.GetLatest)
-
-	// kategori
-	kategori := parentPath.Group("/kategori")
-	kategori.Get("/", kategoriController.IndexPage)
-
-	// kategori - API
-	kategori.Get("/get", kategoriAPIController.Read)
-
-	// index page
-	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {
-		return c.Render("home", nil)
-	})
 
 	// pesanan page
 	pesanan := parentPath.Group("/pesanan", middlewareStrict)
@@ -166,4 +154,9 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	// raja ongkir API
 	rajaongkirPath := parentPath.Group("/rajaongkir")
 	rajaongkirPath.Get("/kota", rajaongkirAPIController.Kota, middlewareStrict)
+
+	// index page
+	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {
+		return c.Render("home", nil)
+	})
 }
