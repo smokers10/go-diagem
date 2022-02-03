@@ -2,6 +2,7 @@ var toRupiah = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
 })
+
 $('#data-barang').DataTable({
     "ajax":"/admin/produk/get",
     "columns":[

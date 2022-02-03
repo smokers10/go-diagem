@@ -106,8 +106,6 @@ function load_content(){
                 let {produk_single_foto, nama, slug, harga, variasi, discount} = data
                 let {path} = produk_single_foto
                 let hargaText = ""
-                console.log(data)
-
                 if (typeof variasi == undefined || typeof variasi == "undefined") {
                     hargaText = toRupiah.format(harga)
                     el.append(createContentElement(path, slug, nama, hargaText, discount))
