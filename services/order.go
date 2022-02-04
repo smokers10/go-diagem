@@ -339,10 +339,10 @@ func (osc *orderService) Detail(orderID string) *domain.Response {
 	}
 }
 
-func (osc *orderService) UpdateStatus(orderID string, status string) *domain.Response {
+func (osc *orderService) UpdateSR(orderID string, status string, resi string) *domain.Response {
 	res := domain.Response{}
 
-	if err := osc.orderRepository.UpdateStatus(orderID, status); err != nil {
+	if err := osc.orderRepository.UpdateSR(orderID, status, resi); err != nil {
 		fmt.Println(err)
 		res.Message = "error saat update status order"
 		res.Status = 500

@@ -35,13 +35,13 @@ type OrderService interface {
 	Create(req *Order) *Response
 	ReadAll() *Response
 	Detail(orderID string) *Response
-	UpdateStatus(orderID string, status string) *Response
+	UpdateSR(orderID string, status string, resi string) *Response
 	ReadByUser(userID int) *Response
 }
 
 type OrderRepository interface {
 	Create(req *Order, tx *sql.Tx) error
-	UpdateStatus(orderID string, status string) error
+	UpdateSR(orderID string, status string, resi string) error
 	GetByID(orderID string) (*OrderDetail, error)
 	GetByUserID(userID int) ([]OrderDetail, error)
 	Read() ([]OrderDetail, error)

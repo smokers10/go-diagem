@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+        <title>Admin | Diagem</title>
+
+        <meta name="description" content="Diagem">
+        <meta name="author" content="Diagem">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Open Graph Meta -->
+        <meta property="og:title" content="Diagem">
+        <meta property="og:site_name" content="Diagem">
+        <meta property="og:description" content="Diagem">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+
+        <!-- Page JS Plugins CSS -->
+        <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+
+        <!-- Fonts, Styles and Codebase framework -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+        <link rel="stylesheet" id="css-main" href="/css/app.css">
+        <link rel="stylesheet" type="text/css" href="/js/plugins/bootstrap-daterangepicker/daterangepicker.css" />
+        <style>
+            #list-order_filter {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
+            <!-- Sidebar -->
+            {{template "partials/admin-sidebar" .}}
+            <!-- END Sidebar -->
+
+            <!-- Header -->
+            {{template "partials/admin-header" .}}
+            <!-- END Header -->
+
+            <!-- Main Container -->
+            <main id="main-container">
+                <!-- Page Content -->
+                <div class="content">
+                    <div class="row cols-xs-space cols-sm-space cols-md-space">
+                        <div class="col-lg-12">
+                            <div class="block block-bordered block-rounded block-shadow">
+                                <div class="block-header">
+                                    <h3>Invoice</h3>
+                                    <div class="d-flex justify-content-end">
+                                        <h5 id="invoice-no"></h5><br>
+                                    </div>
+                                </div>
+                                
+                                <div class="block-content block-content-full">
+                                    <!-- header inv -->
+                                    <div class="mb-5">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <table style="border: none !important;">
+                                                    <thead>
+                                                        <tr>
+                                                            <td class="col-3"></td>
+                                                            <td class="col-8"></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><b>Nama Penerima</b></td>
+                                                            <td id="nama-penerima"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Alamat Penerima</b></td>
+                                                            <td id="alamat-penerima"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Kontak Penerima</b></td>
+                                                            <td id="kotak-penerima"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Tgl Transaksi</b></td>
+                                                            <td id="buy-date"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end header inv -->
+
+                                    <!-- item -->
+                                    <h4>Item Belanja</h4>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Nama</th>
+                                                <th scope="col">Harga</th>
+                                                <th scope="col">Discount</th>
+                                                <th scope="col">Qty</th>
+                                                <th scope="col">Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="order-item-list">
+                                            
+                                        </tbody>
+                                    </table>
+                                    <!-- end item -->
+                                    
+                                    <!-- summary -->
+                                    <div class="row mt-5" style="margin-top: 40%;">
+                                        <div class="col-lg-8">
+                                        </div>
+
+                                        <div class="col-lg-4">
+                                            <h4>Rincian Belanja</h4>
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Subtotal</td>
+                                                        <td id="subtotal"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Ongkir</td>
+                                                        <td id="ongkir"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Total</td>
+                                                        <td id="total"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Status Pesanan</b></td>
+                                                        <td id="status-pesanan"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Status Pembayaran</b></td>
+                                                        <td id="status-pembayaran"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- end summary -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            </main>
+            <!-- END Main Container -->
+
+        
+
+            <!-- Footer -->
+            {{template "partials/admin-footer" .}}
+            <!-- END Footer -->
+        </div>
+        <script src="/js/laravel.app.js"></script>
+        <script src="/js/laroute.js"></script>
+        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+        <script src="/js/common.js"></script>
+        <script src="/js/functions.js"></script>
+        <script src="/js/plugins/moment/moment.min.js"></script>
+        <script src="/js/plugins/bootstrap-daterangepicker/daterangepicker.min.js"></script>
+        <script src="/js/admin/general.js"></script>
+        <script>
+            const currentPath = location.pathname
+            const CPSplit = currentPath.split("/")  
+            const id = CPSplit[4]
+
+            var toRupiah = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+            })
+
+            $(document).ready(function() {
+                $.ajax({
+                    url:`/admin/order/detail/get/${id}`,
+                    success: function (res) {
+                        const { alamat, order_item, order_bayar, user, invoice_no, ongkir, kurir, paket_kurir, status, tgl_order} = res.data
+                        const { alamat:alamat_penerima, kd_pos, nama_kota, nama_provinsi, penerima, phone } = alamat
+                        const { nama, email, hp } = user
+                        const { jumlah, status: status_pembayaran, token } = order_bayar
+                        var statusPembayaran = ""
+
+                        $("#invoice-no").text(`No. Invoice ${invoice_no}`)
+                        $("#buy-date").text(`Tanggal ${tgl_order}`)
+                        $("#nama-penerima").text(penerima)
+                        $("#alamat-penerima").text(`${alamat_penerima} ${nama_kota} ${nama_provinsi}`)
+                        $("#kotak-penerima").text(phone)
+                        $("#ongkir").text(toRupiah.format(ongkir))
+                        $("#total").text(toRupiah.format(jumlah))
+
+                        switch (status_pembayaran) {
+                            case "pending":
+                                statusPembayaran = "Menunggu Pembayaran" 
+                                break;
+
+                            case "capture":
+                                statusPembayaran = `Telah Dibayar`
+                                break;
+
+                            case "settlement":
+                                statusPembayaran = `Lunas`
+                                break;
+
+                            case "deny":
+                                statusPembayaran = `Ditolak`
+                            break;
+                        
+                            case "cancel":
+                                statusPembayaran = `Dibatalkan`
+                            break;
+
+                            case "expire":
+                                statusPembayaran = `Kadaluarsa`
+                            break;
+
+                            case "failure":
+                                statusPembayaran = `Gagal`
+                            break;
+
+                            case "chargeback":
+                                statusPembayaran = `Sengketa`
+                            break;
+
+                            case "refund":
+                                statusPembayaran = `Refund`
+                            break;
+
+                            case "partial_refund":
+                                statusPembayaran = `Refund Sebagian`
+                            break;
+
+                            case "partial_chargeback":
+                                statusPembayaran = `Sengketa Sebagian`
+                            break;
+
+                            default:
+                                statusPembayaran = `authorize`
+                                break;
+                        }
+                        $("#status-pesanan").html(`<b>${status}</b>`)
+                        $("#status-pembayaran").html(`<div class="text-dark"><b>${statusPembayaran}</b></div>`)
+                        order_item.forEach(el => {
+                            $("#order-item-list").append(createOrderItemElement(el))
+                        })
+                        calculateSubtotal(order_item)
+                    }
+                })
+
+                $.ajax({
+                    url:"/alamat-origin"
+                })
+            })
+
+            function createOrderItemElement(el) {
+                let { produk, variasi, quantity } = el
+                let { nama, harga, discount, is_has_variant } = produk
+                let { harga:harga_variasi, sku, variant } = variasi
+                let pengaliDiscount = discount / 100
+                var priceText = ""
+                var subtotal = ""
+
+                if (is_has_variant) {
+                    priceText = toRupiah.format(harga_variasi)
+
+                    if (discount > 0) {
+                        subtotal = toRupiah.format((harga_variasi - (harga_variasi*pengaliDiscount)) * quantity) 
+                    }else {
+                        subtotal = toRupiah.format(harga_variasi * quantity)
+                    }
+                }else {
+                    priceText = toRupiah.format(harga)
+
+                    if (discount) {
+                        subtotal = toRupiah.format((harga - (harga * pengaliDiscount)) * quantity)
+                    } else {
+                        subtotal = toRupiah.format(harga * quantity)
+                    }
+                }
+
+                return `
+                    <tr>
+                        <td>${nama} ${ is_has_variant ? `(${variant})`: ""}</td>
+                        <td>${priceText}</td>
+                        <td>${discount ? `${discount}%` : ''}</td>
+                        <td>${quantity}</td>
+                        <td>${subtotal}</td>
+                    </tr>
+                `
+            }
+
+            function calculateSubtotal(orderItem) {
+                let total = 0
+                
+                orderItem.forEach(el => {
+                    let { produk, variasi, quantity } = el
+                    let { harga, discount, is_has_variant } = produk
+                    let { harga:harga_variasi} = variasi
+                    let pengaliDiscount = discount / 100
+
+                    if (is_has_variant) {
+                        if (discount > 0) {
+                            subtotal = harga_variasi - (harga_variasi * pengaliDiscount)
+                            total = total + subtotal
+                        }else {
+                            subtotal = harga_variasi * quantity
+                            total = total + subtotal
+                        }
+                    }else {
+                        if (discount) {
+                            subtotal = harga - (harga * pengaliDiscount)
+                            total = total + subtotal
+                        } else {
+                            subtotal = harga * quantity
+                            total = total + subtotal
+                        }
+                    }
+                })
+
+                $("#subtotal").text(toRupiah.format(total))
+            }
+
+            
+        </script>
+    </body>
+</html>

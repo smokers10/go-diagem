@@ -29,14 +29,14 @@ func (or *orderRepository) Create(req *domain.Order, tx *sql.Tx) error {
 	return nil
 }
 
-func (or *orderRepository) UpdateStatus(orderID string, status string) error {
+func (or *orderRepository) UpdateSR(orderID string, status string, resi string) error {
 	c := context.Background()
 	tx, err := or.db.BeginTx(c, nil)
 	if err != nil {
 		return err
 	}
 
-	stmt, err := tx.Prepare("UPDATE order_checkout SET status = ? WHERE id = ?")
+	stmt, err := tx.Prepare("UPDATE order_checkout SET status = ?, no_resi = ? WHERE id = ?")
 	if err != nil {
 		tx.Rollback()
 		return err

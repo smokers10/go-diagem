@@ -18,11 +18,12 @@ func (oc *orderController) Read(c *fiber.Ctx) error {
 	return c.Status(response.Status).JSON(response)
 }
 
-func (oc *orderController) UpdateStatus(c *fiber.Ctx) error {
+func (oc *orderController) UpdateSR(c *fiber.Ctx) error {
 	orderID := c.FormValue("order_id")
 	status := c.FormValue("status")
+	no_resi := c.FormValue("resi")
 
-	response := oc.orderService.UpdateStatus(orderID, status)
+	response := oc.orderService.UpdateSR(orderID, status, no_resi)
 	return c.Status(response.Status).JSON(response)
 }
 

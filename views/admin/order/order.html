@@ -53,7 +53,7 @@
                                     <tr>
                                         <th scope="col">No Invoice</th>
                                         <th scope="col">Kurir</th>
-                                        <th scope="col">Tanggal Dipesan</th>
+                                        <th scope="col">Tgl Pesanan</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Pembayaran</th>
                                         <th scope="col">Pelanggan</th>
@@ -67,6 +67,44 @@
                 <!-- END Page Content -->
             </main>
             <!-- END Main Container -->
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Status Pemesanan & Resi Kurir</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="selected_transaction" id="selected_transaction">
+                                <div class="form-group">
+                                    <label for="status_pemesanan">Status Pemesanan</label>
+                                    <select name="status_pemesanan" id="status_pemesanan" class="form-control">
+                                        <option value="dipesan">Di Pesan</option>
+                                        <option value="dikonfirmasi">Di Konfirmasi</option>
+                                        <option value="dikirim">di Kirim</option>
+                                        <option value="selesai">Selesai</option>
+                                        <option value="batal">Batal</option>
+                                        <option value="dikemas">Di Kemas</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="no_resi">No Resi Kurir</label>
+                                    <input type="text" id="no_resi" class="form-control">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="sr-submit">Simpan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal -->
 
             <!-- Footer -->
             {{template "partials/admin-footer" .}}
@@ -187,14 +225,40 @@
                             "data":null,
                             "orderable":false,
                             "render":function(data, type, row){
-                                return `<a href="/pesanan/invoice/${data.id}" class="btn btn-primary"> <b>Invoice</b>  </a>`
+                                return `
+                                <div class="dropdown show">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Aksi
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="/admin/order/detail/${data.id}">Lihat Detail</a>
+                                        <button class="dropdown-item" onclick="showStatusAndNoResiModal('${data.id}')">Ganti Status & Resi</button>
+                                    </div>
+                                </div>
+                                `
                             }
                         }
                     ],
                 })
 
                 $("#table-invoice_filter").addClass("d-flex justify-content-end")
+
+                $("#sr-submit").click(function(e) {
+                    const data = {
+                        order_id : $("#selected_transaction").val(),
+                        status : $("#status_pemesanan").val(),
+                        resi : $("#no_resi").val()
+                    }
+                    console.log(data)
+                })
             })
+
+            function showStatusAndNoResiModal (id) {
+                $("#selected_transaction").val(id)
+                $("#exampleModal").modal("show")
+                $("#status-and-resi").trigger("reset")
+            }
         </script>
     </body>
 </html>

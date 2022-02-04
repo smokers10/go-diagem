@@ -142,9 +142,10 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	// order
 	order := adminParentPath.Group("/order", middleware.AdminWeb(session, "admin", "super admin"))
 	order.Get("/", orderController.IndexPage)
+	order.Get("/detail/:id", orderController.DetailPage)
 	order.Get("/get", orderAPIController.Read)
-	order.Put("/update-state", orderAPIController.UpdateStatus)
-	order.Get("/detail/:id", orderAPIController.DetailOrder)
+	order.Put("/update-sr", orderAPIController.UpdateSR)
+	order.Get("/detail/get/:order_id", orderAPIController.DetailOrder)
 
 	// promo
 	promo := adminParentPath.Group("/promo", middleware.AdminWeb(session, "admin", "super admin"))
