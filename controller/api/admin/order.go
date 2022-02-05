@@ -19,11 +19,18 @@ func (oc *orderController) Read(c *fiber.Ctx) error {
 }
 
 func (oc *orderController) UpdateSR(c *fiber.Ctx) error {
-	orderID := c.FormValue("order_id")
-	status := c.FormValue("status")
-	no_resi := c.FormValue("resi")
+	type request struct {
+		OrderID string `form:"order_id"`
+		Status  string `form:"status"`
+		Resi    string `form:"resi"`
+	}
+	req := request{}
 
-	response := oc.orderService.UpdateSR(orderID, status, no_resi)
+	if err := c.BodyParser(&req); err != nil {
+		panic(err)
+	}
+
+	response := oc.orderService.UpdateSR(req.OrderID, req.Status, req.Resi)
 	return c.Status(response.Status).JSON(response)
 }
 

@@ -78,11 +78,12 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+                        <form action="#" id="form-sr">
                             <div class="modal-body">
-                                <input type="hidden" name="selected_transaction" id="selected_transaction">
+                                <input type="hidden" name="order_id" id="order_id">
                                 <div class="form-group">
-                                    <label for="status_pemesanan">Status Pemesanan</label>
-                                    <select name="status_pemesanan" id="status_pemesanan" class="form-control">
+                                    <label for="status">Status Pemesanan</label>
+                                    <select name="status" id="status" class="form-control">
                                         <option value="dipesan">Di Pesan</option>
                                         <option value="dikonfirmasi">Di Konfirmasi</option>
                                         <option value="dikirim">di Kirim</option>
@@ -93,14 +94,15 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="no_resi">No Resi Kurir</label>
-                                    <input type="text" id="no_resi" class="form-control">
+                                    <label for="resi">No Resi Kurir</label>
+                                    <input type="text" id="resi" name="resi" class="form-control">
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-primary" id="sr-submit">Simpan</button>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -245,17 +247,45 @@
                 $("#table-invoice_filter").addClass("d-flex justify-content-end")
 
                 $("#sr-submit").click(function(e) {
-                    const data = {
-                        order_id : $("#selected_transaction").val(),
-                        status : $("#status_pemesanan").val(),
-                        resi : $("#no_resi").val()
-                    }
-                    console.log(data)
+                    var formData = new FormData($('#form-sr')[0])
+                    $.ajax({
+                        url: "/admin/order/update-sr",
+                        type:"put",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function(){
+                            Swal.fire({
+                                title: 'Tunggu Sebentar...',
+                                text: '',
+                                imageUrl: '/img/loading.gif',
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                            })
+                        },
+                        success: function () {
+                            Swal.fire({
+                                title: `Berhasil!`,
+                                showConfirmButton: false,
+                                icon: 'success',
+                                text: 'status dan no resi berhasil disimpan',
+                                timer: 3000,
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                            })
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            Swal.close()
+                            alert('Error adding / update data')
+                        }
+                    })
                 })
             })
 
             function showStatusAndNoResiModal (id) {
-                $("#selected_transaction").val(id)
+                $("#order_id").val(id)
                 $("#exampleModal").modal("show")
                 $("#status-and-resi").trigger("reset")
             }

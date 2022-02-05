@@ -43,7 +43,7 @@ func (or *orderRepository) UpdateSR(orderID string, status string, resi string) 
 	}
 	defer stmt.Close()
 
-	if _, err := stmt.Exec(status, orderID); err != nil {
+	if _, err := stmt.Exec(status, resi, orderID); err != nil {
 		tx.Rollback()
 		return err
 	}
