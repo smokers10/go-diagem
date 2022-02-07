@@ -23,8 +23,9 @@ type UserBasicData struct {
 }
 
 type UserCredential struct {
-	Email    string `json:"email,omitempty" form:"email"`
-	Password string `json:"password,omitempty" form:"password"`
+	Email            string `json:"email,omitempty" form:"email"`
+	Password         string `json:"password,omitempty" form:"password"`
+	RechaptaResponse string `json:"g-recaptcha-response,omitempty" form:"g-recaptcha-response"`
 }
 
 type UserService interface {

@@ -27,9 +27,7 @@
         <!-- Fonts and Codebase framework -->
         <link rel="stylesheet" id="css-main" href="/css/app.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
-
-        <style>
-        </style>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
     <body class="bg-white">
         <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
@@ -50,26 +48,32 @@
                                             <h2 class="font-weight-bold mb-0">Masuk Ke Akun Kamu</h2>
                                             <p>Belum punya akun? <a href="/register">Daftar</a> di sini</p>
                                         </div>
+                                        
                                         <form id="form-login" onsubmit="return false;">
                                             <div class="form-group">
                                                 <label class="form-label" for="field_login-email">Alamat Email
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="text" class="form-control" name="email" id="field_login-email" placeholder="Masukan Alamat Email">
+                                                <input type="text" class="form-control" name="email" id="field_login-email" placeholder="Masukan Alamat Email" required>
                                                 <div class="invalid-feedback" id="error_login-email"></div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="form-label" for="field_login-password">Password
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <input type="password" class="form-control" name="password" id="field_login-password" placeholder="Masukan Password">
+                                                <input type="password" class="form-control" name="password" id="field_login-password" placeholder="Masukan Password" required>
                                                 <div class="invalid-feedback" id="error_login-password"></div>
                                             </div>
+
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-primary btn-block">
+                                                <div class="g-recaptcha" data-sitekey="6Ld-PmIeAAAAAKob8rasv2a-NCsMH7XVAT5Jsxbu"></div>
+                                                <br>
+                                                <input type="submit" class="btn btn-primary btn-block">
                                                     Masuk Sekarang
-                                                </button>
+                                                </input>
                                             </div>
+
                                             <div class="form-group row mb-2">
                                                 <div class="col-sm-6 d-sm-flex align-items-center">
                                                     <div class="custom-control custom-checkbox mr-auto ml-0 mb-0">
@@ -102,5 +106,11 @@
         <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="/js/umum/auth/login.js"></script>
         <script src="/js/functions.js"></script>
+        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+        <script type="text/javascript">
+            var onloadCallback = function() {
+              alert("grecaptcha is ready!")
+            }
+        </script>
     </body>
 </html>

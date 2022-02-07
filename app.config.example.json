@@ -31,6 +31,8 @@
 
     "etc" : {
         "midtrans_server_key" : "",
-        "rajaongkir_api_key" : ""
+        "rajaongkir_api_key" : "",
+        "rechapta_server_key" : "",
+        "rechapta_site_key" : ""
     }
 }

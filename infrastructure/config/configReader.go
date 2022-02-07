@@ -44,6 +44,8 @@ type SMTP struct {
 type ETC struct {
 	Midtrans_Server_key string `json:"midtrans_server_key"`
 	Rajaongkir_API_Key  string `json:"rajaongkir_api_key"`
+	RechaptaServerKey   string `json:"rechapta_server_key"`
+	RechaptaSiteKey     string `json:"rechapta_site_key"`
 }
 
 func ReadConfig() *configurationScheme {

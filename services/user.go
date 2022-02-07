@@ -1,16 +1,25 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/smokers10/go-diagem.git/domain"
+	"github.com/smokers10/go-diagem.git/infrastructure/config"
 	"github.com/smokers10/go-diagem.git/infrastructure/encryption"
 	"github.com/smokers10/go-diagem.git/infrastructure/jwt"
 )
 
 type userServiceImpl struct {
 	userRepository domain.UserRepository
+}
+
+type chaptacheck struct {
+	Success     bool   `json:"success"`
+	ChallengeTS string `json:"challenge_ts"`
 }
 
 func UserService(user *domain.UserRepository) domain.UserService {
@@ -58,6 +67,23 @@ func (u *userServiceImpl) Detail(id int) *domain.Response {
 func (u *userServiceImpl) Login(cred *domain.UserCredential) *domain.Response {
 	res := domain.Response{}
 	payload := jwt.Payload{}
+
+	// verifikasi chapta
+	cresult, err := u.verifyChapta(cred.RechaptaResponse)
+	if err != nil {
+		fmt.Println(err)
+		return &domain.Response{
+			Message: "Error saat check chapta",
+			Status:  500,
+		}
+	}
+
+	if !cresult.Success {
+		return &domain.Response{
+			Message: "Silahkan checklist chapta terlebih dahulu",
+			Status:  http.StatusUnauthorized,
+		}
+	}
 
 	// check user
 	user, err := u.userRepository.ByEmail(cred.Email)
@@ -187,4 +213,29 @@ func (u *userServiceImpl) GetProfile(userID int) *domain.Response {
 	res.Status = http.StatusOK
 	res.Success = true
 	return &res
+}
+
+func (a *userServiceImpl) verifyChapta(chaptaResponse string) (*chaptacheck, error) {
+	// deklarasi var penting
+	r := &chaptacheck{}
+	c := config.ReadConfig().ETC
+	u := "https://www.google.com/recaptcha/api/siteverify"
+
+	// request HTTP dimulai
+	resp, err := http.PostForm(u, url.Values{"secret": {c.RechaptaServerKey}, "response": {chaptaResponse}})
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// read body ke penyimpanan sementara (RAM)
+	resBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// unmarshal response body dari json ke struct
+	json.Unmarshal(resBody, r)
+
+	return r, nil
 }

@@ -39,6 +39,7 @@ func (a *authenticationController) Login(c *fiber.Ctx) error {
 		panic(err)
 	}
 
+	// mulai logik login
 	response := a.userService.Login(&credential)
 
 	if response.Success {
