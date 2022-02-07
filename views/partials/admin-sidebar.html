@@ -127,8 +127,66 @@
     <!-- Sidebar Content -->
 </nav>            
 
+<!-- show menu by user type -->
 <script>
-    // get current URL path
+    // get element
+    const beranda = document.getElementById("beranda-submenu"),
+    blog = document.getElementById("blog-submenu"),
+    produk = document.getElementById("produk-submenu"),
+    order = document.getElementById("order-submenu"),
+    promo = document.getElementById("promo-submenu"),
+    userAdmin = document.getElementById("user-administratif-submenu"),
+    reseller = document.getElementById("reseller-submenu"),
+    keuangan = document.getElementById("keuangan-submenu"),
+    slider = document.getElementById("slider-submenu"),
+    alamatOrigin = document.getElementById("alamat-origin-submenu")
+
+    // get localstorage
+    const storage = JSON.parse(localStorage.getItem("logged"))
+
+    if (storage.roles == "super admin") {
+        beranda.style.display = "block"
+        blog.style.display = "block"
+        produk.style.display = "block"
+        order.style.display = "block"
+        promo.style.display = "block"
+        userAdmin.style.display = "block"
+        reseller.style.display = "block"
+        keuangan.style.display = "block"
+        slider.style.display = "block"
+        alamatOrigin.style.display = "block"
+    }
+
+    if (storage.roles == "admin") {
+        beranda.style.display = "block"
+        blog.style.display = "block"
+        produk.style.display = "none"
+        order.style.display = "block"
+        promo.style.display = "none"
+        userAdmin.style.display = "none"
+        reseller.style.display = "block"
+        keuangan.style.display = "block"
+        slider.style.display = "none"
+        alamatOrigin.style.display = "none"
+    }
+
+    if (storage.roles == "marketing") {
+        beranda.style.display = "block"
+        blog.style.display = "block"
+        produk.style.display = "block"
+        order.style.display = "none"
+        promo.style.display = "block"
+        userAdmin.style.display = "none"
+        reseller.style.display = "none"
+        keuangan.style.display = "none"
+        slider.style.display = "block"
+        alamatOrigin.style.display = "none"
+    }
+
+</script>
+
+<!-- interactive sidebar -->
+<script>
     const pathname = location.pathname
     const pathnameSplit = pathname.split("/")
     const parentPath = pathnameSplit[1]

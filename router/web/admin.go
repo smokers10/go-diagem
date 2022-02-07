@@ -80,7 +80,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	mitra.Delete("/delete", mitraAPIController.Delete)
 
 	// slider
-	slider := adminParentPath.Group("/slider", middleware.AdminWeb(session, "admin", "super admin"))
+	slider := adminParentPath.Group("/slider", middleware.AdminWeb(session, "marketing", "super admin"))
 	// slider page
 	slider.Get("/", sliderController.IndexPage)
 	slider.Get("/tambah", sliderController.TambahPage)
@@ -101,7 +101,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	keuangan.Get("/get", bankAPIController.Read)
 
 	// produk
-	produk := adminParentPath.Group("/produk", middleware.AdminWeb(session, "admin", "super admin"))
+	produk := adminParentPath.Group("/produk", middleware.AdminWeb(session, "marketing", "super admin"))
 	// produk - page
 	produk.Get("/", produkController.IndexPage)
 	produk.Get("/tambah", produkController.TambahPage)
@@ -125,7 +125,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	varian.Delete("/", varianAPIController.Delete)
 
 	// kategori
-	kategori := adminParentPath.Group("/kategori", middleware.AdminWeb(session, "admin", "super admin"))
+	kategori := adminParentPath.Group("/kategori", middleware.AdminWeb(session, "marketing", "super admin"))
 	// produk kategori - page
 	kategori.Get("/", produkController.KategoriPage)
 	kategori.Get("/tambah", produkController.KategoriTambahPage)
@@ -148,7 +148,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	order.Get("/detail/get/:order_id", orderAPIController.DetailOrder)
 
 	// promo
-	promo := adminParentPath.Group("/promo", middleware.AdminWeb(session, "admin", "super admin"))
+	promo := adminParentPath.Group("/promo", middleware.AdminWeb(session, "marketing", "super admin"))
 	// promo page
 	promo.Get("/", promoController.IndexPage)
 	promo.Get("/tambah", promoController.TambahPage)
@@ -163,7 +163,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	promo.Delete("/delete", promoAPIController.Delete)
 
 	// user administratif
-	userAdministratif := adminParentPath.Group("/user-administratif", middleware.AdminWeb(session, "admin", "super admin"))
+	userAdministratif := adminParentPath.Group("/user-administratif", middleware.AdminWeb(session, "super admin"))
 	// user adminsitratif page
 	userAdministratif.Get("/", userAdministratifController.IndexPage)
 	userAdministratif.Get("/tambah", userAdministratifController.TambahPage)
@@ -178,7 +178,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	userAdministratif.Delete("/delete", userAdminController.Delete)
 
 	// user
-	user := adminParentPath.Group("/user", middleware.AdminWeb(session, "admin", "super admin", "marketing"))
+	user := adminParentPath.Group("/user", middleware.AdminWeb(session, "super admin", "marketing"))
 	// user page
 	user.Get("/", userController.IndexPage)
 	user.Get("/profile/:id", userController.DetailPage)
