@@ -133,7 +133,7 @@ function load_content(target, order, limit){
                                 <img src="${ element.produk_single_foto.path }" class="img-fluid"/>
                             </div>
                             <div class="product-info">
-                                <div class="product-title"><a href="${ laroute.route('product.detail', { produk : element.slug }) }">${ element.nama }</a></div>
+                                <div class="product-title"><a href="/produk/detail/${slug}">${ element.nama }</a></div>
                                 <div class="product-price">${ element.harga }</div>
                             </div>
                         </div>
@@ -193,7 +193,7 @@ function createProdukElement(path, slug, nama, textHarga, discount) {
                             <img src="${ path }" class="img-fluid"/>
                         </div>
                         <div class="product-info">
-                            <div class="product-title"><a href="${ laroute.route('product.detail', { produk : slug }) }">${ nama }</a></div>
+                            <div class="product-title"><a href="/produk/detail/${slug}">${ nama }</a></div>
                             <div class="product-price">${ textHarga }</div>
                             ${
                                 discount ? `<b> discount <span class="product-price__discount" id="besaran-discount">${discount}%</span></b>` : ``
