@@ -13,7 +13,7 @@ $.ajax({
         $("#field-type").val(type)
         $("#field-link").val(url)
         $("#field-deskripsi").summernote("pasteHTML", description)
-        image ? $("#img_preview").attr("src", "/"+image.split("public/")[1]) : $("#img_preview").attr("src","/img/slider.png")
+        image ? $("#thumbnail").attr("src", "/"+image.split("public/")[1]) : $("#thumbnail").attr("src","/img/slider.png")
         is_publish ? $("#status_publikasi").prop("checked", true) : $("#status_draft").prop("checked", true)
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -23,120 +23,58 @@ $.ajax({
 })
 
 jQuery(document).ready(function () {
-    var croppie = null
-    var el = document.getElementById('resizer')
-
-    $.getImage = function(input, croppie) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader()
-            reader.onload = function(e) {
-                croppie.bind({
-                    url: e.target.result,
-                })
-            }
-            reader.readAsDataURL(input.files[0])
+    // upload thumbnails
+    const thumbnails = $('#thumbnail-upload')
+    thumbnails.change(function () {
+        var file = thumbnails.prop('files')[0]
+        var reader = new FileReader()
+        reader.onloadend = function() {
+            $("#thumbnail").attr('src', reader.result)
+            let src = reader.result
+            let base64 = src.split(";base64,")[1]
+            let filetype = src.split(";base64,")[0]
+            let format = filetype.split("data:image/")[1]
+            const data = JSON.stringify({
+                id: sliderID,
+                sampul: {base64,format},
+            })
+            $.ajax({
+                id: sliderID,
+                url:"/admin/slider/update-cover",
+                type:"PUT",
+                data,
+                dataType: "json",
+                contentType: "application/json",
+                beforeSend: function(){
+                    Swal.fire({
+                        title: 'Tunggu Sebentar...',
+                        text: 'Data Sedang Diproses!',
+                        imageUrl:'/img/loading.gif',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                    })
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: `Berhasil!`,
+                        text: 'Sampul Slider Diperbaharui',
+                        timer: 3000,
+                        showConfirmButton: false,
+                        icon: 'success',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    })
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Swal.close()
+                    alert('Error adding / update data')
+                }
+            })
         }
-    }
-
-    $("#file-upload").on("change", function(event) {
-        $("#cropModal").modal()
-        croppie = new Croppie(el, {
-            viewport: {
-                width: 700,
-                height: 332,
-                type: 'square'
-            },
-            original : {
-                width: 700,
-                height: 332,
-                type: 'square'
-            },
-            boundary: {
-                width: 730,
-                height: 376,
-            },
-            enableOrientation: true
-        })
-        $.getImage(event.target, croppie)
+        reader.readAsDataURL(file)
     })
 
-    $("#sampulSave").on("click", function() {
-        croppie.result({
-            type: 'base64',
-            size: 'original',
-			format:'jpeg',
-			size: { width: 1376, height: 652 }
-        }).then(function(base64result) {
-            $("#cropModal").modal("hide")
-            $("#img_preview").attr("src", base64result)
-            $("#image").val(base64result)
-            if($("#method").val() == "update") {
-                let base64 = base64result.split(";base64,")[1]
-                let filetype = base64result.split(";base64,")[0]
-                let format = filetype.split("data:image/")[1]
-                let data = JSON.stringify({
-                    id: sliderID,
-                    sampul: {base64,format},
-                })
-
-                $.ajax({
-                    url: "/admin/slider/update-cover",
-                    type: "put",
-                    data,
-                    dataType: "json",
-                    contentType: "application/json",
-                    beforeSend: function(){
-                        Swal.fire({
-                            title: 'Tunggu Sebentar...',
-                            text: 'Data Sedang Diproses!',
-                            imageUrl:'/img/loading.gif',
-                            showConfirmButton: false,
-                            allowOutsideClick: false,
-                        })
-                    },
-                    success: function (response) {
-                        Swal.close()
-                        $('.is-invalid').removeClass('is-invalid')
-                        if (response.success) {
-                            $('#modal_embed').modal('hide')
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Sampul Berhasil Diupdate',
-                                showConfirmButton: false,
-                                timer: 1500
-                              })
-                        } else {
-                            Swal.close()
-                            for (control in response.errors) {
-                                $('#field-' + control).addClass('is-invalid')
-                                $('#error-' + control).html(response.errors[control])
-                                $.notify({
-                                    icon: 'fa fa-times',
-                                    message: response.errors[control]
-                                },{
-                                    delay: 7000,
-                                    type: 'danger'
-                                })
-                            }
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        Swal.close()
-                        alert('Error adding / update data')
-                    }
-                })
-            }
-        })
-    })
-
-    $(".rotate").on("click", function() {
-        croppie.rotate(parseInt($(this).data('deg')))
-    })
-
-    $('#cropModal').on('hidden.bs.modal', function (e) {
-        setTimeout(function() { croppie.destroy() }, 100)
-    })
-
+    // inisiasi summernote
     $('#field-deskripsi').summernote({
         height: '250px',
         toolbar: [
@@ -150,10 +88,10 @@ jQuery(document).ready(function () {
         ]
     })
 
+    // submit
     $("#form-slide").on('submit', function (e) {
         e.preventDefault()
         var url, type;
-
         if($('#method').val() === 'update'){
             url = "/admin/slider/update"
             type = "PUT"
@@ -162,7 +100,7 @@ jQuery(document).ready(function () {
             type = "POST"
         }
 
-        let src = $("#img_preview").attr("src")
+        let src = $("#thumbnail").attr("src")
         const base64 = src.split(";base64,")[1]
         const filetype = src.split(";base64,")[0]
         const format = filetype.split("data:image/")[1]
@@ -196,7 +134,6 @@ jQuery(document).ready(function () {
             },
             success: function (response) {
                 Swal.close()
-                $('.is-invalid').removeClass('is-invalid')
                 if (response.success) {
                     $('#modal_embed').modal('hide')
                     Swal.fire({

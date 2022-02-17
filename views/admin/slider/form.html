@@ -39,7 +39,6 @@
 
             <!-- Main Container -->
             <main id="main-container">
-
                 <!-- Page Content -->
                 <div class="content">
                     <form id="form-slide" onsubmit="return false;" enctype="multipart/form-data">
@@ -98,12 +97,12 @@
                                             <label class="col-12">Thumbnail</label>
                                             <div class="col-lg-12">
                                                 <div class="text-center">
-                                                    <img id="img_preview" src="/img/slider.png" width="100%">
+                                                    <img id="thumbnail" src="/img/slider.png" width="100%">
                                                 </div>
                                                 <div class="text-danger" id="error-foto"></div>
                                                 <div class="btn btn-primary btn-block mt-15">
                                                     <input type="hidden" id="featured_img" name="featured_img" value="">
-                                                    <input type="file" class="file-upload" id="file-upload" accept="image/*">
+                                                    <input type="file" class="file-upload" id="thumbnail-upload" accept="image/*">
                                                     Pilih Foto
                                                 </div>
                                             </div>
@@ -115,45 +114,8 @@
                     </form>
                 </div>
                 <!-- END Page Content -->
-
             </main>
             <!-- END Main Container -->
-
-            <!-- crop modal -->
-            <div class="modal" id="cropModal">
-                <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="block-header block-header-default">
-                            <h3 class="block-title modal-title">Potong & Sesuaikan Sampul</h3>
-                            <div class="block-options">
-                                <button type="button" class="close btn-primary" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">
-                                        <i class="fa fa-times-circle"></i>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="block-content pb-15">
-                            <div id="resizer"></div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <button class="btn btn-info rotate btn-block text-center" data-deg="90">
-                                        <i class="fa fa-undo"></i>
-                                    </button>
-                                </div>
-                                <div class="col-md-3">
-                                    <button class="btn btn-info rotate btn-block text-center" data-deg="-90" >
-                                    <i class="fa fa-redo"></i></button>
-                                </div>
-                                <div class="col-md-6">
-                                    <button class="btn btn-primary btn-block" id="sampulSave">Potong Dan Simpan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END crop modal -->
 
             <!-- Footer -->
             {{template "partials/admin-footer" .}}

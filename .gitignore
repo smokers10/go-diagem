@@ -16,3 +16,6 @@
 
 #configuration files
 app.config.json
+
+# public uploads
+public/uploads
