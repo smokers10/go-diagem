@@ -142,8 +142,8 @@
                                                         </div>
                                                         <input type="hidden" name="image" id="image">
                                                         <div class="btn btn-primary btn-block">
-                                                            <input type="file" class="file-upload" id="file-upload" accept="image/*">
-                                                            Pilih Foto
+                                                            <input type="file" class="file-upload" id="file-upload" accept="image/*" onchange="coverUpdate(this)">
+                                                            Ubah Foto
                                                         </div>
                                                     </div>
                                                 </div>
@@ -160,42 +160,6 @@
 
             </main>
             <!-- END Main Container -->
-
-            <!-- crop modal -->
-            <div class="modal" id="cropModal">
-                <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="block-header block-header-default">
-                            <h3 class="block-title modal-title">Potong & Sesuaikan Sampul</h3>
-                            <div class="block-options">
-                                <button type="button" class="close btn-primary" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">
-                                        <i class="fa fa-times-circle"></i>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="block-content pb-15">
-                            <div id="resizer"></div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <button class="btn btn-info rotate btn-block text-center" data-deg="90">
-                                        <i class="fa fa-undo"></i>
-                                    </button>
-                                </div>
-                                <div class="col-md-3">
-                                    <button class="btn btn-info rotate btn-block text-center" data-deg="-90" >
-                                    <i class="fa fa-redo"></i></button>
-                                </div>
-                                <div class="col-md-6">
-                                    <button class="btn btn-primary btn-block" id="sampulSave">Potong Dan Simpan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END crop modal -->
             
             <!-- Footer -->
             {{template "partials/admin-footer" .}}
@@ -250,119 +214,7 @@
             })
 
             jQuery(document).ready(function () {
-                var croppie = null
-                var el = document.getElementById('resizer')
                 moment.locale('id')
-
-                $.getImage = function(input, croppie) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader()
-                        reader.onload = function(e) {
-                            croppie.bind({
-                                url: e.target.result,
-                            })
-                        }
-                        reader.readAsDataURL(input.files[0])
-                    }
-                }
-
-                $("#file-upload").on("change", function(event) {
-                    $("#cropModal").modal()
-                    croppie = new Croppie(el, {
-                        viewport: {
-                            width: 700,
-                            height: 332,
-                            type: 'square'
-                        },
-                        original : {
-                            width: 700,
-                            height: 332,
-                            type: 'square'
-                        },
-                        boundary: {
-                            width: 730,
-                            height: 376,
-                        },
-                        enableOrientation: true
-                    })
-                    $.getImage(event.target, croppie)
-                })
-
-                $("#sampulSave").on("click", function() {
-                    croppie.result({
-                        type: 'base64',
-                        size: 'original',
-                        format:'jpeg',
-                        size: { width: 1376, height: 652 }
-                    }).then(function(base64result) {
-                        $("#cropModal").modal("hide")
-                        $("#img_preview").attr("src", base64result)
-                        $("#image").val(base64result)
-
-                        let base64 = base64result.split(";base64,")[1]
-                        let filetype = base64result.split(";base64,")[0]
-                        let format = filetype.split("data:image/")[1]
-                        let data = JSON.stringify({
-                            id: $("#id-blog").val(),
-                            thumbnail: {base64,format},
-                        })
-
-                        $.ajax({
-                            url: "/admin/blog/update-thumbnail",
-                            type: "put",
-                            data,
-                            dataType: "json",
-                            contentType: "application/json",
-                            beforeSend: function(){
-                                Swal.fire({
-                                    title: 'Tunggu Sebentar...',
-                                    text: 'Data Sedang Diproses!',
-                                    imageUrl:'/img/loading.gif',
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
-                                })
-                            },
-                            success: function (response) {
-                                Swal.close()
-                                $('.is-invalid').removeClass('is-invalid')
-                                if (response.success) {
-                                    $('#modal_embed').modal('hide')
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Sampul Berhasil Diupdate',
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    })
-                                } else {
-                                    Swal.close()
-                                    for (control in response.errors) {
-                                        $('#field-' + control).addClass('is-invalid')
-                                        $('#error-' + control).html(response.errors[control])
-                                        $.notify({
-                                            icon: 'fa fa-times',
-                                            message: response.errors[control]
-                                        },{
-                                            delay: 7000,
-                                            type: 'danger'
-                                        })
-                                    }
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Swal.close()
-                                alert('Error adding / update data')
-                            }
-                        })
-                    })
-                })
-
-                $(".rotate").on("click", function() {
-                    croppie.rotate(parseInt($(this).data('deg')))
-                })
-
-                $('#cropModal').on('hidden.bs.modal', function (e) {
-                    setTimeout(function() { croppie.destroy() }, 100)
-                })
 
                 $('#field-deskripsi').summernote({
                     height: '250px',
@@ -452,6 +304,80 @@
                     })
                 })
             })
+        </script>
+
+        <script>
+            function coverUpdate(e) {
+                var img = e.files[0]
+                var reader = new FileReader()
+                reader.onload = function() {
+                    var data = serializeCover(reader.result)
+                    ajaxUpdateCover(data)
+                    $("#img_preview").attr("src", reader.result)
+                }
+                reader.readAsDataURL(img)
+            }
+
+            function serializeCover(base) {
+                let base64 = base.split(";base64,")[1]
+                let filetype = base.split(";base64,")[0]
+                let format = filetype.split("data:image/")[1]
+                let data = JSON.stringify({
+                    id: $("#id-blog").val(),
+                    thumbnail: {base64,format},
+                })
+
+                return data
+            }
+
+            function ajaxUpdateCover(data){
+                $.ajax({
+                    url: "/admin/blog/update-thumbnail",
+                    type: "put",
+                    data,
+                    dataType: "json",
+                    contentType: "application/json",
+                    beforeSend: function(){
+                        Swal.fire({
+                            title: 'Tunggu Sebentar...',
+                            text: 'Data Sedang Diproses!',
+                            imageUrl:'/img/loading.gif',
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                        })
+                    },
+                    success: function (response) {
+                        Swal.close()
+                        $('.is-invalid').removeClass('is-invalid')
+                        if (response.success) {
+                            $('#modal_embed').modal('hide')
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sampul Berhasil Diupdate',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        } else {
+                            Swal.close()
+                            for (control in response.errors) {
+                                $('#field-' + control).addClass('is-invalid')
+                                $('#error-' + control).html(response.errors[control])
+                                $.notify({
+                                    icon: 'fa fa-times',
+                                    message: response.errors[control]
+                                },{
+                                    delay: 7000,
+                                    type: 'danger'
+                                })
+                            }
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal.close()
+                        alert('Error adding / update data')
+                    }
+                })
+            }
         </script>
     </body>
 </html>

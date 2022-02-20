@@ -167,7 +167,7 @@ function createBlogElement(data) {
     return `
         <div class="col-md-4">
             <div class="px-2">
-                <a class="block block-link-pop d-flex flex-column" href="javascript:void(0)">
+                <a class="block block-link-pop d-flex flex-column" href="/blog/read/${data.slug}">
                     <img src="${splitedImageUrl[1]}" class="block-content block-content-full min-height-175 flex-grow-0">
                     <div class="block-content flex-grow-1">
                         <h5 class="mb-5">

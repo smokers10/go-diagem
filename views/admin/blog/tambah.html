@@ -140,7 +140,7 @@
                                                         </div>
                                                         <input type="hidden" name="image" id="image">
                                                         <div class="btn btn-primary btn-block">
-                                                            <input type="file" class="file-upload" id="file-upload" accept="image/*">
+                                                            <input type="file" class="file-upload" id="file-upload" accept="image/*" onchange="onChangeImage(this)">
                                                             Pilih Foto
                                                         </div>
                                                     </div>
@@ -158,42 +158,6 @@
 
             </main>
             <!-- END Main Container -->
-
-            <!-- crop modal -->
-            <div class="modal" id="cropModal">
-                <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="block-header block-header-default">
-                            <h3 class="block-title modal-title">Potong & Sesuaikan Sampul</h3>
-                            <div class="block-options">
-                                <button type="button" class="close btn-primary" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">
-                                        <i class="fa fa-times-circle"></i>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="block-content pb-15">
-                            <div id="resizer"></div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <button class="btn btn-info rotate btn-block text-center" data-deg="90">
-                                        <i class="fa fa-undo"></i>
-                                    </button>
-                                </div>
-                                <div class="col-md-3">
-                                    <button class="btn btn-info rotate btn-block text-center" data-deg="-90" >
-                                    <i class="fa fa-redo"></i></button>
-                                </div>
-                                <div class="col-md-6">
-                                    <button class="btn btn-primary btn-block" id="sampulSave">Potong Dan Simpan</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END crop modal -->
             
             <!-- Footer -->
             {{template "partials/admin-footer" .}}
@@ -217,74 +181,8 @@
         <script src="/js/admin/general.js"></script>
         <script>
             jQuery(document).ready(function () {
-                var croppie = null
                 var el = document.getElementById('resizer')
                 moment.locale('id')
-
-                $.getImage = function(input, croppie) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader()
-                        reader.onload = function(e) {
-                            croppie.bind({
-                                url: e.target.result,
-                            })
-                        }
-                        reader.readAsDataURL(input.files[0])
-                    }
-                }
-
-                $("#file-upload").on("change", function(event) {
-                    $("#cropModal").modal()
-                    croppie = new Croppie(el, {
-                        viewport: {
-                            width: 700,
-                            height: 332,
-                            type: 'square'
-                        },
-                        original : {
-                            width: 700,
-                            height: 332,
-                            type: 'square'
-                        },
-                        boundary: {
-                            width: 730,
-                            height: 376,
-                        },
-                        enableOrientation: true
-                    })
-                    $.getImage(event.target, croppie)
-                })
-
-                $("#sampulSave").on("click", function() {
-                    croppie.result({
-                        type: 'base64',
-                        size: 'original',
-                        format:'jpeg',
-                        size: { width: 1376, height: 652 }
-                    }).then(function(base64result) {
-                        $("#cropModal").modal("hide")
-                        $("#img_preview").attr("src", base64result)
-                        $("#image").val(base64result)
-
-                        if($("#method").val() == "update") {
-                            let base64 = base64result.split(";base64,")[1]
-                            let filetype = base64result.split(";base64,")[0]
-                            let format = filetype.split("data:image/")[1]
-                            let data = JSON.stringify({
-                                id: promoID,
-                                sampul: {base64,format},
-                            })
-                        }
-                    })
-                })
-
-                $(".rotate").on("click", function() {
-                    croppie.rotate(parseInt($(this).data('deg')))
-                })
-
-                $('#cropModal').on('hidden.bs.modal', function (e) {
-                    setTimeout(function() { croppie.destroy() }, 100)
-                })
 
                 $('#field-deskripsi').summernote({
                     height: '250px',
@@ -308,7 +206,6 @@
                     const base64 = src.split(";base64,")[1]
                     const filetype = src.split(";base64,")[0]
                     const format = filetype.split("data:image/")[1]
-
                     const data = JSON.stringify({
                         judul: $("#field-judul").val(),
                         isi: $("#field-deskripsi").val(),
@@ -374,6 +271,16 @@
                     })
                 })
             })
+
+            function onChangeImage(e){
+                var img = e.files[0]
+                var reader = new FileReader()
+                reader.onloadend = function() {
+                    $("#img_preview").attr("src", reader.result)
+                }
+
+                reader.readAsDataURL(img)
+            }
         </script>
     </body>
 </html>
