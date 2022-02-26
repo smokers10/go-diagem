@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2022 at 10:05 AM
+-- Generation Time: Feb 26, 2022 at 04:57 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -34,9 +34,9 @@ CREATE TABLE `admins` (
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `roles` enum('super admin','marketing','admin','') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'admin',
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp(),
-  `email_verified_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL,
+  `updated_at` timestamp NULL,
+  `email_verified_at` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -58,8 +58,8 @@ CREATE TABLE `alamat` (
   `nama_kota` varchar(30) NOT NULL,
   `kd_pos` char(8) NOT NULL,
   `is_utama` tinyint(4) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL,
+  `updated_at` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -115,8 +115,8 @@ CREATE TABLE `blogs` (
   `seo_keyword` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `seo_tags` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `seo_deskripsi` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tgl_publish` date NOT NULL DEFAULT current_timestamp(),
-  `tgl_update` date NOT NULL DEFAULT current_timestamp()
+  `tgl_publish` date NOT NULL,
+  `tgl_update` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -145,7 +145,7 @@ CREATE TABLE `feedback` (
   `rating` int(1) NOT NULL,
   `produk_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `created_at` date NOT NULL DEFAULT current_timestamp()
+  `created_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -160,8 +160,8 @@ CREATE TABLE `kategori` (
   `slug` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `cover` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL,
+  `updated_at` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -194,7 +194,7 @@ CREATE TABLE `order_bayar` (
   `status` enum('belum lunas','pending','capture','settlement','deny','cancel','expire','failure','chargeback','refund','partial_refund','partial_chargeback','authorize') DEFAULT 'pending',
   `token` varchar(100) NOT NULL,
   `redirect_url` text NOT NULL,
-  `tgl_bayar` timestamp NULL DEFAULT current_timestamp()
+  `tgl_bayar` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -213,7 +213,7 @@ CREATE TABLE `order_checkout` (
   `ongkir` int(11) NOT NULL,
   `no_resi` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `invoice_no` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tgl_order` timestamp NOT NULL DEFAULT current_timestamp()
+  `tgl_order` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -268,8 +268,8 @@ CREATE TABLE `produk` (
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   `discount` int(3) NOT NULL,
   `kategori_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL,
+  `updated_at` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -301,8 +301,8 @@ CREATE TABLE `produk_variasi` (
   `produk_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `stok` int(11) DEFAULT 0,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL,
+  `updated_at` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -324,8 +324,8 @@ CREATE TABLE `promo` (
   `seo_deskripsi` text NOT NULL,
   `tgl_mulai` date DEFAULT NULL,
   `tgl_selesai` date DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL,
+  `updated_at` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -339,8 +339,8 @@ CREATE TABLE `rekening` (
   `bank_id` bigint(20) NOT NULL,
   `rekening_no` varchar(30) NOT NULL,
   `nama` varchar(191) NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL,
+  `updated_at` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -369,8 +369,8 @@ CREATE TABLE `slider` (
   `is_publish` tinyint(1) NOT NULL,
   `url` varchar(191) NOT NULL,
   `type` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -387,8 +387,8 @@ CREATE TABLE `users` (
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tgl_lahir` date NOT NULL,
   `is_verified` tinyint(1) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
+  `created_at` timestamp NULL,
+  `updated_at` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
