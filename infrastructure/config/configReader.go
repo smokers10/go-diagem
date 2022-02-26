@@ -6,10 +6,11 @@ import (
 )
 
 type configurationScheme struct {
-	Application APP   `json:"application"`
-	Database    MYSQL `json:"database"`
-	SMTP        SMTP  `json:"smtp"`
-	ETC         ETC   `json:"etc"`
+	Application *APP      `json:"application"`
+	Database    *MYSQL    `json:"database"`
+	SSHDatabase *SSHMYSQL `json:"database_ssh"`
+	SMTP        *SMTP     `json:"smtp"`
+	ETC         *ETC      `json:"etc"`
 }
 
 type APP struct {
@@ -33,6 +34,17 @@ type MYSQL struct {
 	MYSQL_Max_Idle_Connection_Life_Time int    `json:"mysql_max_idle_connection_life_time"`
 }
 
+type SSHMYSQL struct {
+	UseSSH         bool   `json:"use_ssh"`
+	SSH_Host       string `json:"ssh_host"`
+	SSH_Port       int    `json:"ssh_port"`
+	SSH_Password   string `json:"ssh_password"`
+	MYSQL_Username string `json:"db_username"`
+	MYSQL_Host     string `json:"db_host"`
+	MYSQL_Name     string `json:"db_name"`
+	MYSQL_Password string `json:"db_password"`
+}
+
 type SMTP struct {
 	SMTP_Host          string `json:"SMTP_host"`
 	SMTP_Port          int    `json:"SMTP_port"`
@@ -51,12 +63,13 @@ type ETC struct {
 func ReadConfig() *configurationScheme {
 	result := configurationScheme{}
 
-	rawConfig, err := ioutil.ReadFile("app.config.json")
+	r, err := ioutil.ReadFile("app.config.json")
 	if err != nil {
-		panic(err)
+		r, _ := ioutil.ReadFile("../../app.config.json")
+		json.Unmarshal(r, &result)
+		return &result
 	}
 
-	json.Unmarshal(rawConfig, &result)
-
+	json.Unmarshal(r, &result)
 	return &result
 }
