@@ -322,8 +322,8 @@ CREATE TABLE `promo` (
   `seo_keyword` text NOT NULL,
   `seo_tags` text NOT NULL,
   `seo_deskripsi` text NOT NULL,
-  `tgl_mulai` timestamp DEFAULT NULL,
-  `tgl_selesai` timestamp DEFAULT NULL,
+  `tgl_mulai` timestamp DEFAULT current_timestamp(),
+  `tgl_selesai` timestamp DEFAULT current_timestamp(),
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
