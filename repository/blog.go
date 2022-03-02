@@ -139,6 +139,7 @@ func (br *blogRepositoryImpl) Latest() ([]domain.Blog, error) {
 	stmt, _ := br.db.Prepare(`
 		SELECT id, judul, slug, isi, image, is_publish, seo_keyword, seo_tags, seo_deskripsi, tgl_publish, tgl_update 
 		FROM blogs 
+		WHERE is_publish = true
 		ORDER BY tgl_publish DESC 
 		LIMIT 10
 	`)

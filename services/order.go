@@ -219,6 +219,9 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 			return &res
 		}
 
+		// naikan jumlah penjualan
+		osc.produkRepository.UpdateSellingPoint(cart.ProdukID, cart.Quantity)
+
 		// update stok
 		if !cart.Produk.IsHasVariant {
 			if err := osc.produkRepository.UpdateStok(cart.Produk.ID, cart.Quantity, "subtraction"); err != nil {
@@ -238,7 +241,6 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 
 		osc.cartRepository.Delete(&domain.Cart{ID: cart.ID, UserID: cart.UserID})
 	}
-
 	// ================================ end vital part! =============================================
 
 	res.Data = map[string]string{"order_id": req.ID}

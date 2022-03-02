@@ -303,6 +303,27 @@ func (p *produkRepositoryImpl) UpdateStok(produkID string, changeValue int, oper
 	return nil
 }
 
+func (p *produkRepositoryImpl) UpdateSellingPoint(produkID string, changeValue int) error {
+	product, err := p.ByIDSimplified(produkID)
+	if err != nil {
+		return err
+	}
+
+	new_point := product.JumlahPenjualan + changeValue
+
+	stmt, err := p.db.Prepare(`UPDATE produk SET jumlah_penjualan = ? WHERE id = ?`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(new_point, produkID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (p *produkRepositoryImpl) GetPopular() ([]domain.ProdukDetailed, error) {
 	result := []domain.ProdukDetailed{}
 	produkFoto := ProdukFotoRepository(p.db)

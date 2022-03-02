@@ -85,6 +85,10 @@
                                                             <td><b>Tgl Transaksi</b></td>
                                                             <td id="buy-date"></td>
                                                         </tr>
+                                                        <tr>
+                                                            <td><b>Kurir</b></td>
+                                                            <td id="kurir"></td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -156,8 +160,6 @@
             </main>
             <!-- END Main Container -->
 
-        
-
             <!-- Footer -->
             {{template "partials/admin-footer" .}}
             <!-- END Footer -->
@@ -200,6 +202,7 @@
                         $("#kotak-penerima").text(phone)
                         $("#ongkir").text(toRupiah.format(ongkir))
                         $("#total").text(toRupiah.format(jumlah))
+                        $("#kurir").text(`${kurir} - ${paket_kurir}`)
 
                         switch (status_pembayaran) {
                             case "pending":
@@ -331,8 +334,6 @@
 
                 $("#subtotal").text(toRupiah.format(total))
             }
-
-            
         </script>
     </body>
 </html>
