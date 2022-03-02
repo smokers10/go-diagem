@@ -65,7 +65,13 @@ func ReadConfig() *configurationScheme {
 
 	r, err := ioutil.ReadFile("app.config.json")
 	if err != nil {
-		r, _ := ioutil.ReadFile("../../app.config.json")
+		r, err := ioutil.ReadFile("../../app.config.json")
+		if err != nil {
+			r, _ := ioutil.ReadFile("/root/diagem/app.config.json")
+			json.Unmarshal(r, &result)
+			return &result
+		}
+
 		json.Unmarshal(r, &result)
 		return &result
 	}
