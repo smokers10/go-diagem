@@ -18,7 +18,7 @@ import (
 func main() {
 	config := config.ReadConfig().Application
 
-	engine := html.New("./views", ".html")
+	engine := html.New("/root/go-diagem/views", ".html")
 
 	app := fiber.New(fiber.Config{
 		Views: engine,
