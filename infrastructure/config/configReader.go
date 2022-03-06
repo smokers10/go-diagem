@@ -71,7 +71,6 @@ func ReadConfig() *configurationScheme {
 			json.Unmarshal(r, &result)
 			return &result
 		}
-
 		json.Unmarshal(r, &result)
 		return &result
 	}
