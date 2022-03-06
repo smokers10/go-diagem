@@ -25,7 +25,7 @@ func main() {
 	})
 
 	// static folder
-	app.Static("/", "./public")
+	app.Static("/", "/root/go-diagem/public")
 
 	// error recovery
 	if mode := config.APP_Production_Mode; mode == "production" {
