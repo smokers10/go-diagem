@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 )
 
@@ -63,16 +64,10 @@ type ETC struct {
 func ReadConfig() *configurationScheme {
 	result := configurationScheme{}
 
-	r, err := ioutil.ReadFile("app.config.json")
+	r, err := ioutil.ReadFile("/root/go-diagem/app.config.json")
 	if err != nil {
-		r, err := ioutil.ReadFile("../../app.config.json")
-		if err != nil {
-			r, _ := ioutil.ReadFile("/root/diagem/app.config.json")
-			json.Unmarshal(r, &result)
-			return &result
-		}
-		json.Unmarshal(r, &result)
-		return &result
+		fmt.Println(err)
+		panic(err)
 	}
 
 	json.Unmarshal(r, &result)
