@@ -52,7 +52,7 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	adminParentPath.Get("/logout", authenticationController.Logout)
 
 	// blog
-	blog := adminParentPath.Group("/blog", middleware.AdminWeb(session, "admin", "super admin"))
+	blog := adminParentPath.Group("/blog", middleware.AdminWeb(session, "admin", "super admin", "marketing"))
 	blog.Get("/", blogController.IndexPage)
 	blog.Get("/tambah", blogController.TambahPage)
 	blog.Get("/edit/:slug", blogController.EditPage)
