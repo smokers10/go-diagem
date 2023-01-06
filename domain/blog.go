@@ -40,7 +40,7 @@ type BlogRepository interface {
 	//khusus admin
 	Create(req *Blog, tx *sql.Tx) error
 	Update(req *Blog) error
-	Delete(blogID string) error
+	Delete(blogID string) (string, error)
 	CheckJudul(judul string) (*Blog, error)
 	ReadAll() ([]Blog, error)
 

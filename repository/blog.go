@@ -14,7 +14,7 @@ func BlogRepository(database *sql.DB) domain.BlogRepository {
 	return &blogRepositoryImpl{db: database}
 }
 
-//khusus admin
+// khusus admin
 func (br *blogRepositoryImpl) Create(req *domain.Blog, tx *sql.Tx) error {
 	stmt, _ := tx.Prepare(`
 		INSERT INTO blogs(id, judul, slug, isi, image, is_publish, seo_keyword, seo_tags, seo_deskripsi) 
@@ -42,14 +42,20 @@ func (br *blogRepositoryImpl) Update(req *domain.Blog) error {
 	return nil
 }
 
-func (br *blogRepositoryImpl) Delete(id string) error {
+func (br *blogRepositoryImpl) Delete(id string) (string, error) {
 	stmt, _ := br.db.Prepare(`DELETE FROM blogs WHERE id = ?`)
+	getFormat, _ := br.db.Prepare(`SELECT image FROM blogs WHERE id = ? LIMIT 1`)
+	image := domain.Blog{}
 
-	if _, err := stmt.Exec(id); err != nil {
-		return err
+	if err := getFormat.QueryRow(id).Scan(&image.Image); err != nil {
+		return "", err
 	}
 
-	return nil
+	if _, err := stmt.Exec(id); err != nil {
+		return "", err
+	}
+
+	return image.Image, nil
 }
 
 func (br *blogRepositoryImpl) CheckJudul(judul string) (*domain.Blog, error) {
@@ -90,7 +96,7 @@ func (br *blogRepositoryImpl) ReadAll() ([]domain.Blog, error) {
 	return result, nil
 }
 
-//khusus umum
+// khusus umum
 func (br *blogRepositoryImpl) PublishedOnly(judul string) ([]domain.Blog, error) {
 	result := []domain.Blog{}
 
@@ -157,7 +163,7 @@ func (br *blogRepositoryImpl) Latest() ([]domain.Blog, error) {
 	return result, nil
 }
 
-//for transaction
+// for transaction
 func (br *blogRepositoryImpl) GetSqlInstance() *sql.DB {
 	return br.db
 }

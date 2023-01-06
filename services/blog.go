@@ -112,7 +112,7 @@ func (bs *blogServiceImpl) Update(req *domain.Blog) *domain.Response {
 
 func (bs *blogServiceImpl) Delete(id string) *domain.Response {
 	// call repository
-	err := bs.blogRepository.Delete(id)
+	image, err := bs.blogRepository.Delete(id)
 	if err != nil {
 		fmt.Println(err)
 		return &domain.Response{
@@ -122,7 +122,7 @@ func (bs *blogServiceImpl) Delete(id string) *domain.Response {
 	}
 
 	// hapus citra promo
-	if err := os.Remove(fmt.Sprintf("public/uploads/blog/%s.jpeg", id)); err != nil {
+	if err := os.Remove(image); err != nil {
 		fmt.Println(err)
 		fmt.Println(err)
 		return &domain.Response{
