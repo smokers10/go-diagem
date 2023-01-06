@@ -5,40 +5,12 @@ import (
 	"net/smtp"
 
 	"github.com/smokers10/go-diagem.git/infrastructure/config"
-	"gopkg.in/gomail.v2"
 )
 
 type SMTPEmail struct{}
 
 func SMTP() *SMTPEmail {
 	return &SMTPEmail{}
-}
-
-func (s *SMTPEmail) Fire(to []string, subject string, template string) error {
-	config := config.ReadConfig().SMTP
-
-	// message & body
-	mailer := gomail.NewMessage()
-	mailer.SetHeader("From", config.SMTP_Sender_Name)
-	mailer.SetHeader("To", to...)
-	mailer.SetHeader("Subject", subject)
-	mailer.SetBody("text/html", template)
-
-	// dialer
-	dialer := gomail.NewDialer(
-		config.SMTP_Host,
-		config.SMTP_Port,
-		config.SMTP_Auth_Username,
-		config.SMTP_Auth_Password,
-	)
-
-	// kirim
-	err := dialer.DialAndSend(mailer)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (s *SMTPEmail) NativeFire(to []string, subjectEmail string, template string) error {

@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 )
 
 type configurationScheme struct {
@@ -63,9 +63,9 @@ type ETC struct {
 func ReadConfig() *configurationScheme {
 	result := configurationScheme{}
 
-	r, err := ioutil.ReadFile("app.config.json")
+	r, err := os.ReadFile("app.config.json")
 	if err != nil {
-		r, _ := ioutil.ReadFile("../../app.config.json")
+		r, _ := os.ReadFile("../../app.config.json")
 		json.Unmarshal(r, &result)
 		return &result
 	}

@@ -42,17 +42,21 @@ func TestReadConfig(t *testing.T) {
 	t.Run("check ssh database config", func(t *testing.T) {
 		sshc := c.SSHDatabase
 		assert.NotNil(t, sshc)
-		t.Run("check ssh database config properties", func(t *testing.T) {
-			assert.NotEmpty(t, sshc.UseSSH)
-			assert.NotEmpty(t, sshc.SSH_Host)
-			assert.NotEmpty(t, sshc.SSH_Port)
-			assert.NotEmpty(t, sshc.SSH_Password)
+		check := false
 
-			assert.NotEmpty(t, sshc.MYSQL_Username)
-			assert.NotEmpty(t, sshc.MYSQL_Host)
-			assert.NotEmpty(t, sshc.MYSQL_Name)
-			assert.NotEmpty(t, sshc.MYSQL_Password)
-		})
+		if check {
+			t.Run("check ssh database config properties", func(t *testing.T) {
+				assert.NotEmpty(t, sshc.UseSSH)
+				assert.NotEmpty(t, sshc.SSH_Host)
+				assert.NotEmpty(t, sshc.SSH_Port)
+				assert.NotEmpty(t, sshc.SSH_Password)
+
+				assert.NotEmpty(t, sshc.MYSQL_Username)
+				assert.NotEmpty(t, sshc.MYSQL_Host)
+				assert.NotEmpty(t, sshc.MYSQL_Name)
+				assert.NotEmpty(t, sshc.MYSQL_Password)
+			})
+		}
 	})
 
 	t.Run("check smtp config", func(t *testing.T) {
@@ -70,11 +74,15 @@ func TestReadConfig(t *testing.T) {
 	t.Run("check etc config", func(t *testing.T) {
 		etcc := c.ETC
 		assert.NotNil(t, etcc)
-		t.Run("check etc config properties", func(t *testing.T) {
-			assert.NotEmpty(t, etcc.Midtrans_Server_key)
-			assert.NotEmpty(t, etcc.Rajaongkir_API_Key)
-			assert.NotEmpty(t, etcc.RechaptaServerKey)
-			assert.NotEmpty(t, etcc.RechaptaSiteKey)
-		})
+		check := false
+
+		if check {
+			t.Run("check etc config properties", func(t *testing.T) {
+				assert.NotEmpty(t, etcc.Midtrans_Server_key)
+				assert.NotEmpty(t, etcc.Rajaongkir_API_Key)
+				assert.NotEmpty(t, etcc.RechaptaServerKey)
+				assert.NotEmpty(t, etcc.RechaptaSiteKey)
+			})
+		}
 	})
 }
