@@ -156,7 +156,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	rajaongkirPath.Get("/kota", rajaongkirAPIController.Kota, middlewareStrict)
 
 	// index page
-	parentPath.Get("/", middlewareGuestOnly, func(c *fiber.Ctx) error {
+	parentPath.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("home", nil)
 	})
 }
