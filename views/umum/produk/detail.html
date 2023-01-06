@@ -1,253 +1,284 @@
 <!doctype html>
 <html lang="en" class="no-focus">
-    <head>
-        <title>Diagem</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <meta name="description" content="Diagem">
-        <meta name="author" content="Diagem">
-        <meta name="robots" content="noindex, nofollow">
 
-        <!-- Open Graph Meta -->
-        <meta property="og:title" content="Diagem">
-        <meta property="og:site_name" content="Diagem">
-        <meta property="og:description" content="Diagem">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="">
-        <meta property="og:image" content="">
+<head>
+    <title>Diagem</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="Diagem">
+    <meta name="author" content="Diagem">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Diagem">
+    <meta property="og:site_name" content="Diagem">
+    <meta property="og:description" content="Diagem">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
 
 
-        <!-- Icons -->
-        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
-        <link rel="shortcut icon" href="/img/favicons/favicon.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
-        <!-- END Icons -->
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="/img/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+    <!-- END Icons -->
 
-        <!-- Fonts and Codebase framework -->
-        <link rel="stylesheet" id="css-main" href="/css/app.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
-        <link rel="stylesheet" id="css-main" href="/js/plugins/slick/slick-theme.css">
-        <link rel="stylesheet" id="css-main" href="/js/plugins/slick/slick.css">
-        <style>
-            .prodPrice {
-                font-size: 2rem;
-                font-weight: 700;
-                color: orange;
-                text-decoration: none;
-            }
-            .sticky {
-                position: fixed;
-                top: 0;
-                z-index: 1030;
-                margin-top: 70px;
-            }
-        
-            /* .sticky + .content {
+    <!-- Fonts and Codebase framework -->
+    <link rel="stylesheet" id="css-main" href="/css/app.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="/js/plugins/slick/slick-theme.css">
+    <link rel="stylesheet" id="css-main" href="/js/plugins/slick/slick.css">
+    <style>
+        .prodPrice {
+            font-size: 2rem;
+            font-weight: 700;
+            color: orange;
+            text-decoration: none;
+        }
+
+        .sticky {
+            position: fixed;
+            top: 0;
+            z-index: 1030;
+            margin-top: 70px;
+        }
+
+        /* .sticky + .content {
                 padding-top: 60px;
             } */
-        
-            .sticky-navigation{
-                background: #fff;
-                border-bottom: 1px solid #e0e0e0;
-                display: -webkit-box;
-                display: -ms-flexbox;
-                overflow: hidden;
-            }
-        </style>
-    </head>
-    <body class="bg-white">
-        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
-            <!-- Header -->
-            {{if .Logged.IsLogged}}
-                {{template "partials/user-header" .}}
-                {{else}}
-                {{template "partials/user-unlogged-header" .}}
-            {{end}}
-            <!-- END Header -->
 
-            <!-- Main Container -->
-            <main id="main-container">
-                <!-- Page Content -->
-                <div class="bg-white">
-                    <div class="content content-full">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="product-slides mb-0">
-                                    <!-- for each image foto -->
-                                    <div class="item-detail">
-                                        <img class="img-fluid zoomImg" src="/img/placeholder/product.png" id="foto-produk-main" alt="Image Description" onclick="imgOnclick(this)">
-                                    </div>
+        .sticky-navigation {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+    <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+        <!-- Header -->
+        {{if .Logged.IsLogged}}
+        {{template "partials/user-header" .}}
+        {{else}}
+        {{template "partials/user-unlogged-header" .}}
+        {{end}}
+        <!-- END Header -->
+
+        <!-- Main Container -->
+        <main id="main-container">
+            <!-- Page Content -->
+            <div class="bg-white">
+                <div class="content content-full">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="product-slides mb-0">
+                                <!-- for each image foto -->
+                                <div class="item-detail">
+                                    <img class="img-fluid zoomImg" src="/img/placeholder/product.png"
+                                        id="foto-produk-main" alt="Image Description" onclick="imgOnclick(this)">
                                 </div>
-                                <div class="product-slides-nav row ml-0 mr-0" id="foto-produk-nav"></div>
+                            </div>
+                            <div class="product-slides-nav row ml-0 mr-0" id="foto-produk-nav"></div>
+                        </div>
+
+                        <div class="col-md-7">
+                            <div class="product-title">
+                                <div id="nama-produk" class="d-inline-block"></div>
+                                <div id="choosed-variant" class="d-inline-block"></div>
                             </div>
 
-                            <div class="col-md-7">
-                                <div class="product-title">
-                                    <div id="nama-produk" class="d-inline-block"></div><div id="choosed-variant" class="d-inline-block"></div>
+                            <div class="product-rating" data-score="3" data-star-on="fa fa-fw fa-star text-warning"
+                                data-star-off="fa fa-fw fa-star text-muted"></div>
+
+                            <div class="product-price mb-3">
+                                <div class="product-price_final">
+                                    <span class="product-price__after" id="harga-produk">Harga Produk</span>
+                                </div>
+                                <div class="product-strikethrough_price" id="discount">
+                                    <span class="product-price__before" id="harga-produk-original"></span>
+                                    <span class="product-price__discount" id="besaran-discount"></span>
+                                </div>
+                            </div>
+
+                            <form id="option-choice-form" method="POST" onsubmit="return false;">
+                                <input type="hidden" id="id-produk" name="produk_id">
+                                <input type="hidden" id="harga-original" name="harga-original">
+                                <input type="hidden" id="discount-form" name="discount-form">
+                                <input type="hidden" id="subtotal-form" name="subtotal">
+                                <input type="hidden" id="id-varian" name="variasi_id">
+
+                                <div id="varian-produk" class="product-variant"></div>
+
+                                <div class="product-subtotal" id="varian-section">
+                                    <label class="product-label">Varian</label>
+                                    <div class="product-price" id="variasi"></div>
                                 </div>
 
-                                <div class="product-rating" data-score="3" data-star-on="fa fa-fw fa-star text-warning" data-star-off="fa fa-fw fa-star text-muted"></div>
-                                
-                                <div class="product-price mb-3">
-                                    <div class="product-price_final">
-                                        <span class="product-price__after" id="harga-produk">Harga Produk</span>
-                                    </div>
-                                    <div class="product-strikethrough_price" id="discount">
-                                        <span class="product-price__before" id="harga-produk-original"></span>
-                                        <span class="product-price__discount" id="besaran-discount"></span>
-                                    </div>
-                                </div>
-
-                                <form id="option-choice-form" method="POST" onsubmit="return false;">
-                                    <input type="hidden" id="id-produk" name="produk_id">
-                                    <input type="hidden" id="harga-original" name="harga-original">
-                                    <input type="hidden" id="discount-form" name="discount-form">
-                                    <input type="hidden" id="subtotal-form" name="subtotal">
-                                    <input type="hidden" id="id-varian" name="variasi_id">
-
-                                    <div id="varian-produk" class="product-variant"></div>
-
-                                    <div class="product-subtotal" id="varian-section">
-                                        <label class="product-label">Varian</label>
-                                        <div class="product-price" id="variasi"></div>
-                                    </div>
-
-                                    <div class="product-quantity d-flex">
-                                        <label class="product-label">Kuantitas</label>
-                                        <div class="cart-quantity">
-                                            <button class="btn-qty" type="button" data-type="minus">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-                                            <input type="text" id="buy-quantity" name="quantity" class="input-number" value="1" data-min="1" data-max="10">
-                                            <button class="btn-qty" type="button" data-type="plus">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                        <div class="product-available">
-                                            <span class="label">Stok :&nbsp; <b id="stok">n/a</b></span>
-                                        </div>
-                                    </div>
-                    
-                                    <div class="product-subtotal">
-                                        <label class="product-label">Subtotal</label>
-                                        <div class="product-price" id="subtotal">Harga</div>
-                                    </div>
-                                </form>
-
-                                <div class="product-action">
-                                    {{if .Logged.IsLogged}}
-                                        <button href="#" class="btn btn-outline-primary font-weight-bold mr-1" id="btn-add-cart">
-                                            <i class="si si-plus mr-1"></i>
-                                            Masukan Keranjang
+                                <div class="product-quantity d-flex">
+                                    <label class="product-label">Kuantitas</label>
+                                    <div class="cart-quantity">
+                                        <button class="btn-qty" type="button" data-type="minus">
+                                            <i class="fa fa-minus"></i>
                                         </button>
-                                        <button href="#" class="btn btn btn-primary font-weight-bold" id="btn-buy-now">
-                                            Beli Sekarang
+                                        <input type="text" id="buy-quantity" name="quantity" class="input-number"
+                                            value="1" data-min="1" data-max="10">
+                                        <button class="btn-qty" type="button" data-type="plus">
+                                            <i class="fa fa-plus"></i>
                                         </button>
-                                        {{else}}
-                                        <a href="/login" class="btn btn-outline-primary font-weight-bold mr-1">
-                                            <i class="si si-plus mr-1"></i>
-                                            Masukan Keranjang
-                                        </a>
-                                        <a href="/login" class="btn btn btn-primary font-weight-bold">
-                                            Beli Sekarang
-                                        </a>
-                                    {{end}}
+                                    </div>
+                                    <div class="product-available">
+                                        <span class="label">Stok :&nbsp; <b id="stok">n/a</b></span>
+                                    </div>
                                 </div>
 
-                                <div class="content pl-0 pr-0 pt-50">
-                                    <div class="block">
-                                        <div class="block-header p-0 sticky-navigation">
-                                            <ul class="nav nav-tabs nav-tabs-alt" id="myTab" role="tablist">
-                                                <li class="nav-item">
-                                                  <a class="nav-link active" id="spec-tab" data-toggle="tab" href="#spec" role="tab" aria-controls="spec" aria-selected="true">Spesifikasi</a>
-                                                </li>
-                
-                                                <li class="nav-item">
-                                                  <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Deskripsi</a>
-                                                </li>
-                
-                                                <li class="nav-item">
-                                                  <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">Rating & Ulasan</a>
-                                                </li>
-                                            </ul>
+                                <div class="product-subtotal">
+                                    <label class="product-label">Subtotal</label>
+                                    <div class="product-price" id="subtotal">Harga</div>
+                                </div>
+                            </form>
+
+                            <div class="product-action">
+                                {{if .Logged.IsLogged}}
+                                <button href="#" class="btn btn-outline-primary font-weight-bold mr-1"
+                                    id="btn-add-cart">
+                                    <i class="si si-plus mr-1"></i>
+                                    Masukan Keranjang
+                                </button>
+                                <button href="#" class="btn btn btn-primary font-weight-bold" id="btn-buy-now">
+                                    Beli Sekarang
+                                </button>
+                                {{else}}
+                                <a href="/login" class="btn btn-outline-primary font-weight-bold mr-1">
+                                    <i class="si si-plus mr-1"></i>
+                                    Masukan Keranjang
+                                </a>
+                                <a href="/login" class="btn btn btn-primary font-weight-bold">
+                                    Beli Sekarang
+                                </a>
+                                {{end}}
+                            </div>
+
+                            <div class="content pl-0 pr-0 pt-50">
+                                <div class="block">
+                                    <div class="block-header p-0 sticky-navigation">
+                                        <ul class="nav nav-tabs nav-tabs-alt" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="spec-tab" data-toggle="tab" href="#spec"
+                                                    role="tab" aria-controls="spec" aria-selected="true">Spesifikasi</a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="description-tab" data-toggle="tab"
+                                                    href="#description" role="tab" aria-controls="description"
+                                                    aria-selected="false">Deskripsi</a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback"
+                                                    role="tab" aria-controls="feedback" aria-selected="false">Rating &
+                                                    Ulasan</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="tab-content block-content" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="spec" role="tabpanel"
+                                            aria-labelledby="spec-tab">
+                                            <h4 class="font-w400">Spesifikasi</h4>
+                                            <table class="table" id="table-spec">
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
                                         </div>
-            
-                                        <div class="tab-content block-content" id="myTabContent">
-                                            <div class="tab-pane fade show active" id="spec" role="tabpanel" aria-labelledby="spec-tab">
-                                                <h4 class="font-w400">Spesifikasi</h4>
-                                                <table class="table" id="table-spec">
-                                                    <tbody>
-            
-                                                    </tbody>
-                                                </table>
-                                            </div>
 
-                                            <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
-                                                <h4 class="font-w400">Deskripsi</h4>
-                                                <div id="deskripsi"></div>
-                                            </div>
+                                        <div class="tab-pane fade" id="description" role="tabpanel"
+                                            aria-labelledby="description-tab">
+                                            <h4 class="font-w400">Deskripsi</h4>
+                                            <div id="deskripsi"></div>
+                                        </div>
 
-                                            <div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
-                                                <h4 class="font-w400">Rating Produk</h4>
-                                                <div class="row mb-5">
-                                                    <div class="col-md-3">
-                                                        <center>
-                                                            <h1 id="rating-score">
-                                                                0
-                                                            </h1>
-                                                            <h5>dari 5</h5>
-                                                            <div id="rating-star">
-                                                            </div>
-                                                        </center>
-                                                    </div>
-
-                                                    <div class="col-md-9">
-                                                        <button class="btn btn-outline-primary mb-5" data-rating="all" onclick="getFeedbackByRating(this)">Semuanya</button>
-                                                        <button class="btn btn-outline-primary mb-5" data-rating="1" onclick="getFeedbackByRating(this)" id="1-star">Bintang 1 <div id="star1-count"></div></button>
-                                                        <button class="btn btn-outline-primary mb-5" data-rating="2" onclick="getFeedbackByRating(this)" id="2-star">Bintang 2 <div id="star2-count"></div></button>
-                                                        <button class="btn btn-outline-primary mb-5" data-rating="3" onclick="getFeedbackByRating(this)" id="3-star">Bintang 3 <div id="star3-count"></div></button>
-                                                        <button class="btn btn-outline-primary mb-5" data-rating="4" onclick="getFeedbackByRating(this)" id="4-star">Bintang 4 <div id="star4-count"></div></button>
-                                                        <button class="btn btn-outline-primary mb-5" data-rating="5" onclick="getFeedbackByRating(this)" id="5-star">Bintang 5 <div id="star5-count"></div></button>
-                                                    </div>
+                                        <div class="tab-pane fade" id="feedback" role="tabpanel"
+                                            aria-labelledby="feedback-tab">
+                                            <h4 class="font-w400">Rating Produk</h4>
+                                            <div class="row mb-5">
+                                                <div class="col-md-3">
+                                                    <center>
+                                                        <h1 id="rating-score">
+                                                            0
+                                                        </h1>
+                                                        <h5>dari 5</h5>
+                                                        <div id="rating-star">
+                                                        </div>
+                                                    </center>
                                                 </div>
 
-                                                {{if .Logged.IsLogged}}
-                                                <form id="feedback-form" action="#" method="post" style="margin-bottom: 5%; margin-top: 5%;">
-                                                    <h4 class="font-w400">Ulasan Produk</h4>
+                                                <div class="col-md-9">
+                                                    <button class="btn btn-outline-primary mb-5" data-rating="all"
+                                                        onclick="getFeedbackByRating(this)">Semuanya</button>
+                                                    <button class="btn btn-outline-primary mb-5" data-rating="1"
+                                                        onclick="getFeedbackByRating(this)" id="1-star">Bintang 1 <div
+                                                            id="star1-count"></div></button>
+                                                    <button class="btn btn-outline-primary mb-5" data-rating="2"
+                                                        onclick="getFeedbackByRating(this)" id="2-star">Bintang 2 <div
+                                                            id="star2-count"></div></button>
+                                                    <button class="btn btn-outline-primary mb-5" data-rating="3"
+                                                        onclick="getFeedbackByRating(this)" id="3-star">Bintang 3 <div
+                                                            id="star3-count"></div></button>
+                                                    <button class="btn btn-outline-primary mb-5" data-rating="4"
+                                                        onclick="getFeedbackByRating(this)" id="4-star">Bintang 4 <div
+                                                            id="star4-count"></div></button>
+                                                    <button class="btn btn-outline-primary mb-5" data-rating="5"
+                                                        onclick="getFeedbackByRating(this)" id="5-star">Bintang 5 <div
+                                                            id="star5-count"></div></button>
+                                                </div>
+                                            </div>
 
-                                                    <div class="form-group">
-                                                        <label for="rating">Rating</label>
-                                                        <select name="rating" id="rating" class="form-control" required>
-                                                            <option value="">pilih rating produk</option>
-                                                            <option value="1">Terrible</option>
-                                                            <option value="2">Poor</option>
-                                                            <option value="3">Average</option>
-                                                            <option value="4">Good</option>
-                                                            <option value="5">Excellent</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="comment">Komentar</label>
-                                                        <textarea name="comment" id="comment" class="form-control" cols="10" rows="5" placeholder="Berikan pendapat Anda tentang produk ini..." required></textarea>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-primary">Beri Ulasan</button>
-                                                    </div>
-                                                </form>
-                                                {{else}}
-                                                <a href="/login" class="btn btn btn-primary font-weight-bold" style="margin-bottom: 5%; margin-top: 5%;">
-                                                    Login untuk memberikan ulasan
-                                                </a>
-                                                {{end}}
-
+                                            {{if .Logged.IsLogged}}
+                                            <form id="feedback-form" action="#" method="post"
+                                                style="margin-bottom: 5%; margin-top: 5%;">
                                                 <h4 class="font-w400">Ulasan Produk</h4>
 
-                                                <div id="feedback-ulasan">
-                                                    
+                                                <div class="form-group">
+                                                    <label for="rating">Rating</label>
+                                                    <select name="rating" id="rating" class="form-control" required>
+                                                        <option value="">pilih rating produk</option>
+                                                        <option value="1">Terrible</option>
+                                                        <option value="2">Poor</option>
+                                                        <option value="3">Average</option>
+                                                        <option value="4">Good</option>
+                                                        <option value="5">Excellent</option>
+                                                    </select>
                                                 </div>
+
+                                                <div class="form-group">
+                                                    <label for="comment">Komentar</label>
+                                                    <textarea name="comment" id="comment" class="form-control" cols="10"
+                                                        rows="5"
+                                                        placeholder="Berikan pendapat Anda tentang produk ini..."
+                                                        required></textarea>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary">Beri Ulasan</button>
+                                                </div>
+                                            </form>
+                                            {{else}}
+                                            <a href="/login" class="btn btn btn-primary font-weight-bold"
+                                                style="margin-bottom: 5%; margin-top: 5%;">
+                                                Login untuk memberikan ulasan
+                                            </a>
+                                            {{end}}
+
+                                            <h4 class="font-w400">Ulasan Produk</h4>
+
+                                            <div id="feedback-ulasan">
+
                                             </div>
                                         </div>
                                     </div>
@@ -256,27 +287,29 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div id="myModal" class="modal-img">
-                    <span class="close-img">&times;</span>
-                    <img class="modal-content modal-dialog-centered" id="mainImg">
-                </div>
-                <!-- END Page Content -->
-            </main>
-            <!-- END Main Container -->
+            <div id="myModal" class="modal-img">
+                <span class="close-img">&times;</span>
+                <img class="modal-content modal-dialog-centered" id="mainImg">
+            </div>
+            <!-- END Page Content -->
+        </main>
+        <!-- END Main Container -->
 
-            <!-- Footer -->
-            {{template "partials/footer" .}}
-            <!-- END Footer -->
-        </div>
-        <script src="/js/laravel.app.js"></script>
-        <script src="/js/laroute.js"></script>
-        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="/js/umum/general.js"></script>
-        <script src="/js/umum/product/product-detail.js"></script>
-        <script src="/js/functions.js"></script>
-        <script src="/js/plugins/slick/slick.js"></script>
-        <script src="/js/plugins/jquery-raty/jquery.raty.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/jquery-zoom@1.7.21/jquery.zoom.min.js"></script>
-    </body>
+        <!-- Footer -->
+        {{template "partials/footer" .}}
+        <!-- END Footer -->
+    </div>
+    <script src="/js/laravel.app.js"></script>
+    <script src="/js/laroute.js"></script>
+    <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="/js/umum/general.js"></script>
+    <script src="/js/umum/product/product-detail.js"></script>
+    <script src="/js/functions.js"></script>
+    <script src="/js/plugins/slick/slick.js"></script>
+    <script src="/js/plugins/jquery-raty/jquery.raty.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-zoom@1.7.21/jquery.zoom.min.js"></script>
+</body>
+
 </html>
