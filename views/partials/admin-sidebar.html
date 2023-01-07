@@ -17,7 +17,8 @@
             <div class="content-header-section text-center align-parent sidebar-mini-hidden">
                 <!-- Close Sidebar, Visible only on mobile screens -->
                 <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                <button type="button" class="btn btn-circle btn-dual-secondary d-lg-none align-v-r" data-toggle="layout" data-action="sidebar_close">
+                <button type="button" class="btn btn-circle btn-dual-secondary d-lg-none align-v-r" data-toggle="layout"
+                    data-action="sidebar_close">
                     <i class="fa fa-times text-danger"></i>
                 </button>
                 <!-- END Close Sidebar -->
@@ -25,7 +26,7 @@
                 <!-- Logo -->
                 <div class="content-header-item">
                     <a href="/">
-                        <img src="/img/logo/logo.png" width="180px"/>
+                        <img src="/img/logo/logo.png" width="180px" />
                     </a>
                 </div>
                 <!-- END Logo -->
@@ -33,13 +34,14 @@
             <!-- END Normal Mode -->
         </div>
         <!-- END Side Header -->
-        
+
         <!-- Side Navigation -->
         <div class="content-side content-side-full">
             <!-- li class="open" untuk membuka nav sub-menu -->
             <ul class="nav-main">
                 <li id="beranda-submenu">
-                    <a class="" href="/" id="beranda"><i class="si si-cup"></i><span class="sidebar-mini-hide">Beranda</span></a>
+                    <a class="" href="/" id="beranda"><i class="si si-cup"></i><span
+                            class="sidebar-mini-hide">Beranda</span></a>
                 </li>
 
                 <li id="blog-submenu">
@@ -49,28 +51,30 @@
                 </li>
 
                 <li id="produk-submenu">
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-social-dropbox"></i><span class="sidebar-mini-hide">Produk</span></a>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-social-dropbox"></i><span
+                            class="sidebar-mini-hide">Produk</span></a>
                     <ul>
-                        <li>
+                        <!-- <li>
                             <a id="tambah-produk" class="" href="/admin/produk/tambah">Tambah Produk Baru</a>
+                        </li> -->
+                        <li>
+                            <a id="kategori-produk" class="" href="/admin/produk/kategori">Kelola Kategori</a>
                         </li>
                         <li>
                             <a id="atur-produk" class="" href="/admin/produk">Kelola Produk</a>
                         </li>
-                        <li>
-                            <a id="kategori-produk" class="" href="/admin/produk/kategori">Kelola Kategori</a>
-                        </li>
                     </ul>
                 </li>
-                
+
                 <li id="order-submenu">
                     <a id="atur-order" class="" href="/admin/order">
                         <i class="fas fa-box"></i>Order</span>
                     </a>
                 </li>
 
-                <li id="promo-submenu">
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-tags"></i><span class="sidebar-mini-hide">Promo</span></a>
+                <!-- <li id="promo-submenu">
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-tags"></i><span
+                            class="sidebar-mini-hide">Promo</span></a>
                     <ul>
                         <li>
                             <a id="tambah-promo" class="" href="/admin/promo/tambah">Tambah Promo</a>
@@ -80,7 +84,7 @@
                             <a id="atur-promo" class="" href="/admin/promo">Daftar Promo</a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
 
                 <li id="user-administratif-submenu">
                     <a id="user-administratif" class="" href="/admin/user-administratif">
@@ -101,7 +105,8 @@
                 </li>
 
                 <li id="keuangan-submenu">
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-wallet"></i>Keuangan</span></a>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i
+                            class="si si-wallet"></i>Keuangan</span></a>
                     <ul>
                         <li>
                             <a id="rekening-keuangan" class="" href="/admin/keuangan/va">Virtual Account</a>
@@ -120,31 +125,32 @@
                         <i class="si si-home"></i>Alamat Origin</span>
                     </a>
                 </li>
-            </ul>                        
+            </ul>
         </div>
         <!-- END Side Navigation -->
     </div>
     <!-- Sidebar Content -->
-</nav>            
+</nav>
 
 <!-- show menu by user type -->
 <script>
     // get element
     const beranda = document.getElementById("beranda-submenu"),
-    blog = document.getElementById("blog-submenu"),
-    produk = document.getElementById("produk-submenu"),
-    order = document.getElementById("order-submenu"),
-    promo = document.getElementById("promo-submenu"),
-    userAdmin = document.getElementById("user-administratif-submenu"),
-    reseller = document.getElementById("reseller-submenu"),
-    keuangan = document.getElementById("keuangan-submenu"),
-    slider = document.getElementById("slider-submenu"),
-    alamatOrigin = document.getElementById("alamat-origin-submenu")
+        blog = document.getElementById("blog-submenu"),
+        produk = document.getElementById("produk-submenu"),
+        order = document.getElementById("order-submenu"),
+        promo = document.getElementById("promo-submenu"),
+        userAdmin = document.getElementById("user-administratif-submenu"),
+        reseller = document.getElementById("reseller-submenu"),
+        keuangan = document.getElementById("keuangan-submenu"),
+        slider = document.getElementById("slider-submenu"),
+        alamatOrigin = document.getElementById("alamat-origin-submenu")
 
     // get localstorage
     const storage = JSON.parse(localStorage.getItem("logged"))
 
-    if (storage.roles == "super admin") {
+    if (storage.roles == "super admin")
+    {
         beranda.style.display = "block"
         blog.style.display = "block"
         produk.style.display = "block"
@@ -157,7 +163,8 @@
         alamatOrigin.style.display = "block"
     }
 
-    if (storage.roles == "admin") {
+    if (storage.roles == "admin")
+    {
         beranda.style.display = "block"
         blog.style.display = "block"
         produk.style.display = "none"
@@ -170,7 +177,8 @@
         alamatOrigin.style.display = "none"
     }
 
-    if (storage.roles == "marketing") {
+    if (storage.roles == "marketing")
+    {
         beranda.style.display = "block"
         blog.style.display = "block"
         produk.style.display = "block"
@@ -194,18 +202,21 @@
     const subChildPath = pathnameSplit[3]
 
     // beranda
-    if (childPath == "beranda") {
+    if (childPath == "beranda")
+    {
         document.getElementById("beranda").classList.add("active")
     }
 
     // produk
-    if (childPath == "produk") {
+    if (childPath == "produk")
+    {
         document.getElementById("produk-submenu").classList.add("open")
-        switch (subChildPath) {
+        switch (subChildPath)
+        {
             case "tambah":
                 document.getElementById("tambah-produk").classList.add("active")
                 break;
-            
+
             case "kategori":
                 document.getElementById("kategori-produk").classList.add("active")
                 break;
@@ -217,9 +228,11 @@
     }
 
     // promo
-    if (childPath == "promo") {
+    if (childPath == "promo")
+    {
         document.getElementById("promo-submenu").classList.add("open")
-        switch (subChildPath) {
+        switch (subChildPath)
+        {
             case "tambah":
                 document.getElementById("tambah-promo").classList.add("active")
                 break;
@@ -231,37 +244,44 @@
     }
 
     // reseller
-    if (childPath == "reseller") {
+    if (childPath == "reseller")
+    {
         document.getElementById("reseller").classList.add("active")
     }
 
     // slider
-    if (childPath == "slider") {
+    if (childPath == "slider")
+    {
         document.getElementById("slider").classList.add("active")
     }
 
     // user administratif
-    if (childPath == "user-administratif") {
+    if (childPath == "user-administratif")
+    {
         document.getElementById("user-administratif").classList.add("active")
     }
 
     // user
-    if (childPath == "user") {
+    if (childPath == "user")
+    {
         document.getElementById("user").classList.add("active")
     }
 
     // alamat origin
-    if (childPath == "alamat-origin") {
+    if (childPath == "alamat-origin")
+    {
         document.getElementById("alamat-origin").classList.add("active")
     }
 
     // order/pesanan
-    if (childPath == "order") {
+    if (childPath == "order")
+    {
         document.getElementById("atur-order").classList.add("active")
     }
 
     // blog
-    if (childPath == "blog") {
+    if (childPath == "blog")
+    {
         document.getElementById("blog").classList.add("active")
     }
 </script>
