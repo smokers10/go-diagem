@@ -1,306 +1,327 @@
 <!doctype html>
 <html lang="en" class="no-focus">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-        <title>Admin | Diagem</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-        <meta name="description" content="Diagem">
-        <meta name="author" content="Diagem">
-        <meta name="robots" content="noindex, nofollow">
+    <title>Admin | Diagem</title>
 
-        <!-- Open Graph Meta -->
-        <meta property="og:title" content="Diagem">
-        <meta property="og:site_name" content="Diagem">
-        <meta property="og:description" content="Diagem">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="">
-        <meta property="og:image" content="">
+    <meta name="description" content="Diagem">
+    <meta name="author" content="Diagem">
+    <meta name="robots" content="noindex, nofollow">
 
-        <!-- Page JS Plugins CSS -->
-        <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Diagem">
+    <meta property="og:site_name" content="Diagem">
+    <meta property="og:description" content="Diagem">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
 
-        <!-- Fonts, Styles and Codebase framework -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
-        <link rel="stylesheet" id="css-main" href="/css/app.css">
-        <link rel="stylesheet" href="/js/plugins/select2/css/select2.min.css">
-        <link rel="stylesheet" href="/js/plugins/select2/css/select2-bootstrap4.min.css">
-        <link rel="stylesheet" href="/js/plugins/summernote/summernote-bs4.css">
-        <link rel="stylesheet" href="/js/plugins/bootstrap-taginput/tagsinput.css">
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
-        <style type="text/css">
-            .file-upload {
-                width: 100%;
-                padding: 10px 0px;
-                position: absolute;
-                left: 0;
-                opacity: 0;
-                cursor: pointer;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
-            <!-- Sidebar -->
-            {{template "partials/admin-sidebar" .}}
-            <!-- END Sidebar -->
+    <!-- Page JS Plugins CSS -->
+    <link rel="stylesheet" href="/js/plugins/datatables/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css">
 
-            <!-- Header -->
-            {{template "partials/admin-header" .}}
-            <!-- END Header -->
-            
-            <!-- Main Container -->
-            <main id="main-container">
+    <!-- Fonts, Styles and Codebase framework -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+    <link rel="stylesheet" id="css-main" href="/css/app.css">
+    <link rel="stylesheet" href="/js/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/js/plugins/select2/css/select2-bootstrap4.min.css">
+    <link rel="stylesheet" href="/js/plugins/summernote/summernote-bs4.css">
+    <link rel="stylesheet" href="/js/plugins/bootstrap-taginput/tagsinput.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css">
+    <style type="text/css">
+        .file-upload {
+            width: 100%;
+            padding: 10px 0px;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
 
-                <!-- Page Content -->
-                <div class="content">
-                    <div class="content-heading pt-0 mb-3">
-                        Tambah Produk Baru
-                        <button type="button" id="submit-tbh-barang" class="btn btn-primary float-right mr-5">
-                            <i class="si si-paper-plane mr-1"></i>
-                            Simpan
-                        </button>
-                    </div>
+<body>
+    <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header main-content-boxed">
+        <!-- Sidebar -->
+        {{template "partials/admin-sidebar" .}}
+        <!-- END Sidebar -->
 
-                    <!-- 1. Informasi Produk -->
-                    <div class="block block-rounded">
-                        <div class="block-header block-header-default">
-                            <div class="block-title">
-                                <strong>1. Informasi Produk</strong>
-                            </div>
-                        </div>
-                        <div class="block-content pb-15">
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label" for="field-nama">Nama Produk</label>
-                                <div class="col-lg-9">
-                                    <input type="text" class="form-control" id="field-nama" name="nama" placeholder="Masukan Nama Produk" autocomplete="off">
-                                    <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
-                                </div>
-                            </div>
-            
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label" for="field-deskripsi">Deskripsi Produk</label>
-                                <div class="col-lg-9">
-                                    <textarea class="form-control" name="deskripsi" id="field-deskripsi" cols="30" rows="10" placeholder="Masukan Deskripsi Produk"></textarea>
-                                    <div class="invalid-feedback font-size-sm" id="error-deskripsi">Invalid feedback</div>
-                                </div>
-                            </div>
-            
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label" for="field-kategori">Kategori Produk</label>
-                                <div class="col-lg-9">
-                                    <select class="form-control" id="field-kategori" name="kategori_id"></select>
-                                    <div class="invalid-feedback font-size-sm" id="error-kategori">Invalid feedback</div>
-                                </div>
-                            </div>
-            
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label" for="field-kode">Kode Produk</label>
-                                <div class="col-lg-9">
-                                    <input type="text" class="form-control" id="field-kode" name="kode" placeholder="Masukan Kode Produk" autocomplete="off">
-                                    <div class="invalid-feedback font-size-sm" id="error-kode">Invalid feedback</div>
-                                </div>
-                            </div>
+        <!-- Header -->
+        {{template "partials/admin-header" .}}
+        <!-- END Header -->
 
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label" for="field-discount">Diskon</label>
-                                <div class="col-lg-9">
-                                    <input type="number" max="100" class="form-control" id="field-discount" name="discount" placeholder="Masukan besaran diskon" autocomplete="off">
-                                    <div class="invalid-feedback font-size-sm" id="error-discount">Invalid feedback</div>
-                                </div>
-                            </div>
-            
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label" for="field-spek">Spesifikasi Produk</label>
-                                <div class="col-lg-9">
-                                    <input type="hidden" id="field-spek_count" value="0">
-                                    <table class="table table-bordered" id="field-spek">
-                                        <tbody>
+        <!-- Main Container -->
+        <main id="main-container">
 
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3">
-                                                    <button class="btn btn-block btn-primary" type="button" id="btn-add-spek">Tambah Spesifikasi</button>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
+            <!-- Page Content -->
+            <div class="content">
+                <div class="content-heading pt-0 mb-3">
+                    Tambah Produk Baru
+                    <button type="button" id="submit-tbh-barang" class="btn btn-primary float-right mr-5">
+                        <i class="si si-paper-plane mr-1"></i>
+                        Simpan
+                    </button>
+                </div>
+
+                <!-- 1. Informasi Produk -->
+                <div class="block block-rounded">
+                    <div class="block-header block-header-default">
+                        <div class="block-title">
+                            <strong>1. Informasi Produk</strong>
                         </div>
                     </div>
-            
-                    <!-- 2. Harga Produk -->
-                    <div class="block block-rounded">
-                        <div class="block-header block-header-default">
-                            <div class="block-title">
-                                <strong>2. Harga Produk</strong>
+                    <div class="block-content pb-15">
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label" for="field-nama">Nama Produk</label>
+                            <div class="col-lg-9">
+                                <input type="text" class="form-control" id="field-nama" name="nama"
+                                    placeholder="Masukan Nama Produk" autocomplete="off">
+                                <div class="invalid-feedback font-size-sm" id="error-nama">Invalid feedback</div>
                             </div>
-                            <div class="d-flex justify-content-end" id="add-variasi">
-                                <button type="button" class="btn btn-outline-primary" id="btn-add-variasi">
-                                    <i class="si si-plus mr-1"></i> Tambahkan Variasi
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label" for="field-deskripsi">Deskripsi Produk</label>
+                            <div class="col-lg-9">
+                                <textarea class="form-control" name="deskripsi" id="field-deskripsi" cols="30" rows="10"
+                                    placeholder="Masukan Deskripsi Produk"></textarea>
+                                <div class="invalid-feedback font-size-sm" id="error-deskripsi">Invalid feedback</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label" for="field-kategori">Kategori Produk</label>
+                            <div class="col-lg-9">
+                                <select class="form-control" id="field-kategori" name="kategori_id"></select>
+                                <div class="invalid-feedback font-size-sm" id="error-kategori">Invalid feedback</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label" for="field-kode">Kode Produk</label>
+                            <div class="col-lg-9">
+                                <input type="text" class="form-control" id="field-kode" name="kode"
+                                    placeholder="Masukan Kode Produk" autocomplete="off">
+                                <div class="invalid-feedback font-size-sm" id="error-kode">Invalid feedback</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label" for="field-discount">Diskon</label>
+                            <div class="col-lg-9">
+                                <div class="input-group" style="width: 50%">
+                                    <input type="number" max="100" class="form-control" id="field-discount"
+                                        name="discount" placeholder="Masukan besaran diskon" autocomplete="off">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            &percnt;
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback font-size-sm" id="error-discount">Invalid feedback</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label" for="field-spek">Spesifikasi Produk</label>
+                            <div class="col-lg-9">
+                                <input type="hidden" id="field-spek_count" value="0">
+                                <table class="table table-bordered" id="field-spek">
+                                    <tbody>
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3">
+                                                <button class="btn btn-block btn-primary" type="button"
+                                                    id="btn-add-spek">Tambah Spesifikasi</button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Harga Produk -->
+                <div class="block block-rounded">
+                    <div class="block-header block-header-default">
+                        <div class="block-title">
+                            <strong>2. Harga Produk</strong>
+                        </div>
+                        <div class="d-flex justify-content-end" id="add-variasi">
+                            <button type="button" class="btn btn-outline-primary" id="btn-add-variasi">
+                                <i class="si si-plus mr-1"></i> Tambahkan Variasi
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content pb-15">
+                        <input type="hidden" name="is_has_variant" id="is_has_variant" value="0">
+                        <input type="hidden" id="variant-count" value="0">
+                        <div id="harga-produk-form">
+
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button type="button" class="btn btn-outline-primary btn-block" id="btn-toggle-variasi">
+                                    <i class="si si-plus mr-1"></i> Aktifkan Variasi Produk
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Foto Produk -->
+                <div class="block block-rounded">
+                    <div class="block-header block-header-default">
+                        <div class="block-title">
+                            <strong>3. Foto Produk</strong>
+                        </div>
+                    </div>
+                    <div class="block-content pb-15">
+                        <div class="form-group">
+                            <div class="foto-produk">
+                                <div class="row" id="selected-foto-row">
+
+                                </div>
+                                <div class="btn btn-primary btn-block btn-sm mt-3" id="foto-modal-btn"
+                                    data-toggle="modal" data-target="#foto-produk-modal">
+                                    <i class="si si-plus mr-1"></i>Pilih Foto
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Pengiriman Produk -->
+                <div class="block block-rounded">
+                    <div class="block-header block-header-default">
+                        <div class="block-title">
+                            <strong>4. Pengiriman</strong>
+                        </div>
+                    </div>
+                    <div class="block-content pb-15">
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label" for="field-berat">Berat</label>
+                            <div class="col-lg-9">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <input type="number" class="form-control" id="field-berat" name="berat"
+                                            placeholder="Masukan Berat Produk">
+                                    </div>
+                                    <div class="col-4">
+                                        <select class="form-control" id="field-berat-satuan" name="berat_satuan">
+                                            <option value="g">Gram (g)</option>
+                                            <option value="kg">Kilogram (Kg)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label" for="field-lebar">Ukuran Paket</label>
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="field-lebar" name="lebar"
+                                        placeholder="Lebar">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            cm
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="field-panjang" name="panjang"
+                                        placeholder="Panjang">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            cm
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="field-tinggi" name="tinggi"
+                                        placeholder="Tinggi">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            cm
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="foto-produk-modal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title modal-title">Potong & Sesuaikan Foto</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="si si-close"></i>
                                 </button>
                             </div>
                         </div>
                         <div class="block-content pb-15">
-                            <input type="hidden" name="is_has_variant" id="is_has_variant" value="0">
-                            <input type="hidden" id="variant-count" value="0">
-                            <div id="harga-produk-form">
+                            <center>
+                                <img id="imagePreview" src="/img/placeholder/product.png" width="50%" height="50%" />
+                            </center>
 
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-lg-12">
-                                    <button type="button" class="btn btn-outline-primary btn-block" id="btn-toggle-variasi">
-                                        <i class="si si-plus mr-1"></i> Aktifkan Variasi Produk
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <!-- 3. Foto Produk -->
-                    <div class="block block-rounded">
-                        <div class="block-header block-header-default">
-                            <div class="block-title">
-                                <strong>3. Foto Produk</strong>
-                            </div>
-                        </div>
-                        <div class="block-content pb-15">
-                            <div class="form-group">
-                                <div class="foto-produk">
-                                    <div class="row" id="selected-foto-row">
-                                        
-                                    </div>
-                                    <div class="btn btn-primary btn-block btn-sm mt-3" id="foto-modal-btn" data-toggle="modal" data-target="#foto-produk-modal">
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <div class="btn btn-alt-primary btn-block mt-2">
+                                        <input type="file" id="file-upload-input" class="file-upload" accept="image/*">
                                         <i class="si si-plus mr-1"></i>Pilih Foto
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 4. Pengiriman Produk -->
-                    <div class="block block-rounded">
-                        <div class="block-header block-header-default">
-                            <div class="block-title">
-                                <strong>4. Pengiriman</strong>
-                            </div>
-                        </div>
-                        <div class="block-content pb-15">
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label" for="field-berat">Berat</label>
-                                <div class="col-lg-9">
-                                    <div class="row">
-                                        <div class="col-8">
-                                            <input type="number" class="form-control" id="field-berat" name="berat" placeholder="Masukan Berat Produk">
-                                        </div>
-                                        <div class="col-4">
-                                            <select class="form-control" id="field-berat-satuan" name="berat_satuan">
-                                                <option value="g">Gram (g)</option>
-                                                <option value="kg">Kilogram (Kg)</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-lg-3 col-form-label" for="field-lebar">Ukuran Paket</label>
-                                <div class="col-lg-3">
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="field-lebar" name="lebar" placeholder="Lebar">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                cm
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="field-panjang" name="panjang" placeholder="Panjang">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                cm
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="field-tinggi" name="tinggi" placeholder="Tinggi">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                cm
-                                            </span>
-                                        </div>
-                                    </div>
+
+                                <div class="col-md-12">
+                                    <button class="btn btn-alt-primary btn-block" id="upload"
+                                        onclick="_uploadSelectedFoto()">Potong Dan Simpan</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="modal" id="foto-produk-modal">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="block-header block-header-default">
-                                <h3 class="block-title modal-title">Potong & Sesuaikan Foto</h3>
-                                <div class="block-options">
-                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                        <i class="si si-close"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="block-content pb-15">
-                                <center>
-                                    <img id="imagePreview" src="/img/placeholder/product.png" width="50%" height="50%"/>
-                                </center>
+            </div>
+            <!-- END Page Content -->
 
-                                <div class="row">
-                                    <div class="col-md-12 mb-4">
-                                        <div class="btn btn-alt-primary btn-block mt-2" >
-                                            <input type="file" id="file-upload-input" class="file-upload" accept="image/*">
-                                            <i class="si si-plus mr-1"></i>Pilih Foto
-                                        </div>
-                                    </div>
+        </main>
+        <!-- END Main Container -->
 
-                                    <div class="col-md-12">
-                                        <button class="btn btn-alt-primary btn-block" id="upload" onclick="_uploadSelectedFoto()">Potong Dan Simpan</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- END Page Content -->
+        <!-- Footer -->
+        {{template "partials/admin-footer" .}}
+        <!-- END Footer -->
+    </div>
+    <script src="/js/laravel.app.js"></script>
+    <script src="/js/laroute.js"></script>
+    <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/functions.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
+    <script src="/js/plugins/select2/js/select2.full.min.js"></script>
+    <script src="/js/plugins/select2/js/i18n/id.js"></script>
+    <script src="/js/plugins/bootstrap-taginput/tagsinput.js"></script>
+    <script src="/js/plugins/jquery-rowspanizer/jquery.rowspanizer.min.js"></script>
+    <script src="/js/plugins/summernote/summernote-bs4.min.js"></script>
+    <script src="/js/admin/general.js"></script>
+    <script src="/js/admin/produk/tambah.js"></script>
+</body>
 
-            </main>
-            <!-- END Main Container -->
-
-            <!-- Footer -->
-            {{template "partials/admin-footer" .}}
-            <!-- END Footer -->
-        </div>
-        <script src="/js/laravel.app.js"></script>
-        <script src="/js/laroute.js"></script>
-        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="/js/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
-        <script src="/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
-        <script src="/js/common.js"></script>
-        <script src="/js/functions.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.js"></script>
-        <script src="/js/plugins/select2/js/select2.full.min.js"></script>
-        <script src="/js/plugins/select2/js/i18n/id.js"></script>
-        <script src="/js/plugins/bootstrap-taginput/tagsinput.js"></script>
-        <script src="/js/plugins/jquery-rowspanizer/jquery.rowspanizer.min.js"></script>
-        <script src="/js/plugins/summernote/summernote-bs4.min.js"></script>
-        <script src="/js/admin/general.js"></script>
-        <script src="/js/admin/produk/tambah.js"></script>
-    </body>
 </html>
