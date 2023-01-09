@@ -49,6 +49,9 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	// router clustering
 	parentPath := app.Group("/")
 
+	// alamat origin
+	parentPath.Get("/alamat-origin/footer", alamatOriginAPIController.Read)
+
 	// authentication
 	parentPath.Get("/login", middlewareGuestOnly, authencticationController.LoginPage)
 	parentPath.Post("/login", middlewareGuestOnly, authencticationController.Login)
@@ -82,6 +85,9 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	alamat.Put("/make-utama", alamatAPIController.MakeUtama)
 	alamat.Get("/provinsi", alamatAPIController.Provinsi)
 	alamat.Get("/kota/:provinsi_id", alamatAPIController.Kota)
+
+	alamatOri := parentPath.Group("/alamat-origin")
+	alamatOri.Get("/", alamatOriginAPIController.Read)
 
 	// profile
 	profile := parentPath.Group("/profile", middlewareStrict)
@@ -141,10 +147,6 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	feedback.Get("/:produk_id/:rating", feedbackAPIController.ByRating)
 	feedback.Post("/create", middlewareStrict, feedbackAPIController.GiveFeedback)
 	feedback.Put("/update", middlewareStrict, feedbackAPIController.EditFeedback)
-
-	// alamat origin
-	alamatOrigin := parentPath.Group("/alamat-origin")
-	alamatOrigin.Get("/", alamatOriginAPIController.Read, middlewareNotSoStrict)
 
 	// reseller
 	reseller := parentPath.Group("/seller", middlewareNotSoStrict)
