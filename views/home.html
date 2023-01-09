@@ -1,253 +1,268 @@
 <!doctype html>
 <html lang="en" class="no-focus">
-    <head>
-        <title>Diagem</title>
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <meta name="description" content="Diagem">
-        <meta name="author" content="Diagem">
-        <meta name="robots" content="noindex, nofollow">
-        
-        <!-- Open Graph Meta -->
-        <meta property="og:title" content="Diagem">
-        <meta property="og:site_name" content="Diagem">
-        <meta property="og:description" content="Diagem">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="">
-        <meta property="og:image" content="">
-        
-        
-        <!-- Icons -->
-        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
-        <link rel="shortcut icon" href="/img/favicons/favicon.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
-        
-        <!-- Styling -->
-        <!-- Fonts and Codebase framework -->
-        <link rel="stylesheet" id="css-main" href="/css/app.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
-        <link rel="stylesheet" href="/js/plugins/slick/slick-theme.css">
-        <link rel="stylesheet" href="/js/plugins/slick/slick.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css">
-        <link rel="stylesheet" href="/css/slider.css">
+<head>
+    <title>Diagem</title>
 
-        <style>
-            .slider-item-arrow {
-                font-size: 25px;
-                color: #000;
-                position: absolute;
-                top: -90px;
-                transform: translateY(-50%);
-                z-index: 3;
-                border: 1px solid #ddd;
-                border-radius: 50%;
-            }
-            .slider-item-arrow {
-                cursor: pointer;
-                -webkit-transition: all 0.6s ease 0s;
-                -moz-transition: all 0.6s ease 0s;
-                -o-transition: all 0.6s ease 0s;
-                transition: all 0.6s ease 0s;
-                height: 40px;
-                line-height: 38px;
-                width: 40px;
-                text-align: center;
-                z-index: 2;
-            }
-            .slider-item-arrow.prev {
-                right: calc(50% + 150px);
-            }
-            .slider-item-arrow.next {
-                left: calc(50% + 150px);
-            }
-        </style>
-        <!-- End Styling -->
-    </head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="Diagem">
+    <meta name="author" content="Diagem">
+    <meta name="robots" content="noindex, nofollow">
 
-    <body class="bg-white">
-        <div class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
-            {{template "partials/user-unlogged-header" .}}
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Diagem">
+    <meta property="og:site_name" content="Diagem">
+    <meta property="og:description" content="Diagem">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="/img/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+
+    <!-- Styling -->
+    <!-- Fonts and Codebase framework -->
+    <link rel="stylesheet" id="css-main" href="/css/app.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" href="/js/plugins/slick/slick-theme.css">
+    <link rel="stylesheet" href="/js/plugins/slick/slick.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css">
+    <link rel="stylesheet" href="/css/slider.css">
+
+    <style>
+        .slider-item-arrow {
+            font-size: 25px;
+            color: #000;
+            position: absolute;
+            top: -90px;
+            transform: translateY(-50%);
+            z-index: 3;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+        }
+
+        .slider-item-arrow {
+            cursor: pointer;
+            -webkit-transition: all 0.6s ease 0s;
+            -moz-transition: all 0.6s ease 0s;
+            -o-transition: all 0.6s ease 0s;
+            transition: all 0.6s ease 0s;
+            height: 40px;
+            line-height: 38px;
+            width: 40px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .slider-item-arrow.prev {
+            right: calc(50% + 150px);
+        }
+
+        .slider-item-arrow.next {
+            left: calc(50% + 150px);
+        }
+    </style>
+    <!-- End Styling -->
+</head>
+
+<body class="bg-white">
+    <div class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+        {{template "partials/user-unlogged-header" .}}
+    </div>
+
+    <!-- slider -->
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <img src="/img/dummy/img_nature_wide.jpg" style="width:100%">
+            <div class="text">Caption Text</div>
         </div>
 
-        <!-- slider -->
-        <div class="slideshow-container">
-            <div class="mySlides fade">
-                <img src="/img/dummy/img_nature_wide.jpg" style="width:100%">
-                <div class="text">Caption Text</div>
-            </div>
-            
-            <!-- Next and previous buttons -->
-            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        <!-- Next and previous buttons -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
         <br>
-        </div>
+    </div>
 
-        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
-            <main id="main-container">
-                <div class="content content-full">
-                    <div class="row text-center nice-copy">
-                        <div class="col-md-12 col-lg-3 col-6 d-flex align-items-stretch">
-                            <div class="animated bg-body fadeInUp js-appear-enabled p-20 w-100 rounded" data-toggle="appear" data-class="animated fadeInUp" data-offset="-150">
-                                <div class="height-75 mb-3 mx-auto">
-                                    <img src="/img/icons/gold.svg" class="h-100">
-                                </div>
-                                <h4 class="mb-5">
-                                    REAL GOLD
-                                </h4>
-                                <!-- <p class="text-muted mb-0">All of our jewerly was made from real 9k gold.</p> -->
+    <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+        <main id="main-container">
+            <div class="content content-full">
+                <div class="row text-center nice-copy">
+                    <div class="col-md-12 col-lg-3 col-6 d-flex align-items-stretch">
+                        <div class="animated bg-body fadeInUp js-appear-enabled p-20 w-100 rounded" data-toggle="appear"
+                            data-class="animated fadeInUp" data-offset="-150">
+                            <div class="height-50 mb-3 mx-auto">
+                                <img src="/img/icons/gold-r.svg" class="h-100">
                             </div>
+                            <h5 class="mb-5">
+                                REAL GOLD
+                            </h5>
+                            <!-- <p class="text-muted mb-0">All of our jewerly was made from real 9k gold.</p> -->
                         </div>
-                        <div class="col-md-12 col-lg-3 col-6 d-flex align-items-stretch">
-                            <div class="animated bg-body fadeInUp js-appear-enabled p-20 w-100 rounded" data-toggle="appear"
-                                data-class="animated fadeInUp" data-offset="-150">
-                                <div class="height-75 mb-3 mx-auto">
-                                    <img src="/img/icons/reseller.svg" class="h-100">
-                                </div>
-                                <h4 class="mb-5">
-                                    RESELLER
-                                </h4>
-                                <!-- <p class="text-muted mb-0">We accept resale for Diagem Jewerly's product. </p>  -->
+                    </div>
+                    <div class="col-md-12 col-lg-3 col-6 d-flex align-items-stretch">
+                        <div class="animated bg-body fadeInUp js-appear-enabled p-20 w-100 rounded" data-toggle="appear"
+                            data-class="animated fadeInUp" data-offset="-150">
+                            <div class="height-50 mb-3 mx-auto">
+                                <img src="/img/icons/reseller-r.svg" class="h-100">
                             </div>
+                            <h5 class="mb-5">
+                                RESELLER
+                            </h5>
+                            <!-- <p class="text-muted mb-0">We accept resale for Diagem Jewerly's product. </p>  -->
                         </div>
-                        <div class="col-md-12 col-lg-3 col-6 d-flex align-items-stretch">
-                            <div class="animated bg-body fadeInUp js-appear-enabled p-20 w-100 rounded" data-toggle="appear"
-                                data-class="animated fadeInUp" data-offset="-150">
-                                <div class="height-75 mb-3 mx-auto">
-                                    <img src="/img/icons/certification.svg" class="h-100">
-                                </div>
-                                <h4 class="mb-5">
-                                    CERTIFICATION
-                                </h4>
-                                <!-- <p class="text-muted mb-0">We give certificates of authenticity and invoice in every purchase </p> -->
+                    </div>
+                    <div class="col-md-12 col-lg-3 col-6 d-flex align-items-stretch">
+                        <div class="animated bg-body fadeInUp js-appear-enabled p-20 w-100 rounded" data-toggle="appear"
+                            data-class="animated fadeInUp" data-offset="-150">
+                            <div class="height-50 mb-3 mx-auto">
+                                <img src="/img/icons/certification-r.svg" class="h-100">
                             </div>
+                            <h5 class="mb-5">
+                                CERTIFICATION
+                            </h5>
+                            <!-- <p class="text-muted mb-0">We give certificates of authenticity and invoice in every purchase </p> -->
                         </div>
-                        <div class="col-md-12 col-lg-3 col-6 d-flex align-items-stretch">
-                            <div class="animated bg-body fadeInUp js-appear-enabled p-20 w-100 rounded" data-toggle="appear"
-                                data-class="animated fadeInUp" data-offset="-150">
-                                <div class="height-75 mb-3 mx-auto">
-                                    <img src="/img/icons/money-guarantee.svg" class="h-100">
-                                </div>
-                                <h4 class="mb-5">
-                                    MONEY GUARANTEE
-                                </h4>
-                                <!-- <p class="text-muted mb-0">we provide a money as an opportunity for customer to ensure that the jewerly you get is as expected </p> -->
+                    </div>
+                    <div class="col-md-12 col-lg-3 col-6 d-flex align-items-stretch">
+                        <div class="animated bg-body fadeInUp js-appear-enabled p-20 w-100 rounded" data-toggle="appear"
+                            data-class="animated fadeInUp" data-offset="-150">
+                            <div class="height-50 mb-3 mx-auto">
+                                <img src="/img/icons/money-guarantee-r.svg" class="h-100">
                             </div>
+                            <h5 class="mb-5">
+                                MONEY GUARANTEE
+                            </h5>
+                            <!-- <p class="text-muted mb-0">we provide a money as an opportunity for customer to ensure that the jewerly you get is as expected </p> -->
                         </div>
                     </div>
                 </div>
-    
-                <div class="content content-full">
-                    <div class="heading-title style-1">
-                        <div class="heading-inner">
-                            <h3 class="title">
-                                Best Seller
-                                <span></span>
-                            </h3>
-                            <div class="subtitle">
-                                Browse our website for the hottest items now.
+            </div>
+
+            <div class="content content-full">
+                <div class="heading-title style-1">
+                    <div class="heading-inner">
+                        <h3 class="title">
+                            Best Seller
+                            <span></span>
+                        </h3>
+                        <div class="subtitle">
+                            Browse our website for the hottest items now.
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="popular-products"></div>
+            </div>
+
+            <div class="content content-full">
+                <div class="row mb-lg-4">
+                    <div class="col-lg-8">
+                        <a class="bg-image block block-rounded-2 block-link-pop"
+                            style="background-image: url('/img/banner/RING-D.webp')" href="#">
+                            <div class="bg-black-op block-content block-content-full d-flex min-height-300">
+                                <div class="mt-auto nice-copy text-white w-75">
+                                    <h6 class="font-weight-bold h3 mb-1 text-white">Rings</h6>
+                                    <p class="mb-2">
+                                        Discover various pieces of engravingand stunning stone rings that create an art
+                                        of talking with your fingers.
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
-                    <div class="row" id="popular-products"></div>
-                </div>
-                
-                <div class="content content-full">
-                    <div class="row mb-lg-4">
-                        <div class="col-lg-8">
-                            <a class="bg-image block block-rounded-2 block-link-pop" style="background-image: url('/img/banner/RING-D.webp')" href="#">
-                                <div class="bg-black-op block-content block-content-full d-flex min-height-300">
-                                    <div class="mt-auto nice-copy text-white w-75">
-                                        <h6 class="font-weight-bold h3 mb-1 text-white">Rings</h6>
-                                        <p class="mb-2">
-                                            Discover various pieces of engravingand stunning stone rings that create an art of talking with your fingers.
-                                        </p>
-                                    </div>
+                    <div class="col-lg-4">
+                        <a class="bg-image block block-rounded-2 block-link-pop"
+                            style="background-image: url('/img/banner/earring.webp')" href="#">
+                            <div class="bg-black-op block-content block-content-full d-flex min-height-300">
+                                <div class="mt-auto nice-copy text-white w-75">
+                                    <h6 class="font-weight-bold h3 mb-1 text-white">Earrings</h6>
+                                    <p class="mb-2">
+                                        From classic drops to modern studs, double the impact with dazzled earrings
+                                    </p>
                                 </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-4">
-                            <a class="bg-image block block-rounded-2 block-link-pop" style="background-image: url('/img/banner/earring.webp')" href="#">
-                                <div class="bg-black-op block-content block-content-full d-flex min-height-300">
-                                    <div class="mt-auto nice-copy text-white w-75">
-                                        <h6 class="font-weight-bold h3 mb-1 text-white">Earrings</h6>
-                                        <p class="mb-2">
-                                            From classic drops to modern studs, double the impact with dazzled earrings
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <a class="bg-image block block-rounded-2 block-link-pop" style="background-image: url('/img/banner/bracelet.webp')" href="#">
-                                <div class="bg-black-op block-content block-content-full d-flex min-height-300">
-                                    <div class="mt-auto nice-copy text-white w-75">
-                                        <h6 class="font-weight-bold h3 mb-1 text-white">Shop Rings</h6>
-                                        <p class="mb-2">
-                                            Classic and adjustable bracelets in sleek metals to be one little thing that makes you feel unique.
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-4">
-                            <a class="bg-image block block-rounded-2 block-link-pop" style="background-image: url('/img/banner/necklace.webp')" href="#">
-                                <div class="bg-black-op block-content block-content-full d-flex min-height-300">
-                                    <div class="mt-auto nice-copy text-white w-75">
-                                        <h6 class="font-weight-bold h3 mb-1 text-white">Necklace</h6>
-                                        <p>
-                                            Make a sparkling look with breathtaking gold and diamond necklaces around the neck.
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-4">
-                            <a class="bg-image block block-rounded-2 block-link-pop" style="background-image: url('/img/banner/pendant.webp')" href="#">
-                                <div class="bg-black-op block-content block-content-full d-flex min-height-300">
-                                    <div class="mt-auto nice-copy text-white w-75">
-                                        <h6 class="font-weight-bold h3 mb-1 text-white">Pendant</h6>
-                                        <p>
-                                            An artful piece of pendant that accentuates and complements what’s already there.
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content content-full">
-                    <div class="heading-title style-1">
-                        <div class="heading-inner">
-                            <h3 class="title">
-                                Lattest Post
-                                <span></span>
-                            </h3>
-                            <div class="subtitle">
-                                Browse our website for the hottest items now.
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="row" id="latest-post">
-
+                        </a>
                     </div>
                 </div>
-            </main>
-        </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <a class="bg-image block block-rounded-2 block-link-pop"
+                            style="background-image: url('/img/banner/bracelet.webp')" href="#">
+                            <div class="bg-black-op block-content block-content-full d-flex min-height-300">
+                                <div class="mt-auto nice-copy text-white w-75">
+                                    <h6 class="font-weight-bold h3 mb-1 text-white">Shop Rings</h6>
+                                    <p class="mb-2">
+                                        Classic and adjustable bracelets in sleek metals to be one little thing that
+                                        makes you feel unique.
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a class="bg-image block block-rounded-2 block-link-pop"
+                            style="background-image: url('/img/banner/necklace.webp')" href="#">
+                            <div class="bg-black-op block-content block-content-full d-flex min-height-300">
+                                <div class="mt-auto nice-copy text-white w-75">
+                                    <h6 class="font-weight-bold h3 mb-1 text-white">Necklace</h6>
+                                    <p>
+                                        Make a sparkling look with breathtaking gold and diamond necklaces around the
+                                        neck.
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a class="bg-image block block-rounded-2 block-link-pop"
+                            style="background-image: url('/img/banner/pendant.webp')" href="#">
+                            <div class="bg-black-op block-content block-content-full d-flex min-height-300">
+                                <div class="mt-auto nice-copy text-white w-75">
+                                    <h6 class="font-weight-bold h3 mb-1 text-white">Pendant</h6>
+                                    <p>
+                                        An artful piece of pendant that accentuates and complements what’s already
+                                        there.
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-        {{template "partials/footer" .}}
-        <script src="/js/slider.js"></script>
-        <script src="/js/laravel.app.js"></script>
-        <script src="/js/laroute.js"></script>
-        <script src="/js/functions.js"></script>
-        <script src="/js/plugins/slick/slick.js"></script>
-        <script src="https://alexandrebuffet.fr/codepen/slider/slick-animation.min.js"></script>
-        <script src="/js/umum/home.js"></script>
-    </body>
+            <div class="content content-full">
+                <div class="heading-title style-1">
+                    <div class="heading-inner">
+                        <h3 class="title">
+                            Lattest Post
+                            <span></span>
+                        </h3>
+                        <div class="subtitle">
+                            Browse our website for the hottest items now.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="latest-post">
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    {{template "partials/footer" .}}
+    <script src="/js/slider.js"></script>
+    <script src="/js/laravel.app.js"></script>
+    <script src="/js/laroute.js"></script>
+    <script src="/js/functions.js"></script>
+    <script src="/js/plugins/slick/slick.js"></script>
+    <script src="https://alexandrebuffet.fr/codepen/slider/slick-animation.min.js"></script>
+    <script src="/js/umum/home.js"></script>
+</body>
+
 </html>
