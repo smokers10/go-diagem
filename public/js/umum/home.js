@@ -86,9 +86,8 @@ jQuery('#popular-products').each((index, element) => {
                 if (typeof variasi == undefined || typeof variasi == "undefined") {
                     hargaText = formatDUIT.format(harga)
                 }else {
-                    let firstItem = variasi[0]
-                    let lastItem = variasi[variasi.length - 1]
-                    hargaText = `${formatDUIT.format(firstItem.harga)} - ${formatDUIT.format(lastItem.harga)}`
+                    const lowestVariant = variasi.reduce((min, variasi) =>  variasi.harga < min.harga ? variasi : min)
+                    hargaText = `${formatDUIT.format(lowestVariant.harga)}`
                 }
 
                 el.append(createProdukElement(path, slug, nama, hargaText, discount))

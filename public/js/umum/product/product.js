@@ -110,9 +110,8 @@ function load_content(){
                     hargaText = toRupiah.format(harga)
                     el.append(createContentElement(path, slug, nama, hargaText, discount))
                 }else {
-                    let firstItem = variasi[0]
-                    let lastItem = variasi[variasi.length - 1]
-                    hargaText = `${toRupiah.format(firstItem.harga)} - ${toRupiah.format(lastItem.harga)}`
+                    const lowestVariant = variasi.reduce((min, variasi) =>  variasi.harga < min.harga ? variasi : min)
+                    hargaText = `${toRupiah.format(lowestVariant.harga)}`
                     el.append(createContentElement(path, slug, nama, hargaText, discount))
                 }
             })

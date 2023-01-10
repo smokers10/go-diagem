@@ -28,9 +28,9 @@ $('#data-barang').DataTable({
                 let { variasi } = data
 
                 if (typeof variasi == "object" || typeof variasi == Object) {
-                    let firstItem = variasi[0]
-                    let lastItem = variasi[variasi.length - 1]
-                    return `${toRupiah.format(firstItem.harga)} - ${toRupiah.format(lastItem.harga)}`
+                    const lowestVariant = variasi.reduce((min, variasi) =>  variasi.harga < min.harga ? variasi : min)
+
+                    return toRupiah.format(lowestVariant.harga)
                 } 
 
                 return toRupiah.format(data.harga)
