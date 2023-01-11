@@ -9,12 +9,15 @@ import (
 
 	"github.com/smokers10/go-diagem.git/domain"
 	"github.com/smokers10/go-diagem.git/infrastructure/config"
+	Email "github.com/smokers10/go-diagem.git/infrastructure/email"
 	"github.com/smokers10/go-diagem.git/infrastructure/encryption"
+	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 	"github.com/smokers10/go-diagem.git/infrastructure/jwt"
 )
 
 type userServiceImpl struct {
-	userRepository domain.UserRepository
+	userRepository         domain.UserRepository
+	verificationRepository domain.VerifikasiRepository
 }
 
 type chaptacheck struct {
@@ -22,8 +25,8 @@ type chaptacheck struct {
 	ChallengeTS string `json:"challenge_ts"`
 }
 
-func UserService(user *domain.UserRepository) domain.UserService {
-	return &userServiceImpl{userRepository: *user}
+func UserService(user *domain.UserRepository, verification *domain.VerifikasiRepository) domain.UserService {
+	return &userServiceImpl{userRepository: *user, verificationRepository: *verification}
 }
 
 // khusus admin
@@ -157,6 +160,13 @@ func (u *userServiceImpl) Registrasi(req *domain.UserBasicData) *domain.Response
 		return &res
 	}
 
+	// kirim verifikasi
+	if err := u.sendVerification(newUser); err != nil {
+		res.Message = "error ketika mengirim email verifikasi"
+		res.Status = http.StatusInternalServerError
+		return &res
+	}
+
 	// kosong kan data password
 	newUser.Password = ""
 
@@ -238,4 +248,40 @@ func (a *userServiceImpl) verifyChapta(chaptaResponse string) (*chaptacheck, err
 	json.Unmarshal(resBody, r)
 
 	return r, nil
+}
+
+func (u *userServiceImpl) sendVerification(user *domain.User) error {
+	// check apakah user_id sudah ada
+	verification, err := u.verificationRepository.ByUserID(user.ID)
+	if err != nil {
+		return err
+	}
+
+	// buat kode verifikasi
+	kode := etc.KodeGeneratorImproved(6)
+
+	// send kode ke email
+	template := Email.SMTP().VerificationTemplate(user.Nama, kode)
+	if err := Email.SMTP().NativeFire([]string{user.Email}, "Verifikasi Akun", template); err != nil {
+		return err
+	}
+
+	// assign verification struc
+	ver := domain.Verifikasi{
+		UserID: user.ID,
+		Kode:   encryption.Hash(kode),
+	}
+
+	// jika verifikasi dengan user_id sudah ada update jika tidak buat baru.
+	if verification.UserID != 0 {
+		if err := u.verificationRepository.Update(&ver); err != nil {
+			return err
+		}
+	} else {
+		if err := u.verificationRepository.Create(&ver); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
