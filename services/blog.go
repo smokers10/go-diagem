@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/google/uuid"
 	"github.com/gosimple/slug"
@@ -54,8 +55,9 @@ func (bs *blogServiceImpl) Create(req *domain.Blog) *domain.Response {
 	id, _ := uuid.NewRandom()
 	req.ID = id.String()
 
-	// buat slug
 	req.Slug = slug.Make(req.Judul)
+
+	req.Isi = bs.HTMLCleaned(req.Isi)
 
 	// upload thumbnails blog
 	path := "public/uploads/blog/"
@@ -93,6 +95,8 @@ func (bs *blogServiceImpl) Create(req *domain.Blog) *domain.Response {
 func (bs *blogServiceImpl) Update(req *domain.Blog) *domain.Response {
 	// buat slug
 	req.Slug = slug.Make(req.Judul)
+
+	req.Isi = bs.HTMLCleaned(req.Isi)
 
 	// call repository
 	if err := bs.blogRepository.Update(req); err != nil {
@@ -247,4 +251,10 @@ func (bs *blogServiceImpl) IsTitleExists(judul string) (bool, error) {
 	}
 
 	return false, nil
+}
+
+func (br *blogServiceImpl) HTMLCleaned(html string) string {
+	re, _ := regexp.Compile(`<p><br></p>`)
+	cleanedHTML := re.ReplaceAllString(html, "")
+	return cleanedHTML
 }
