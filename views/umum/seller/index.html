@@ -1,139 +1,152 @@
 <!doctype html>
 <html lang="en" class="no-focus">
-    <head>
-        <title>Diagem</title>
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <meta name="description" content="Diagem">
-        <meta name="author" content="Diagem">
-        <meta name="robots" content="noindex, nofollow">
-        
-        <!-- Open Graph Meta -->
-        <meta property="og:title" content="Diagem">
-        <meta property="og:site_name" content="Diagem">
-        <meta property="og:description" content="Diagem">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="">
-        <meta property="og:image" content="">
-        
-        
-        <!-- Icons -->
-        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
-        <link rel="shortcut icon" href="/img/favicons/favicon.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
-        
-        <!-- Fonts and Codebase framework -->
-        <link rel="stylesheet" id="css-main" href="/css/app.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
-    </head>
-    <body class="bg-white">
-        <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
-            <!-- Header -->
-            {{if .Logged.IsLogged}}
-            {{template "partials/user-header" .}}
-            {{else}}
-            {{template "partials/user-unlogged-header" .}}
-             {{end}}
-            <!-- END Header -->
+<head>
+    <title>Diagem</title>
 
-            <!-- Main Container -->
-            <main id="main-container">
-                <div class="bg-image" style="background-image: url('/img/banner/banner-for-all.jpg');">
-                    <div class="content content-full d-flex min-height-200 text-center">
-                        <div class="m-auto">
-                            <h1 class="font-w700 mb-10">Our Seller</h1>
-                            <h2 class="h4 font-w400 text-muted"></h2>
-                        </div>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="Diagem">
+    <meta name="author" content="Diagem">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Diagem">
+    <meta property="og:site_name" content="Diagem">
+    <meta property="og:description" content="Diagem">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="/img/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+
+    <!-- Fonts and Codebase framework -->
+    <link rel="stylesheet" id="css-main" href="/css/app.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+</head>
+
+<body class="bg-white">
+    <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+        <!-- Header -->
+        {{if .Logged.IsLogged}}
+        {{template "partials/user-header" .}}
+        {{else}}
+        {{template "partials/user-unlogged-header" .}}
+        {{end}}
+        <!-- END Header -->
+
+        <!-- Main Container -->
+        <main id="main-container" style="margin-bottom: 3em;">
+            <div class="bg-image" style="background-image: url('/img/banner/banner-for-all.jpg');">
+                <div class="content content-full d-flex min-height-200 text-center">
+                    <div class="m-auto">
+                        <h1 class="font-w700 mb-10">Our Seller</h1>
+                        <h2 class="h4 font-w400 text-muted"></h2>
                     </div>
                 </div>
+            </div>
 
-                <div class="content" id="seller-content">
-                    <div class="justify-content-between mb-4">
-                        <form id="seller-search">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="input-group mb-2 mr-sm-2">
-                                        <input type="text" class="form-control" id="seller-name" placeholder="Cari nama/ID seller">
-                                        <div class="input-group-prepend">
-                                            <button class="input-group-text" id="search-btn"><i class="fas fa-search"></i></button>
-                                        </div>
+            <div class="content" id="seller-content">
+                <div class="justify-content-between mb-4">
+                    <form id="seller-search">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <input type="text" class="form-control" id="seller-name"
+                                        placeholder="Cari nama/ID seller">
+                                    <div class="input-group-prepend">
+                                        <button class="input-group-text" id="search-btn"><i
+                                                class="fas fa-search"></i></button>
                                     </div>
                                 </div>
-                                
-                                <div class="col-6">
-                                    <select class="form-control" id="seller-kota">
-                                        <option value="">Pilih Domisili</option>
-                                    </select>
-                                </div>
                             </div>
-                        </form>
-                    </div>
-                    <input type="hidden" id="current-page" value="1">
 
-                    <div class="row" id="seller-list">
-
-                    </div>
+                            <div class="col-6">
+                                <select class="form-control" id="seller-kota">
+                                    <option value="">Pilih Domisili</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </main>
-            <!-- END Main Container -->
+                <input type="hidden" id="current-page" value="1">
 
-            <!-- Footer -->
-            {{template "partials/footer" .}}
-            <!-- END Footer -->
-        </div>
-        <script src="/js/laravel.app.js"></script>
-        <script src="/js/laroute.js"></script>
-        <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="/js/umum/general.js"></script>
-        <script src="/js/functions.js"></script>
-        <script>
-            $(document).ready(function(){
-                loadSeller()
-                
-                $.ajax({
-                    url:"/rajaongkir/kota",
-                    success: function(res){
-                        var data = JSON.parse(res.data)
-                        var { results } = data.rajaongkir
-                        results.forEach(element => {
-                            $("#seller-kota").append(`<option value='${element.city_id}'>${element.type} ${element.city_name}</option>`)
-                        })
-                    }
-                })
+                <div class="row" id="seller-list">
 
-                $("#seller-search").submit(function(e){
-                    e.preventDefault()
-                    loadSeller()
-                })
+                </div>
+            </div>
+        </main>
+        <!-- END Main Container -->
 
-                $("#seller-kota").change(function(){
-                    loadSeller()
-                })
+        <!-- Footer -->
+        {{template "partials/footer" .}}
+        <!-- END Footer -->
+    </div>
+    <script src="/js/laravel.app.js"></script>
+    <script src="/js/laroute.js"></script>
+    <script src="/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="/js/umum/general.js"></script>
+    <script src="/js/functions.js"></script>
+    <script>
+        $(document).ready(function ()
+        {
+            loadSeller()
+
+            $.ajax({
+                url: "/rajaongkir/kota",
+                success: function (res)
+                {
+                    var data = JSON.parse(res.data)
+                    var { results } = data.rajaongkir
+                    results.forEach(element =>
+                    {
+                        $("#seller-kota").append(`<option value='${element.city_id}'>${element.type} ${element.city_name}</option>`)
+                    })
+                }
             })
-            
-            function loadSeller() {
-                const name = $("#seller-name").val() || ""
-                const kota = $("#seller-kota").val() || ""
 
-                $.ajax({
-                    url:`/seller/get`,
-                    data: {
-                        nama: name, kota: kota
-                    },
-                    success: function(res) {
-                        $("#seller-list").html("")
-                        const data = res.data
-                        data.forEach(element => {
-                            $("#seller-list").append(createSellerElement(element))
-                        });
-                    }
-                })
-            }
+            $("#seller-search").submit(function (e)
+            {
+                e.preventDefault()
+                loadSeller()
+            })
 
-            function createSellerElement(data) {
-                return `
+            $("#seller-kota").change(function ()
+            {
+                loadSeller()
+            })
+        })
+
+        function loadSeller ()
+        {
+            const name = $("#seller-name").val() || ""
+            const kota = $("#seller-kota").val() || ""
+
+            $.ajax({
+                url: `/seller/get`,
+                data: {
+                    nama: name, kota: kota
+                },
+                success: function (res)
+                {
+                    $("#seller-list").html("")
+                    const data = res.data
+                    data.forEach(element =>
+                    {
+                        $("#seller-list").append(createSellerElement(element))
+                    });
+                }
+            })
+        }
+
+        function createSellerElement (data)
+        {
+            return `
                     <div class="col-3">
                         <div class="card shadow p-2">
                             <div class="card-header">
@@ -141,13 +154,14 @@
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title" style="margin-bottom: 5px;">${data.kota}</h5>
-                                <p class="card-text"><i class="fas fa-map"></i>${data.alamat}</p>
+                                <p class="card-text"><i class="fas fa-map"></i>&nbsp;&nbsp;${data.alamat}</p>
                             </div>
                             <a href="https://api.whatsapp.com/send?phone=${data.kontak}&text=Hai%20Saya%20tertarik%20untuk%20membeli%20perhiasan%20dari%20diagem" class="btn btn-primary btn-block"><i class="fab fa-whatsapp"></i> Chat Via Whatsap</a>
                         </div>
                     </div>
                 `
-            }
-        </script>
-    </body>
+        }
+    </script>
+</body>
+
 </html>
