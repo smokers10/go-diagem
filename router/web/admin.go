@@ -19,7 +19,6 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	homeController := admin.HomeController()
 	mitraController := admin.MitraController()
 	sliderController := admin.SliderController()
-	keuanganController := admin.KeuanganController()
 	produkController := admin.ProdukController()
 	orderController := admin.OrderController()
 	promoController := admin.PromoController()
@@ -39,7 +38,6 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	userAdminController := adminAPI.UserAdminController(resolver.AdminService)
 	userAPIController := adminAPI.UserController(resolver.UserService)
 	alamatOriginAPIController := adminAPI.AlamatOriginController(resolver.AlamatOriginService)
-	bankAPIController := adminAPI.BankController(resolver.BankService)
 	rajaongkir := adminAPI.RajaOngkir(resolver.AlamatService)
 	orderAPIController := adminAPI.OrderController(resolver.OrderService)
 
@@ -93,12 +91,6 @@ func AdminWebPage(app *fiber.App, session *session.Store, resolver *resolver.Ser
 	slider.Put("/update", sliderAPIController.Update)
 	slider.Put("/update-cover", sliderAPIController.UpdateCover)
 	slider.Delete("/delete", sliderAPIController.Delete)
-
-	// keuangan
-	keuangan := adminParentPath.Group("/keuangan", middleware.AdminWeb(session, "admin", "super admin"))
-	keuangan.Get("/va", keuanganController.RekeningPage)
-	keuangan.Put("/update", bankAPIController.Update)
-	keuangan.Get("/get", bankAPIController.Read)
 
 	// produk
 	produk := adminParentPath.Group("/produk", middleware.AdminWeb(session, "marketing", "super admin"))
