@@ -2,6 +2,15 @@ $(document).ready(function() {
     $("#form-register").submit(function (e) {
         e.preventDefault()
         var formData = new FormData($('#form-register')[0])
+        let pw = $("#reg-password").val()
+        let cpw = $("#reg-password_confirmation").val()
+
+        if (pw != cpw) {
+            $("#reg_error-password_confirmation").show()
+            $("#reg_error-password_confirmation").text("konfirmasi password salah")
+            return
+        }
+
         $.ajax({
             url: "/register",
             type: 'POST',
@@ -44,7 +53,7 @@ $(document).ready(function() {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 Swal.close()
-                alert('Error adding / update data')
+                alert(jqXHR.responseJSON.message)
             }
         })
     })
