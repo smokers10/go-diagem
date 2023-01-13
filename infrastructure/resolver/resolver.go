@@ -65,7 +65,7 @@ func MYSQLResolver(mysql *sql.DB) ServiceResolver {
 	produkVariasiServ := services.ProdukVariasiService(&produkVariasiRepo)
 	promoServ := services.PromoService(&promoRepo)
 	sliderServ := services.SliderService(&sliderRepo)
-	userServ := services.UserService(&userRepo)
+	userServ := services.UserService(&userRepo, &verificationRepo)
 	verificationServ := services.VerificationService(&verificationRepo, &userRepo)
 	checkoutServ := services.CheckoutService(&cartRepo)
 	orderServ := services.OrderService(&orderRepo, &produkRepo, &produkVariasiRepo, &cartRepo, &orderItemRepo, &userRepo, &alamatRepo, &bankRepo, &orderBayarRepo)
