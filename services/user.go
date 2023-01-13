@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/smokers10/go-diagem.git/domain"
 	"github.com/smokers10/go-diagem.git/infrastructure/config"
@@ -20,9 +21,11 @@ type userServiceImpl struct {
 	verificationRepository domain.VerifikasiRepository
 }
 
-type chaptacheck struct {
-	Success     bool   `json:"success"`
-	ChallengeTS string `json:"challenge_ts"`
+type chaptaCheck struct {
+	Success     bool      `json:"success"`
+	ChallengeTS time.Time `json:"challenge_ts"`
+	Hostname    string    `json:"hostname"`
+	ErrorCodes  []string  `json:"error-codes"`
 }
 
 func UserService(user *domain.UserRepository, verification *domain.VerifikasiRepository) domain.UserService {
@@ -225,27 +228,31 @@ func (u *userServiceImpl) GetProfile(userID int) *domain.Response {
 	return &res
 }
 
-func (a *userServiceImpl) verifyChapta(chaptaResponse string) (*chaptacheck, error) {
-	// deklarasi var penting
-	r := &chaptacheck{}
-	c := config.ReadConfig().ETC
+func (a *userServiceImpl) verifyChapta(chaptaResponse string) (*chaptaCheck, error) {
+	// Declare important variables
+	r := &chaptaCheck{}
 	u := "https://www.google.com/recaptcha/api/siteverify"
+	secretKey := config.ReadConfig().ETC.RechaptaServerKey
 
-	// request HTTP dimulai
-	resp, err := http.PostForm(u, url.Values{"secret": {c.RechaptaServerKey}, "response": {chaptaResponse}})
+	// Start the HTTP request
+	resp, err := http.PostForm(u, url.Values{"secret": {secretKey}, "response": {chaptaResponse}})
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	// read body ke penyimpanan sementara (RAM)
-	resBody, err := ioutil.ReadAll(resp.Body)
+	// Read the response body into a temporary storage
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	// unmarshal response body dari json ke struct
-	json.Unmarshal(resBody, r)
+	// Unmarshal the response body from JSON into a struct
+	json.Unmarshal(body, &r)
+
+	fmt.Println(secretKey)
+	// fmt.Println(chaptaResponse)
+	fmt.Println(r)
 
 	return r, nil
 }
