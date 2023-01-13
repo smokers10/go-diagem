@@ -26,6 +26,12 @@ $('#data-barang').DataTable({
         {
             "data":null,
             "render":function(data, type, row){
+               return data.kategori.nama
+            }
+        },
+        {
+            "data":null,
+            "render":function(data, type, row){
                 let { variasi } = data
 
                 if (typeof variasi == "object" || typeof variasi == Object) {
