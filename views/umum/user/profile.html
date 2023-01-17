@@ -150,9 +150,11 @@
                     success: function(res){
                         const { data } = res
                         const { nama, email, hp, tgl_lahir } = data
+                        let dateString = "1997-02-14 00:00:00".split(" ")[0];
+
                         $("#field-nama").val(nama)
                         $("#field-phone").val(hp)
-                        $("#field-tgl-lahir").val(tgl_lahir)
+                        $("#field-tgl-lahir").val(dateString)
                     }
                 })
             }
