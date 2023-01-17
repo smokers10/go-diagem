@@ -105,7 +105,6 @@ function load_cart(){
                         let pengali = discount / 100
                         let dipotong = element.subtotal - (element.subtotal * pengali)
                         totalBelanja = totalBelanja + dipotong
-
                     }else {
                         totalBelanja = totalBelanja + element.subtotal
                     }
@@ -195,6 +194,7 @@ function _createElement(data){
     const { variant, harga: hargaVariant, stok: stokVariant } = variasi
     const { path } = produk_single_foto
     const pengaliDiscount = discount / 100
+    const HargaDiscount = harga - (harga * pengaliDiscount)
     var item
     var denganPotongan
 
@@ -213,11 +213,11 @@ function _createElement(data){
                     <div class="cart-item-product_title">
                         <a href="">${ nama }</a>
                     </div>
-                    <span>${ toRupiah.format(harga) } x (${quantity}) </span>
+                    <span>${ discount > 0 ? toRupiah.format(HargaDiscount) : harga } x (${quantity}) </span>
                     <div class="cart-item-product_price" id="view-cart-subtotal-${id}">
                         ${ discount > 0 ? toRupiah.format(denganPotongan) : toRupiah.format(subtotal) }
                     </div>
-                    ${ discount > 0 ? `<span> sudah dipotong discount ${discount}% </span>` : "" }
+                    ${ discount > 0 ? `<span> sudah dipotong discount ${discount}% </span> harga aslinya ${toRupiah.format(harga)}` : "" }
                 </div>
             </div>
             <div class="cart-item-action my-auto">
