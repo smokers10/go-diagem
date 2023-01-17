@@ -1,13 +1,12 @@
 jQuery(function() {
     _loadContent()
     _getProvinsi() 
-       
-    // state awal modal
-    const inputKota = $("#kota-input") 
-    inputKota.hide()
 
     // triger tambah alamat modal
     $("#btn-add_alamat").click(()=>{
+        // state awal modal
+        const inputKota = $("#kota-input") 
+        inputKota.hide()
         $("#alamatModal").modal('show')
         $("#alamatModal-title").text("Tambah Alamat Baru")
         $("#alamatModalFrm").trigger("reset")
@@ -17,13 +16,8 @@ jQuery(function() {
     // onchange select provinsi
     $("#field-provinsi").change(function() {
         const provinceID = $(this).val()
-        if (provinceID == "") {
-            inputKota.hide()
-            return
-        }else{
-            inputKota.show()
-            _getKota(provinceID)
-        }
+        inputKota.show()
+        _getKota(provinceID)
     })
 
     // onchange select kota
@@ -67,21 +61,12 @@ function _loadContent(){
         dataType: "JSON",
         success: function(response) {
             var dataList = ''
+            $("#data-list").html("")
+
             if(response.data.length !== 0){
-                $("#data-list").html("")
                 $.each(response.data, function(k, item) {
                     dataList += _createElement(item)
                 })
-            }else{
-                dataList += `<div class="height-380 py-5 text-center">
-                    <img class="empty-img" src="/img/placeholder/alamat.png" width="200px">
-                    <div>
-                        <h3 class="font-size-24 font-weight-bold mt-5">Alamat Pengiriman Belum Ditambahkan</h3>
-                        <p class="font-size-16"></p>
-                        <button type="button" class="btn btn-primary btn-lg" id="btn-add_alamat">
-                            <i class="fa fa-plus mr-1"></i>Tambah Alamat</button>
-                    </div>
-                </div>`
             }
             $('#data-list').append(dataList)
         },
@@ -110,10 +95,10 @@ function _createElement(item){
         </div>
         <div class="block-content block-content-full">
             <div class="row justify-content-space-between">
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                     <h4 class="font-size-18 font-w700 mb-0 nice-copy">${ item.penerima }</h4>
                     <p class="mb-0 nice-copy">${ item.phone }</p>
-                    <p class="mb-0 nice-copy">${ item.alamat }</p>
+                    <p class="mb-0 nice-copy">${ item.alamat }, ${item.nama_kota}, ${item.nama_provinsi}</p>
                 </div>
             </div>
         </div>
@@ -159,7 +144,7 @@ function _hapusAlamat(e) {
                             icon: 'success'
                         })
                         
-                        _loadContent()
+                        location.reload()
                     }else {
                         Swal.close()
                     }
@@ -179,6 +164,8 @@ function _editAlamat(e) {
     let kdPos = selected.attr("data-kode-pos")
     let provinsi = selected.attr("data-provid")
     let kota = selected.attr("data-kotaid")
+
+    _getKota(provinsi)
 
     $("#alamatModal-title").text("Edit Alamat")
     $("#field-nama").val(nama)
@@ -223,7 +210,7 @@ function _insert(formData) {
                 })
 
                 // appending alamat baru
-                _loadContent()
+                location.reload()
             }else {
                 Swal.close()
             }
@@ -264,7 +251,7 @@ function _update(formData) {
                 })
 
                 // update element alamat
-                _loadContent()
+                location.reload()
             }else {
                 Swal.close()
             }
@@ -301,6 +288,7 @@ function _getKota(provinsiID) {
         success: function (res) {
             const data = JSON.parse(res.data)
             const provinsi = data.rajaongkir.results
+            $("#field-kota").empty("")
             for (let i = 0; i < provinsi.length; i++) {
                 const element = provinsi[i]
                 $("#field-kota").append(`<option value='${JSON.stringify(element)}'>${element.type} ${element.city_name}</option>`)
