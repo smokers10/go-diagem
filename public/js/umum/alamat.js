@@ -1,12 +1,10 @@
 jQuery(function() {
     _loadContent()
     _getProvinsi() 
-
+    
     // triger tambah alamat modal
     $("#btn-add_alamat").click(()=>{
         // state awal modal
-        const inputKota = $("#kota-input") 
-        inputKota.hide()
         $("#alamatModal").modal('show')
         $("#alamatModal-title").text("Tambah Alamat Baru")
         $("#alamatModalFrm").trigger("reset")
@@ -16,7 +14,6 @@ jQuery(function() {
     // onchange select provinsi
     $("#field-provinsi").change(function() {
         const provinceID = $(this).val()
-        inputKota.show()
         _getKota(provinceID)
     })
 
