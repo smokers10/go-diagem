@@ -34,51 +34,59 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css">
     <link rel="stylesheet" href="/css/slider.css">
-
-    <style>
-        .slider-item-arrow {
-            font-size: 25px;
-            color: #000;
-            position: absolute;
-            top: -90px;
-            transform: translateY(-50%);
-            z-index: 3;
-            border: 1px solid #ddd;
-            border-radius: 50%;
-        }
-
-        .slider-item-arrow {
-            cursor: pointer;
-            -webkit-transition: all 0.6s ease 0s;
-            -moz-transition: all 0.6s ease 0s;
-            -o-transition: all 0.6s ease 0s;
-            transition: all 0.6s ease 0s;
-            height: 40px;
-            line-height: 38px;
-            width: 40px;
-            text-align: center;
-            z-index: 2;
-        }
-
-        .slider-item-arrow.prev {
-            right: calc(50% + 150px);
-        }
-
-        .slider-item-arrow.next {
-            left: calc(50% + 150px);
-        }
-    </style>
-    <!-- End Styling -->
 </head>
 
 <body class="bg-white">
-    <div class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
-        {{template "partials/user-unlogged-header" .}}
-    </div>
-   
-    <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+    <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed mb-10">
+        <!-- Header -->
+        <div class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+            {{template "partials/user-unlogged-header" .}}
+        </div>
+
+        <!-- Main Container -->
         <main id="main-container">
-            <h1>CONTENT</h1>
+            <!-- Title -->
+            <div class="bg-image" style="background-image: url('/img/banner/banner-for-all.jpg');">
+                <div class="content content-full d-flex min-height-200 text-center">
+                    <div class="m-auto">
+                        <h1 class="font-w700 mb-10">Who We Are</h1>
+                    </div>
+                </div>
+            </div>
+            <!-- Content -->
+            <div class="content mb-10" id="seller-content">
+                <div class="justify-content-between px-4">
+                    <h2>DIAGEM JEWELRY</h2>
+                    <p>Diagem merupakan singkatan dari DIAmond. GEmstone. Mutiara.</p>
+                    <p>Secara filosofi, DIAGEM dalam bahasa jawa artinya dipakai, dipercaya, dihargai. Harapannya setiap
+                        wanita yang mengenakan perhiasan dari Diagem bisa semakin percaya diri dan semakin menghargai
+                        diri sendiri.</p>
+                    <p>Dari desain logo, ada bentuk astakona (segi delapan) dan lingkaran sebagai pusat. Lingkaran
+                        melambangkan mutiara, dan garis penyusun segi delapan melambangkan diamond dan gemstone (jika
+                        kita perhatikan, serat di dalam diamond dan gemstone pasti membentuk garis-garis beraturan
+                        seperti tarikan garis segi delapan tersebut).</p>
+                    <p>Kenapa logo dibuat seperti itu?<br>Karena pada awalnya produk Diagem hanya perhiasan mutiara.
+                        Seiring berjalannya waktu, bisa bertambah diamond dan gemstone.
+                    </p>
+                    <p><b>4 hal yang menjadi kelebihan Diagem Jewelry adalah:</b></p>
+                    <p><b><i>1. Fashionable</i></b><br>
+                        Perhiasan dari Diagem didesain khusus untuk melengkapi apapun fashion stylemu dan dibuat oleh
+                        tangan ahli pengrajin Diagem.
+                    </p>
+                    <p><b><i>2. Lovely</i></b><br>
+                        Jewelry is magic. Ketika menatap sosok di cermin dengan mengenakan jewelry dari Diagem,
+                        penampilanmu akan terlihat more lovely. Menyenangkan dilihat, bahagia dirasa.
+                    </p>
+                    <p><b><i>3. Long Lasting</i></b><br>
+                        Produk utama dari Diagem adalah perhiasan emas dengan Diamond, Gemstone, dan Mutiara semuanya
+                        asli dengan kualitas terbaik di kelasnya, sehingga kilaunya long lasting.
+                    </p>
+                    <p><b><i>4. Valuable</i></b><br>
+                        Semua perhiasan emas maupun perak dari Diagem bisa dilebur dan remodel kapanpun kamu mau. Tanpa
+                        menghilangkan story perhiasan.
+                    </p>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -90,4 +98,5 @@
     <script src="https://alexandrebuffet.fr/codepen/slider/slick-animation.min.js"></script>
     <script src="/js/umum/footer.js"></script>
 </body>
+
 </html>
