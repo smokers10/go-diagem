@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" class="no-focus">
+
+<head>
+    <title>Diagem</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="Diagem">
+    <meta name="author" content="Diagem">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Diagem">
+    <meta property="og:site_name" content="Diagem">
+    <meta property="og:description" content="Diagem">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="/img/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon-180x180.png">
+
+    <!-- Styling -->
+    <!-- Fonts and Codebase framework -->
+    <link rel="stylesheet" id="css-main" href="/css/app.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" href="/js/plugins/slick/slick-theme.css">
+    <link rel="stylesheet" href="/js/plugins/slick/slick.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css">
+    <link rel="stylesheet" href="/css/slider.css">
+
+    <style>
+        .slider-item-arrow {
+            font-size: 25px;
+            color: #000;
+            position: absolute;
+            top: -90px;
+            transform: translateY(-50%);
+            z-index: 3;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+        }
+
+        .slider-item-arrow {
+            cursor: pointer;
+            -webkit-transition: all 0.6s ease 0s;
+            -moz-transition: all 0.6s ease 0s;
+            -o-transition: all 0.6s ease 0s;
+            transition: all 0.6s ease 0s;
+            height: 40px;
+            line-height: 38px;
+            width: 40px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .slider-item-arrow.prev {
+            right: calc(50% + 150px);
+        }
+
+        .slider-item-arrow.next {
+            left: calc(50% + 150px);
+        }
+    </style>
+    <!-- End Styling -->
+</head>
+
+<body class="bg-white">
+    <div class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+        {{template "partials/user-unlogged-header" .}}
+    </div>
+   
+    <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+        <main id="main-container">
+            <h1>CONTENT</h1>
+        </main>
+    </div>
+
+    {{template "partials/footer" .}}
+    <script src="/js/laravel.app.js"></script>
+    <script src="/js/laroute.js"></script>
+    <script src="/js/functions.js"></script>
+    <script src="/js/plugins/slick/slick.js"></script>
+    <script src="https://alexandrebuffet.fr/codepen/slider/slick-animation.min.js"></script>
+    <script src="/js/umum/footer.js"></script>
+</body>
+</html>
