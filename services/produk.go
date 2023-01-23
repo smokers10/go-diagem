@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/gosimple/slug"
 	"github.com/smokers10/go-diagem.git/domain"
+	"github.com/smokers10/go-diagem.git/infrastructure/etc"
 )
 
 type produkServiceImpl struct {
@@ -26,7 +27,7 @@ func ProdukService(produk *domain.ProdukRepository, foto *domain.ProdukFotoRepos
 	}
 }
 
-//Untuk Admin
+// Untuk Admin
 func (p *produkServiceImpl) Create(req *domain.Produk) *domain.Response {
 	// dekalarasi var
 	res := domain.Response{}
@@ -41,9 +42,8 @@ func (p *produkServiceImpl) Create(req *domain.Produk) *domain.Response {
 		return &res
 	}
 	req.ID = id.String()
-
-	// buat slug
 	req.Slug = slug.Make(req.Nama)
+	req.Deskripsi = etc.HTMLCleaner(req.Deskripsi)
 
 	// panggil repository utk menyimpan produk
 	produk, err := p.produkRepository.Create(req)
@@ -148,6 +148,7 @@ func (p *produkServiceImpl) Update(req *domain.Produk) *domain.Response {
 
 	// buat slug
 	req.Slug = slug.Make(req.Nama)
+	req.Deskripsi = etc.HTMLCleaner(req.Deskripsi)
 
 	// panggil repository terkait
 	produk, err := p.produkRepository.Update(req)
@@ -185,7 +186,7 @@ func (p *produkServiceImpl) Delete(id string) *domain.Response {
 	return &res
 }
 
-//Untuk Umum
+// Untuk Umum
 func (p *produkServiceImpl) Read(filter *domain.ProdukFilter) *domain.Response {
 	// dekalarasi var
 	res := domain.Response{}
