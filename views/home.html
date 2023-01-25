@@ -163,7 +163,7 @@
                 <div class="row mb-lg-4">
                     <div class="col-lg-8">
                         <a class="bg-image block block-rounded-2 block-link-pop"
-                            style="background-image: url('/img/banner/RING-D.webp')" href="#">
+                            style="background-image: url('/img/banner/RING-D.webp')" href="#" id="item-0">
                             <div class="bg-black-op block-content block-content-full d-flex min-height-300">
                                 <div class="mt-auto nice-copy text-white w-75">
                                     <h6 class="font-weight-bold h3 mb-1 text-white">Rings</h6>
@@ -177,7 +177,7 @@
                     </div>
                     <div class="col-lg-4">
                         <a class="bg-image block block-rounded-2 block-link-pop"
-                            style="background-image: url('/img/banner/earring.webp')" href="#">
+                            style="background-image: url('/img/banner/earring.webp')" href="#" id="item-1">
                             <div class="bg-black-op block-content block-content-full d-flex min-height-300">
                                 <div class="mt-auto nice-copy text-white w-75">
                                     <h6 class="font-weight-bold h3 mb-1 text-white">Earrings</h6>
@@ -192,10 +192,10 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <a class="bg-image block block-rounded-2 block-link-pop"
-                            style="background-image: url('/img/banner/bracelet.webp')" href="#">
+                            style="background-image: url('/img/banner/bracelet.webp')" href="#" id="item-2">
                             <div class="bg-black-op block-content block-content-full d-flex min-height-300">
                                 <div class="mt-auto nice-copy text-white w-75">
-                                    <h6 class="font-weight-bold h3 mb-1 text-white">Shop Rings</h6>
+                                    <h6 class="font-weight-bold h3 mb-1 text-white">Pearls</h6>
                                     <p class="mb-2">
                                         Classic and adjustable bracelets in sleek metals to be one little thing that
                                         makes you feel unique.
@@ -206,7 +206,7 @@
                     </div>
                     <div class="col-lg-4">
                         <a class="bg-image block block-rounded-2 block-link-pop"
-                            style="background-image: url('/img/banner/necklace.webp')" href="#">
+                            style="background-image: url('/img/banner/necklace.webp')" href="#" id="item-3">
                             <div class="bg-black-op block-content block-content-full d-flex min-height-300">
                                 <div class="mt-auto nice-copy text-white w-75">
                                     <h6 class="font-weight-bold h3 mb-1 text-white">Necklace</h6>
@@ -220,7 +220,7 @@
                     </div>
                     <div class="col-lg-4">
                         <a class="bg-image block block-rounded-2 block-link-pop"
-                            style="background-image: url('/img/banner/pendant.webp')" href="#">
+                            style="background-image: url('/img/banner/pendant.webp')" href="#" id="item-4">
                             <div class="bg-black-op block-content block-content-full d-flex min-height-300">
                                 <div class="mt-auto nice-copy text-white w-75">
                                     <h6 class="font-weight-bold h3 mb-1 text-white">Pendant</h6>
@@ -264,5 +264,43 @@
     <script src="https://alexandrebuffet.fr/codepen/slider/slick-animation.min.js"></script>
     <script src="/js/umum/home.js"></script>
     <script src="/js/umum/footer.js"></script>
+    <script>
+        jQuery(function() {
+            $.ajax({
+                url: "/produk/kategori",
+                success: function (response) {
+                  let data = response.data
+                  let redirectURL = "/produk"
+                  data.forEach(el => {
+                    nama = el.nama
+                    switch (nama.toLowerCase()) {
+                        case "rings":
+                            $("#item-0").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                            break;
+
+                        case "earrings":
+                            $("#item-1").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                            break;
+
+                        case "pearl" || "pearls":
+                            $("#item-2").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                            break;
+
+                        case "necklace":
+                            $("#item-3").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                            break;
+
+                        default:
+                            $("#item-4").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                            break;
+                    }
+                  })
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error adding / update data')
+                }
+            })
+        })
+    </script>
 </body>
 </html>

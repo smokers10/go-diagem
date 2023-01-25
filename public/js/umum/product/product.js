@@ -1,14 +1,6 @@
-$.ajax({
-    url: "/produk/kategori",
-    success: function(res) {
-        const data = res.data
-        data.forEach(el => {
-            $("#product-category").append(`<option value="${el.id}">${el.nama}</option>`)
-        })
-    }
-})
-
 jQuery(function() {
+    load_category()
+
     $("#product-sort").on("change", function(){
         load_content()
     })
@@ -69,13 +61,42 @@ jQuery('#product-content').first().each((index, element) => {
     load_content()
 })
 
+function load_category() {
+    $.ajax({
+        url: "/produk/kategori",
+        success: function(res) {
+            const data = res.data
+            data.forEach(el => {
+                $("#product-category").append(`<option value="${el.id}">${el.nama}</option>`)
+            })
+        }
+    })
+}
+
 function load_content(){
     var el = $("#product-list")
+    let queryString = location.search
+    let params = new URLSearchParams(queryString)
+    let filter = params.get("filter")
+    let namaKategori = params.get("name")
+
     let data = JSON.stringify({
         nama : $("#product-name").val(),
         short_by : $("#product-sort").val(),
         kategori_id : $("#product-category").val()
     })
+
+    if (filter) {
+        data = JSON.stringify({
+            nama : $("#product-name").val(),
+            short_by : $("#product-sort").val(),
+            kategori_id : filter,
+        })
+
+        $("#filter-content").hide()
+        $("#page-title").text(`Our ${namaKategori}`)
+    }
+
     $.ajax({
         url: "/produk/get",
         type: 'POST',
