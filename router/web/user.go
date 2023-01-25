@@ -31,6 +31,7 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	pesananController := user.OrderController()
 	resellerController := user.ResellerController()
 	resetPasswordController := user.ResetPasswordController(resolver.ResetPasswordService)
+	whoWeAreController := user.WhoWeAreController()
 
 	// API Controller init
 	verificationAPIController := userAPI.VerificationController(resolver.VerificationService)
@@ -152,6 +153,10 @@ func UserWebPage(app *fiber.App, session *session.Store, resolver *resolver.Serv
 	reseller := parentPath.Group("/seller", middlewareNotSoStrict)
 	reseller.Get("/", resellerController.IndexPage)
 	reseller.Get("/get", sellerAPIController.Get)
+
+	// Who We Are
+	whoWeAre := parentPath.Group("/who-we-are")
+	whoWeAre.Get("/", whoWeAreController.Index)
 
 	// raja ongkir API
 	rajaongkirPath := parentPath.Group("/rajaongkir")
