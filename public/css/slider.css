@@ -8,9 +8,9 @@
 }
 
 /* Hide the images by default */
-/* .mySlides {
-  display: none;
-} */
+.mySlides {
+  display: block;
+}
 
 /* Next & previous buttons */
 .prev, .next {
