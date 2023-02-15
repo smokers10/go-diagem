@@ -36,33 +36,91 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css">
         <style>
-            .slider-item-arrow {
-                font-size: 25px;
-                color: #000;
+            .slider-container {
+                position: relative;
+                margin: auto;
+            }
+    
+            .slider-n {
+                display: flex;
+                overflow: hidden;
+    
+            }
+    
+            .slide-n {
+                flex: 1 0 100%;
+                display: none;
+                position: relative;
+                -webkit-animation-duration: 1.5s;
+                animation-duration: 1.5s;
+                transition: opacity 1.5s ease 1.3s;
+                transition: 1s;
+            }
+    
+            .slide-n.active {
+                display: block;
+            }
+    
+            .slide-n img {
+                width: 100%;
+                height: auto;
+            }
+    
+            .slider-navigation {
                 position: absolute;
-                top: -90px;
-                transform: translateY(-50%);
-                z-index: 3;
-                border: 1px solid #ddd;
-                border-radius: 50%;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
             }
-            .slider-item-arrow {
+    
+            .prev-button,
+            .next-button {
+                background: transparent;
+                border: none;
                 cursor: pointer;
-                -webkit-transition: all 0.6s ease 0s;
-                -moz-transition: all 0.6s ease 0s;
-                -o-transition: all 0.6s ease 0s;
-                transition: all 0.6s ease 0s;
-                height: 40px;
-                line-height: 38px;
-                width: 40px;
-                text-align: center;
-                z-index: 2;
+                position: absolute;
+                top: 50%;
+                width: auto;
+                margin-top: -22px;
+                padding: 16px;
+                color: #fff;
+                font-weight: bold;
+                font-size: 30px;
+                transition: 0.6s ease;
+                user-select: none;
             }
-            .slider-item-arrow.prev {
-                right: calc(50% + 150px);
+    
+            .next-button {
+                right: 0;
             }
-            .slider-item-arrow.next {
-                left: calc(50% + 150px);
+    
+            .prev-button:hover,
+            .next-button:hover {
+                background-color: rgba(63, 63, 63, 0.459);
+            }
+    
+            .dots-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 0 1em;
+            }
+    
+            .dot {
+                width: 15px;
+                height: 15px;
+                background-color: #bbb;
+                border-radius: 50%;
+                margin: 0 0.5em;
+                margin-bottom: 0.5em;
+                cursor: pointer;
+                display: inline-block;
+                transition: background-color 0.6s ease;
+            }
+    
+            .dot.active,
+            .dot:hover {
+                background-color: #717171;
             }
         </style>
         <!-- End Styling -->
@@ -74,6 +132,22 @@
             {{template "partials/user-header" .}}
             <!-- END Header -->
             
+             <!-- slider -->
+            <div class="slider-container">
+                <div class="slider-n" id="slider-showcase"></div>
+                <div>
+                    <button class="prev-button">&#10094;</button>
+                    <button class="next-button">&#10095;</button>
+                </div>
+                <div class="slider-navigation">
+                    <div class="dots-container">
+                        <div class="dot active"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+
             <main id="main-container">
                 <div class="content content-full">
                     <div class="row text-center nice-copy">

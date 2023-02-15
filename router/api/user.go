@@ -21,6 +21,7 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	produkController := user.ProdukController(resolver.ProdukService)
 	checkoutController := user.CheckoutController(resolver.CheckoutService)
 	profileController := user.ProfileController(resolver.UserService)
+	sliderController := user.SliderController(resolver.SliderService)
 
 	// parent path
 	parentPath := app.Group("/api/user")
@@ -67,6 +68,10 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	// checkout
 	checkout := parentPath.Group("/checkout", middlewareStrict)
 	checkout.Post("/", checkoutController.Checkout)
+
+	// slider
+	slider := parentPath.Group("/slider")
+	slider.Get("/", sliderController.Read)
 
 	parentPath.Get("/", middlewareStrict, func(c *fiber.Ctx) error {
 		return c.JSON("Hey there wellcome")

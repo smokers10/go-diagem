@@ -33,7 +33,6 @@
     <link rel="stylesheet" href="/js/plugins/slick/slick.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/placeholder-loading/dist/css/placeholder-loading.min.css">
-    <!-- <link rel="stylesheet" href="/css/slider.css"> -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
     <style>
@@ -123,22 +122,6 @@
         .dot:hover {
             background-color: #717171;
         }
-
-        /* .mySlides {
-            display: none;
-        }
-
-        .w3-left,
-        .w3-right,
-        .w3-badge {
-            cursor: pointer
-        }
-
-        .w3-badge {
-            height: 13px;
-            width: 13px;
-            padding: 0
-        } */
     </style>
     <!-- End Styling -->
 </head>
@@ -150,17 +133,7 @@
 
     <!-- slider -->
     <div class="slider-container">
-        <div class="slider-n ">
-            <div class="slide-n active">
-                <img src="/img/dummy/img_nature_wide.jpg">
-            </div>
-            <div class="slide-n">
-                <img src="/img/dummy/img_mountains_wide.jpg">
-            </div>
-            <div class="slide-n">
-                <img src="/img/dummy/img_snow_wide.jpg">
-            </div>
-        </div>
+        <div class="slider-n" id="slider-showcase"></div>
         <div>
             <button class="prev-button">&#10094;</button>
             <button class="next-button">&#10095;</button>
@@ -173,22 +146,6 @@
             </div>
         </div>
     </div>
-    <!-- <div class="slider-container">
-        <div class="w3-content w3-display-container" style="max-width:800px">
-            <img class="mySlides w3-animate-down" src="/img/dummy/img_nature_wide.jpg" style="width:100%">
-            <img class="mySlides w3-animate-down" src="/img/dummy/img_snow_wide.jpg" style="width:100%">
-            <img class="mySlides w3-animate-down" src="/img/dummy/img_mountains_wide.jpg" style="width:100%">
-            <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle"
-                style="width:100%">
-                <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
-                <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
-                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
-                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
-                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
-            </div>
-        </div>
-    </div> -->
-
 
     <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
         <main id="main-container">
@@ -365,136 +322,6 @@
     <script src="https://alexandrebuffet.fr/codepen/slider/slick-animation.min.js"></script>
     <script src="/js/umum/home.js"></script>
     <script src="/js/umum/footer.js"></script>
-    <script>
-        jQuery(function ()
-        {
-            $.ajax({
-                url: "/produk/kategori",
-                success: function (response)
-                {
-                    let data = response.data
-                    let redirectURL = "/produk"
-                    data.forEach(el =>
-                    {
-                        nama = el.nama
-                        switch (nama.toLowerCase())
-                        {
-                            case "rings":
-                                $("#item-0").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                                break;
-
-                            case "earrings":
-                                $("#item-1").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                                break;
-
-                            case "pearl" || "pearls":
-                                $("#item-2").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                                break;
-
-                            case "necklace":
-                                $("#item-3").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                                break;
-
-                            default:
-                                $("#item-4").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                                break;
-                        }
-                    })
-                },
-                error: function (jqXHR, textStatus, errorThrown)
-                {
-                    alert('Error adding / update data')
-                }
-            })
-        })
-    </script>
-    <script>
-        const slides = document.querySelectorAll('.slide-n');
-        const prevButton = document.querySelector('.prev-button');
-        const nextButton = document.querySelector('.next-button');
-        const dots = document.querySelectorAll('.dot');
-
-        let currentSlide = 0;
-
-        function showSlide (slideIndex)
-        {
-            if (slideIndex < 0)
-            {
-                slideIndex = slides.length - 1;
-            } else if (slideIndex >= slides.length)
-            {
-                slideIndex = 0;
-            }
-
-            slides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            slides[slideIndex].classList.add('active');
-            dots[slideIndex].classList.add('active');
-
-            currentSlide = slideIndex;
-        }
-
-        showSlide(currentSlide);
-
-        prevButton.addEventListener('click', () =>
-        {
-            showSlide(currentSlide - 1);
-        });
-
-        nextButton.addEventListener('click', () =>
-        {
-            showSlide(currentSlide + 1);
-        });
-
-        dots.forEach((dot, index) =>
-        {
-            dot.addEventListener('click', () =>
-            {
-                showSlide(index);
-            });
-        });
-
-        setInterval(() =>
-        {
-            showSlide(currentSlide + 1);
-        }, 5000);
-
-        /* W3 SCHOOL: */
-        // var slideIndex = 1;
-        // showDivs(slideIndex);
-
-        // function plusDivs (n)
-        // {
-        //     showDivs(slideIndex += n);
-        // }
-
-        // function currentDiv (n)
-        // {
-        //     showDivs(slideIndex = n);
-        // }
-
-        // function showDivs (n)
-        // {
-        //     var i;
-        //     var x = document.getElementsByClassName("mySlides");
-        //     var dots = document.getElementsByClassName("demo");
-        //     if (n > x.length) { slideIndex = 1 }
-        //     if (n < 1) { slideIndex = x.length }
-        //     for (i = 0; i < x.length; i++)
-        //     {
-        //         x[i].style.display = "none";
-        //     }
-        //     for (i = 0; i < dots.length; i++)
-        //     {
-        //         dots[i].className = dots[i].className.replace(" w3-white", "");
-        //     }
-        //     myIndex++;
-        //     if (myIndex > x.length) { myIndex = 1 }
-        //     x[slideIndex - 1].style.display = "block";
-        //     dots[slideIndex - 1].className += " w3-white";
-        //     setTimeout(showDivs, 2500);
-        // }
-    </script>
 </body>
 
 </html>
