@@ -79,6 +79,14 @@
                                                             <td><b>Tgl Transaksi</b></td>
                                                             <td id="buy-date"></td>
                                                         </tr>
+                                                        <tr>
+                                                            <td><b>Kurir</b></td>
+                                                            <td id="expedition"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>No Resi Kurir</b></td>
+                                                            <td id="expedition-recipt"></td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -171,20 +179,22 @@
                 $.ajax({
                     url:`/pesanan/get/${id}`,
                     success: function (res) {
-                        const { alamat, order_item, order_bayar, user, invoice_no, ongkir, kurir, paket_kurir, status, tgl_order} = res.data
+                        const { alamat, order_item, order_bayar, user, invoice_no, ongkir, kurir, paket_kurir, status, tgl_order, no_resi} = res.data
                         const { alamat:alamat_penerima, kd_pos, nama_kota, nama_provinsi, penerima, phone } = alamat
                         const { nama, email, hp } = user
                         const { jumlah, status: status_pembayaran, token } = order_bayar
                         var statusPembayaran = ""
 
                         $("#invoice-no").text(`No. Invoice ${invoice_no}`)
-                        $("#buy-date").text(`Tanggal ${tgl_order}`)
+                        $("#buy-date").text(`${tgl_order}`)
                         
                         $("#nama-penerima").text(penerima)
                         $("#alamat-penerima").text(`${alamat_penerima} ${nama_kota} ${nama_provinsi}`)
                         $("#kotak-penerima").text(phone)
                         $("#ongkir").text(toRupiah.format(ongkir))
                         $("#total").text(toRupiah.format(jumlah))
+                        $("#expedition").text(`${kurir} - ${paket_kurir}`)
+                        $("#expedition-recipt").text(no_resi)
 
                         switch (status_pembayaran) {
                             case "pending":

@@ -91,6 +91,10 @@
                                                         <td><b>Kurir</b></td>
                                                         <td id="kurir"></td>
                                                     </tr>
+                                                    <tr>
+                                                        <td><b>No Resi Kurir</b></td>
+                                                        <td id="expedition-recipt"></td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -194,7 +198,7 @@
                 url: `/admin/order/detail/get/${id}`,
                 success: function (res)
                 {
-                    const { alamat, order_item, order_bayar, user, invoice_no, ongkir, kurir, paket_kurir, status, tgl_order } = res.data
+                    const { alamat, order_item, order_bayar, user, invoice_no, ongkir, kurir, paket_kurir, status, tgl_order, no_resi } = res.data
                     const { alamat: alamat_penerima, kd_pos, nama_kota, nama_provinsi, penerima, phone } = alamat
                     const { nama, email, hp } = user
                     const { jumlah, status: status_pembayaran, token } = order_bayar
@@ -208,6 +212,7 @@
                     $("#ongkir").text(toRupiah.format(ongkir))
                     $("#total").text(toRupiah.format(jumlah))
                     $("#kurir").text(`${kurir} - ${paket_kurir}`)
+                    $("#expedition-recipt").text(no_resi)
 
                     switch (status_pembayaran)
                     {
