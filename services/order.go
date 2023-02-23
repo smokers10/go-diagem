@@ -70,14 +70,14 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 		return &res
 	}
 
-	// ambil data virtual account yang sesuai dengan konfigurasi dari admin
-	bank, err := osc.bankRepository.Segmented()
-	if err != nil {
-		fmt.Println(err)
-		res.Message = "error saat mengambil data bank"
-		res.Status = 500
-		return &res
-	}
+	// // ambil data virtual account yang sesuai dengan konfigurasi dari admin
+	// bank, err := osc.bankRepository.Segmented()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	res.Message = "error saat mengambil data bank"
+	// 	res.Status = 500
+	// 	return &res
+	// }
 
 	// check stok pada tiap cart item
 	for i := 0; i < len(carts); i++ {
@@ -136,9 +136,9 @@ func (osc *orderService) Create(req *domain.Order) *domain.Response {
 			},
 		},
 		ItemDetail: itemDetails,
-		BCA:        bank.BCA,
-		BNI:        bank.BNI,
-		BRI:        bank.BRI,
+		BCA:        etc.BCA{VANumber: "4566545676543", SubCompanyNumber: "G549190193"},
+		BNI:        etc.BNI{VANumber: "123456543345"},
+		BRI:        etc.BRI{VANumber: "67876545678"},
 	}
 
 	midres, err := midtrans.Transaction()
