@@ -59,13 +59,13 @@ func (or *orderRepository) GetByID(orderID string) (*domain.OrderDetail, error) 
 	orderItemRepo := OrderItemRepository(or.db)
 	paymentRepo := OrderBayarRepository(or.db)
 
-	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order FROM order_checkout WHERE id = ? LIMIT 1")
+	stmt, err := or.db.Prepare("SELECT id, status, user_id, alamat_id, kurir, paket_kurir, ongkir, invoice_no, tgl_order, no_resi FROM order_checkout WHERE id = ? LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
 	defer stmt.Close()
 
-	stmt.QueryRow(orderID).Scan(&result.ID, &result.Status, &result.UserID, &result.AlamatID, &result.Kurir, &result.PaketKurir, &result.Ongkir, &result.InvoiceNo, &result.TglOrder)
+	stmt.QueryRow(orderID).Scan(&result.ID, &result.Status, &result.UserID, &result.AlamatID, &result.Kurir, &result.PaketKurir, &result.Ongkir, &result.InvoiceNo, &result.TglOrder, &result.NoResi)
 
 	// ambil alamat
 	alamat, err := alamatRepo.ByID(result.AlamatID)

@@ -25,6 +25,7 @@ type OrderDetail struct {
 	Ongkir     string            `json:"ongkir,omitempty" form:"ongkir"`
 	InvoiceNo  string            `json:"invoice_no,omitempty" form:"invoice_no"`
 	TglOrder   string            `json:"tgl_order,omitempty" form:"tgl_order"`
+	NoResi     string            `json:"no_resi,omitempty" form:"tgl_resi"`
 	OrderBayar OrderBayar        `json:"order_bayar,omitempty" form:"order_bayar"`
 	OrderItem  []OrderItemDetail `json:"order_item,omitempty" form:"order_item"`
 	Alamat     Alamat            `json:"alamat,omitempty" form:"alamat"`
