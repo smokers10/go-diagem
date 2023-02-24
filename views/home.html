@@ -44,11 +44,10 @@
         .slider-n {
             display: flex;
             overflow: hidden;
-
         }
 
         .slide-n {
-            flex: 1 0 100%;
+            flex: 1 0 50%;
             display: none;
             position: relative;
             -webkit-animation-duration: 1.5s;
@@ -62,8 +61,16 @@
         }
 
         .slide-n img {
+            /* max-width: calc(100vw/3); */
+            /* max-height: calc(100vh/3); */
+
             width: 100%;
             height: auto;
+            /* max-width: 25vw;
+            max-height: 25vh;
+            object-fit: contain; */
+
+            /* object-fit: fill; */
         }
 
         .slider-navigation {
@@ -139,11 +146,7 @@
             <button class="next-button">&#10095;</button>
         </div>
         <div class="slider-navigation">
-            <div class="dots-container">
-                <div class="dot active"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
+            <div class="dots-container"></div>
         </div>
     </div>
 

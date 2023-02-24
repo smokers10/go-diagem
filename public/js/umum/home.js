@@ -58,87 +58,180 @@ $(document).ready(function() {
         }
     })
 
+    // $.ajax({
+    //     url: "/api/user/slider",
+    //     success: function(response){
+    //         resp = response.data
+    //         for (let i = 0; i < resp.length; i++) {
+    //             var data = resp[i]
+    //             var imageSource = data.image
+    //             var parts = imageSource.split('public');
+    //             var correctedSource = parts.join('');
+    //             // var correctedSource = imageSource.replace("/public", "")
+    //             console.log(correctedSource)
+
+    //             if (i == 0) {
+    //                 $("#slider-showcase").append(`
+    //                     <div class="slide-n active">
+    //                         <img src="${correctedSource}">
+    //                     </div>
+    //                 `)
+    //             }else{
+    //                 $("#slider-showcase").append(`
+    //                     <div class="slide-n">
+    //                         <img src="${correctedSource}">
+    //                     </div>
+    //                 `)
+    //             }
+    //         }
+
+    //         deferred.resolve()
+    //     },
+    //     error: function (jqXHR, textStatus, errorThrown){
+    //         alert('Error loading data')
+    //     }
+    // })
+
+    // deferred.done(function(){
+    //     const slides = document.querySelectorAll('.slide-n');
+    //     const prevButton = document.querySelector('.prev-button');
+    //     const nextButton = document.querySelector('.next-button');
+    //     const dots = document.querySelectorAll('.dot');
+    //     let currentSlide = 0;
+
+    //     function showSlide (slideIndex)
+    //     {
+    //         if (slideIndex < 0)
+    //         {
+    //             slideIndex = slides.length - 1;
+    //         } else if (slideIndex >= slides.length)
+    //         {
+    //             slideIndex = 0;
+    //         }
+    
+    //         slides.forEach(slide => slide.classList.remove('active'));
+    //         dots.forEach(dot => dot.classList.remove('active'));
+    //         slides[slideIndex].classList.add('active');
+    //         dots[slideIndex].classList.add('active');
+    
+    //         currentSlide = slideIndex;
+    //     }
+    
+    //     showSlide(currentSlide);
+    
+    //     prevButton.addEventListener('click', () =>
+    //     {
+    //         showSlide(currentSlide - 1);
+    //     });
+    
+    //     nextButton.addEventListener('click', () =>
+    //     {
+    //         showSlide(currentSlide + 1);
+    //     });
+    
+    //     dots.forEach((dot, index) =>
+    //     {
+    //         dot.addEventListener('click', () =>
+    //         {
+    //             showSlide(index);
+    //         });
+    //     });
+    
+    //     setInterval(() =>
+    //     {
+    //         showSlide(currentSlide + 1);
+    //     }, 5000);      
+    // })
+
+
     $.ajax({
-        url: "/api/user/slider",
-        success: function(response){
-            resp = response.data
-            for (let i = 0; i < resp.length; i++) {
-                var data = resp[i]
-                var imageSource = data.image
-                var correctedSource = imageSource.replace("/public", "")
-                
-                if (i == 0) {
-                    $("#slider-showcase").append(`
-                        <div class="slide-n active">
-                            <img src="${correctedSource}">
-                        </div>
-                    `)
-                }else{
-                    $("#slider-showcase").append(`
-                        <div class="slide-n">
-                            <img src="${correctedSource}">
-                        </div>
-                    `)
-                }
-            }
+      url: "/api/user/slider",
+      success: function(response) {
+        resp = response.data;
+        for (let i = 0; i < resp.length; i++) {
+          var data = resp[i];
+          var imageSource = data.image;
+          var parts = imageSource.split('public');
+          var correctedSource = parts.join('');
+          // var correctedSource = imageSource.replace("/public", "")
+          console.log(correctedSource);
 
-            deferred.resolve()
-        },
-        error: function (jqXHR, textStatus, errorThrown){
-            alert('Error loading data')
+          if (i == 0) {
+            $("#slider-showcase").append(`
+              <div class="slide-n active">
+                <img src="${correctedSource}">
+              </div>
+            `);
+          } else {
+            $("#slider-showcase").append(`
+              <div class="slide-n">
+                <img src="${correctedSource}">
+              </div>
+            `);
+          }
         }
-    })
 
-    deferred.done(function(){
-        const slides = document.querySelectorAll('.slide-n');
-        const prevButton = document.querySelector('.prev-button');
-        const nextButton = document.querySelector('.next-button');
-        const dots = document.querySelectorAll('.dot');
-        let currentSlide = 0;
+        deferred.resolve();
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert('Error loading data');
+      }
+    });
 
-        function showSlide (slideIndex)
-        {
-            if (slideIndex < 0)
-            {
-                slideIndex = slides.length - 1;
-            } else if (slideIndex >= slides.length)
-            {
-                slideIndex = 0;
-            }
-    
-            slides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            slides[slideIndex].classList.add('active');
-            dots[slideIndex].classList.add('active');
-    
-            currentSlide = slideIndex;
+    deferred.done(function() {
+      const slides = document.querySelectorAll('.slide-n');
+      const prevButton = document.querySelector('.prev-button');
+      const nextButton = document.querySelector('.next-button');
+      const dotsContainer = document.querySelector('.dots-container');
+      let currentSlide = 0;
+
+      // Generate dots dynamically based on the number of slides
+      for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (i == 0) {
+          dot.classList.add('active');
         }
-    
-        showSlide(currentSlide);
-    
-        prevButton.addEventListener('click', () =>
-        {
-            showSlide(currentSlide - 1);
+        dotsContainer.appendChild(dot);
+      }
+
+      function showSlide(slideIndex) {
+        if (slideIndex < 0) {
+          slideIndex = slides.length - 1;
+        } else if (slideIndex >= slides.length) {
+          slideIndex = 0;
+        }
+
+        slides.forEach(slide => slide.classList.remove('active'));
+        document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
+        slides[slideIndex].classList.add('active');
+        document.querySelectorAll('.dot')[slideIndex].classList.add('active');
+
+        currentSlide = slideIndex;
+      }
+
+      showSlide(currentSlide);
+
+      prevButton.addEventListener('click', () => {
+        showSlide(currentSlide - 1);
+      });
+
+      nextButton.addEventListener('click', () => {
+        showSlide(currentSlide + 1);
+      });
+
+      document.querySelectorAll('.dot').forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          showSlide(index);
         });
+      });
+
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
     
-        nextButton.addEventListener('click', () =>
-        {
-            showSlide(currentSlide + 1);
-        });
     
-        dots.forEach((dot, index) =>
-        {
-            dot.addEventListener('click', () =>
-            {
-                showSlide(index);
-            });
-        });
-    
-        setInterval(() =>
-        {
-            showSlide(currentSlide + 1);
-        }, 5000);      
-    })
 })
 
 
