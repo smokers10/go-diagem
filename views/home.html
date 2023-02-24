@@ -36,36 +36,91 @@
     <link rel="stylesheet" href="/css/slider.css">
 
     <style>
-        .slider-item-arrow {
-            font-size: 25px;
-            color: #000;
+        .slider-container {
+            position: relative;
+            margin: auto;
+        }
+
+        .slider-n {
+            display: flex;
+            overflow: hidden;
+
+        }
+
+        .slide-n {
+            flex: 1 0 100%;
+            display: none;
+            position: relative;
+            -webkit-animation-duration: 1.5s;
+            animation-duration: 1.5s;
+            transition: opacity 1.5s ease 1.3s;
+            transition: 1s;
+        }
+
+        .slide-n.active {
+            display: block;
+        }
+
+        .slide-n img {
+            width: 100%;
+            height: auto;
+        }
+
+        .slider-navigation {
             position: absolute;
-            top: -90px;
-            transform: translateY(-50%);
-            z-index: 3;
-            border: 1px solid #ddd;
-            border-radius: 50%;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .slider-item-arrow {
+        .prev-button,
+        .next-button {
+            background: transparent;
+            border: none;
             cursor: pointer;
-            -webkit-transition: all 0.6s ease 0s;
-            -moz-transition: all 0.6s ease 0s;
-            -o-transition: all 0.6s ease 0s;
-            transition: all 0.6s ease 0s;
-            height: 40px;
-            line-height: 38px;
-            width: 40px;
-            text-align: center;
-            z-index: 2;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 30px;
+            transition: 0.6s ease;
+            user-select: none;
         }
 
-        .slider-item-arrow.prev {
-            right: calc(50% + 150px);
+        .next-button {
+            right: 0;
         }
 
-        .slider-item-arrow.next {
-            left: calc(50% + 150px);
+        .prev-button:hover,
+        .next-button:hover {
+            background-color: rgba(63, 63, 63, 0.459);
+        }
+
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 1em;
+        }
+
+        .dot {
+            width: 15px;
+            height: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            margin: 0 0.5em;
+            margin-bottom: 0.5em;
+            cursor: pointer;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+
+        .dot.active,
+        .dot:hover {
+            background-color: #717171;
         }
     </style>
     <!-- End Styling -->
@@ -77,16 +132,19 @@
     </div>
 
     <!-- slider -->
-    <div class="slideshow-container">
-        <div class="mySlides fade">
-            <img src="/img/dummy/img_nature_wide.jpg" style="width:100%">
-            <div class="text">Caption Text</div>
+    <div class="slider-container">
+        <div class="slider-n" id="slider-showcase"></div>
+        <div>
+            <button class="prev-button">&#10094;</button>
+            <button class="next-button">&#10095;</button>
         </div>
-
-        <!-- Next and previous buttons -->
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-        <br>
+        <div class="slider-navigation">
+            <div class="dots-container">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
     </div>
 
     <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
@@ -264,43 +322,6 @@
     <script src="https://alexandrebuffet.fr/codepen/slider/slick-animation.min.js"></script>
     <script src="/js/umum/home.js"></script>
     <script src="/js/umum/footer.js"></script>
-    <script>
-        jQuery(function() {
-            $.ajax({
-                url: "/produk/kategori",
-                success: function (response) {
-                  let data = response.data
-                  let redirectURL = "/produk"
-                  data.forEach(el => {
-                    nama = el.nama
-                    switch (nama.toLowerCase()) {
-                        case "rings":
-                            $("#item-0").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                            break;
-
-                        case "earrings":
-                            $("#item-1").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                            break;
-
-                        case "pearl" || "pearls":
-                            $("#item-2").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                            break;
-
-                        case "necklace":
-                            $("#item-3").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                            break;
-
-                        default:
-                            $("#item-4").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
-                            break;
-                    }
-                  })
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Error adding / update data')
-                }
-            })
-        })
-    </script>
 </body>
+
 </html>
