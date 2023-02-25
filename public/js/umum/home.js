@@ -1,37 +1,12 @@
 var formatDUIT = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
-    maximumFractionDigits: 0,
 })
 
 $(document).ready(function() {
     loadLatestBlog()
-})
-
-jQuery(function() {
-    $('.slider').slick({
-        autoplay: false,
-        lazyLoad: 'progressive',
-        arrows: true,
-        dots: false,
-        prevArrow: '<div class="slick-nav prev-arrow"><i></i><svg><use xlink:href="#circle"></svg></div>',
-        nextArrow: '<div class="slick-nav next-arrow"><i></i><svg><use xlink:href="#circle"></svg></div>',
-    }).slickAnimation()
-    
-    $('.slick-nav').on('click touch', function(e) {
-        e.preventDefault()
-    
-        var arrow = $(this)
-    
-        if(!arrow.hasClass('animate')) {
-            arrow.addClass('animate')
-            setTimeout(() => {
-                arrow.removeClass('animate')
-            }, 1600)
-        }
-    })
-
     load_content("#prodBestSeller > .row", "best_seller", 8)
+    var deferred = $.Deferred()
 
     $('ul#productTab > li > a[data-toggle="product-tab"]').on('click', function(e) {
         var $this = $(this),
@@ -43,7 +18,222 @@ jQuery(function() {
         $this.tab('show')
         return false;
     })
+
+    $.ajax({
+        url: "/produk/kategori",
+        success: function (response)
+        {
+            let data = response.data
+            let redirectURL = "/produk"
+            data.forEach(el =>
+            {
+                nama = el.nama
+                switch (nama.toLowerCase())
+                {
+                    case "rings":
+                        $("#item-0").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                        break;
+
+                    case "earrings":
+                        $("#item-1").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                        break;
+
+                    case "pearl" || "pearls":
+                        $("#item-2").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                        break;
+
+                    case "necklace":
+                        $("#item-3").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                        break;
+
+                    default:
+                        $("#item-4").attr("href", `${redirectURL}?filter=${el.id}&name=${nama}`)
+                        break;
+                }
+            })
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            alert('Error loading data')
+        }
+    })
+
+    // $.ajax({
+    //     url: "/api/user/slider",
+    //     success: function(response){
+    //         resp = response.data
+    //         for (let i = 0; i < resp.length; i++) {
+    //             var data = resp[i]
+    //             var imageSource = data.image
+    //             var parts = imageSource.split('public');
+    //             var correctedSource = parts.join('');
+    //             // var correctedSource = imageSource.replace("/public", "")
+    //             console.log(correctedSource)
+
+    //             if (i == 0) {
+    //                 $("#slider-showcase").append(`
+    //                     <div class="slide-n active">
+    //                         <img src="${correctedSource}">
+    //                     </div>
+    //                 `)
+    //             }else{
+    //                 $("#slider-showcase").append(`
+    //                     <div class="slide-n">
+    //                         <img src="${correctedSource}">
+    //                     </div>
+    //                 `)
+    //             }
+    //         }
+
+    //         deferred.resolve()
+    //     },
+    //     error: function (jqXHR, textStatus, errorThrown){
+    //         alert('Error loading data')
+    //     }
+    // })
+
+    // deferred.done(function(){
+    //     const slides = document.querySelectorAll('.slide-n');
+    //     const prevButton = document.querySelector('.prev-button');
+    //     const nextButton = document.querySelector('.next-button');
+    //     const dots = document.querySelectorAll('.dot');
+    //     let currentSlide = 0;
+
+    //     function showSlide (slideIndex)
+    //     {
+    //         if (slideIndex < 0)
+    //         {
+    //             slideIndex = slides.length - 1;
+    //         } else if (slideIndex >= slides.length)
+    //         {
+    //             slideIndex = 0;
+    //         }
+    
+    //         slides.forEach(slide => slide.classList.remove('active'));
+    //         dots.forEach(dot => dot.classList.remove('active'));
+    //         slides[slideIndex].classList.add('active');
+    //         dots[slideIndex].classList.add('active');
+    
+    //         currentSlide = slideIndex;
+    //     }
+    
+    //     showSlide(currentSlide);
+    
+    //     prevButton.addEventListener('click', () =>
+    //     {
+    //         showSlide(currentSlide - 1);
+    //     });
+    
+    //     nextButton.addEventListener('click', () =>
+    //     {
+    //         showSlide(currentSlide + 1);
+    //     });
+    
+    //     dots.forEach((dot, index) =>
+    //     {
+    //         dot.addEventListener('click', () =>
+    //         {
+    //             showSlide(index);
+    //         });
+    //     });
+    
+    //     setInterval(() =>
+    //     {
+    //         showSlide(currentSlide + 1);
+    //     }, 5000);      
+    // })
+
+
+    $.ajax({
+      url: "/api/user/slider",
+      success: function(response) {
+        resp = response.data;
+        for (let i = 0; i < resp.length; i++) {
+          var data = resp[i];
+          var imageSource = data.image;
+          var parts = imageSource.split('public');
+          var correctedSource = parts.join('');
+          // var correctedSource = imageSource.replace("/public", "")
+          console.log(correctedSource);
+
+          if (i == 0) {
+            $("#slider-showcase").append(`
+              <div class="slide-n active">
+                <img src="${correctedSource}">
+              </div>
+            `);
+          } else {
+            $("#slider-showcase").append(`
+              <div class="slide-n">
+                <img src="${correctedSource}">
+              </div>
+            `);
+          }
+        }
+
+        deferred.resolve();
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert('Error loading data');
+      }
+    });
+
+    deferred.done(function() {
+      const slides = document.querySelectorAll('.slide-n');
+      const prevButton = document.querySelector('.prev-button');
+      const nextButton = document.querySelector('.next-button');
+      const dotsContainer = document.querySelector('.dots-container');
+      let currentSlide = 0;
+
+      // Generate dots dynamically based on the number of slides
+      for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (i == 0) {
+          dot.classList.add('active');
+        }
+        dotsContainer.appendChild(dot);
+      }
+
+      function showSlide(slideIndex) {
+        if (slideIndex < 0) {
+          slideIndex = slides.length - 1;
+        } else if (slideIndex >= slides.length) {
+          slideIndex = 0;
+        }
+
+        slides.forEach(slide => slide.classList.remove('active'));
+        document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
+        slides[slideIndex].classList.add('active');
+        document.querySelectorAll('.dot')[slideIndex].classList.add('active');
+
+        currentSlide = slideIndex;
+      }
+
+      showSlide(currentSlide);
+
+      prevButton.addEventListener('click', () => {
+        showSlide(currentSlide - 1);
+      });
+
+      nextButton.addEventListener('click', () => {
+        showSlide(currentSlide + 1);
+      });
+
+      document.querySelectorAll('.dot').forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          showSlide(index);
+        });
+      });
+
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+    
+    
 })
+
 
 jQuery('#popular-products').each((index, element) => {
     let el = jQuery(element)
@@ -87,8 +277,9 @@ jQuery('#popular-products').each((index, element) => {
                 if (typeof variasi == undefined || typeof variasi == "undefined") {
                     hargaText = formatDUIT.format(harga)
                 }else {
-                    const lowestVariant = variasi.reduce((min, variasi) =>  variasi.harga < min.harga ? variasi : min)
-                    hargaText = `${formatDUIT.format(lowestVariant.harga)}`
+                    let firstItem = variasi[0]
+                    let lastItem = variasi[variasi.length - 1]
+                    hargaText = `${formatDUIT.format(firstItem.harga)} - ${formatDUIT.format(lastItem.harga)}`
                 }
 
                 el.append(createProdukElement(path, slug, nama, hargaText, discount))

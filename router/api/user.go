@@ -71,4 +71,9 @@ func UserAPI(app *fiber.App, resolver *resolver.ServiceResolver) {
 	parentPath.Get("/", middlewareStrict, func(c *fiber.Ctx) error {
 		return c.JSON("Hey there wellcome")
 	})
+
+	// Slider
+	sliderController := user.SliderController(resolver.SliderService) 
+	slider := parentPath.Group("/slider")
+	slider.Get("/", sliderController.Read)
 }
